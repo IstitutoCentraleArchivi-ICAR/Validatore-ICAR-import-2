@@ -7,14 +7,14 @@
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:ead="http://ead3.archivists.org/schema/"
 	xmlns:scons="http://www.san.beniculturali.it/scons2" 
-	xmlns:eac-cpf="urn:isbn:1-931666-33-4"
+	xmlns:eac="https://archivists.org/ns/eac/v2"
 	xmlns:mets="http://www.loc.gov/METS/"
 	xmlns:metsrights="http://cosimo.stanford.edu/sdr/metsrights/"
 	xmlns:mix="http://www.loc.gov/mix/v20">
 
-  <xs:import namespace="urn:isbn:1-931666-33-4" schemaLocation="eac-sia.xsd"/>
+  <xs:import namespace="https://archivists.org/ns/eac/v2" schemaLocation="eac-sia.xsd"/>
   <!--
-  <xs:import namespace="urn:isbn:1-931666-33-4" schemaLocation="https://eac.staatsbibliothek-berlin.de/schema/v2/eac.xsd"/>
+  <xs:import namespace="https://archivists.org/ns/eac/v2" schemaLocation="https://eac.staatsbibliothek-berlin.de/schema/v2/eac.xsd"/>
   -->
 	<xs:import namespace="http://www.loc.gov/METS/"	schemaLocation="https://www.loc.gov/standards/mets/mets.xsd"/>
 	<xs:import namespace="http://cosimo.stanford.edu/sdr/metsrights/" schemaLocation="https://www.loc.gov/standards/rights/METSRights.xsd"/>
@@ -144,7 +144,7 @@
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="ead3"/>
-					<xs:enumeration value="eac-cpf"/>
+					<xs:enumeration value="eac"/>
 					<xs:enumeration value="scons"/>
 					<xs:enumeration value="mets"/>
 				</xs:restriction>
@@ -155,7 +155,7 @@
 	<xs:complexType name="recordBody">
 		<xs:choice>
 			<xs:element ref="ead:ead"/>
-			<xs:element ref="eac-cpf:eac-cpf"/>
+			<xs:element ref="eac:eac"/>
 			<xs:element ref="scons:scons"/>
 			<xs:element ref="mets:mets"/>
 		</xs:choice>
