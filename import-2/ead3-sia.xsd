@@ -259,6 +259,12 @@ M245: In &lt;subject>, quando rappresenta un tematismo, può essere presente&#x0
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(part[@localtype = ('PercorsoRicercaSi', 'PercorsoRicercaNo')])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M259: È obbligatoria in &lt;subject>, quando rappresenta un tematismo, che sia&#x0a;
+      presente, e con valore non nullo, l'attributo @id
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="@id != ''"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -696,6 +702,21 @@ M218: In &lt;bibliography>, quando @localtype è pari a &quot;RiferimentoWeb&quo
     <xs:attributeGroup ref="am.desc.base"/>
     <xs:attributeGroup ref="a.level"/>
     <xs:attribute name="base" type="xs:anyURI"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M159: In &lt;archdesc> è ammesso, al più, un unico figlio &lt;odd> con @localtype&#x0a;
+      pari ad &quot;Osservazioni&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(odd[@localtype = 'Osservazioni'])"/>
+  </xs:complexType>
+
+  <!-- M185: creato il tipo "archdesc.strc", derivato per estensione da
+             "archdesc.base" e utilizzato per gli strumenti di ricerca -->
+  <xs:complexType name="archdesc.strc">
+    <xs:complexContent>
+      <xs:extension base="archdesc.base">
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
   
   <!-- M185: creato il tipo "archdesc.comp", derivato per estensione da
@@ -784,12 +805,14 @@ M030: In &lt;archdesc> è ammesso, al più, un unico figlio &lt;odd> con @localt
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(odd[@localtype = 'AltreInfo'])"/>
+        <!--
         <xs:assert xa:message="[&#x0a;&#x0a;
 M159: In &lt;archdesc> è ammesso, al più, un unico figlio &lt;odd> con @localtype&#x0a;
       pari ad &quot;Osservazioni&quot;
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(odd[@localtype = 'Osservazioni'])"/>
+          -->
         <!--          
         <xs:assert xa:message="[&#x0a;&#x0a;
 M031: In &lt;archdesc> gli eventuali figli &lt;odd> devono avere almeno un figlio &lt;p>
@@ -940,10 +963,21 @@ M180: In &lt;archdesc>, gli eventuali figli &lt;scopecontent> devono avere @loca
   </xs:complexType>
 
   <!-- M185: creato il tipo "archdesc.prog", derivato per estensione da
-             "archdesc.base" e utilizzato per i tracciati dei progetti -->
+             "archdesc.base" e utilizzato, genericamente, per i tracciati
+             dei progetti -->
   <xs:complexType name="archdesc.prog">
     <xs:complexContent>
       <xs:extension base="archdesc.base">
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- M185: creato il tipo "archdesc.prdg", derivato per estensione da
+             "archdesc.prog" e utilizzato, specificamente, per i tracciati
+             che corrispondono a un progetto di digitalizzazione -->
+  <xs:complexType name="archdesc.prdg">
+    <xs:complexContent>
+      <xs:extension base="archdesc.prog">
         <xs:assert xa:message="[&#x0a;&#x0a;
 M246: In &lt;archdesc>, quando rappresenta un progetto di digitalizzazione, può&#x0a;
       essere presente, al più, un unico figlio &lt;phystech> con @localtype&#x0a;
@@ -2672,11 +2706,15 @@ M184: In &lt;c>, quando rappresenta un'unità documentale, è ammesso, al più, 
     <xs:complexType>
       <xs:sequence>
         <xs:element name="control" type="control"/>
-        <!-- M185: utilizzate le due versioni di "archdesc" a seconda dei
+        <!-- M185: utilizzate le versioni di "archdesc" a seconda dei
                    valori di @level e @otherlevel -->
         <xs:element name="archdesc">
-          <xs:alternative type="archdesc.prog" test="    (@level = 'otherlevel')
+          <xs:alternative type="archdesc.prdg" test="    (@level = 'otherlevel')
                                                      and (@otherlevel = 'ProgettoDigitalizzazione')"/>
+          <xs:alternative type="archdesc.prog" test="    (@level = 'otherlevel')
+                                                     and (@otherlevel = 'Progetto')"/>
+          <xs:alternative type="archdesc.strc" test="    (@level = 'otherlevel')
+                                                     and (@otherlevel = 'StrumentoRicerca')"/>
           <xs:alternative type="archdesc.comp"/>
         </xs:element>
       </xs:sequence>
