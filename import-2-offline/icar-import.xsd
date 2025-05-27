@@ -17,7 +17,6 @@
 	<xs:import namespace="http://cosimo.stanford.edu/sdr/metsrights/" schemaLocation="METSRights.xsd"/>
 	<xs:import namespace="http://www.loc.gov/mix/v20" schemaLocation="mix20.xsd"/>
 	<xs:import namespace="http://ead3.archivists.org/schema/" schemaLocation="ead3-sia.xsd"/>
-	<xs:import namespace="http://www.san.beniculturali.it/scons2" schemaLocation="scons2.xsd"/>
 	<xs:import namespace="http://purl.org/dc/elements/1.1/"	schemaLocation="simpledc20021212.xsd"/>
 	
 	<xs:simpleType name="emailAddress">
@@ -139,7 +138,6 @@
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="ead3"/>
 					<xs:enumeration value="eac"/>
-					<xs:enumeration value="scons"/>
 					<xs:enumeration value="mets"/>
 				</xs:restriction>
 			</xs:simpleType>
@@ -150,7 +148,6 @@
 		<xs:choice>
 			<xs:element ref="ead:ead"/>
 			<xs:element ref="eac:eac"/>
-			<xs:element ref="scons:scons"/>
 			<xs:element ref="mets:mets"/>
 		</xs:choice>
 	</xs:complexType>
