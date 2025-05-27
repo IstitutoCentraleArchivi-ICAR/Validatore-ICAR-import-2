@@ -1,0 +1,3899 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  
+                              An XML Schema:
+  Encoded Archival Context - Corporate Bodies, Persons, and Families (EAC-CPF)
+  
+  See: https://eac.staatsbibliothek-berlin.de/schemata-and-tag-library/
+  
+  *****************************************************************
+  *                                                               *                
+  *                            EAC-CPF 2.0                        *
+  *                                                               *       
+  *****************************************************************
+  
+  *****************************************************************
+  
+  EDITORS: Society of American Archivists Technical Subcommittee on Encoded Archival Standards (TS-EAS)
+  
+  PUBLISHER: Society of American Archivists in collaboration with the Staatsbibliothek zu Berlin
+  
+  PURPOSE: The EAC-CPF Schema is a communication standard for the description of corporate bodies,
+  persons, and families. It is based on the International Council of Archives' International Standard 
+  Archival Authority Record For Corporate Bodies, Persons and Families (ISAAR(CPF)). For additional
+  documentation on the use of the standard, see the EAC-CPF Tag Library
+  (https://eac.staatsbibliothek-berlin.de/schemata-and-tag-library/).
+  
+  *****************************************************************
+  
+  This schema has been generated automatically. 
+  
+  If you would like to contribute to this project, please see:
+  https://github.com/SAA-SDT/TS-EAS-subteam-notes/wiki/Contributing-to-the-EAS-standards
+  
+  Comments, questions, and suggestions may be addressed to: 
+  ts-eas@archivists.org
+  
+  For more information about the EAC-CPF team, see: 
+  https://github.com/SAA-SDT/TS-EAS-subteam-notes/wiki/EAC-CPF-Sub-Team 
+  
+  *****************************************************************
+  *****************************************************************
+  
+-->
+<xs:schema xmlns:eac="https://archivists.org/ns/eac/v2"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:xao="http://xerces.apache.org"
+           elementFormDefault="qualified"
+           xmlns:eac-sia="http://www.san.beniculturali.it/eac-sia"
+           targetNamespace="https://archivists.org/ns/eac/v2"
+           xmlns="https://archivists.org/ns/eac/v2">
+           
+   <xs:element name="eac">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element type="eac:control" name="control"/>
+            <xs:choice>
+               <xs:element type="eac:cpfDescription" name="cpfDescription"/>
+               <xs:element type="eac:multipleIdentities" name="multipleIdentities"/>
+            </xs:choice>
+         </xs:sequence>
+         <xs:attribute name="audience">
+            <xs:simpleType>
+               <xs:restriction base="xs:token">
+                  <xs:enumeration value="external"/>
+                  <xs:enumeration value="internal"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="base" type="xs:anyURI"/>
+         <xs:attribute name="id" type="xs:ID"/>
+         <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+         <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+         <xs:anyAttribute namespace="##other" processContents="lax"/>
+                  
+         <!-- 0602 0599 0600 0601
+           eac/cpfDescription/@audience
+              valori possibili "external" or "internal" su cui vanno rispettivamente mappati i valori SI o NO.
+           eac/control/localControl/term/
+              Luogo della cultura (SI/NO) NB: se il flag ha valore SI, valorizzare l'elemento <term> con la stringa "luogo della cultura"; se il valore è NO il campo non si mappa.
+              Sala di Studio      (SI/NO) NB: se il flag ha valore SI, valorizzare l'elemento <term> con la stringa "Sala studio"; se il valore è NO il campo non si mappa.
+              Tenant (soppresso 241022) identifica un controllo unitario di una responsabilità attribuita (non sempre corrispondente ad un Istituto) cfr: Soprintendenza, soggetti non standardizzati (Regione, …) => traduzione= responsabile tenutario di un ambiente di lavoro
+         -->
+         <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+            xao:message="&#160;&#xa; eac 0602 0599 0600 0601;&#xa; visibilità e qualifica&#xa; cpfDescription[@audience='internal'] richiede in control/localControl/term uno dei valori&#xa;
+luogo della cultura,
+sala studio."
+            test="not
+                  (cpfDescription[normalize-space(lower-case(@audience))='internal']
+                   and 
+                   (count(control/localControl/term[normalize-space(lower-case(.))='luogo della cultura'])&gt;0 or
+                    count(control/localControl/term[normalize-space(lower-case(.))='sala studio'        ])&gt;0
+                   )
+                  )
+                 "/>
+      </xs:complexType>
+   </xs:element>
+   <xs:complexType name="control">
+      <xs:sequence>
+         <xs:element type="eac:recordId" name="recordId"/>
+         <xs:element type="eac:maintenanceAgency" name="maintenanceAgency"/>
+         <xs:element type="eac:maintenanceHistory" name="maintenanceHistory"/>
+         <xs:element type="eac:sources" name="sources" minOccurs="0"/>
+         <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element type="eac:conventionDeclaration" name="conventionDeclaration"/>
+            <xs:element type="eac:languageDeclaration" name="languageDeclaration"/>
+            <xs:element type="eac:localControl" name="localControl"/>
+            <xs:element type="eac:localTypeDeclaration" name="localTypeDeclaration"/>
+            <xs:element type="eac:otherRecordId" name="otherRecordId"/>
+            <xs:element type="eac:representation" name="representation"/>
+            <xs:element type="eac:rightsDeclaration" name="rightsDeclaration"/>
+         </xs:choice>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="base" type="xs:anyURI"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="languageEncoding">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="iso639-1"/>
+               <xs:enumeration value="iso639-2b"/>
+               <xs:enumeration value="iso639-3"/>
+               <xs:enumeration value="ietf-bcp-47"/>
+               <xs:enumeration value="otherLanguageEncoding"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="scriptEncoding">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="iso15924"/>
+               <xs:enumeration value="otherScriptEncoding"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="dateEncoding">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="iso8601"/>
+               <xs:enumeration value="otherDateEncoding"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="countryEncoding">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="iso3166-1"/>
+               <xs:enumeration value="otherCountryEncoding"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="repositoryEncoding">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="iso15511"/>
+               <xs:enumeration value="otherRepositoryEncoding"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="detailLevel">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="minimal"/>
+               <xs:enumeration value="basic"/>
+               <xs:enumeration value="extended"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="maintenanceStatus" use="required">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="revised"/>
+               <xs:enumeration value="deleted"/>
+               <xs:enumeration value="new"/>
+               <xs:enumeration value="deletedSplit"/>
+               <xs:enumeration value="deletedMerged"/>
+               <xs:enumeration value="deletedReplaced"/>
+               <xs:enumeration value="cancelled"/>
+               <xs:enumeration value="derived"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="publicationStatus">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="approved"/>
+               <xs:enumeration value="published"/>
+               <xs:enumeration value="inProcess"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+      <!-- 0016 0732 0882 1025 Status della scheda obbligatorio
+           Lista chiusa: Bozza, In validazione di primo livello, Validata (primo livello), In validazione di secondo livello, Validata (secondo livello), Pubblicata, Copia parallela. -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0016 0732 0882 1025&#xa; control/@eac-sia:status 'Status della scheda' è richiesto con valori:&#xa;
+Bozza,
+In validazione di primo livello,
+Validata (primo livello),
+In validazione di secondo livello,
+Validata (secondo livello),
+Pubblicata,
+Copia parallela."
+         test="
+            normalize-space(lower-case(@eac-sia:status))='bozza'
+         or normalize-space(lower-case(@eac-sia:status))='in validazione di primo livello'
+         or normalize-space(lower-case(@eac-sia:status))='validata (primo livello)'
+         or normalize-space(lower-case(@eac-sia:status))='in validazione di secondo livello'
+         or normalize-space(lower-case(@eac-sia:status))='validata (secondo livello)'
+         or normalize-space(lower-case(@eac-sia:status))='pubblicata'
+         or normalize-space(lower-case(@eac-sia:status))='copia parallela'
+         "/>
+      <!--
+      in alternativa localControl[@localType='status']/term per evitare ricorso a namespace locale -->
+      <!--
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa;0016 0732 0882 1025 Status della scheda obbligatorio
+control/localControl[@localType='status']/term è richiesto e univoco con valori:
+Bozza,
+In validazione di primo livello,
+Validata (primo livello),
+In validazione di secondo livello,
+Validata (secondo livello),
+Pubblicata,
+Copia parallela."
+         test="
+         (count(localControl[@localType='status']/term)=1)
+         and
+         (
+            normalize-space(lower-case(localControl[normalize-space(lower-case(@localType)='status']/term))='bozza'
+         or normalize-space(lower-case(localControl[normalize-space(lower-case(@localType)='status']/term))='in validazione di primo livello'
+         or normalize-space(lower-case(localControl[normalize-space(lower-case(@localType)='status']/term))='validata (primo livello)'
+         or normalize-space(lower-case(localControl[normalize-space(lower-case(@localType)='status']/term))='in validazione di secondo livello'
+         or normalize-space(lower-case(localControl[normalize-space(lower-case(@localType)='status']/term))='validata (secondo livello)'
+         or normalize-space(lower-case(localControl[normalize-space(lower-case(@localType)='status']/term))='pubblicata'
+         or normalize-space(lower-case(localControl[normalize-space(lower-case(@localType)='status']/term))='copia parallela'
+         )
+         "/>
+         -->
+      <!-- 0004 0720 0870 1018
+           Acronimo di sistema	obbligatorio non ripetibile	control/localControl[@localType='acronimoSistema']/term/ -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0004 0720 0870 1018&#xa; control/localControl[@localType='acronimoSistema']/term/&#xa; 'Acronimo di sistema' è richiesto e univoco"
+         test="count(localControl[normalize-space(lower-case(@localType))='acronimosistema']/term)=1 and string-length(normalize-space(localControl[normalize-space(lower-case(@localType))='acronimosistema']/term))>0"/>
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0715 0865 1013&#xa; control/localControl[@localType='Visibilita_FE']/term&#xa; 'Visibilità FE' lista chiusa con valori:&#xa;
+Completa,
+Non visibile,
+Descrizione Libera e Risorsa Protetta (login),
+Descrizione Protetta e Risorsa Protetta (login),
+Descrizione Libera e Risorse Riservata (autorizzazione),
+Descrizione Riservata e Risorse Riservata (autorizzazione)."
+      test="(count(localControl[@localType[normalize-space(lower-case(.))='visibilita_fe']]/term) = 1)
+             and
+            (
+             every $v in (localControl[@localType[normalize-space(lower-case(.))='visibilita_fe']]/term)
+             satisfies 
+             (
+                 normalize-space(lower-case($v))='completa'
+              or normalize-space(lower-case($v))='non visibile'
+              or normalize-space(lower-case($v))='descrizione libera e risorsa protetta (login)'
+              or normalize-space(lower-case($v))='descrizione protetta e risorsa protetta (login)'
+              or normalize-space(lower-case($v))='descrizione libera e risorsa riservata (autorizzazione)'
+              or normalize-space(lower-case($v))='descrizione riservata e risorse riservata (autorizzazione)'
+             )
+            )
+           "/>
+
+
+   </xs:complexType>
+   <xs:complexType name="cpfDescription">
+      <xs:sequence>
+         <xs:element type="eac:identity" name="identity"/>
+         <xs:element type="eac:description" name="description" minOccurs="0"/>
+         <xs:element type="eac:relations" name="relations" minOccurs="0"/>
+         <xs:element type="eac:alternativeSet" name="alternativeSet" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="base" type="xs:anyURI"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+      
+      <!-- eac 0042 ENTE eac/cpfDescription/identity/entityType[@value='corporateBody']
+           CONDIZIONE GIURIDICA eac/cpfDescription/description/legalStatuses/legalStatus/term/
+           Lista chiusa: Ente ecclesiastico, Ente privato, Ente pubblico. -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0042&#xa; cpfDescription/description/legalStatuses/legalStatus/term&#xa; 'Condizione giuridica' lista chiusa con valori:&#xa;
+Ente ecclesiastico,
+Ente privato,
+Ente pubblico"
+         test="
+            every $v in .[identity/entityType[normalize-space(lower-case(@value))='corporatebody']]
+                         /description/legalStatuses/legalStatus/term
+            satisfies 
+            (
+                normalize-space(lower-case($v))='ente ecclesiastico'
+             or normalize-space(lower-case($v))='ente privato'
+             or normalize-space(lower-case($v))='ente pubblico'
+            )
+         "/>
+         
+      <!-- eac 0124 ENTE eac/cpfDescription/identity/entityType[@value='corporateBody']
+           Qualifica della data eac/cpfDescription/description/existDates[@localType='dateEsistenzaEnte']/dateSet/date/@eac-sia:qualificaData
+           OBBLIGATORIO
+           -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0124&#xa; cpfDescription/description/existDates[@localType='dateEsistenzaEnte']/dateSet/date/@eac-sia:qualificaData&#xa; 'Qualifica della data' è richiesto"
+         test="
+            not(normalize-space(lower-case(identity/entityType/@value))='corporatebody')
+            or
+            (
+             count(description/existDates[normalize-space(lower-case(@localType))='dateesistenzaente']/dateSet/date/@eac-sia:qualificaData[string-length(normalize-space(.)) &gt; 0]) &gt; 0
+            )
+         "/>
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0215&#xa; cpfDescription/description/existDates[@localType='dateEsistenzaFamiglia']/dateSet/date/@eac-sia:qualificaData&#xa; 'Qualifica della data' è richiesto"
+         test="
+            not(normalize-space(lower-case(identity/entityType/@value))='family')
+            or
+            (
+             count(description/existDates[normalize-space(lower-case(@localType))='dateesistenzafamiglia']/dateSet/date/@eac-sia:qualificaData[string-length(normalize-space(.)) &gt; 0]) &gt; 0
+            )
+         "/>
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0335&#xa; cpfDescription/description/existDates[@localType='dateEsistenzaPersona']/dateSet/date/@eac-sia:qualificaData&#xa; 'Qualifica della data' è richiesto"
+         test="
+            not(normalize-space(lower-case(identity/entityType/@value))='person')
+            or
+            (
+             count(description/existDates[normalize-space(lower-case(@localType))='dateesistenzapersona']/dateSet/date/@eac-sia:qualificaData[string-length(normalize-space(.)) &gt; 0]) &gt; 0
+            )
+         "/>
+         
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0397&#xa; cpfDescription/description/occupations/occupation/(.|dateSet)/date/@eac-sia:qualificaData&#xa; 'Qualifica della data' lista chiusa con valori:&#xa;
+inizio attività/professione,
+fine attività/professione."
+         test="
+            not(normalize-space(lower-case(identity/entityType/@value))='person')
+            or 
+            (
+             every $v in (description/occupations/occupation/(.|dateSet)/date/@eac-sia:qualificaData)
+             satisfies
+             (
+                 normalize-space(lower-case($v))='inizio attività/professione'
+              or normalize-space(lower-case($v))='fine attività/professione'
+             )
+            )
+         "/>
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0397&#xa; cpfDescription/description/functions/function/(.|dateSet)/date/@eac-sia:qualificaData&#xa; 'Qualifica della data' lista chiusa con valori:&#xa;
+inizio qualifica,
+fine qualifica."
+         test="
+            not(normalize-space(lower-case(identity/entityType/@value))='person')
+            or 
+            (
+             every $v in (description/functions/function/(.|dateSet)/date/@eac-sia:qualificaData)
+             satisfies
+             (
+                 normalize-space(lower-case($v))='inizio qualifica'
+              or normalize-space(lower-case($v))='fine qualifica'
+             )
+            )
+         "/>
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0239 &#xa;cpfDescription/description/localDescriptions/localDescription[@localType='titoloFamiglia']/term&#xa; 'Titolo' lista chiusa con valori:&#xa;
+Barone,
+Cavaliere,
+Conte,
+Duca,
+Granduca,
+Imperatore,
+Marchese,
+Nobile,
+Nobile di città,
+Patrizio,
+Principe,
+Re,
+Signore,
+Visconte."
+         test="
+            not(normalize-space(lower-case(identity/entityType/@value))='family')
+            or 
+            (
+             every $v in (description/localDescriptions/localDescription[normalize-space(lower-case(@localType))='titolofamiglia']/term)
+             satisfies
+             (
+                 normalize-space(lower-case($v))='barone'
+              or normalize-space(lower-case($v))='cavaliere'
+              or normalize-space(lower-case($v))='conte'
+              or normalize-space(lower-case($v))='duca'
+              or normalize-space(lower-case($v))='granduca'
+              or normalize-space(lower-case($v))='imperatore'
+              or normalize-space(lower-case($v))='marchese'
+              or normalize-space(lower-case($v))='nobile'
+              or normalize-space(lower-case($v))='nobile di città'
+              or normalize-space(lower-case($v))='patrizio'
+              or normalize-space(lower-case($v))='principe'
+              or normalize-space(lower-case($v))='re'
+              or normalize-space(lower-case($v))='signore'
+              or normalize-space(lower-case($v))='visconte'
+             )
+            )
+         "/>
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0360 &#xa;cpfDescription/description/localDescriptions/localDescription[@localType='titoloPersona']/term&#xa; 'Titolo' lista chiusa con valori:&#xa;
+Barone,
+Cavaliere,
+Conte,
+Duca,
+Granduca,
+Imperatore,
+Marchese,
+Nobile,
+Nobile di città,
+Patrizio,
+Principe,
+Re,
+Signore,
+Visconte."
+         test="
+            not(normalize-space(lower-case(identity/entityType/@value))='person')
+            or 
+            (
+             every $v in (description/localDescriptions/localDescription[normalize-space(lower-case(@localType))='titolopersona']/term)
+             satisfies
+             (
+                 normalize-space(lower-case($v))='barone'
+              or normalize-space(lower-case($v))='cavaliere'
+              or normalize-space(lower-case($v))='conte'
+              or normalize-space(lower-case($v))='duca'
+              or normalize-space(lower-case($v))='granduca'
+              or normalize-space(lower-case($v))='imperatore'
+              or normalize-space(lower-case($v))='marchese'
+              or normalize-space(lower-case($v))='nobile'
+              or normalize-space(lower-case($v))='nobile di città'
+              or normalize-space(lower-case($v))='patrizio'
+              or normalize-space(lower-case($v))='principe'
+              or normalize-space(lower-case($v))='re'
+              or normalize-space(lower-case($v))='signore'
+              or normalize-space(lower-case($v))='visconte'
+             )
+            )
+         "/>
+      <!--0612 CONSERVARTORE SEDE Tipologia Lista chiusa: Principale, Consultazione, Privato. -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0612&#xa; cpfDescription/description/places/place/placeRole/&#xa; 'CONSERVARTORE SEDE Tipologia' lista chiusa con valori:&#xa;
+Principale,
+Consultazione,
+Privato."
+         test="
+            not(identity[@localType[normalize-space(lower-case(.))='soggettoconservatore']])
+            or
+            (
+             every $v in description/places/place/placeRole
+             satisfies
+             (
+                 normalize-space(lower-case($v))='principale'
+              or normalize-space(lower-case($v))='consultazione'
+              or normalize-space(lower-case($v))='privato'
+             )
+            )
+         "/>
+
+       <!-- eac 0803 0825
+       cpfDescription
+        [identity[@localType="contestoStoricoIstituzionale"]/entityType[@value="corporateBody"]]
+        /relations/relation
+        [targetRole[.="Contesto storico collegato" or .="Relazione in arrivo - Contesto storico istituzionale a cui è collegato"]
+        [targetEntity[@targetType='corporateBody']
+        /relationType 'Qualifica della relazione con altro Contesto' Lista chiusa: Collegato, dipendente, sovraordinato, precedente, successivo -->
+       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+          xao:message="&#160;&#xa; eac 0803 0825&#xa; cpfDescription&#xa; 
+[identity[@localType='contestoStoricoIstituzionale']/entityType[@value='corporateBody']]&#xa; 
+/relations/relation&#xa; 
+[targetRole[.='Contesto storico collegato' or.='Relazione in arrivo - Contesto storico istituzionale a cui è collegato']]&#xa; 
+[targetEntity[@targetType='corporateBody]]&#xa; 
+/relationType&#xa; 'Qualifica della relazione con altro Contesto' lista chiusa con valori:&#xa;
+Collegato,
+dipendente,
+sovraordinato,
+precedente,
+successivo."
+           test="not(.
+                     [identity[@localType[normalize-space(lower-case(.))='contestostoricoistituzionale']]
+                      /entityType[@value[normalize-space(lower-case(.))='corporatebody']]
+                     ]
+                     /relations/relation
+                     [targetRole
+                      [
+                       normalize-space(lower-case(.))='contesto storico collegato'
+                       or
+                       normalize-space(lower-case(.))='relazione in arrivo - contesto storico istituzionale a cui è collegato'
+                      ]
+                     ]
+                     [targetEntity/@targetType[normalize-space(lower-case(.))='corporatebody']]
+                     /relationType
+                     [    normalize-space(lower-case(.))!='collegato'
+                      and normalize-space(lower-case(.))!='dipendente'
+                      and normalize-space(lower-case(.))!='sovraordinato'
+                      and normalize-space(lower-case(.))!='precedente'
+                      and normalize-space(lower-case(.))!='successivo'
+                     ]
+                    )"/>
+
+       <!-- eac 0932 0953
+       cpfDescription
+        [identity[@localType="profiloIstituzionale"]/entityType[@value="corporateBody"]]
+        /relations/relation
+        [targetRole[.="Profilo istituzionale collegato" or .="Relazione in arrivo - Profilo istituzionale a cui è collegato"]
+        [targetEntity[@targetType='corporateBody']
+        /relationType 'Qualifica della relazione' Lista chiusa: Successore, Predecessore -->
+       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+          xao:message="&#160;&#xa; eac 0803 0825&#xa; cpfDescription&#xa; 
+[identity[@localType='profiloIstituzionale']/entityType[@value='corporateBody']]&#xa; 
+/relations/relation&#xa; 
+[targetRole[.='Profilo istituzionale collegato' or .='Relazione in arrivo - Profilo istituzionale a cui è collegato']]&#xa; 
+[targetEntity[@targetType='corporateBody]]&#xa; 
+/relationType&#xa; 'Qualifica della relazione' lista chiusa con valori:&#xa;
+Successore,
+Predecessore."
+           test="not(.
+                     [identity[@localType[normalize-space(lower-case(.))='profiloistituzionale']]
+                      /entityType[@value[normalize-space(lower-case(.))='corporatebody']]
+                     ]
+                     /relations/relation
+                     [targetRole
+                      [
+                       normalize-space(lower-case(.))='profilo istituzionale collegato'
+                       or
+                       normalize-space(lower-case(.))='relazione in arrivo - profilo istituzionale a cui è collegato'
+                      ]
+                     ]
+                     [targetEntity/@targetType[normalize-space(lower-case(.))='corporatebody']]
+                     /relationType
+                     [    normalize-space(lower-case(.))!='successore'
+                      and normalize-space(lower-case(.))!='predecessore'
+                     ]
+                    )"/>
+
+   </xs:complexType>
+   <xs:complexType name="multipleIdentities">
+      <xs:sequence>
+         <xs:element type="eac:cpfDescription" name="cpfDescription"/>
+         <xs:element type="eac:cpfDescription"
+                     name="cpfDescription"
+                     maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="base" type="xs:anyURI"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="recordId">
+      <xs:simpleContent>
+         <xs:restriction base="xs:anyType">
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value="(.|\n|\r)*\S(.|\n|\r)*"/>
+               </xs:restriction>
+            </xs:simpleType>
+            <xs:attribute name="audience">
+               <xs:simpleType>
+                  <xs:restriction base="xs:token">
+                     <xs:enumeration value="external"/>
+                     <xs:enumeration value="internal"/>
+                  </xs:restriction>
+               </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="id" type="xs:ID"/>
+            <xs:attribute name="target" type="xs:IDREFS"/>
+            <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+            <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+            <xs:anyAttribute namespace="##other" processContents="lax"/>
+         </xs:restriction>
+      </xs:simpleContent>
+   </xs:complexType>
+   <xs:complexType name="maintenanceAgency">
+      <xs:sequence>
+         <xs:choice>
+            <xs:sequence>
+               <xs:element type="eac:agencyCode" name="agencyCode"/>
+               <xs:element type="eac:agencyName"
+                           name="agencyName"
+                           minOccurs="0"
+                           maxOccurs="unbounded"/>
+               <xs:element type="eac:otherAgencyCode"
+                           name="otherAgencyCode"
+                           minOccurs="0"
+                           maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:sequence>
+               <xs:element type="eac:agencyName" name="agencyName" maxOccurs="unbounded"/>
+               <xs:element type="eac:otherAgencyCode"
+                           name="otherAgencyCode"
+                           minOccurs="0"
+                           maxOccurs="unbounded"/>
+            </xs:sequence>
+         </xs:choice>
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="countryCode" type="xs:NMTOKEN"/>
+      <xs:attribute name="vocabularySource" type="xs:token"/>
+      <xs:attribute name="vocabularySourceURI" type="xs:anyURI"/>
+      <xs:attribute name="valueURI" type="xs:anyURI"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="maintenanceHistory">
+      <xs:sequence>
+         <xs:element type="eac:maintenanceEvent"
+                     name="maintenanceEvent"
+                     maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="sources">
+      <xs:sequence>
+         <xs:element type="eac:source" name="source" maxOccurs="unbounded"/>
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="base" type="xs:anyURI"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="conventionDeclaration">
+      <xs:sequence>
+         <xs:element type="eac:reference" name="reference"/>
+         <xs:element type="eac:shortCode" name="shortCode" minOccurs="0"/>
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="vocabularySource" type="xs:token"/>
+      <xs:attribute name="vocabularySourceURI" type="xs:anyURI"/>
+      <xs:attribute name="valueURI" type="xs:anyURI"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="languageDeclaration">
+      <xs:sequence>
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="languageCode" use="required" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptCode" type="xs:NMTOKEN"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="localControl">
+      <xs:sequence>
+         <xs:element type="eac:term" name="term" maxOccurs="unbounded"/>
+         <xs:choice minOccurs="0">
+            <xs:element type="eac:date" name="date"/>
+            <xs:element type="eac:dateRange" name="dateRange"/>
+         </xs:choice>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="vocabularySource" type="xs:token"/>
+      <xs:attribute name="vocabularySourceURI" type="xs:anyURI"/>
+      <xs:attribute name="valueURI" type="xs:anyURI"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="localTypeDeclaration">
+      <xs:sequence>
+         <xs:element type="eac:reference" name="reference"/>
+         <xs:element type="eac:shortCode" name="shortCode" minOccurs="0"/>
+         <!-- 0004 0720 0870 1018 shortCode obbligatorio, reference non usato (xsd)
+         <xs:element type="eac:reference" name="reference" minOccurs="0"/>
+         <xs:element type="eac:shortCode" name="shortCode"/> -->
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="vocabularySource" type="xs:token"/>
+      <xs:attribute name="vocabularySourceURI" type="xs:anyURI"/>
+      <xs:attribute name="valueURI" type="xs:anyURI"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+      
+      <!-- 0004 0720 0870 1018 <xs:complexType name="localTypeDeclaration"> name="shortCode"
+           Acronimo di sistema	obbligatorio non ripetibile	eac/control/localTypeDeclaration/shortCode/ -->
+      <!--  spostato in control/localControl[@localType='acronimoSistema']/term per evitare obbligatorietà conseguente in localTypeDeclaration/reference
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0004 0720 0870 1018&#xa; eac/control/localTypeDeclaration/shortCode/&#xa; 'Acronimo di sistema' è richiesto e univoco"
+         test="count(shortCode)=1 and string-length(normalize-space(shortCode))>0"/>
+      -->
+   </xs:complexType>
+   <xs:complexType name="otherRecordId" mixed="true">
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="vocabularySource" type="xs:token"/>
+      <xs:attribute name="vocabularySourceURI" type="xs:anyURI"/>
+      <xs:attribute name="valueURI" type="xs:anyURI"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="representation" mixed="true">
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="href" type="xs:anyURI"/>
+      <xs:attribute name="linkRole" type="xs:anyURI"/>
+      <xs:attribute name="linkTitle" type="xs:token"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="rightsDeclaration">
+      <xs:sequence>
+         <xs:element type="eac:reference" name="reference"/>
+         <xs:element type="eac:shortCode" name="shortCode" minOccurs="0"/>
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="vocabularySource" type="xs:token"/>
+      <xs:attribute name="vocabularySourceURI" type="xs:anyURI"/>
+      <xs:attribute name="valueURI" type="xs:anyURI"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="identity">
+      <xs:sequence>
+         <xs:element type="eac:entityType" name="entityType"/>
+         <xs:choice maxOccurs="unbounded">
+            <xs:element type="eac:nameEntry" name="nameEntry"/>
+            <xs:element type="eac:nameEntrySet" name="nameEntrySet"/>
+         </xs:choice>
+         <xs:element type="eac:otherEntityTypes" name="otherEntityTypes" minOccurs="0"/>
+         <xs:element type="eac:identityId"
+                     name="identityId"
+                     minOccurs="0"
+                     maxOccurs="unbounded"/>
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="base" type="xs:anyURI"/>
+      <xs:attribute name="identityType">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="given"/>
+               <xs:enumeration value="acquired"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+      
+      <!-- 0598 qualifica conservatore (quando il conservatore è una famiglia o una persona non va compilato?) -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0598&#xa; identity/otherEntityTypes/otherEntityType[@localType='qualifica']/term/&#xa; 'CONSERVATORE Qualifica' lista chiusa con valori&#xa;
+archivio,
+sezione,
+altra sede."
+         test="not(@localType[normalize-space(lower-case(.))='soggettoconservatore'])
+                or 
+               not(otherEntityTypes/otherEntityType[@localType='qualifica']/term)
+                or 
+               (count(otherEntityTypes/otherEntityType[@localType='qualifica']/term)=1
+                and 
+                otherEntityTypes/otherEntityType[@localType='qualifica']/term
+                [   normalize-space(lower-case(.))='archivio'
+                 or normalize-space(lower-case(.))='sezione'
+                 or normalize-space(lower-case(.))='altra sede'
+                ]
+               )"/>
+
+      <!-- 0022 solo per tipologia ENTE - per esprimere la specifica tipologia dell'ente bisogna prima inserire come sottoelemento di <identity>  <entityType> con @value='corporateBody' e poi sempre come sottoelemento di <identity> otherEntityTypes/otherEntityType[@localType="ente"]/term/, dove
+                 va inserito il valore del campo controllato ??? -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0022&#xa; identity[entityType/@value='corporateBody']/otherEntityTypes/otherEntityType[@localType='ente']/term&#xa; 'TIPOLOGIA ENTE' è richiesto con valori:&#xa;
+organo o ufficio statale del periodo preunitario,
+organo o ufficio statale del periodo postunitario,
+accademia/ente di cultura,
+arte/ordine/collegio/associazione di categoria,
+associazione civile e di movimento,
+associazione combattentistica e d'arma,
+banca/istituto di credito/ente assicurativo/ente previdenziale,
+comitato di liberazione nazionale/corpo militare della Resistenza,
+comune/città metropolitana/unione di comuni (organo e ufficio),
+corporazione religiosa soppressa,
+ente di gestione di acque, ambiente, energia, territorio, trasporti,
+ente economico e di promozione economica/impresa/studio professionale,
+ente di culto acattolico/associazione acattolica,
+ente di culto cattolico/associazione cattolica,
+ente/istituzione fascista,
+ente ricreativo/sportivo/turistico,
+ente territoriale minore,
+notaio,
+opera pia/istituzione ed ente di assistenza e beneficenza/ospedale,
+ordine cavalleresco,
+organizzazione internazionale,
+organo di informazione e stampa,
+feudo,
+ente sanitario/ente di servizi alla persona,
+partito e movimento politico/associazione politica,
+provincia/provincia autonoma (organo e ufficio),
+rappresentanza diplomatica/ufficio di paesi stranieri con sede in Italia,
+regione/regione a statuto speciale (organo e ufficio),
+scuola/ente di istruzione,
+sindacato/organizzazione sindacale,
+università/ente di ricerca,
+organo centrale di stato di Antico regime,
+organo periferico o locale di stato di Antico regime,
+organo o ufficio di stato di Antico regime,
+organo centrale di stato del periodo napoleonico,
+organo periferico di stato del periodo napoleonico,
+organo centrale di stato della Restaurazione,
+organo periferico di stato della Restaurazione,
+organo e ufficio statale centrale di periodo postunitario,
+organo e ufficio statale periferico di periodo postunitario."
+         test="
+          not(entityType/@value='corporateBody')
+           or
+          (
+           string-length(normalize-space(otherEntityTypes/otherEntityType[@localType='ente']/term))&gt;0
+           and
+           (
+            every $v in otherEntityTypes/otherEntityType[@localType='ente']/term
+            satisfies
+            (
+                normalize-space(lower-case($v))='organo o ufficio statale del periodo preunitario'
+             or normalize-space(lower-case($v))='organo o ufficio statale del periodo postunitario'
+             or normalize-space(lower-case($v))='accademia/ente di cultura'
+             or normalize-space(lower-case($v))='arte/ordine/collegio/associazione di categoria'
+             or normalize-space(lower-case($v))='associazione civile e di movimento'
+             or normalize-space(lower-case($v))='associazione combattentistica e d''arma'
+             or normalize-space(lower-case($v))='banca/istituto di credito/ente assicurativo/ente previdenziale'
+             or normalize-space(lower-case($v))='comitato di liberazione nazionale/corpo militare della resistenza'
+             or normalize-space(lower-case($v))='comune/città metropolitana/unione di comuni (organo e ufficio)'
+             or normalize-space(lower-case($v))='corporazione religiosa soppressa'
+             or normalize-space(lower-case($v))='ente di gestione di acque, ambiente, energia, territorio, trasporti'
+             or normalize-space(lower-case($v))='ente economico e di promozione economica/impresa/studio professionale'
+             or normalize-space(lower-case($v))='ente di culto acattolico/associazione acattolica'
+             or normalize-space(lower-case($v))='ente di culto cattolico/associazione cattolica'
+             or normalize-space(lower-case($v))='ente/istituzione fascista'
+             or normalize-space(lower-case($v))='ente ricreativo/sportivo/turistico'
+             or normalize-space(lower-case($v))='ente territoriale minore'
+             or normalize-space(lower-case($v))='notaio'
+             or normalize-space(lower-case($v))='opera pia/istituzione ed ente di assistenza e beneficenza/ospedale'
+             or normalize-space(lower-case($v))='ordine cavalleresco'
+             or normalize-space(lower-case($v))='organizzazione internazionale'
+             or normalize-space(lower-case($v))='organo di informazione e stampa'
+             or normalize-space(lower-case($v))='feudo'
+             or normalize-space(lower-case($v))='ente sanitario/ente di servizi alla persona'
+             or normalize-space(lower-case($v))='partito e movimento politico/associazione politica'
+             or normalize-space(lower-case($v))='provincia/provincia autonoma (organo e ufficio)'
+             or normalize-space(lower-case($v))='rappresentanza diplomatica/ufficio di paesi stranieri con sede in italia'
+             or normalize-space(lower-case($v))='regione/regione a statuto speciale (organo e ufficio)'
+             or normalize-space(lower-case($v))='scuola/ente di istruzione'
+             or normalize-space(lower-case($v))='sindacato/organizzazione sindacale'
+             or normalize-space(lower-case($v))='università/ente di ricerca'
+             or normalize-space(lower-case($v))='organo centrale di stato di antico regime'
+             or normalize-space(lower-case($v))='organo periferico o locale di stato di antico regime'
+             or normalize-space(lower-case($v))='organo o ufficio di stato di antico regime'
+             or normalize-space(lower-case($v))='organo centrale di stato del periodo napoleonico'
+             or normalize-space(lower-case($v))='organo periferico di stato del periodo napoleonico'
+             or normalize-space(lower-case($v))='organo centrale di stato della restaurazione'
+             or normalize-space(lower-case($v))='organo periferico di stato della restaurazione'
+             or normalize-space(lower-case($v))='organo e ufficio statale centrale di periodo postunitario'
+             or normalize-space(lower-case($v))='organo e ufficio statale periferico di periodo postunitario'
+            )
+           )
+          )
+         "/>
+
+      <!-- eac 0062 ENTE eac/cpfDescription/identity/entityType[@value='corporateBody']
+           cpfDescription/identity/nameEntry/part[@localType='intestazionePrincipaleEnte']/ è richiesto -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0062&#xa; nameEntry/part[@localType='intestazionePrincipaleEnte']&#xa; 'Intestazione principale' è richiesto e univoco"
+         test="
+          not(normalize-space(lower-case(entityType/@value))='corporatebody')
+           or
+          (
+           count(nameEntry/part[normalize-space(lower-case(@localType))='intestazioneprincipaleente'][string-length(normalize-space())>0]) = 1
+          )
+         "/>
+
+      <!-- eac 0063 ENTE eac/cpfDescription/identity/entityType[@value='corporateBody']
+           cpfDescription/identity/nameEntry/part[@localType='denominazionePrincipaleEnte']/ è richiesto -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0063&#xa; nameEntry/part[@localType='denominazionePrincipaleEnte']&#xa; 'Denominazione principale' è richiesto e univoco"
+         test="
+          not(normalize-space(lower-case(entityType/@value))='corporatebody')
+           or
+          (
+           count(nameEntry/part[normalize-space(lower-case(@localType))='denominazioneprincipaleente'][string-length(normalize-space())>0]) = 1
+          )
+         "/>
+
+      <!-- eac 0089 cpfDescription/identity/nameEntry[@localType="altraDenominazioneEnte" @status="alternative"]/part[@localType="qualifica"]
+       Altra denominazione, Denominazione parallela, Intestazione parallela, Altro. -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0089&#xa; cpfDescription/identity/nameEntry[@localType='altraDenominazioneEnte][@status='alternative']/part[@localType='qualifica']&#xa; 'Qualifica dell'altra denominazione e intestazione' lista chiusa con valori:&#xa;
+Altra denominazione,
+Denominazione parallela,
+Intestazione parallela,
+Altro."
+         test="
+          not(normalize-space(lower-case(entityType/@value))='corporatebody')
+           or
+          (
+           every $v in nameEntry[normalize-space(lower-case(@localType))='altradenominazioneente' and normalize-space(lower-case(@status))='alternative']/part[normalize-space(lower-case(@localType))='qualifica']
+           satisfies
+           (
+               normalize-space(lower-case($v))='altra denominazione'
+            or normalize-space(lower-case($v))='denominazione parallela'
+            or normalize-space(lower-case($v))='intestazione parallela'
+            or normalize-space(lower-case($v))='altro'
+           )
+          )
+         "/>
+         
+      <!-- eac 0154 cpfDescription/identity/nameEntry/part[@localType="intestazionePrincipaleFamiglia"]/ -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0154&#xa; cpfDescription/identity/nameEntry/part[@localType='intestazionePrincipaleFamiglia']&#xa; 'Intestazione principale' è richiesto e univoco"
+         test="
+          not(normalize-space(lower-case(entityType/@value))='family')
+           or
+          count(nameEntry/part[normalize-space(lower-case(@localType))='intestazioneprincipalefamiglia'][string-length(normalize-space(lower-case(.))) &gt; 0]) = 1
+         "/>
+
+      <!-- eac 0154 cpfDescription/identity/nameEntry/part[@localType="denominazionePrincipaleFamiglia"]/ -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0154&#xa; cpfDescription/identity/nameEntry/part[@localType='denominazionePrincipaleFamiglia']&#xa; 'Denominazione principale' è richiesto e univoco"
+         test="
+          not(normalize-space(lower-case(entityType/@value))='family')
+           or
+          count(nameEntry/part[normalize-space(lower-case(@localType))='denominazioneprincipalefamiglia'][string-length(normalize-space(lower-case(.))) &gt; 0]) = 1
+         "/>
+         
+      <!-- eac 0180 cpfDescription/identity/nameEntry[@localType="altraDenominazioneFamiglia" @status="alternative"]/part[@localType="qualifica"]
+       Altra denominazione, Denominazione parallela, Intestazione parallela, Altro -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0180&#xa; cpfDescription/identity/nameEntry[@localType='altraDenominazioneFamiglia][@status='alternative']/part[@localType='qualifica']&#xa; 'Qualifica dell'altra denominazione e intestazione' lista chiusa con valori:&#xa;
+Altra denominazione,
+Denominazione parallela,
+Intestazione parallela,
+Altro."
+         test="
+          not(normalize-space(lower-case(entityType/@value))='family')
+           or
+          (
+           every $v in nameEntry[normalize-space(lower-case(@localType))='altradenominazionefamiglia' and normalize-space(lower-case(@status))='alternative']/part[normalize-space(lower-case(@localType))='qualifica']
+           satisfies
+           (
+               normalize-space(lower-case($v))='altra denominazione'
+            or normalize-space(lower-case($v))='denominazione parallela'
+            or normalize-space(lower-case($v))='intestazione parallela'
+            or normalize-space(lower-case($v))='altro'
+           )
+          )
+         "/>
+      <!-- eac 0292 cpfDescription/identity/nameEntry[@localType="altraDenominazionePersona" @status="alternative"]/part[@localType="qualifica"]
+       Altra denominazione, Denominazione parallela, Intestazione parallela, Altro. -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0292&#xa; cpfDescription/identity/nameEntry[@localType='altraDenominazionePersona][@status='alternative']/part[@localType='qualifica']&#xa; 'Qualifica dell'altra denominazione e intestazione' lista chiusa con valori:&#xa;
+Altra denominazione,
+Denominazione parallela,
+Intestazione parallela,
+Altro."
+         test="
+          not(normalize-space(lower-case(entityType/@value))='person')
+           or
+          (
+           every $v in nameEntry[normalize-space(lower-case(@localType))='altradenominazionepersona' and normalize-space(lower-case(@status))='alternative']/part[normalize-space(lower-case(@localType))='qualifica']
+           satisfies
+           (
+               normalize-space(lower-case($v))='altra denominazione'
+            or normalize-space(lower-case($v))='denominazione parallela'
+            or normalize-space(lower-case($v))='intestazione parallela'
+            or normalize-space(lower-case($v))='altro'
+           )
+          )
+         "/>
+         
+      <!-- eac 0262 cpfDescription/identity/otherEntityTypes/otherEntityType/term/ -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0262&#xa; cpfDescription/identity/otherEntityTypes/otherEntityType[@localType='genere']/term/&#xa; 'Genere' lista chiusa con valori:&#xa;
+maschile,
+femminile."
+         test="
+            not(normalize-space(lower-case(entityType/@value))='person')
+            or 
+            (
+             every $v in otherEntityTypes/otherEntityType[normalize-space(lower-case(@localType))='genere']/term
+             satisfies
+             (
+                 normalize-space(lower-case($v))='maschile'
+              or normalize-space(lower-case($v))='femminile'
+             )
+            )
+         "/>
+         
+      <!-- eac 0267 cpfDescription/identity/nameEntry/part[@localType='cognomePersona'] -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0267 &#xa;cpfDescription/identity/nameEntry/part[@localType='cognomePersona']&#xa; 'Cognome' è richiesto e univoco"
+         test="
+            not(normalize-space(lower-case(entityType/@value))='person')
+            or 
+            (
+             count(nameEntry/part[normalize-space(lower-case(@localType))='cognomepersona'][string-length(normalize-space(.)) &gt; 0]) = 1
+            )
+         "/>
+
+      <!-- eac 0265 cpfDescription/identity/nameEntry/part[@localType='intestazionePersona'] -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0265&#xa; cpfDescription/identity/nameEntry/part[@localType='intestazionePersona']&#xa; 'Intestazione principale' è richiesto e univoco"
+         test="
+            not(normalize-space(lower-case(entityType/@value))='person')
+            or 
+            (
+             count(nameEntry/part[normalize-space(lower-case(@localType))='intestazionepersona'][string-length(normalize-space(.)) &gt; 0]) = 1
+            )
+         "/>
+
+      <!-- eac 0721 cpfDescription/identity[@localType="contestoStoricoIstituzionale"][entityType[@value="corporateBody"]]/identityId/ -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0721&#xa; cpfDescription/identity[@localType='contestoStoricoIstituzionale'][entityType[@value='corporateBody']]identityId&#xa; 'Identificativo per il Contesto' è richiesto"
+         test="
+            not(.[normalize-space(lower-case(@localType))='contestostoricoistituzionale'][entityType[normalize-space(lower-case(@value))='corporatebody']])
+            or 
+            (
+             count(.[normalize-space(lower-case(@localType))='contestostoricoistituzionale'][entityType[normalize-space(lower-case(@value))='corporatebody']]/identityId[string-length(normalize-space(.)) &gt; 0]) &gt; 0
+            )
+         "/>
+
+      <!-- eac 0737 cpfDescription/identity//nameEntry[@localType="denominazioneContesto"]/part[@localType="intestazione"]/ -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0737&#xa; cpfDescription/identity/(.|nameEntrySet)/nameEntry[@localType='denominazioneContesto']/part[@localType='intestazione']/&#xa; 'Intestazione' è richiesto"
+         test="
+            not(.[normalize-space(lower-case(@localType))='contestostoricoistituzionale'])
+            or
+            (
+             count(
+                   .[normalize-space(lower-case(@localType))='contestostoricoistituzionale']/
+                   (.|nameEntrySet)/nameEntry[normalize-space(lower-case(@localType))='denominazionecontesto']/part[normalize-space(lower-case(@localType))='intestazione'][string-length(normalize-space(.)) &gt; 0]
+                  ) = 1
+            )
+         "/>
+
+      <!-- eac 0871 cpfDescription/identity[@localType="profiloIstituzionale"][entityType[@value="corporateBody"]]/identityId/ -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0871&#xa; cpfDescription/identity[@localType='profiloIstituzionale'][entityType[@value='corporateBody']]identityId&#xa; 'Identificativo per il Profilo' è richiesto"
+         test="
+            not(.[normalize-space(lower-case(@localType))='profiloistituzionale'][entityType[normalize-space(lower-case(@value))='corporatebody']])
+            or 
+            (
+             count(.[normalize-space(lower-case(@localType))='profiloistituzionale'][entityType[normalize-space(lower-case(@value))='corporatebody']]/identityId[string-length(normalize-space(.)) &gt; 0]) &gt; 0
+            )
+         "/>
+
+      <!-- eac 0884 cpfDescription/identity//nameEntry[@localType="denominazioneProfilo"]/part[@localType="intestazione"]/ -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0884&#xa; cpfDescription/identity/(.|nameEntrySet)/nameEntry[@localType='denominazioneProfilo']/part[@localType='intestazione']/&#xa; 'Intestazione' è richiesto"
+         test="
+            not(.[normalize-space(lower-case(@localType))='profiloistituzionale'])
+            or
+            (
+             count(
+                   .[normalize-space(lower-case(@localType))='profiloistituzionale']/
+                   (.|nameEntrySet)/nameEntry[normalize-space(lower-case(@localType))='denominazioneprofilo']/part[normalize-space(lower-case(@localType))='intestazione'][string-length(normalize-space(.)) &gt; 0]
+                  ) = 1
+            )
+         "/>
+
+   </xs:complexType>
+   <xs:complexType name="description">
+      <xs:sequence>
+         <xs:element type="eac:demographicDescriptions"
+                     name="demographicDescriptions"
+                     minOccurs="0"/>
+         <xs:element type="eac:functions" name="functions" minOccurs="0"/>
+         <xs:element type="eac:languagesUsed" name="languagesUsed" minOccurs="0"/>
+         <xs:element type="eac:legalStatuses" name="legalStatuses" minOccurs="0"/>
+         <xs:element type="eac:localDescriptions" name="localDescriptions" minOccurs="0"/>
+         <xs:element type="eac:mandates" name="mandates" minOccurs="0"/>
+         <xs:element type="eac:occupations" name="occupations" minOccurs="0"/>
+         <xs:element type="eac:places" name="places" minOccurs="0"/>
+         <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element type="eac:biogHist" name="biogHist"/>
+            <xs:element type="eac:existDates" name="existDates"/>
+            <xs:element type="eac:generalContext" name="generalContext"/>
+            <xs:element type="eac:structureOrGenealogy" name="structureOrGenealogy"/>
+         </xs:choice>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="base" type="xs:anyURI"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="relations">
+      <xs:sequence>
+         <xs:element type="eac:relation" name="relation" maxOccurs="unbounded"/>
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="base" type="xs:anyURI"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="alternativeSet">
+      <xs:sequence>
+         <xs:element type="eac:setComponent" name="setComponent" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="base" type="xs:anyURI"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="agencyCode" mixed="true">
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="status">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="authorized"/>
+               <xs:enumeration value="alternative"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="vocabularySource" type="xs:token"/>
+      <xs:attribute name="vocabularySourceURI" type="xs:anyURI"/>
+      <xs:attribute name="valueURI" type="xs:anyURI"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="agencyName" mixed="true">
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="vocabularySource" type="xs:token"/>
+      <xs:attribute name="vocabularySourceURI" type="xs:anyURI"/>
+      <xs:attribute name="valueURI" type="xs:anyURI"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="otherAgencyCode" mixed="true">
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="status">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="authorized"/>
+               <xs:enumeration value="alternative"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="vocabularySource" type="xs:token"/>
+      <xs:attribute name="vocabularySourceURI" type="xs:anyURI"/>
+      <xs:attribute name="valueURI" type="xs:anyURI"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="descriptiveNote">
+      <xs:sequence>
+         <xs:element type="eac:p" name="p" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="maintenanceEvent">
+      <xs:sequence>
+         <xs:element type="eac:agent" name="agent"/>
+         <xs:element type="eac:eventDateTime" name="eventDateTime"/>
+         <xs:element type="eac:eventDescription"
+                     name="eventDescription"
+                     minOccurs="0"
+                     maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="maintenanceEventType" use="required">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="cancelled"/>
+               <xs:enumeration value="created"/>
+               <xs:enumeration value="deleted"/>
+               <xs:enumeration value="derived"/>
+               <xs:enumeration value="revised"/>
+               <xs:enumeration value="unknown"/>
+               <xs:enumeration value="updated"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0705 0855 1003 1079&#xa; control/maintenanceHistory/maintenanceEvent/agent/@eac-sia:tipologiaAgente&#xa; 'Tipologia compilatore' lista chiusa con valori:&#xa;
+Persona,
+Organizzazione,
+Software."
+      test="every $v in (agent/@eac-sia:tipologiaAgente)
+            satisfies 
+            (
+                normalize-space(lower-case($v))='persona'
+             or normalize-space(lower-case($v))='organizzazione'
+             or normalize-space(lower-case($v))='software'
+            )
+           "/>
+      
+   </xs:complexType>
+   <xs:complexType name="source">
+      <xs:sequence>
+         <xs:element type="eac:reference" name="reference" maxOccurs="unbounded"/>
+         <xs:element type="eac:citedRange"
+                     name="citedRange"
+                     minOccurs="0"
+                     maxOccurs="unbounded"/>
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+         <xs:element type="eac:objectXMLWrap" name="objectXMLWrap" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="href" type="xs:anyURI"/>
+      <xs:attribute name="linkRole" type="xs:anyURI"/>
+      <xs:attribute name="linkTitle" type="xs:token"/>
+      <xs:attribute name="vocabularySource" type="xs:token"/>
+      <xs:attribute name="vocabularySourceURI" type="xs:anyURI"/>
+      <xs:attribute name="valueURI" type="xs:anyURI"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="reference" mixed="true">
+      <xs:sequence>
+         <xs:element type="eac:span" name="span" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="href" type="xs:anyURI"/>
+      <xs:attribute name="linkRole" type="xs:anyURI"/>
+      <xs:attribute name="linkTitle" type="xs:token"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="shortCode" mixed="true">
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="term" mixed="true">
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:simpleType name="m.data.standardDate"><!-- uniformità con eac-cpf -->
+     <xs:union memberTypes="xs:date xs:gYear xs:gYearMonth"/>
+   </xs:simpleType>
+   <xs:complexType name="date" mixed="true">
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="calendar" type="xs:NMTOKEN"/>
+      <xs:attribute name="certainty" type="xs:NMTOKEN"/>
+      <xs:attribute name="era" type="xs:NMTOKEN"/>
+      <!--
+      <xs:attribute name="notAfter" type="xs:token"/>
+      <xs:attribute name="notBefore" type="xs:token"/>
+      <xs:attribute name="standardDate" type="xs:token"/>
+      -->
+      <xs:attribute name="standardDate" type="m.data.standardDate"/>
+      <xs:attribute name="notBefore" type="m.data.standardDate"/>
+      <xs:attribute name="notAfter" type="m.data.standardDate"/>
+      <xs:attribute name="status">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="unknown"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+      
+      <!-- 
+       eac 0030 0036 0050 0056 0073 0079 0097 0103 0115 0121 0136 0142 0164 0170 0188 0194 0206 0212 0227 0233 0247 0253 0276 0282 0300 0306 0326 0332 0348 0354 0368 0374 0388 0394 0408 0414 0437 0443 0460 0466 0483 0489 0515 0521 0542 0548 0562 0568 0581 0587 0653 0659 0675 0681 0744 0750 0768 0774 0789 0795 0811 0817 0833 0839 0894 0900 0918 0924 0940 0946 0961 0967 0981 0987 1039 1046
+       date/@certainty 'Validità' Lista chiusa: dataApprossimativa, dataAttribuita, dataIncerta, dataIncertaAttribuita, dataPostQuem.
+      -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0030 0036 0050 0056 0073 0079 0097 0103 0115 0121 0136 0142 0164 0170 0188 0194 0206 0212 0227 0233 0247 0253 0276 0282 0300 0306 0326 0332 0348 0354 0368 0374 0388 0394 0408 0414 0437 0443 0460 0466 0483 0489 0515 0521 0542 0548 0562 0568 0581 0587 0653 0659 0675 0681 0744 0750 0768 0774 0789 0795 0811 0817 0833 0839 0894 0900 0918 0924 0940 0946 0961 0967 0981 0987 1039 1046&#xa;
+date/@certainty&#xa; 'Validità' lista chiusa con valori:&#xa;
+dataApprossimativa,
+dataAttribuita,
+dataIncerta,
+dataIncertaAttribuita,
+dataPostQuem."
+         test="
+            every $v in (@certainty)
+            satisfies
+            (
+                normalize-space(lower-case($v))='dataapprossimativa'
+             or normalize-space(lower-case($v))='dataattribuita'
+             or normalize-space(lower-case($v))='dataincerta'
+             or normalize-space(lower-case($v))='dataincertaattribuita'
+             or normalize-space(lower-case($v))='datapostquem'
+            )
+           "/>
+      
+      <!-- 0026 0046 0069 0093 0111 0132 0160 0184 0202 0223 0243 0272 0296 0322 0344 0364 0384 0404 0433 0456 0479 0511 0538 0558 0577 0649 0671 0740 0764 0785 0807 0829 0890 0914 0936 0957 0977 1034
+      date[@eac-sia:tipologiaData] 'Tipologia data' Lista chiusa: Intervallo di date, Data singola, Data aperta, Data non rilevata/non rilevabile.
+      -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0026 0046 0069 0093 0111 0132 0160 0184 0202 0223 0243 0272 0296 0322 0344 0364 0384 0404 0433 0456 0479 0511 0538 0558 0577 0649 0671 0740 0764 0785 0807 0829 0890 0914 0936 0957 0977 1034&#xa; 
+date/@eac-sia:tipologiaData&#xa; 'Tipologia data' lista chiusa con valori:&#xa; 
+intervallo di date,
+data singola,
+data aperta,
+data non rilevabile - non rilevata."
+      test="every $v in (@eac-sia:tipologiaData)
+            satisfies 
+            (
+                normalize-space(lower-case($v))='intervallo di date'
+             or normalize-space(lower-case($v))='data singola'
+             or normalize-space(lower-case($v))='data aperta'
+             or normalize-space(lower-case($v))='data non rilevabile - non rilevata'
+            )
+           "/>
+         
+   </xs:complexType>
+   <xs:complexType name="dateRange">
+      <xs:choice>
+         <xs:sequence>
+            <xs:element type="eac:fromDate" name="fromDate"/>
+            <xs:element type="eac:toDate" name="toDate" minOccurs="0"/>
+         </xs:sequence>
+         <xs:element type="eac:toDate" name="toDate"/>
+      </xs:choice>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+
+      <!-- 0030 0050 0073 0097 0115 0136 0164 0188 0206 0227 0247 0276 0300 0326 0348 0368 0388 0408 0437 0460 0483 0515 0542 0562 0581 0653 0675 0744 0768 0789 0811 0833 0894 0918 0940 0961 0981 1039
+         Validità fromDate/@certainty Lista chiusa: dataApprossimativa, dataAttribuita, dataIncerta, dataIncertaAttribuita, dataPostQuem.
+           0036 0056 0079 0103 0121 0142 0170 0194 0212 0233 0253 0282 0306 0332 0354 0374 0394 0414 0443 0466 0489 0521 0548 0568 0587 0659 0681 0750 0774 0795 0817 0839 0900 0924 0946 0967 0987 1046
+         Validità toDate/@certainty Lista chiusa: dataApprossimativa, dataAttribuita, dataIncerta, dataIncertaAttribuita, dataPostQuem.
+      -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0030 0050 0073 0097 0115 0136 0164 0188 0206 0227 0247 0276 0300 0326 0348 0368 0388 0408 0437 0460 0483 0515 0542 0562 0581 0653 0675 0744 0768 0789 0811 0833 0894 0918 0940 0961 0981 1039 0036 0056 0079 0103 0121 0142 0170 0194 0212 0233 0253 0282 0306 0332 0354 0374 0394 0414 0443 0466 0489 0521 0548 0568 0587 0659 0681 0750 0774 0795 0817 0839 0900 0924 0946 0967 0987 1046&#xa;
+(fromDate|toDate)/@certainty&#xa; 'Validità' lista chiusa con valori:
+dataApprossimativa,
+dataAttribuita,
+dataIncerta,
+dataIncertaAttribuita,
+dataPostQuem."
+         test="
+            every $v in ((fromDate|toDate)/@certainty)
+            satisfies
+            (
+                normalize-space(lower-case($v))='dataapprossimativa'
+             or normalize-space(lower-case($v))='dataattribuita'
+             or normalize-space(lower-case($v))='dataincerta'
+             or normalize-space(lower-case($v))='dataincertaattribuita'
+             or normalize-space(lower-case($v))='datapostquem'
+            )
+           "/>
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0026 0046 0069 0093 0111 0132 0160 0184 0202 0223 0243 0272 0296 0322 0344 0364 0384 0404 0433 0456 0479 0511 0538 0558 0577 0649 0671 0740 0764 0785 0807 0829 0890 0914 0936 0957 0977 1034&#xa; 
+dateRange/@eac-sia:tipologiaData&#xa; 'Tipologia data' lista chiusa con valori:&#xa; 
+intervallo di date,
+data singola,
+data aperta,
+data non rilevabile - non rilevata."
+      test="every $v in (@eac-sia:tipologiaData)
+            satisfies 
+            (
+                normalize-space(lower-case($v))='intervallo di date'
+             or normalize-space(lower-case($v))='data singola'
+             or normalize-space(lower-case($v))='data aperta'
+             or normalize-space(lower-case($v))='data non rilevabile - non rilevata'
+            )
+           "/>
+
+   </xs:complexType>
+   <xs:complexType name="entityType">
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="value" use="required">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="corporateBody"/>
+               <xs:enumeration value="person"/>
+               <xs:enumeration value="family"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="nameEntry">
+      <xs:sequence>
+         <xs:element type="eac:part" name="part" maxOccurs="unbounded"/>
+         <xs:element type="eac:useDates"
+                     name="useDates"
+                     minOccurs="0"
+                     maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="vocabularySource" type="xs:token"/>
+      <xs:attribute name="vocabularySourceURI" type="xs:anyURI"/>
+      <xs:attribute name="valueURI" type="xs:anyURI"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="preferredForm" type="xs:boolean"/>
+      <xs:attribute name="status">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="authorized"/>
+               <xs:enumeration value="alternative"/>
+               <!-- 0089 0180 0292 sostituito con alternative (xsd)
+               <xs:enumeration value="alternativo"/> -->
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="nameEntrySet">
+      <xs:sequence>
+         <xs:element type="eac:nameEntry" name="nameEntry"/>
+         <xs:element type="eac:nameEntry" name="nameEntry" maxOccurs="unbounded"/>
+         <xs:element type="eac:useDates"
+                     name="useDates"
+                     minOccurs="0"
+                     maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="otherEntityTypes">
+      <xs:sequence>
+         <xs:element type="eac:otherEntityType"
+                     name="otherEntityType"
+                     maxOccurs="unbounded"/>
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="identityId" mixed="true">
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="vocabularySource" type="xs:token"/>
+      <xs:attribute name="vocabularySourceURI" type="xs:anyURI"/>
+      <xs:attribute name="valueURI" type="xs:anyURI"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="demographicDescriptions">
+      <xs:sequence>
+         <xs:element type="eac:demographicDescription"
+                     name="demographicDescription"
+                     maxOccurs="unbounded"/>
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="functions">
+      <xs:sequence>
+         <xs:element type="eac:function" name="function" maxOccurs="unbounded"/>
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="languagesUsed">
+      <xs:sequence>
+         <xs:element type="eac:languageUsed" name="languageUsed" maxOccurs="unbounded"/>
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="legalStatuses">
+      <xs:sequence>
+         <xs:element type="eac:legalStatus" name="legalStatus" maxOccurs="unbounded"/>
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="localDescriptions">
+      <xs:sequence>
+         <xs:element type="eac:localDescription"
+                     name="localDescription"
+                     maxOccurs="unbounded"/>
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="mandates">
+      <xs:sequence>
+         <xs:element type="eac:mandate" name="mandate" maxOccurs="unbounded"/>
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="occupations">
+      <xs:sequence>
+         <xs:element type="eac:occupation" name="occupation" maxOccurs="unbounded"/>
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="places">
+      <xs:sequence>
+         <xs:element type="eac:place" name="place" maxOccurs="unbounded"/>
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="biogHist">
+      <xs:sequence>
+         <xs:element type="eac:head" name="head" minOccurs="0"/>
+         <xs:element type="eac:abstract" name="abstract" minOccurs="0"/>
+         <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element type="eac:list" name="list"/>
+            <xs:element type="eac:p" name="p"/>
+            <xs:element type="eac:chronList" name="chronList"/>
+         </xs:choice>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="existDates">
+      <xs:sequence>
+         <xs:choice>
+            <xs:element type="eac:date" name="date"/>
+            <xs:element type="eac:dateRange" name="dateRange"/>
+            <xs:element type="eac:dateSet" name="dateSet"/>
+         </xs:choice>
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+      
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0124&#xa; cpfDescription/description/existDates[@localType='dateEsistenzaEnte']/dateSet/date/@eac-sia:qualificaData&#xa; 'Qualifica della data' è richiesto con valori:&#xa;
+Data di istituzione/costituzione,
+Data di soppressione/cessazione,
+Date di esistenza."
+      test="not(normalize-space(lower-case(@localType))='dateesistenzaente')
+            or
+            (
+             (count(dateSet/date/@eac-sia:qualificaData) &gt; 0)
+             and
+             (
+              every $v in (dateSet/date/@eac-sia:qualificaData)
+              satisfies 
+              (
+                  normalize-space(lower-case($v))='data di istituzione/costituzione'
+               or normalize-space(lower-case($v))='data di soppressione/cessazione'
+               or normalize-space(lower-case($v))='date di esistenza'
+              )
+             )
+            )
+           "/>
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0215&#xa; cpfDescription/description/existDates[@localType='dateEsistenzaFamiglia']/dateSet/date/@eac-sia:qualificaData&#xa; 'Qualifica della data' è richiesto con valori:&#xa;
+Data di origine,
+Data di estinzione,
+Date di esistenza."
+      test="not(normalize-space(lower-case(@localType))='dateesistenzafamiglia')
+            or
+            (
+             (count(dateSet/date/@eac-sia:qualificaData) &gt; 0)
+             and
+             (
+              every $v in (dateSet/date/@eac-sia:qualificaData)
+              satisfies 
+              (
+                  normalize-space(lower-case($v))='data di origine'
+               or normalize-space(lower-case($v))='data di estinzione'
+               or normalize-space(lower-case($v))='date di esistenza'
+              )
+             )
+            )
+           "/>
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0335&#xa; cpfDescription/description/existDates[@localType='dateEsistenzaPersona']/dateSet/date/@eac-sia:qualificaData&#xa; 'Qualifica della data' è richiesto con valori:&#xa;
+Data di nascita,
+Data di morte,
+Date di esistenza."
+      test="not(normalize-space(lower-case(@localType))='dateesistenzapersona')
+            or
+            (
+             (count(dateSet/date/@eac-sia:qualificaData) &gt; 0)
+             and
+             (
+              every $v in (dateSet/date/@eac-sia:qualificaData)
+              satisfies 
+              (
+                  normalize-space(lower-case($v))='data di nascita'
+               or normalize-space(lower-case($v))='data di morte'
+               or normalize-space(lower-case($v))='date di esistenza'
+              )
+             )
+            )
+           "/>
+      
+   </xs:complexType>
+   <xs:complexType name="generalContext">
+      <xs:sequence>
+         <xs:element type="eac:head" name="head" minOccurs="0"/>
+         <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element type="eac:list" name="list"/>
+            <xs:element type="eac:p" name="p"/>
+         </xs:choice>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="structureOrGenealogy">
+      <xs:sequence>
+         <xs:element type="eac:head" name="head" minOccurs="0"/>
+         <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element type="eac:list" name="list"/>
+            <xs:element type="eac:p" name="p"/>
+         </xs:choice>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="relation">
+      <xs:sequence>
+         <xs:element type="eac:targetEntity" name="targetEntity"/>
+         <xs:choice minOccurs="0">
+            <xs:element type="eac:date" name="date"/>
+            <xs:element type="eac:dateRange" name="dateRange"/>
+            <xs:element type="eac:dateSet" name="dateSet"/>
+         </xs:choice>
+         <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element type="eac:place" name="place"/>
+            <xs:element type="eac:relationType" name="relationType"/>
+            <xs:element type="eac:targetRole" name="targetRole"/>
+         </xs:choice>
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+         <xs:element type="eac:objectXMLWrap" name="objectXMLWrap" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+      
+       <!-- 0426 0427
+          eac/cpfDescription/relations/relation[targetRole="complessoArchivistico"]/relationType/
+             Lista chiusa: Soggetto produttore, Soggetto conservatore, Possessore, Proprietario, Detentore di diritti
+             obbligatorio con eac/cpfDescription/relations/relation[targetRole="complessoArchivistico"]/targetEntity[@targetType="resource"]/@id --><!--
+       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+          xao:message="&#160;&#xa; eac 0426 0427 cpfDescription/relations/relation[targetRole='complessoArchivistico'][targetEntity[@targetType='resource' and @id]]/relationType lista chiusa con valori:
+Soggetto produttore,
+Soggetto conservatore,
+Possessore,
+Proprietario,
+Detentore di diritti"
+          test="not(.[targetRole[normalize-space(lower-case(.))='complessoarchivistico']]/targetEntity[@targetType='resource']/@id)
+                 or
+                not
+                (.[targetRole[normalize-space(lower-case(.))='complessoarchivistico']][targetEntity[@targetType='resource' and @id]]
+                 [not(relationType)
+                  or
+                  relationType
+                  [    normalize-space(lower-case(.))!='soggetto produttore'
+                   and normalize-space(lower-case(.))!='soggetto conservatore'
+                   and normalize-space(lower-case(.))!='possessore'
+                   and normalize-space(lower-case(.))!='proprietario'
+                   and normalize-space(lower-case(.))!='detentore di diritti'
+                  ]
+                 ]
+                )
+               "/>
+       -->
+       <!-- 0427
+          eac/cpfDescription/relations/relation[targetRole="complessoArchivistico"]/relationType/
+             Lista chiusa: Soggetto produttore, Soggetto conservatore, Possessore, Proprietario, Detentore di diritti -->
+       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+          xao:message="&#160;&#xa; eac 0427&#xa; cpfDescription/relations/relation[targetRole='complessoArchivistico']/relationType&#xa; 'Qualifica della relazione' è richiesto con valori:&#xa;
+Soggetto produttore,
+Soggetto conservatore,
+Possessore,
+Proprietario,
+Detentore di diritti."
+          test="not(.[targetRole[normalize-space(lower-case(.))='complessoarchivistico']])
+                 or
+                (
+                 (count(relationType) &gt; 0)
+                  and
+                 ( 
+                  every $v in (relationType/text())
+                  satisfies 
+                  (
+                      normalize-space(lower-case($v))='soggetto produttore'
+                   or normalize-space(lower-case($v))='soggetto conservatore'
+                   or normalize-space(lower-case($v))='possessore'
+                   or normalize-space(lower-case($v))='proprietario'
+                   or normalize-space(lower-case($v))='detentore di diritti'
+                  )
+                 )
+                )
+               "/>
+       <!-- 0446 cpfDescription/relations/relation[targetRole="complessoArchivistico"][relationType[.='soggetto produttore' or .='soggetto conservatore']]/(.|dateSet)/date/@eac-sia:qualificaData Lista chiusa: data inizio produzione, data fine produzione, data di ingresso presso il conservatore  -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0446&#xa; cpfDescription/relations/relation[targetRole='complessoArchivistico'][relationType[.='soggetto produttore' or .='soggetto conservatore']]/(.|dateSet)/date/@eac-sia:qualificaData&#xa; 'Qualifica della data' lista chiusa con valori:&#xa;
+data inizio produzione,
+data fine produzione,
+data di ingresso presso il conservatore."
+         test="
+            not(.[targetRole[normalize-space(lower-case(.))='complessoarchivistico']])
+            or
+            not(.[relationType[normalize-space(lower-case(.))='soggetto produttore' or normalize-space(lower-case(.))='soggetto conservatore']])
+            or 
+            (
+             every $v in ((.|dateSet)/date/@eac-sia:qualificaData)
+             satisfies 
+             (
+                 normalize-space(lower-case($v))='data inizio produzione'
+              or normalize-space(lower-case($v))='data fine produzione'
+              or normalize-space(lower-case($v))='data di ingresso presso il conservatore'
+             )
+            )
+         "/>
+
+       <!-- 0451 eac/cpfDescription/relations/relation[targetRole="unitaArchivistica"]/targetRole/@localType
+            0474 eac/cpfDescription/relations/relation[targetRole="unitaDocumentaria"]/targetRole/@localType
+               Lista chiusa: Destinatario, Mittente, Notaio, Testimone, Autore, Disegnatore, Editore, Incisore, Giudice, Agrimensore, Rilevatore, Miniaturista, Copista, Esecutore, Progettista, Supervisore, Litografo, Fotografo inventore, Fotografo principale, Ideatore, Regista, Committente, Corrispondente, Curatore, Responsabile, Partecipante, Finanziatore, Possessore, Proprietario, Detentore dei diritti.
+       -->
+       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+          xao:message="&#160;&#xa; eac 0451 0474&#xa; cpfDescription/relations/relation/targetRole[.='unitaArchivistica' or .='unitaDocumentaria']/@localType&#xa; 'Ruolo/qualifica' lista chiusa con valori:&#xa;
+Agrimensore,
+Autore,
+Committente,
+Copista,
+Corrispondente,
+Curatore,
+Destinatario,
+Detentore dei diritti,
+Disegnatore,
+Editore,
+Esecutore,
+Finanziatore,
+Fotografo inventore,
+Fotografo principale,
+Giudice,
+Ideatore,
+Incisore,
+Litografo,
+Miniaturista,
+Mittente,
+Notaio,
+Partecipante,
+Possessore,
+Progettista,
+Proprietario,
+Regista,
+Responsabile,
+Rilevatore,
+Supervisore,
+Testimone."
+           test="not(./targetRole[normalize-space(lower-case(.))='unitaarchivistica' or normalize-space(lower-case(.))='unitadocumentaria']/@localType[
+                     normalize-space(lower-case(.))!='destinatario'
+                 and normalize-space(lower-case(.))!='mittente'
+                 and normalize-space(lower-case(.))!='notaio'
+                 and normalize-space(lower-case(.))!='testimone'
+                 and normalize-space(lower-case(.))!='autore'
+                 and normalize-space(lower-case(.))!='disegnatore'
+                 and normalize-space(lower-case(.))!='editore'
+                 and normalize-space(lower-case(.))!='incisore'
+                 and normalize-space(lower-case(.))!='giudice'
+                 and normalize-space(lower-case(.))!='agrimensore'
+                 and normalize-space(lower-case(.))!='rilevatore'
+                 and normalize-space(lower-case(.))!='miniaturista'
+                 and normalize-space(lower-case(.))!='copista'
+                 and normalize-space(lower-case(.))!='esecutore'
+                 and normalize-space(lower-case(.))!='progettista'
+                 and normalize-space(lower-case(.))!='supervisore'
+                 and normalize-space(lower-case(.))!='litografo'
+                 and normalize-space(lower-case(.))!='fotografo inventore'
+                 and normalize-space(lower-case(.))!='fotografo principale'
+                 and normalize-space(lower-case(.))!='ideatore'
+                 and normalize-space(lower-case(.))!='regista'
+                 and normalize-space(lower-case(.))!='committente'
+                 and normalize-space(lower-case(.))!='corrispondente'
+                 and normalize-space(lower-case(.))!='curatore'
+                 and normalize-space(lower-case(.))!='responsabile'
+                 and normalize-space(lower-case(.))!='partecipante'
+                 and normalize-space(lower-case(.))!='finanziatore'
+                 and normalize-space(lower-case(.))!='possessore'
+                 and normalize-space(lower-case(.))!='proprietario'
+                 and normalize-space(lower-case(.))!='detentore dei diritti'
+                ])"/>
+       <!-- 0452 eac/cpfDescription/relations/relation[targetRole="unitaArchivistica"]/descriptiveNote/p/
+            0475 eac/cpfDescription/relations/relation[targetRole="unitaDocumentaria"]/descriptiveNote/p/
+               Lista chiusa: Analisi diagnostiche, Analisi iconografica, Analisi stilistica, Attributo figurato, Bibliografia, Bollo, Cartiglio, Contesto, Documentazione, Firma, Fonte archivistica, Inventario museale, Iscrizione, Marchio, Monogramma, Nota manoscritta, Pubblicazione, Punzone, Sigla, Simbolo, Timbro, Tradizione orale
+       -->
+       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+          xao:message="&#160;&#xa; eac 0452 0475&#xa; cpfDescription/relations/relation[targetRole[.='unitaArchivistica' or .='unitaDocumentaria']]/descriptiveNote/p&#xa; 'Motivo dell'attribuzione' lista chiusa con valori:&#xa;
+Analisi diagnostiche,
+Analisi iconografica,
+Analisi stilistica,
+Attributo figurato,
+Bibliografia,
+Bollo,
+Cartiglio,
+Contesto,
+Documentazione,
+Firma,
+Fonte archivistica,
+Inventario museale,
+Iscrizione,
+Marchio,
+Monogramma,
+Nota manoscritta,
+Pubblicazione,
+Punzone,
+Sigla,
+Simbolo,
+Timbro,
+Tradizione orale."
+          test="not(.[targetRole[normalize-space(lower-case(.))='unitaarchivistica' or normalize-space(lower-case(.))='unitadocumentaria']]/descriptiveNote/p[
+                     normalize-space(lower-case(.))!='analisi diagnostiche'
+                 and normalize-space(lower-case(.))!='analisi iconografica'
+                 and normalize-space(lower-case(.))!='analisi stilistica'
+                 and normalize-space(lower-case(.))!='attributo figurato'
+                 and normalize-space(lower-case(.))!='bibliografia'
+                 and normalize-space(lower-case(.))!='bollo'
+                 and normalize-space(lower-case(.))!='cartiglio'
+                 and normalize-space(lower-case(.))!='contesto'
+                 and normalize-space(lower-case(.))!='documentazione'
+                 and normalize-space(lower-case(.))!='firma'
+                 and normalize-space(lower-case(.))!='fonte archivistica'
+                 and normalize-space(lower-case(.))!='inventario museale'
+                 and normalize-space(lower-case(.))!='iscrizione'
+                 and normalize-space(lower-case(.))!='marchio'
+                 and normalize-space(lower-case(.))!='monogramma'
+                 and normalize-space(lower-case(.))!='nota manoscritta'
+                 and normalize-space(lower-case(.))!='pubblicazione'
+                 and normalize-space(lower-case(.))!='punzone'
+                 and normalize-space(lower-case(.))!='sigla'
+                 and normalize-space(lower-case(.))!='simbolo'
+                 and normalize-space(lower-case(.))!='timbro'
+                 and normalize-space(lower-case(.))!='tradizione orale'
+                ])"/>
+
+       <!-- eac 0497 cpfDescription/relations/relation[targetRole="strumentoDiRicerca"]/relationType/@localType
+               Lista chiusa: Autore, Curatore, Supervisore. -->
+       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+          xao:message="&#160;&#xa; eac 0497&#xa; cpfDescription/relations/relation[targetRole[.='strumentoDiRicerca']]/relationType/@localType&#xa; 'Ruolo' lista chiusa con valori:&#xa;
+Autore,
+Curatore,
+Supervisore."
+           test="not(.[targetRole[normalize-space(lower-case(.))='strumentodiricerca']]/relationType/@localType[
+                     normalize-space(lower-case(.))!='autore'
+                 and normalize-space(lower-case(.))!='curatore'
+                 and normalize-space(lower-case(.))!='supervisore'
+                ])"/>
+
+       <!-- eac 0501 cpfDescription/relations/relation[targetRole="progetto"]/relationType/@localType
+               Lista chiusa: Responsabile, Finanziatore, Partecipante, Supporto, Responsabile scientifico, Responsabile operativo, Coordinatore, Operatore, Promotore, Realizzatore. -->
+       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+          xao:message="&#160;&#xa; eac 0501&#xa; cpfDescription/relations/relation[targetRole[.='progetto']]/relationType/@localType&#xa; 'Qualificazione della partecipazione al progetto' lista chiusa con valori:&#xa;
+Responsabile,
+Finanziatore,
+Partecipante,
+Supporto,
+Responsabile scientifico,
+Responsabile operativo,
+Coordinatore,
+Operatore,
+Promotore,
+Realizzatore."
+           test="not(.[targetRole[normalize-space(lower-case(.))='progetto']]/relationType/@localType[
+                     normalize-space(lower-case(.))!='responsabile'
+                 and normalize-space(lower-case(.))!='finanziatore'
+                 and normalize-space(lower-case(.))!='partecipante'
+                 and normalize-space(lower-case(.))!='supporto'
+                 and normalize-space(lower-case(.))!='responsabile scientifico'
+                 and normalize-space(lower-case(.))!='responsabile operativo'
+                 and normalize-space(lower-case(.))!='coordinatore'
+                 and normalize-space(lower-case(.))!='operatore'
+                 and normalize-space(lower-case(.))!='promotore'
+                 and normalize-space(lower-case(.))!='realizzatore'
+                ])"/>
+                
+       <!-- eac 0533 0553 0644 0666 cpfDescription/relations/relation[
+       targetRole="Soggetto produttore collegato" or
+       targetRole="Relazione in arrivo - Soggetto produttore a cui è collegato" or
+       targetRole="Soggetto conservatore collegato" or
+       targetRole="Relazione in arrivo - Soggetto conservatore a cui è collegato"
+       ]/targetEntity/@targetType
+               Lista chiusa: corporateBody, family, person. -->
+       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+          xao:message="&#160;&#xa; eac 0533 0553 0644 0666&#xa; cpfDescription/relations/relation[targetRole[
+
+.='Soggetto produttore collegato' or
+.='Relazione in arrivo - Soggetto produttore a cui è collegato' or
+.='Soggetto conservatore collegato' or
+.='Relazione in arrivo - Soggetto conservatore a cui è collegato'
+
+]]/targetEntity/@targetType&#xa; 'Soggetto produttore/conservatore' lista chiusa con valori:&#xa;
+
+corporateBody,
+family,
+person."
+           test="not(.
+                     [
+                      targetRole
+                      [
+                          normalize-space(lower-case(.))='soggetto produttore collegato'
+                       or normalize-space(lower-case(.))='relazione in arrivo - soggetto produttore a cui è collegato'
+                       or normalize-space(lower-case(.))='soggetto conservatore collegato'
+                       or normalize-space(lower-case(.))='relazione in arrivo - soggetto conservatore a cui è collegato'
+                      ]
+                     ]/
+                     targetEntity/@targetType
+                     [
+                          normalize-space(lower-case(.))!='corporatebody'
+                      and normalize-space(lower-case(.))!='family'
+                      and normalize-space(lower-case(.))!='person'
+                     ]
+                    )"/>
+       <!-- eac 0534 0554 0645 0667 cpfDescription/relations/relation[
+       targetRole="Soggetto produttore collegato" or
+       targetRole="Relazione in arrivo - Soggetto produttore a cui è collegato" or
+       targetRole="Soggetto conservatore collegato" or
+       targetRole="Relazione in arrivo - Soggetto conservatore a cui è collegato"
+       ]/relationType
+               Lista chiusa: Identità, Gerarchica, GerarchicaPadre, GerarchicaFiglio, Temporale, TemporalePrecedente, TemporaleSuccessiva, Associativa. -->
+       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+          xao:message="&#160;&#xa; eac 0534 0554 0645 0667&#xa; cpfDescription/relations/relation[targetRole[
+
+.='Soggetto produttore collegato' or
+.='Relazione in arrivo - Soggetto produttore a cui è collegato' or
+.='Soggetto conservatore collegato' or
+.='Relazione in arrivo - Soggetto conservatore a cui è collegato'
+
+]]/relationType&#xa; 'Qualifica della relazione' lista chiusa con valori:&#xa;
+
+Identità,
+Gerarchica,
+GerarchicaPadre,
+GerarchicaFiglio,
+Temporale,
+TemporalePrecedente,
+TemporaleSuccessiva,
+Associativa."
+           test="not(.
+                     [
+                      targetRole
+                      [
+                          normalize-space(lower-case(.))='soggetto produttore collegato'
+                       or normalize-space(lower-case(.))='relazione in arrivo - soggetto produttore a cui è collegato'
+                       or normalize-space(lower-case(.))='soggetto conservatore collegato'
+                       or normalize-space(lower-case(.))='relazione in arrivo - soggetto conservatore a cui è collegato'
+                      ]
+                     ]/
+                     relationType
+                     [
+                          normalize-space(lower-case(.))!='identità'
+                      and normalize-space(lower-case(.))!='gerarchica'
+                      and normalize-space(lower-case(.))!='gerarchicapadre'
+                      and normalize-space(lower-case(.))!='gerarchicafiglio'
+                      and normalize-space(lower-case(.))!='temporale'
+                      and normalize-space(lower-case(.))!='temporaleprecedente'
+                      and normalize-space(lower-case(.))!='temporalesuccessiva'
+                      and normalize-space(lower-case(.))!='associativa'
+                     ]
+                    )"/>
+
+       <!-- eac 0573 cpfDescription/relations/relation[targetRole="Profilo istituzionale collegato"]/targetEntity/@targetType
+               Lista chiusa: corporateBody. -->
+       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+          xao:message="&#160;&#xa; eac 0573&#xa; cpfDescription/relations/relation[targetRole[.='Profilo istituzionbale collegato']]/targetEntity/@targetType&#xa; 'Profilo istituzionale' lista chiusa con valore:&#xa;
+corporateBody."
+           test="not(.[targetRole[normalize-space(lower-case(.))='profilo istituzionale collegato']]/targetEntity/@targetType[
+                     normalize-space(lower-case(.))!='corporatebody'
+                ])"/>
+
+       <!-- eac 0690 cpfDescription/relations/relation[targetRole="Risorsa digitale collegata"]/relationType
+               Lista chiusa: Nativo Digitale, È documentazione, È rappresentazione di. -->
+       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+          xao:message="&#160;&#xa; eac 0690&#xa; cpfDescription/relations/relation[targetRole[.='Risorsa digitale collegata']]/relationType&#xa; 'Tipologia relazione' lista chiusa con valori:&#xa;
+Nativo Digitale,
+È documentazione,
+È rappresentazione di."
+           test="not(.[targetRole[normalize-space(lower-case(.))='risorsa digitale collegata']]/relationType[
+                     normalize-space(lower-case(.))!='nativo digitale'
+                 and normalize-space(lower-case(.))!='è documentazione'
+                 and normalize-space(lower-case(.))!='è rappresentazione di'
+                ])"/>
+
+   </xs:complexType>
+   <xs:complexType name="setComponent">
+      <xs:sequence>
+         <xs:element type="eac:componentEntry"
+                     name="componentEntry"
+                     minOccurs="0"
+                     maxOccurs="unbounded"/>
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+         <xs:element type="eac:objectXMLWrap" name="objectXMLWrap" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="href" type="xs:anyURI"/>
+      <xs:attribute name="linkRole" type="xs:anyURI"/>
+      <xs:attribute name="linkTitle" type="xs:token"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="p" mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+         <xs:element type="eac:reference" name="reference"/>
+         <xs:element type="eac:span" name="span"/>
+      </xs:choice>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="agent" mixed="true">
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="vocabularySource" type="xs:token"/>
+      <xs:attribute name="vocabularySourceURI" type="xs:anyURI"/>
+      <xs:attribute name="valueURI" type="xs:anyURI"/>
+      <xs:attribute name="agentType" use="required">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="human"/>
+               <xs:enumeration value="machine"/>
+               <xs:enumeration value="unknown"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="eventDateTime" mixed="true">
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="standardDateTime">
+         <xs:simpleType>
+            <xs:union memberTypes="xs:gYear xs:gYearMonth xs:date xs:dateTime"/>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="eventDescription" mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+         <xs:element type="eac:reference" name="reference"/>
+         <xs:element type="eac:span" name="span"/>
+      </xs:choice>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+      
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0707 0857 1005 1081&#xa; control/maintenanceHistory/maintenanceEvent/eventDescription/span[@localType='Azione']&#xa; 'Azione' lista chiusa con valori:&#xa;
+Importazione,
+Integrazione successiva,
+Prima redazione,
+Raccolta delle informazioni,
+Revisione,
+Rielaborazione,
+Supervisione."
+      test="every $v in (span[@localType='Azione'])
+            satisfies 
+            (
+                normalize-space(lower-case($v))='importazione'
+             or normalize-space(lower-case($v))='integrazione successiva'
+             or normalize-space(lower-case($v))='prima redazione'
+             or normalize-space(lower-case($v))='raccolta delle informazioni'
+             or normalize-space(lower-case($v))='revisione'
+             or normalize-space(lower-case($v))='rielaborazione'
+             or normalize-space(lower-case($v))='supervisione'
+            )
+           "/>
+
+   </xs:complexType>
+   <xs:complexType name="citedRange" mixed="true">
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="unit" type="xs:token"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="objectXMLWrap">
+      <xs:complexContent>
+         <xs:extension base="eac:_1">
+            <xs:attribute name="audience">
+               <xs:simpleType>
+                  <xs:restriction base="xs:token">
+                     <xs:enumeration value="external"/>
+                     <xs:enumeration value="internal"/>
+                  </xs:restriction>
+               </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="id" type="xs:ID"/>
+            <xs:attribute name="target" type="xs:IDREFS"/>
+            <xs:anyAttribute namespace="##other" processContents="lax"/>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+   <xs:complexType name="span" mixed="true">
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="style" type="xs:normalizedString"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="fromDate" mixed="true">
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="calendar" type="xs:NMTOKEN"/>
+      <xs:attribute name="certainty" type="xs:NMTOKEN"/>
+      <!-- 0030 0050 ... (xsd) modificata lista con NMTOKEN
+      <xs:attribute name="certainty" type="xs:token"/> -->
+      <xs:attribute name="era" type="xs:NMTOKEN"/><!--
+      <xs:attribute name="notAfter" type="xs:token"/>
+      <xs:attribute name="notBefore" type="xs:token"/>
+      <xs:attribute name="standardDate" type="xs:token"/>
+      -->
+      <xs:attribute name="standardDate" type="m.data.standardDate"/>
+      <xs:attribute name="notBefore" type="m.data.standardDate"/>
+      <xs:attribute name="notAfter" type="m.data.standardDate"/>
+      <xs:attribute name="status">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="unknown"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="toDate" mixed="true">
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="calendar" type="xs:NMTOKEN"/>
+      <xs:attribute name="certainty" type="xs:NMTOKEN"/>
+      <!-- 0036 0056 ... (xsd) modificata lista con NMTOKEN
+      <xs:attribute name="certainty" type="xs:token"/> -->
+      <xs:attribute name="era" type="xs:NMTOKEN"/><!--
+      <xs:attribute name="notAfter" type="xs:token"/>
+      <xs:attribute name="notBefore" type="xs:token"/>
+      <xs:attribute name="standardDate" type="xs:token"/>
+      -->
+      <xs:attribute name="standardDate" type="m.data.standardDate"/>
+      <xs:attribute name="notBefore" type="m.data.standardDate"/>
+      <xs:attribute name="notAfter" type="m.data.standardDate"/>
+      <xs:attribute name="status">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="ongoing"/>
+               <xs:enumeration value="unknown"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="part">
+      <xs:simpleContent>
+         <xs:restriction base="xs:anyType">
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value="(.|\n|\r)*\S(.|\n|\r)*"/>
+               </xs:restriction>
+            </xs:simpleType>
+            <xs:attribute name="audience">
+               <xs:simpleType>
+                  <xs:restriction base="xs:token">
+                     <xs:enumeration value="external"/>
+                     <xs:enumeration value="internal"/>
+                  </xs:restriction>
+               </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="id" type="xs:ID"/>
+            <xs:attribute name="target" type="xs:IDREFS"/>
+            <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+            <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+            <xs:attribute name="localType" type="xs:token"/>
+            <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+            <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+            <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+            <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+            <xs:anyAttribute namespace="##other" processContents="lax"/>
+         </xs:restriction>
+      </xs:simpleContent>
+   </xs:complexType>
+   <xs:complexType name="useDates">
+      <xs:choice>
+         <xs:element type="eac:date" name="date"/>
+         <xs:element type="eac:dateRange" name="dateRange"/>
+         <xs:element type="eac:dateSet" name="dateSet"/>
+      </xs:choice>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="otherEntityType">
+      <xs:sequence>
+         <xs:element type="eac:term" name="term" maxOccurs="unbounded"/>
+         <xs:choice minOccurs="0">
+            <xs:element type="eac:date" name="date"/>
+            <xs:element type="eac:dateRange" name="dateRange"/>
+            <xs:element type="eac:dateSet" name="dateSet"/>
+         </xs:choice>
+         <xs:element type="eac:placeName"
+                     name="placeName"
+                     minOccurs="0"
+                     maxOccurs="unbounded"/>
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="vocabularySource" type="xs:token"/>
+      <xs:attribute name="vocabularySourceURI" type="xs:anyURI"/>
+      <xs:attribute name="valueURI" type="xs:anyURI"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="demographicDescription">
+      <xs:sequence>
+         <xs:element type="eac:term" name="term" maxOccurs="unbounded"/>
+         <xs:choice minOccurs="0">
+            <xs:element type="eac:date" name="date"/>
+            <xs:element type="eac:dateRange" name="dateRange"/>
+            <xs:element type="eac:dateSet" name="dateSet"/>
+         </xs:choice>
+         <xs:element type="eac:placeName"
+                     name="placeName"
+                     minOccurs="0"
+                     maxOccurs="unbounded"/>
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="vocabularySource" type="xs:token"/>
+      <xs:attribute name="vocabularySourceURI" type="xs:anyURI"/>
+      <xs:attribute name="valueURI" type="xs:anyURI"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="function">
+      <xs:sequence>
+         <xs:element type="eac:term" name="term" maxOccurs="unbounded"/>
+         <xs:choice minOccurs="0">
+            <xs:element type="eac:date" name="date"/>
+            <xs:element type="eac:dateRange" name="dateRange"/>
+            <xs:element type="eac:dateSet" name="dateSet"/>
+         </xs:choice>
+         <xs:element type="eac:placeName"
+                     name="placeName"
+                     minOccurs="0"
+                     maxOccurs="unbounded"/>
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="vocabularySource" type="xs:token"/>
+      <xs:attribute name="vocabularySourceURI" type="xs:anyURI"/>
+      <xs:attribute name="valueURI" type="xs:anyURI"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="languageUsed">
+      <xs:sequence>
+         <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element type="eac:language" name="language"/>
+            <xs:element type="eac:writingSystem" name="writingSystem"/>
+         </xs:choice>
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="legalStatus">
+      <xs:sequence>
+         <xs:element type="eac:term" name="term" maxOccurs="unbounded"/>
+         <xs:choice minOccurs="0">
+            <xs:element type="eac:date" name="date"/>
+            <xs:element type="eac:dateRange" name="dateRange"/>
+            <xs:element type="eac:dateSet" name="dateSet"/>
+         </xs:choice>
+         <xs:element type="eac:placeName"
+                     name="placeName"
+                     minOccurs="0"
+                     maxOccurs="unbounded"/>
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="vocabularySource" type="xs:token"/>
+      <xs:attribute name="vocabularySourceURI" type="xs:anyURI"/>
+      <xs:attribute name="valueURI" type="xs:anyURI"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="localDescription">
+      <xs:sequence>
+         <xs:element type="eac:term" name="term" maxOccurs="unbounded"/>
+         <xs:choice minOccurs="0">
+            <xs:element type="eac:date" name="date"/>
+            <xs:element type="eac:dateRange" name="dateRange"/>
+            <xs:element type="eac:dateSet" name="dateSet"/>
+         </xs:choice>
+         <xs:element type="eac:placeName"
+                     name="placeName"
+                     minOccurs="0"
+                     maxOccurs="unbounded"/>
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="vocabularySource" type="xs:token"/>
+      <xs:attribute name="vocabularySourceURI" type="xs:anyURI"/>
+      <xs:attribute name="valueURI" type="xs:anyURI"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="mandate">
+      <xs:sequence>
+         <xs:element type="eac:term" name="term" maxOccurs="unbounded"/>
+         <xs:choice minOccurs="0">
+            <xs:element type="eac:date" name="date"/>
+            <xs:element type="eac:dateRange" name="dateRange"/>
+            <xs:element type="eac:dateSet" name="dateSet"/>
+         </xs:choice>
+         <xs:element type="eac:placeName"
+                     name="placeName"
+                     minOccurs="0"
+                     maxOccurs="unbounded"/>
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="vocabularySource" type="xs:token"/>
+      <xs:attribute name="vocabularySourceURI" type="xs:anyURI"/>
+      <xs:attribute name="valueURI" type="xs:anyURI"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="occupation">
+      <xs:sequence>
+         <xs:element type="eac:term" name="term" maxOccurs="unbounded"/>
+         <xs:choice minOccurs="0">
+            <xs:element type="eac:date" name="date"/>
+            <xs:element type="eac:dateRange" name="dateRange"/>
+            <xs:element type="eac:dateSet" name="dateSet"/>
+         </xs:choice>
+         <xs:element type="eac:placeName"
+                     name="placeName"
+                     minOccurs="0"
+                     maxOccurs="unbounded"/>
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="vocabularySource" type="xs:token"/>
+      <xs:attribute name="vocabularySourceURI" type="xs:anyURI"/>
+      <xs:attribute name="valueURI" type="xs:anyURI"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="place">
+      <xs:sequence>
+         <xs:choice maxOccurs="unbounded">
+            <xs:element type="eac:placeName" name="placeName"/>
+            <xs:element type="eac:placeRole" name="placeRole"/>
+            <xs:element type="eac:geographicCoordinates" name="geographicCoordinates"/>
+            <xs:element type="eac:address" name="address"/>
+            <xs:element type="eac:contact" name="contact"/>
+         </xs:choice>
+         <xs:choice minOccurs="0">
+            <xs:element type="eac:date" name="date"/>
+            <xs:element type="eac:dateRange" name="dateRange"/>
+            <xs:element type="eac:dateSet" name="dateSet"/>
+         </xs:choice>
+         <xs:element type="eac:descriptiveNote" name="descriptiveNote" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="vocabularySource" type="xs:token"/>
+      <xs:attribute name="vocabularySourceURI" type="xs:anyURI"/>
+      <xs:attribute name="valueURI" type="xs:anyURI"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+      
+      <!-- 0128 "Qualifica della relazione" Lista chiusa: Giurisdizione, Sede. -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0128&#xa; cpfDescription/description/places/place[@localType='luogoEnte']/placeRole/&#xa; 'Qualifica della relazione' lista chiusa con valori:&#xa;
+Giurisdizione,
+Sede."
+         test="
+            every $v in .[@localType[normalize-space(lower-case(.))='luogoente']]/placeRole
+            satisfies 
+            (
+                normalize-space(lower-case($v))='giurisdizione'
+             or normalize-space(lower-case($v))='sede'
+            )
+         "/>
+      <!-- 0219 "Qualifica luogo" Lista chiusa: domicilio, origine, residenza, sede di attività. -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0128&#xa; cpfDescription/description/places/place[@localType='luogoFamiglia']/placeRole/&#xa; 'Qualifica luogo' lista chiusa con valori:&#xa;
+domicilio,
+origine,
+residenza,
+sede di attività."
+         test="
+            every $v in .[@localType[normalize-space(lower-case(.))='luogofamiglia']]/placeRole
+            satisfies 
+            (
+                normalize-space(lower-case($v))='domicilio'
+             or normalize-space(lower-case($v))='origine'
+             or normalize-space(lower-case($v))='residenza'
+             or normalize-space(lower-case($v))='sede di attività'
+            )
+         "/>
+      <!-- 0339 "Qualifica della relazione" Lista chiusa: domicilio, morte, nascita, residenza, sede attività. -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 0339&#xa; cpfDescription/description/places/place[@localType='luogoPersona']/placeRole/&#xa; 'Qualifica della relazione' lista chiusa con valori:&#xa;
+domicilio,
+morte,
+nascita,
+residenza,
+sede di attività."
+         test="
+            every $v in .[@localType[normalize-space(lower-case(.))='luogopersona']]/placeRole
+            satisfies 
+            (
+                normalize-space(lower-case($v))='domicilio'
+             or normalize-space(lower-case($v))='morte'
+             or normalize-space(lower-case($v))='nascita'
+             or normalize-space(lower-case($v))='residenza'
+             or normalize-space(lower-case($v))='sede di attività'
+            )
+         "/>
+
+   </xs:complexType>
+   <xs:complexType name="head" mixed="true">
+      <xs:sequence>
+         <xs:element type="eac:span" name="span" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="abstract" mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+         <xs:element type="eac:reference" name="reference"/>
+         <xs:element type="eac:span" name="span"/>
+      </xs:choice>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="list">
+      <xs:sequence>
+         <xs:element type="eac:head" name="head" minOccurs="0"/>
+         <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element type="eac:list" name="list"/>
+            <xs:element type="eac:item" name="item"/>
+         </xs:choice>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="style" type="xs:normalizedString"/>
+      <xs:attribute name="listType">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="ordered"/>
+               <xs:enumeration value="unordered"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="chronList">
+      <xs:sequence>
+         <xs:element type="eac:chronItem" name="chronItem" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="dateSet">
+      <xs:sequence>
+         <xs:choice>
+            <xs:element type="eac:date" name="date"/>
+            <xs:element type="eac:dateRange" name="dateRange"/>
+         </xs:choice>
+         <xs:choice maxOccurs="unbounded">
+            <xs:element type="eac:date" name="date"/>
+            <xs:element type="eac:dateRange" name="dateRange"/>
+         </xs:choice>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="targetEntity">
+      <xs:sequence>
+         <xs:element type="eac:part" name="part" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="targetType" use="required">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="agent"/>
+               <xs:enumeration value="corporateBody"/>
+               <xs:enumeration value="person"/>
+               <xs:enumeration value="family"/>
+               <xs:enumeration value="function"/>
+               <xs:enumeration value="resource"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="vocabularySource" type="xs:token"/>
+      <xs:attribute name="vocabularySourceURI" type="xs:anyURI"/>
+      <xs:attribute name="valueURI" type="xs:anyURI"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="relationType" mixed="true">
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="vocabularySource" type="xs:token"/>
+      <xs:attribute name="vocabularySourceURI" type="xs:anyURI"/>
+      <xs:attribute name="valueURI" type="xs:anyURI"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="targetRole" mixed="true">
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="vocabularySource" type="xs:token"/>
+      <xs:attribute name="vocabularySourceURI" type="xs:anyURI"/>
+      <xs:attribute name="valueURI" type="xs:anyURI"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="componentEntry" mixed="true">
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="vocabularySource" type="xs:token"/>
+      <xs:attribute name="vocabularySourceURI" type="xs:anyURI"/>
+      <xs:attribute name="valueURI" type="xs:anyURI"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="_1">
+      <xs:choice>
+         <xs:any namespace="##other" processContents="lax"/>
+         <xs:any namespace="##local" processContents="lax"/>
+      </xs:choice>
+   </xs:complexType>
+   <xs:complexType name="placeName" mixed="true">
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="vocabularySource" type="xs:token"/>
+      <xs:attribute name="vocabularySourceURI" type="xs:anyURI"/>
+      <xs:attribute name="valueURI" type="xs:anyURI"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="countryCode" type="xs:NMTOKEN"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="language" mixed="true">
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="languageCode" type="xs:NMTOKEN"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="writingSystem" mixed="true">
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="scriptCode" type="xs:NMTOKEN"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="placeRole" mixed="true">
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="vocabularySource" type="xs:token"/>
+      <xs:attribute name="vocabularySourceURI" type="xs:anyURI"/>
+      <xs:attribute name="valueURI" type="xs:anyURI"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="geographicCoordinates">
+      <xs:simpleContent>
+         <xs:extension base="xs:normalizedString">
+            <xs:attribute name="audience">
+               <xs:simpleType>
+                  <xs:restriction base="xs:token">
+                     <xs:enumeration value="external"/>
+                     <xs:enumeration value="internal"/>
+                  </xs:restriction>
+               </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="id" type="xs:ID"/>
+            <xs:attribute name="target" type="xs:IDREFS"/>
+            <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+            <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+            <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+            <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+            <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+            <xs:attribute name="coordinateSystem" use="required" type="xs:token"/>
+            <xs:anyAttribute namespace="##other" processContents="lax"/>
+         </xs:extension>
+      </xs:simpleContent>
+   </xs:complexType>
+   <xs:complexType name="address">
+      <xs:sequence>
+         <xs:element type="eac:addressLine" name="addressLine" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="contact">
+      <xs:sequence>
+         <xs:element type="eac:contactLine" name="contactLine" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="item" mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+         <xs:element type="eac:reference" name="reference"/>
+         <xs:element type="eac:span" name="span"/>
+      </xs:choice>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="chronItem">
+      <xs:sequence>
+         <xs:choice>
+            <xs:element type="eac:date" name="date"/>
+            <xs:element type="eac:dateRange" name="dateRange"/>
+            <xs:element type="eac:dateSet" name="dateSet"/>
+         </xs:choice>
+         <xs:choice>
+            <xs:sequence>
+               <xs:element type="eac:event" name="event"/>
+               <xs:element type="eac:place" name="place" minOccurs="0"/>
+            </xs:sequence>
+            <xs:element type="eac:chronItemSet" name="chronItemSet" maxOccurs="unbounded"/>
+         </xs:choice>
+         <xs:element type="eac:reference"
+                     name="reference"
+                     minOccurs="0"
+                     maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="addressLine" mixed="true">
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="addressLineType">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="county"/>
+               <xs:enumeration value="country"/>
+               <xs:enumeration value="district"/>
+               <xs:enumeration value="municipality"/>
+               <xs:enumeration value="postBox"/>
+               <xs:enumeration value="postalCode"/>
+               <xs:enumeration value="region"/>
+               <xs:enumeration value="street"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="contactLine" mixed="true">
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="href" type="xs:anyURI"/>
+      <xs:attribute name="linkRole" type="xs:anyURI"/>
+      <xs:attribute name="linkTitle" type="xs:token"/>
+      <xs:attribute name="contactLineType">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="directions"/>
+               <xs:enumeration value="email"/>
+               <xs:enumeration value="fax"/>
+               <xs:enumeration value="homepage"/>
+               <xs:enumeration value="mobileNumber"/>
+               <xs:enumeration value="phoneNumber"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+   <xs:complexType name="event" mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+         <xs:element type="eac:reference" name="reference"/>
+         <xs:element type="eac:span" name="span"/>
+      </xs:choice>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="localType" type="xs:token"/>
+      <xs:attribute name="localTypeDeclarationReference" type="xs:IDREFS"/>
+      <xs:attribute name="vocabularySource" type="xs:token"/>
+      <xs:attribute name="vocabularySourceURI" type="xs:anyURI"/>
+      <xs:attribute name="valueURI" type="xs:anyURI"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+      
+      <!-- eac 1019 chronitem/event/@id -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 1019&#xa; chronitem/event/@id&#xa; 'Identificativo per l'evento' è richiesto"
+         test="
+             count(@id[string-length(normalize-space(.)) &gt; 0]) = 1
+         "/>
+
+      <!-- eac 1027 chronitem/event/@localType -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 1027&#xa; chronitem/event/@localType&#xa; 'Tipologia' è richiesto con valori:&#xa;
+Evento terroristico,
+Evento storico,
+Evento politico,
+Evento bellico,
+Ricorrenza,
+Celebrazione,
+Ricorrenza annuale,
+Ricorrenza mensile,
+Ricorrenza biennale."
+         test="
+             count(@localType[string-length(normalize-space(.)) &gt; 0]) = 1
+             and
+             (
+              every $v in @localType satisfies
+              (
+                  normalize-space(lower-case($v))='evento terroristico'
+               or normalize-space(lower-case($v))='evento storico'
+               or normalize-space(lower-case($v))='evento politico'
+               or normalize-space(lower-case($v))='evento bellico'
+               or normalize-space(lower-case($v))='ricorrenza'
+               or normalize-space(lower-case($v))='celebrazione'
+               or normalize-space(lower-case($v))='ricorrenza annuale'
+               or normalize-space(lower-case($v))='ricorrenza mensile'
+               or normalize-space(lower-case($v))='ricorrenza biennale'
+              )
+             )
+         "/>
+
+      <!-- eac 1030 chronitem/event/span[@localtype="denominazioneEvento"]/ -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#160;&#xa; eac 1030&#xa; chronitem/event/span[@localtype='denominazioneEvento']/&#xa; 'Denominazione' è richiesto"
+         test="
+             count(span[@localType[normalize-space(lower-case(.))='denominazioneevento']][string-length(normalize-space(.)) &gt; 0]) &gt; 0
+         "/>
+         
+   </xs:complexType>
+   <xs:complexType name="chronItemSet">
+      <xs:sequence>
+         <xs:element type="eac:event" name="event" maxOccurs="unbounded"/>
+         <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element type="eac:place" name="place"/>
+            <xs:element type="eac:reference" name="reference"/>
+         </xs:choice>
+      </xs:sequence>
+      <xs:attribute name="audience">
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="external"/>
+               <xs:enumeration value="internal"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="id" type="xs:ID"/>
+      <xs:attribute name="target" type="xs:IDREFS"/>
+      <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+      <xs:attribute name="maintenanceEventReference" type="xs:IDREFS"/>
+      <xs:attribute name="sourceReference" type="xs:IDREFS"/>
+      <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
+      <xs:anyAttribute namespace="##other" processContents="lax"/>
+   </xs:complexType>
+</xs:schema>
