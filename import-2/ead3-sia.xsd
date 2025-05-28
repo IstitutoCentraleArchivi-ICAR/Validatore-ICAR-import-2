@@ -407,7 +407,7 @@ M190: È obbligatoria in &lt;bibliography>, quando relativo a un tracciato, che&
                                           'Copia parallela')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M225: È obbligatorio in &lt;bibliography>, quando relativo a un tracciato, che&#x0a;
-      il contenuto di degli eventuali bibref/@lang soddisfi lo standard&#x0a;
+      il contenuto degli eventuali bibref/@lang soddisfi lo standard&#x0a;
       ISO 693-3 e quindi, in particolare, corrisponda a esattamente tre&#x0a;
       lettere minuscole
       &#x0a;&#x0a;]"
@@ -968,6 +968,41 @@ M180: In &lt;archdesc>, gli eventuali figli &lt;scopecontent> devono avere @loca
   <xs:complexType name="archdesc.prog">
     <xs:complexContent>
       <xs:extension base="archdesc.base">
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M294: In &lt;archdesc>, quando rappresenta un progetto, può essere presente,&#x0a;
+      al più, un unico did/langmaterial/language
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/langmaterial/language)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M295: È obbligatorio in &lt;archdesc>, quando relativo a un progetto, che il&#x0a;
+      contenuto degli eventuali did/langmaterial/language/@lang soddisfino lo&#x0a;
+      standard ISO 693-3 e quindi, in particolare, corrisponda a esattamente&#x0a;
+      tre lettere minuscole
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $lang in did/langmaterial/language/@lang
+                satisfies matches($lang, '^[a-z]{3}$')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M296: È obbligatoria in &lt;archdesc>, quando relativo a un progetto, la presenza&#x0a;
+      di un (e un solo)&#x0a;
+      accessrestrict/accessrestrict[@localtype = &quot;VisibilitaFE&quot;]/p
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 = count(accessrestrict/accessrestrict[@localtype = 'VisibilitaFE']/p)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M297: In &lt;archdesc>, quando relativo a un progetto, il valore di&#x0a;
+      accessrestrict/accessrestrict[@localtype = &quot;VisibilitaFE&quot;]/p&#x0a;
+      deve soddisfare il contenuto di una precisa lista chiusa di valori&#x0a;
+      ammessi
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $p in accessrestrict/accessrestrict[@localtype = 'VisibilitaFE']/p
+                satisfies $p/text() = ('Completa', 'Non visibile',
+                                       'Descrizione Libera e Risorsa Protetta (login)',
+                                       'Descrizione Protetta e Risorsa Protetta (login)',
+                                       'Descrizione Libera e Risorse Riservata (autorizzazione)',
+                                       'Descrizione Riservata e Risorse Riservata (autorizzazione)')"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -2749,6 +2784,60 @@ M004: &lt;ead> non può contenere più di un
       &#x0a;&#x0a;]"
         xpathDefaultNamespace="##targetNamespace" 
         test="2 > count(control/localcontrol[@localtype = 'IdentificativoDiSistema']/term)"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M277: Quando &lt;ead> contiene almeno un&#x0a;
+      control/filedesc/notestmt/controlnote[@localtype = &quot;TipologiaProgetto&quot;]/p&#x0a;
+      il cui contenuto è pari a &quot;Progetto di digitalizzazione&quot;, l'&lt;archdesc>&#x0a;
+      contenuto deve avere @level pari a &quot;otherlevel&quot; e @otherlevel pari&#x0a;
+      a &quot;ProgettoDigitalizzazione&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (   control/filedesc/notestmt/controlnote[@localtype = 'TipologiaProgetto']/p/text()
+                = 'Progetto di digitalizzazione')
+            then     archdesc/@level = 'otherlevel'
+                 and archdesc/@otherlevel = 'ProgettoDigitalizzazione'
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M278: Quando &lt;ead> contiene almeno un&#x0a;
+      control/filedesc/notestmt/controlnote[@localtype = &quot;TipologiaProgetto&quot;]/p&#x0a;
+      ma il contenuto di nessuno di questi è pari&#x0a;
+      a &quot;Progetto di digitalizzazione&quot;, l'&lt;archdesc> contenuto deve avere&#x0a;
+      @level pari a &quot;otherlevel&quot; e @otherlevel pari a &quot;Progetto&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (   control/filedesc/notestmt/controlnote[@localtype = 'TipologiaProgetto']/p
+                and not(  control/filedesc/notestmt/controlnote[@localtype = 'TipologiaProgetto']/p/text()
+                        = 'Progetto di digitalizzazione'))
+            then     archdesc/@level = 'otherlevel'
+                 and archdesc/@otherlevel = 'Progetto'
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M282: Quando &lt;ead> contiene un &lt;archdesc> con @level pari a &quot;otherlevel&quot;&#x0a;
+      e @otherlevel pari a &quot;ProgettoDigitalizzazione&quot;, deve essere presente un&#x0a;
+      control/filedesc/notestmt/controlnote[@localtype = &quot;TipologiaProgetto&quot;]/p&#x0a;
+      il cui contenuto è pari a &quot;Progetto di digitalizzazione&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (    (archdesc/@level = 'otherlevel')
+                and (archdesc/@otherlevel = 'ProgettoDigitalizzazione'))
+            then   control/filedesc/notestmt/controlnote[@localtype = 'TipologiaProgetto']/p/text()
+                 = 'Progetto di digitalizzazione'
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M283: Quando &lt;ead> contiene un &lt;archdesc> con @level pari a &quot;otherlevel&quot;&#x0a;
+      e @otherlevel pari a &quot;Progetto&quot;, devono essere presenti&#x0a;
+      control/filedesc/notestmt/controlnote[@localtype = &quot;TipologiaProgetto&quot;]/p&#x0a;
+      il contenuto di nessuno dei quali, però, può essere pari&#x0a;
+      a &quot;Progetto di digitalizzazione&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (    (archdesc/@level = 'otherlevel')
+                and (archdesc/@otherlevel = 'Progetto'))
+            then     control/filedesc/notestmt/controlnote[@localtype = 'TipologiaProgetto']/p
+                 and not(   control/filedesc/notestmt
+                           /controlnote[@localtype = 'TipologiaProgetto']/p/text()
+                         = 'Progetto di digitalizzazione')
+            else true()"/>
     </xs:complexType>
   </xs:element>
   <!-- control -->
@@ -2819,6 +2908,250 @@ M004: &lt;ead> non può contenere più di un
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M260: Non è ripetibile, in &lt;control>,&#x0a;
+      filedesc/titlestmt/titleproper[@localtype = &quot;DenominazioneProgetto&quot;]
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(filedesc/titlestmt/titleproper[@localtype = 'DenominazioneProgetto'])"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M261: Non è ripetibile, in &lt;control>,&#x0a;
+      filedesc/titlestmt/subtitle[@localtype = &quot;AcronimoProgetto&quot;]/abbr
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(filedesc/titlestmt/subtitle[@localtype = 'AcronimoProgetto']/abbr)"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M262: In &lt;control>, qualora sia presente un&#x0a;
+      filedesc/titlestmt/subtitle[@localtype = &quot;AcronimoProgetto&quot;]/abbr&#x0a;
+      deve essere presente anche un&#x0a;
+      filedesc/titlestmt/titleproper[@localtype = &quot;DenominazioneProgetto&quot;]
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (filedesc/titlestmt/subtitle[@localtype = 'AcronimoProgetto']/abbr)
+            then filedesc/titlestmt/titleproper[@localtype = 'DenominazioneProgetto']
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M263: Non è ripetibile, in &lt;control>,&#x0a;
+      maintenanceagency/agencyname[@localtype = &quot;AgentePrincipale&quot;]
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(maintenanceagency/agencyname[@localtype = 'AgentePrincipale'])"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M264: In &lt;control>, qualora sia presente un&#x0a;
+      maintenanceagency/agencyname[@localtype = &quot;AgentePrincipale&quot;]&#x0a;
+      deve essere presente anche un&#x0a;
+      filedesc/titlestmt/titleproper[@localtype = &quot;DenominazioneProgetto&quot;]
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (maintenanceagency/agencyname[@localtype = 'AgentePrincipale'])
+            then filedesc/titlestmt/titleproper[@localtype = 'DenominazioneProgetto']
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M265: In &lt;control>, qualora sia presente un&#x0a;
+      filedesc/titlestmt/titleproper[@localtype = &quot;DenominazioneProgetto&quot;]&#x0a;
+      deve essere presente anche un&#x0a;
+      maintenanceagency/agencyname[@localtype = &quot;AgentePrincipale&quot;]/@id
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (filedesc/titlestmt/titleproper[@localtype = 'DenominazioneProgetto'])
+            then maintenanceagency/agencyname[@localtype = 'AgentePrincipale']/@id
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M266: Non è ripetibile, in &lt;control>, maintenanceagency/descriptivenote/p
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(maintenanceagency/descriptivenote/p)"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M267: In &lt;control>, qualora sia presente un maintenanceagency/descriptivenote/p&#x0a;
+      deve essere presente anche un&#x0a;
+      filedesc/titlestmt/titleproper[@localtype = &quot;DenominazioneProgetto&quot;]
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (maintenanceagency/descriptivenote/p)
+            then filedesc/titlestmt/titleproper[@localtype = 'DenominazioneProgetto']
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M268: In &lt;control>, qualora sia presente un&#x0a;
+      filedesc/titlestmt/titleproper[@localtype = &quot;DenominazioneProgetto&quot;]&#x0a;
+      deve essere presente anche un maintenanceagency/descriptivenote/p
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (filedesc/titlestmt/titleproper[@localtype = 'DenominazioneProgetto'])
+            then maintenanceagency/descriptivenote/p
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M269: In &lt;control>, qualora sia presente un&#x0a;
+      filedesc/titlestmt/titleproper[@localtype = &quot;DenominazioneProgetto&quot;]&#x0a;
+      il contenuto di eventuali maintenanceagency/descriptivenote/p devono&#x0a;
+      soddisfare il contenuto di una precisa lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (filedesc/titlestmt/titleproper[@localtype = 'DenominazioneProgetto'])
+            then every $p in maintenanceagency/descriptivenote/p
+                 satisfies $p/text() = ('Responsabile', 'Finanziatore',
+                                        'Responsabile scientifico', 'Responsabile operativo',
+                                        'Coordinatore', 'Promotore', 'Realizzatore')
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M270: In &lt;control>, qualora sia presente un&#x0a;
+      filedesc/titlestmt/author[@localtype = &quot;AgentePartecipante&quot;]&#x0a;
+      deve essere presente anche un&#x0a;
+      filedesc/titlestmt/titleproper[@localtype = &quot;DenominazioneProgetto&quot;]
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (filedesc/titlestmt/author[@localtype = 'AgentePartecipante'])
+            then filedesc/titlestmt/titleproper[@localtype = 'DenominazioneProgetto']
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M274: In &lt;control>, qualora sia presente un&#x0a;
+      filedesc/notestmt/controlnote[@localtype = &quot;TipologiaProgetto&quot;]&#x0a;
+      deve essere presente anche un&#x0a;
+      filedesc/titlestmt/titleproper[@localtype = &quot;DenominazioneProgetto&quot;]
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (filedesc/notestmt/controlnote[@localtype = 'TipologiaProgetto'])
+            then filedesc/titlestmt/titleproper[@localtype = 'DenominazioneProgetto']
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M275: In &lt;control>, qualora sia presente un&#x0a;
+      filedesc/titlestmt/titleproper[@localtype = &quot;DenominazioneProgetto&quot;]&#x0a;
+      deve essere presente anche un&#x0a;
+      filedesc/notestmt/controlnote[@localtype = &quot;TipologiaProgetto&quot;]/p
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (filedesc/titlestmt/titleproper[@localtype = 'DenominazioneProgetto'])
+            then filedesc/notestmt/controlnote[@localtype = 'TipologiaProgetto']/p
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M279: Non è ripetibile, in &lt;control>,&#x0a;
+      filedesc/notestmt/controlnote[@localtype = &quot;FinalitaProgetto&quot;]/p
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(filedesc/notestmt/controlnote[@localtype = 'FinalitaProgetto']/p)"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M280: In &lt;control>, qualora sia presente un&#x0a;
+      filedesc/notestmt/controlnote[@localtype = &quot;FinalitaProgetto&quot;]&#x0a;
+      deve essere presente anche un&#x0a;
+      filedesc/titlestmt/titleproper[@localtype = &quot;DenominazioneProgetto&quot;]
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (filedesc/notestmt/controlnote[@localtype = 'FinalitaProgetto'])
+            then filedesc/titlestmt/titleproper[@localtype = 'DenominazioneProgetto']
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M284: Non è ripetibile, in &lt;control>,&#x0a;
+      filedesc/notestmt/controlnote[@localtype = &quot;ObiettiviProgetto&quot;]/p
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(filedesc/notestmt/controlnote[@localtype = 'ObiettiviProgetto']/p)"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M285: In &lt;control>, qualora sia presente un&#x0a;
+      filedesc/notestmt/controlnote[@localtype = &quot;ObiettiviProgetto&quot;]&#x0a;
+      deve essere presente anche un&#x0a;
+      filedesc/titlestmt/titleproper[@localtype = &quot;DenominazioneProgetto&quot;]
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (filedesc/notestmt/controlnote[@localtype = 'ObiettiviProgetto'])
+            then filedesc/titlestmt/titleproper[@localtype = 'DenominazioneProgetto']
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M286: Non è ripetibile, in &lt;control>,&#x0a;
+      filedesc/notestmt/controlnote[@localtype = &quot;CriteriSelezioneMateriale&quot;]/p
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(filedesc/notestmt/controlnote[@localtype = 'CriteriSelezioneMateriale']/p)"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M287: In &lt;control>, qualora sia presente un&#x0a;
+      filedesc/notestmt/controlnote[@localtype = &quot;CriteriSelezioneMateriale&quot;]&#x0a;
+      deve essere presente anche un&#x0a;
+      filedesc/titlestmt/titleproper[@localtype = &quot;DenominazioneProgetto&quot;]
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (filedesc/notestmt/controlnote[@localtype = 'CriteriSelezioneMateriale'])
+            then filedesc/titlestmt/titleproper[@localtype = 'DenominazioneProgetto']
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M288: Non è ripetibile, in &lt;control>,&#x0a;
+      filedesc/notestmt/controlnote[@localtype = &quot;CriteriRiproduzioneMateriale&quot;]/p
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(filedesc/notestmt/controlnote[@localtype = 'CriteriRiproduzioneMateriale']/p)"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M289: In &lt;control>, qualora sia presente un&#x0a;
+      filedesc/notestmt/controlnote[@localtype = &quot;CriteriRiproduzioneMateriale&quot;]&#x0a;
+      deve essere presente anche un&#x0a;
+      filedesc/titlestmt/titleproper[@localtype = &quot;DenominazioneProgetto&quot;]
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (filedesc/notestmt/controlnote[@localtype = 'CriteriRiproduzioneMateriale'])
+            then filedesc/titlestmt/titleproper[@localtype = 'DenominazioneProgetto']
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M290: Non è ripetibile, in &lt;control>,&#x0a;
+      filedesc/notestmt/controlnote[@localtype = &quot;CoperturaSpazialeMateriale&quot;]/p
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(filedesc/notestmt/controlnote[@localtype = 'CoperturaSpazialeMateriale']/p)"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M291: In &lt;control>, qualora sia presente un&#x0a;
+      filedesc/notestmt/controlnote[@localtype = &quot;CoperturaSpazialeMateriale&quot;]&#x0a;
+      deve essere presente anche un&#x0a;
+      filedesc/titlestmt/titleproper[@localtype = &quot;DenominazioneProgetto&quot;]
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (filedesc/notestmt/controlnote[@localtype = 'CoperturaSpazialeMateriale'])
+            then filedesc/titlestmt/titleproper[@localtype = 'DenominazioneProgetto']
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M292: Non è ripetibile, in &lt;control>,&#x0a;
+      filedesc/notestmt/controlnote[@localtype = &quot;CoperturaTemporaleMateriale&quot;]/p
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(filedesc/notestmt/controlnote[@localtype = 'CoperturaTemporaleMateriale']/p)"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M293: In &lt;control>, qualora sia presente un&#x0a;
+      filedesc/notestmt/controlnote[@localtype = &quot;CoperturaTemporSpazialeale&quot;]&#x0a;
+      deve essere presente anche un&#x0a;
+      filedesc/titlestmt/titleproper[@localtype = &quot;DenominazioneProgetto&quot;]
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (filedesc/notestmt/controlnote[@localtype = 'CoperturaTemporaleMateriale'])
+            then filedesc/titlestmt/titleproper[@localtype = 'DenominazioneProgetto']
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M299: In &lt;control>, qualora sia presente un&#x0a;
+      filedesc/titlestmt/titleproper[@localtype = &quot;DenominazioneProgetto&quot;]&#x0a;
+      deve il figlio &lt;maintenancestatus> deve avere @value pari a &quot;derived&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (filedesc/titlestmt/titleproper[@localtype = 'DenominazioneProgetto'])
+            then maintenancestatus[@value = 'derived']
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M300: In &lt;control>, qualora sia presente un&#x0a;
+      filedesc/titlestmt/titleproper[@localtype = &quot;DenominazioneProgetto&quot;]&#x0a;
+      deve essere presente un (e un solo)&#x0a;
+      localcontrol[@localtype = &quot;StatusScheda&quot;]/term
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (filedesc/titlestmt/titleproper[@localtype = 'DenominazioneProgetto'])
+            then 1 = count(localcontrol[@localtype = 'StatusScheda']/term)
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M301: In &lt;control>, qualora sia presente un&#x0a;
+      filedesc/titlestmt/titleproper[@localtype = &quot;DenominazioneProgetto&quot;]&#x0a;
+      il valore di localcontrol[@localtype = &quot;StatusScheda&quot;]/term deve&#x0a;
+      soddisfare il contenuto di una precisa lista chiusa di valori ammessi
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (filedesc/titlestmt/titleproper[@localtype = 'DenominazioneProgetto'])
+            then every $term in localcontrol[@localtype = 'StatusScheda']/term
+                 satisfies $term/text() = ('Bozza', 'In validazione di primo livello',
+                                           'Validata (primo livello)',
+                                           'In validazione di secondo livello',
+                                           'Validata (secondo livello)', 'Pubblicata',
+                                           'Copia parallela')
+            else true()"/>
   </xs:complexType>
   <xs:complexType name="recordid" mixed="true">
     <xs:attributeGroup ref="am.common"/>
@@ -3188,6 +3521,29 @@ M004: &lt;ead> non può contenere più di un
         <xs:attributeGroup ref="am.common"/>
         <xs:attribute name="localtype" type="xs:token"/>
         <xs:attribute name="encodinganalog" type="xs:token"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M271: In &lt;author>, quando @localtype vale &quot;AgentePartecipante&quot;, non deve essere&#x0a;
+      presente più di un ref/@id
+      &#x0a;&#x0a;]"
+              xpathDefaultNamespace="##targetNamespace" 
+              test="1 >= count(ref/@id)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M272: In &lt;author>, quando @localtype vale &quot;AgentePartecipante&quot;, non deve essere&#x0a;
+      presente più di un ref/function[@localtype = &quot;Qualifica&quot;]/part
+      &#x0a;&#x0a;]"
+              xpathDefaultNamespace="##targetNamespace" 
+              test="1 >= count(ref/function[@localtype = 'Qualifica']/part)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M273: In &lt;author>, quando @localtype vale &quot;AgentePartecipante&quot;, il contenuto&#x0a;
+      di eventuali ref/function[@localtype = &quot;Qualifica&quot;]/part deve soddisfare&#x0a;
+      una precisa lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+              xpathDefaultNamespace="##targetNamespace" 
+              test="every $part in ref/function[@localtype = 'Qualifica']/part
+                    satisfies $part/text() = ('Responsabile', 'Finanziatore', 'Partecipante',
+                                              'Supporto', 'Responsabile scientifico',
+                                              'Responsabile operativo', 'Coordinatore',
+                                              'Operatore', 'Promotore', 'Realizzatore')"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -3223,6 +3579,40 @@ M004: &lt;ead> non può contenere più di un
     <xs:attributeGroup ref="am.common"/>
     <xs:attribute name="localtype" type="xs:token"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M276: In &lt;controlnote>, quando il @localtype vale &quot;TipologiaProgetto&quot;,&#x0a;
+      il contenuto di eventuali figli &lt;p> deve soddisfare una precisa lista&#x0a;
+      chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@localtype = 'TipologiaProgetto')
+            then every $p in p
+                 satisfies $p/text() = ('Progetto di digitalizzazione', 'Censimento/guida',
+                                        'Ordinamento', 'Inventariazione',
+                                        'Recupero e/o rielaborazione di corredo pregresso',
+                                        'Elenco', 'Progetto architettonico')
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M281: In &lt;controlnote>, quando il @localtype vale &quot;FinalitaProgetto&quot;,&#x0a;
+      il contenuto di eventuali figli &lt;p> deve soddisfare una precisa lista&#x0a;
+      chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@localtype = 'FinalitaProgetto')
+            then every $p in p
+                 satisfies $p/text() = ('Riproduzione di serie/fondi archivistici',
+                                        'Aggregazione tematica di oggetti archivistici e documentari',
+                                        'Mostra documentaria', 'Guida tematica', 'Guida settoriale',
+                                        &quot;Guida d'istituto&quot;, 'Guida topografica',
+                                        'Ordinamento preliminare', 'Ordinamento virtuale',
+                                        'Ordinamento definitivo', 'Inventariazione sommaria',
+                                        'Inventariazione analitica',
+                                        'Informatizzazione di strumento di ricerca analogico',
+                                        'Migrazione di dati',
+                                        'Rielaborazione/integrazione di strumento di ricerca pregresso',
+                                        'Elenco di consistenza', 'Elenco di versamento',
+                                        'Elenco di scarto')
+            else true()"/>
   </xs:complexType>
   <xs:complexType name="maintenanceagency">
     <xs:sequence>
@@ -3443,7 +3833,7 @@ M037: In &lt;physloc> deve essere presente almeno un figlio &lt;ptr> con gli&#x0
       attributi @target e @linkrole, il secondo dei quali deve valere &quot;Internal&quot;
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="ptr[@linkrole = 'Internal']/@target"/>
+          test="ptr[@linkrole = 'Internal']/@id"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M038: In &lt;physloc> deve essere presente almeno un figlio &lt;ref> con @arcrole&#x0a;
       pari a &quot;DaPezzo&quot;
