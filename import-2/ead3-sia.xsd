@@ -834,11 +834,13 @@ M033: In &lt;archdesc> non è ammesso un figlio &lt;accessrestrict> diretto con&
           xpathDefaultNamespace="##targetNamespace" 
           test="not(accessrestrict[@localtype = 'NoteCondizioniAccesso'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M034: &lt;archdesc> non ammette più di discendente (e comunque non figlio diretto)&#x0a;
-      &lt;accessrestrict> con @localtype pari a &quot;NoteCondizioniAccesso&quot;
+M034: &lt;archdesc> non è ammesso più di un&#x0a;
+       accessrestrict[@localtype = &quot;CondizioniAccesso&quot;]&#x0a;
+      /accessrestrict[@localtype = &quot;NoteCondizioniAccesso&quot;]
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="1 >= count(accessrestrict//accessrestrict[@localtype = 'NoteCondizioniAccesso'])"/>
+          test="1 >= count( accessrestrict[@localtype = 'CondizioniAccesso']
+                           /accessrestrict[@localtype = 'NoteCondizioniAccesso'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M035: In &lt;archdesc> non è ammesso un figlio &lt;userestrict> diretto con&#x0a;
       @localtype pari a &quot;NoteCondizioniUtilizzo&quot;
@@ -894,23 +896,25 @@ M049: In &lt;archdesc> non deve essere presente più di un&#x0a;
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(did/langmaterial/language)"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M067: In &lt;archdesc> non deve essere presente più di un &lt;accessrestrict>
+M067: In &lt;archdesc> non deve essere presente più di un &lt;accessrestrict>&#x0a;
+      con @localtype pari a &quot;CondizioniAccesso&quot;
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="1 >= count(accessrestrict)"/>
+          test="1 >= count(accessrestrict[@localtype = 'CondizioniAccesso'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M068: In &lt;archdesc> l'eventuale figlio &lt;accessrestrict> deve avere almeno un&#x0a;
-      figlio &lt;p>
+M068: In &lt;archdesc> l'eventuale figlio &lt;accessrestrict>, con @localtype pari&#x0a;
+      a &quot;CondizioniAccesso&quot; deve avere almeno un figlio &lt;p>
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="if (accessrestrict) then accessrestrict/p else true()"/>
+          test="every $acc in accessrestrict[@localtype = 'CondizioniAccesso']
+                satisfies $acc/p"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M076: In &lt;archdesc>, se sono presenti degli accessrestrict/p, allora i&#x0a;
-      contenuti dei &lt;p> devono soddisfare una precisa lista chiusa di valori&#x0a;
-      ammissibili
+M076: In &lt;archdesc>, se sono presenti degli&#x0a;
+      accessrestrict[@localtype = &quot;CondizioniAccesso&quot;]/p, allora i contenuti dei&#x0a;
+      &lt;p> devono soddisfare una precisa lista chiusa di valori ammissibili
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="every $p in accessrestrict/p
+          test="every $p in accessrestrict[@localtype = 'CondizioniAccesso']/p
                 satisfies $p/text() = ('Liberamente accessibile', 'Parzialmente accessibile',
                                        'Non accessibile', 'Accessibile previa autorizzazione')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
@@ -1130,11 +1134,13 @@ M033: In &lt;c> non è ammesso un figlio &lt;accessrestrict> diretto con @localt
         xpathDefaultNamespace="##targetNamespace" 
         test="not(accessrestrict[@localtype = 'NoteCondizioniAccesso'])"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
-M034: &lt;c> non ammette più di discendente (e comunque non figlio diretto)&#x0a;
-      &lt;accessrestrict> con @localtype pari a &quot;NoteCondizioniAccesso&quot;
+M034: &lt;c> non è ammesso più di un&#x0a;
+       accessrestrict[@localtype = &quot;CondizioniAccesso&quot;]&#x0a;
+      /accessrestrict[@localtype = &quot;NoteCondizioniAccesso&quot;]
       &#x0a;&#x0a;]"
         xpathDefaultNamespace="##targetNamespace" 
-        test="1 >= count(accessrestrict//accessrestrict[@localtype = 'NoteCondizioniAccesso'])"/>
+        test="1 >= count( accessrestrict[@localtype = 'CondizioniAccesso']
+                         /accessrestrict[@localtype = 'NoteCondizioniAccesso'])"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M035: In &lt;c> non è ammesso un figlio &lt;userestrict> diretto con @localtype pari&#x0a;
       a &quot;NoteCondizioniUtilizzo&quot;
@@ -1172,24 +1178,27 @@ M045: In &lt;c> non deve essere presente più di un&#x0a;
         xpathDefaultNamespace="##targetNamespace" 
         test="1 >= count(did/didnote[@localtype = 'RestauroOAltriInterventi'])"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
-M067: In &lt;c> non deve essere presente più di un &lt;accessrestrict>
+M067: In &lt;c> non deve essere presente più di un &lt;accessrestrict> con&#x0a;
+      @localtype pari a &quot;CondizioniAccesso&quot;
       &#x0a;&#x0a;]"
         xpathDefaultNamespace="##targetNamespace" 
-        test="1 >= count(accessrestrict)"/>
+        test="1 >= count(accessrestrict[@localtype = 'CondizioniAccesso'])"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
-M068: In &lt;c> l'eventuale figlio &lt;accessrestrict> deve avere almeno un figlio&#x0a;
-      &lt;p>
+M068: In &lt;c> l'eventuale figlio &lt;accessrestrict>, con @localtype pari&#x0a;
+      a &quot;CondizioniAccesso&quot; deve avere almeno un figlio &lt;p>
       &#x0a;&#x0a;]"
         xpathDefaultNamespace="##targetNamespace" 
-        test="if (accessrestrict) then accessrestrict/p else true()"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M076: In &lt;c>, se sono presenti degli accessrestrict/p, allora i contenuti dei&#x0a;
+        test="every $acc in accessrestrict[@localtype = 'CondizioniAccesso']
+              satisfies $acc/p"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M076: In &lt;c>, se sono presenti degli&#x0a;
+      accessrestrict[@localtype = &quot;CondizioniAccesso&quot;]/p, allora i contenuti dei&#x0a;
       &lt;p> devono soddisfare una precisa lista chiusa di valori ammissibili
       &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="every $p in accessrestrict/p
-                satisfies $p/text() = ('Liberamente accessibile', 'Parzialmente accessibile',
-                                       'Non accessibile', 'Accessibile previa autorizzazione')"/>
+        xpathDefaultNamespace="##targetNamespace" 
+        test="every $p in accessrestrict[@localtype = 'CondizioniAccesso']/p
+              satisfies $p/text() = ('Liberamente accessibile', 'Parzialmente accessibile',
+                                     'Non accessibile', 'Accessibile previa autorizzazione')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M077: In &lt;c>, se sono presenti dei userestrict/p, allora i contenuti dei &lt;p>&#x0a;
       devono soddisfare una precisa lista chiusa di valori ammissibili
@@ -1342,10 +1351,10 @@ M046: In &lt;c>, quando rappresenta un complesso archivistico, deve&#x0a;
                           /relationentry[@localtype = 'ComplArchSovraordinato'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M049: In &lt;c>, quando rappresenta un complesso archivistico, deve essere&#x0a;
-      presente, al più, un unico did/langmaterial/language
+      presente, al più, un unico did/langmaterial/language/@lang
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="1 >= count(did/langmaterial/language)"/>
+          test="1 >= count(did/langmaterial/language/@lang)"/>
         <xs:assert test="1 >= count(e3:userestrict)"/> <!-- ??? -->
         <xs:assert xa:message="[&#x0a;&#x0a;
 M178: In &lt;c>, quando rappresenta un complesso archivistico, è ammesso, al più,&#x0a;
@@ -4047,6 +4056,7 @@ M005: se &lt;unitid> ha @localtype pari a &quot;AltroId&quot;, allora deve anche
     <xs:attributeGroup ref="am.common"/>
     <xs:attribute name="localtype" type="xs:token"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
+    <!-- M032: abolito in seguito alle recenti modifiche alla mappatura
     <xs:assert xa:message="[&#x0a;&#x0a;
 M032: Qualora in &lt;arrangement> sia presente un figlio &lt;head> con contenuto pari&#x0a;
       a &quot;numerazione&quot;, allora il @localtype deve valere &quot;Numerazione&quot; e deve&#x0a;
@@ -4059,6 +4069,7 @@ M032: Qualora in &lt;arrangement> sia presente un figlio &lt;head> con contenuto
                  and (  p/num[@localtype='TipoNumerazione']/text()
                       = ('alfabetico', 'numeri arabi', 'numeri romani'))
             else true()"/>
+            -->
   </xs:complexType>
   <xs:complexType name="bibliography">
     <xs:sequence>
