@@ -480,17 +480,17 @@ M224: In &lt;bibliography>, quando @localtype è pari a &quot;FonteNormativa&quo
         <xs:assert xa:message="[&#x0a;&#x0a;
 M196: È obbligatoria, in &lt;bibliography> quando @localtype è pari&#x0a;
       a &quot;RiferimentoBibliografico&quot;, la presenza di un (e un solo)&#x0a;
-      bibref/persname[@localtype = &quot;Autore&quot;]/part
+      bibref/persname[@relator = &quot;Autore&quot;]/part
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="1 = count(bibref/persname[@localtype = 'Autore']/part)"/>
+          test="1 = count(bibref/persname[@relator = 'Autore']/part)"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M197: In &lt;bibliography>, quando @localtype è pari a &quot;RiferimentoBibliografico&quot;,&#x0a;
       può essere presente al più un&#x0a;
-      bibref/persname[@localtype = &quot;Curatore&quot;]/part
+      bibref/persname[@relator = &quot;Curatore&quot;]/part
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="1 >= count(bibref/persname[@localtype = 'Curatore']/part)"/>
+          test="1 >= count(bibref/persname[@relator = 'Curatore']/part)"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M198: È obbligatoria, in &lt;bibliography> quando @localtype è pari&#x0a;
       a &quot;RiferimentoBibliografico&quot;, la presenza di un (e un solo)&#x0a;
@@ -703,11 +703,25 @@ M218: In &lt;bibliography>, quando @localtype è pari a &quot;RiferimentoWeb&quo
     <xs:attributeGroup ref="a.level"/>
     <xs:attribute name="base" type="xs:anyURI"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
+M049: In &lt;archdesc> non deve essere presente più di un&#x0a;
+      did/langmaterial/language/@lang
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(did/langmaterial/language/@lang)"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
 M159: In &lt;archdesc> è ammesso, al più, un unico figlio &lt;odd> con @localtype&#x0a;
       pari ad &quot;Osservazioni&quot;
       &#x0a;&#x0a;]"
       xpathDefaultNamespace="##targetNamespace" 
       test="1 >= count(odd[@localtype = 'Osservazioni'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M295: È obbligatorio in &lt;archdesc> che il contenuto degli eventuali&#x0a;
+      did/langmaterial/language/@lang soddisfino lo standard ISO 693-3&#x0a;
+      e quindi, in particolare, corrisponda a esattamente tre lettere minuscole
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $lang in did/langmaterial/language/@lang
+                satisfies matches($lang, '^[a-z]{3}$')"/>
   </xs:complexType>
 
   <!-- M185: creato il tipo "archdesc.strc", derivato per estensione da
@@ -889,12 +903,14 @@ M045: In &lt;archdesc> non deve essere presente più di un&#x0a;
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(did/didnote[@localtype = 'RestauroOAltriInterventi'])"/>
+        <!-- spostato in archdesc.base
         <xs:assert xa:message="[&#x0a;&#x0a;
 M049: In &lt;archdesc> non deve essere presente più di un&#x0a;
-      did/langmaterial/language
+      did/langmaterial/language/@lang
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="1 >= count(did/langmaterial/language)"/>
+          test="1 >= count(did/langmaterial/language/@lang)"/>
+          -->
         <xs:assert xa:message="[&#x0a;&#x0a;
 M067: In &lt;archdesc> non deve essere presente più di un &lt;accessrestrict>&#x0a;
       con @localtype pari a &quot;CondizioniAccesso&quot;
@@ -961,6 +977,18 @@ M180: In &lt;archdesc>, gli eventuali figli &lt;scopecontent> devono avere @loca
           xpathDefaultNamespace="##targetNamespace" 
           test="every $s in scopecontent
                 satisfies $s/@localtype = 'AmbitiEContenuto'"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M304: In &lt;archdesc>, quando rappresenta un complesso archivistico, gli&#x0a;
+      eventuali valori di&#x0a;
+       relations/relation[@relationtype = &quot;cpfrelation&quot;]&#x0a;
+      /relationentry/@localtype&#x0a;
+      devono soddisfare una precisa lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $type in ( relations/relation[@relationtype = 'cpfrelation']
+                                /relationentry/@localtype)
+                satisfies $type = ('Soggetto conservatore', 'Soggetto vigilante', 'Proprietario',
+                                   'Possessore', 'Detentore di diritti', 'Soggetto produttore')"/>
         <xs:assert test="1 >= count(e3:userestrict)"/> <!-- ??? -->
       </xs:extension>
     </xs:complexContent>
@@ -972,12 +1000,15 @@ M180: In &lt;archdesc>, gli eventuali figli &lt;scopecontent> devono avere @loca
   <xs:complexType name="archdesc.prog">
     <xs:complexContent>
       <xs:extension base="archdesc.base">
+        <!-- soppresso poiche' doppione di M049
         <xs:assert xa:message="[&#x0a;&#x0a;
 M294: In &lt;archdesc>, quando rappresenta un progetto, può essere presente,&#x0a;
       al più, un unico did/langmaterial/language
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(did/langmaterial/language)"/>
+          -->
+          <!-- spostato in "archdesc.base"
         <xs:assert xa:message="[&#x0a;&#x0a;
 M295: È obbligatorio in &lt;archdesc>, quando relativo a un progetto, che il&#x0a;
       contenuto degli eventuali did/langmaterial/language/@lang soddisfino lo&#x0a;
@@ -987,6 +1018,7 @@ M295: È obbligatorio in &lt;archdesc>, quando relativo a un progetto, che il&#x
           xpathDefaultNamespace="##targetNamespace" 
           test="every $lang in did/langmaterial/language/@lang
                 satisfies matches($lang, '^[a-z]{3}$')"/>
+                -->
         <xs:assert xa:message="[&#x0a;&#x0a;
 M296: È obbligatoria in &lt;archdesc>, quando relativo a un progetto, la presenza&#x0a;
       di un (e un solo)&#x0a;
@@ -1007,6 +1039,20 @@ M297: In &lt;archdesc>, quando relativo a un progetto, il valore di&#x0a;
                                        'Descrizione Protetta e Risorsa Protetta (login)',
                                        'Descrizione Libera e Risorse Riservata (autorizzazione)',
                                        'Descrizione Riservata e Risorse Riservata (autorizzazione)')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M302: In &lt;archdesc>, quando rappresenta un progetto, può essere presente,&#x0a;
+      al più, un unico&#x0a;
+      bibliography/bibliography[@localtype = &quot;LinkFonteNormativa&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(bibliography/bibliography[@localtype = 'LinkFonteNormativa'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M303: In &lt;archdesc>, quando rappresenta un progetto, può essere presente,&#x0a;
+      al più, un unico&#x0a;
+      bibliography/bibliography[@localtype = &quot;LinkRiferimentoWeb&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(bibliography/bibliography[@localtype = 'LinkRiferimentoWeb'])"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1177,6 +1223,12 @@ M045: In &lt;c> non deve essere presente più di un&#x0a;
       &#x0a;&#x0a;]"
         xpathDefaultNamespace="##targetNamespace" 
         test="1 >= count(did/didnote[@localtype = 'RestauroOAltriInterventi'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M049: In &lt;c> deve essere presente, al più, un unico&#x0a;
+      did/langmaterial/language/@lang
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/langmaterial/language/@lang)"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M067: In &lt;c> non deve essere presente più di un &lt;accessrestrict> con&#x0a;
       @localtype pari a &quot;CondizioniAccesso&quot;
@@ -1229,6 +1281,14 @@ M159: In &lt;c> è ammesso, al più, un unico figlio &lt;odd> con @localtype par
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(odd[@localtype = 'Osservazioni'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M295: È obbligatorio in &lt;c> che il contenuto degli eventuali&#x0a;
+      did/langmaterial/language/@lang soddisfino lo standard ISO 693-3&#x0a;
+      e quindi, in particolare, corrisponda a esattamente tre lettere minuscole
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $lang in did/langmaterial/language/@lang
+                satisfies matches($lang, '^[a-z]{3}$')"/>
   </xs:complexType>
 
   <!-- M001: creato il tipo "c.comp" -->
@@ -1349,12 +1409,14 @@ M046: In &lt;c>, quando rappresenta un complesso archivistico, deve&#x0a;
           xpathDefaultNamespace="##targetNamespace" 
           test="1 = count( relations/relation[@relationtype = 'resourcerelation']
                           /relationentry[@localtype = 'ComplArchSovraordinato'])"/>
+        <!-- spostato in c.base
         <xs:assert xa:message="[&#x0a;&#x0a;
 M049: In &lt;c>, quando rappresenta un complesso archivistico, deve essere&#x0a;
       presente, al più, un unico did/langmaterial/language/@lang
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(did/langmaterial/language/@lang)"/>
+          -->
         <xs:assert test="1 >= count(e3:userestrict)"/> <!-- ??? -->
         <xs:assert xa:message="[&#x0a;&#x0a;
 M178: In &lt;c>, quando rappresenta un complesso archivistico, è ammesso, al più,&#x0a;
@@ -1378,6 +1440,18 @@ M180: In &lt;c>, quando rappresenta un complesso archivistico, gli eventuali&#x0
           xpathDefaultNamespace="##targetNamespace" 
           test="every $s in scopecontent
                 satisfies $s/@localtype = 'AmbitiEContenuto'"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M304: In &lt;c>, quando rappresenta un complesso archivistico, gli eventuali&#x0a;
+      valori di&#x0a;
+       relations/relation[@relationtype = &quot;cpfrelation&quot;]&#x0a;
+      /relationentry/@localtype&#x0a;
+      devono soddisfare una precisa lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $type in ( relations/relation[@relationtype = 'cpfrelation']
+                                /relationentry/@localtype)
+                satisfies $type = ('Soggetto conservatore', 'Soggetto vigilante', 'Proprietario',
+                                   'Possessore', 'Detentore di diritti', 'Soggetto produttore')"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1527,6 +1601,22 @@ M069: In &lt;c>, quando rappresenta un'unità archivistica, deve&#x0a;
           xpathDefaultNamespace="##targetNamespace" 
           test="1 = count( relations/relation[@relationtype = 'resourcerelation']
                           /relationentry[@localtype = 'LivelloSuperiore'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M079: In &lt;c>, quando rappresenta un'unità archivistica, se sono presenti dei&#x0a;
+      relations/relation[@relationtype = &quot;cpfrelation&quot;], allora il valore degli&#x0a;
+      @arcrole dei &lt;relation> devono soddisfare una precisa lista chiusa di&#x0a;
+      valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $relation in relations/relation[@relationtype = 'cpfrelation']
+                satisfies $relation/@arcrole = ('Destinatario', 'Mittente', 'Notaio', 'Testimone',
+                                                'Autore', 'Disegnatore', 'Editore', 'Incisore',
+                                                'Giudice', 'Agrimensore', 'Rilevatore', 'Miniaturista',
+                                                'Copista', 'Esecutore', 'Progettista', 'Supervisore',
+                                                'Litografo', 'Fotografo inventore', 'Fotografo principale',
+                                                'Ideatore', 'Regista', 'Committente', 'Corrispondente',
+                                                'Curatore', 'Responsabile', 'Partecipante', 'Finanziatore',
+                                                'Possessore', 'Proprietario', 'Detentore dei diritti')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M181: In &lt;c>, quando rappresenta un'unità archivistica, gli eventuali&#x0a;
       figli &lt;scopecontent> devono avere @localtype pari a&#x0a;
