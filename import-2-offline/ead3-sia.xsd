@@ -265,6 +265,23 @@ M259: È obbligatoria in &lt;subject>, quando rappresenta un tematismo, che sia&
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="@id != ''"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M305: È obbligatorio in &lt;subject>, quando rappresenta un tematismo, che&#x0a;
+      il contenuto di un eventiale figlio &lt;part>, con @localtype pari&#x0a;
+      a &quot;Denominazione&quot;, soddisfi una ben precisa lista chiusa&#x0a;
+      di valori possibili ammessi
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $part in part[@localtype = 'Denominazione']
+                satisfies $part/text() = ('Antenati', 'Architettura', &quot;Archivi dell'Ebraismo&quot;,
+                                          'Archivi per non dimenticare', 'Arti figurative',
+                                          'Assistenza, beneficenza, previdenza', 'Chiesa cattolica',
+                                          'Confessioni religiose', 'Donne',
+                                          'Enti pubblici locali e territoriali', 'Imprese',
+                                          'Inquisizione', 'Istruzione', 'Moda', 'Musica', 'Nobiltà',
+                                          'Politica e sindacati', 'Psichiatria', 'Psicologia', 'Sanità',
+                                          'Scienze naturali e matematiche', 'Scienze umane e sociali',
+                                          'Spettacolo', 'Sport', 'Territorio (cartografia storica-catasti)')"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1548,12 +1565,12 @@ M060: In &lt;c>, quando rappresenta un'unità archivistica, deve essere&#x0a;
           test="1 >= count(did/unitid[@localtype = 'TitoloAttribuito'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M061: In &lt;c>, quando rappresenta un'unità archivistica, deve essere&#x0a;
-      presente almeno uno tra did/unitid[@localtype = &quot;TitoloOriginale&quot;] e&#x0a;
-      tra did/unitid[@localtype = &quot;TitoloAttribuito&quot;]
+      presente almeno uno tra did/unittitle[@localtype = &quot;TitoloOriginale&quot;] e&#x0a;
+      tra did/unittitle[@localtype = &quot;TitoloAttribuito&quot;]
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="   did/unitid[@localtype = 'TitoloOriginale']
-                or did/unitid[@localtype = 'TitoloAttribuito']"/>
+          test="   did/unittitle[@localtype = 'TitoloOriginale']
+                or did/unittitle[@localtype = 'TitoloAttribuito']"/>
         <!--
         <xs:assert test="1 >= count(e3:did/e3:physdescstructured/e3:genreform/e3:part[@localtype = 'Tipologia'])"/>
         -->
@@ -1702,12 +1719,12 @@ M060: In &lt;c>, quando rappresenta un'unità documentale, deve essere&#x0a;
           test="1 >= count(did/unitid[@localtype = 'TitoloAttribuito'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M061: In &lt;c>, quando rappresenta un'unità documentale, deve essere&#x0a;
-      presente almeno uno tra did/unitid[@localtype = &quot;TitoloOriginale&quot;] e&#x0a;
-      tra did/unitid[@localtype = &quot;TitoloAttribuito&quot;]
+      presente almeno uno tra did/unittitle[@localtype = &quot;TitoloOriginale&quot;] e&#x0a;
+      tra did/unittitle[@localtype = &quot;TitoloAttribuito&quot;]
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="   did/unitid[@localtype = 'TitoloOriginale']
-                or did/unitid[@localtype = 'TitoloAttribuito']"/>
+          test="   did/unittitle[@localtype = 'TitoloOriginale']
+                or did/unittitle[@localtype = 'TitoloAttribuito']"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M062: In &lt;c>, quando rappresenta un'unità documentale, deve essere&#x0a;
       presente, al più, un unico&#x0a;
@@ -4160,6 +4177,16 @@ M032: Qualora in &lt;arrangement> sia presente un figlio &lt;head> con contenuto
                       = ('alfabetico', 'numeri arabi', 'numeri romani'))
             else true()"/>
             -->
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M306: Qualora in un &lt;arrangement>, con @localtype pari a &quot;Numerazione&quot;,&#x0a;
+      i valori degli eventuali p/num/@localtype devono soddisfare una precisa&#x0a;
+      lista chiusa di valori ammessi
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@localtype = 'Numerazione')
+            then every $type in p/num/@localtype
+                 satisfies $type = ('Alfabetico', 'Numeri arabi', 'numeri romani')
+            else true()"/>
   </xs:complexType>
   <xs:complexType name="bibliography">
     <xs:sequence>
