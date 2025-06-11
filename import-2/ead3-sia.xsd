@@ -281,7 +281,23 @@ M305: È obbligatorio in &lt;subject>, quando rappresenta un tematismo, che&#x0a
                                           'Inquisizione', 'Istruzione', 'Moda', 'Musica', 'Nobiltà',
                                           'Politica e sindacati', 'Psichiatria', 'Psicologia', 'Sanità',
                                           'Scienze naturali e matematiche', 'Scienze umane e sociali',
-                                          'Spettacolo', 'Sport', 'Territorio (cartografia storica-catasti)')"/>
+                                          'Spettacolo', 'Sport', 'Territorio (cartografia storica-catasti)',
+                                          'Antifascismo e resistenza', 'Architetti',
+                                          'Architettura/Urbanistica', 'Atti processuali', 'Azionismo',
+                                          'Cancellerie', 'Carte da legare', 'Credito', 'Diplomatico',
+                                          'Emilia-Romagna - Archivi femminili', 'Emilia-Romagna - ArchiviaMO',
+                                          'Emilia-Romagna - Patrimonio archivistico di interesse ebraico',
+                                          'Emilia-Romagna - Resistenza', 'Enti pubblici', 'Fonti audiovisive',
+                                          'Fotografia', 'Giuristi', 'Grande guerra (1915-1918)', 'Letterati',
+                                          'Libri liturgici e musicali', 'Marche - Imprese', 'Memoria',
+                                          'Notarile', 'Rete Parri', 'Stampa periodica',
+                                          'Strumenti di ricerca', 'Toscana - Archivi di personalità',
+                                          &quot;Toscana - Archivi Pistoiesi del '900&quot;,
+                                          'Toscana - Fondi librari', 'Toscana - Fuori dal manicomio',
+                                          'Trentino Alto Adige - Archivi femminili', 'Tutela beni culturali',
+                                          'Umbria - Archivi femminili', 'Umbria - Istruzione',
+                                          'Umbria - Le carte in dimora', 'Umbria - Politica e sindacati',
+                                          'Verdi')"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -2078,13 +2094,12 @@ M104: In &lt;c>, quando rappresenta un'unità documentale, se è presente un&#x0
                           /part[@localtype = 'TracciatoSpecifico']/text() = 'Fotografia'"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M105: In &lt;c>, quando rappresenta un'unità documentale, deve essere presente,&#x0a;
-      al più, un unico (non ripetibile) did/physdescstructured/dimensions,&#x0a;
-      dove il @physdescstructuredtype del &lt;physdescstructured> vale&#x0a;
-      &quot;materialtype&quot; e dove il @localtype del &lt;dimensions> vale &quot;Altezza&quot;
+      al più, un unico (non ripetibile)
+      did/physdescstructured/dimensions[@localtype = &quot;Altezza&quot;]
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="1 >= count( did/physdescstructured[@physdescstructuredtype = 'materialtype']
-                           /dimensions[@localtype = 'Altezza'])"/>
+          test="1 >= count( did/physdescstructured/dimensions[@localtype = 'Altezza'])"/>
+        <!-- assert annullato poiche' risultato errato  
         <xs:assert xa:message="[&#x0a;&#x0a;
 M106: In &lt;c>, quando rappresenta un'unità documentale, se è presente un&#x0a;
       did/physdescstructured/dimensions, dove il @physdescstructuredtype del&#x0a;
@@ -2099,6 +2114,8 @@ M106: In &lt;c>, quando rappresenta un'unità documentale, se è presente un&#x0
                      /physfacet/genreform[@localtype = 'TipologiaDocumentaria']
                      /part[@localtype = 'TracciatoSpecifico']/text() = 'Cartografia'
                 else true()"/>
+                -->
+        <!-- assert annullato poiche' risultato errato  
         <xs:assert xa:message="[&#x0a;&#x0a;
 M107: In &lt;c>, quando rappresenta un'unità documentale, se è presente un&#x0a;
       did/physdescstructured/dimensions, dove il @physdescstructuredtype del&#x0a;
@@ -2110,26 +2127,23 @@ M107: In &lt;c>, quando rappresenta un'unità documentale, se è presente un&#x0
           test="every $dim in  did/physdescstructured[@physdescstructuredtype = 'materialtype']
                               /dimensions[@localtype = 'Altezza']
                 satisfies $dim/@unit != ''"/>
+                -->
         <xs:assert xa:message="[&#x0a;&#x0a;
 M108: In &lt;c>, quando rappresenta un'unità documentale, se è presente un&#x0a;
-      did/physdescstructured/dimensions, dove il @physdescstructuredtype del&#x0a;
-      &lt;physdescstructured> vale &quot;materialtype&quot; e dove il @localtype del&#x0a;
-      &lt;dimensions> vale &quot;Altezza&quot;, allora &lt;dimensions> deve avere contenuto non&quot;
-      nullo
+      did/physdescstructured/dimensions[@localtype = &quot;Altezza&quot;], allora&#x0a;
+      &lt;dimensions> deve avere contenuto non nullo
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="every $dim in  did/physdescstructured[@physdescstructuredtype = 'materialtype']
-                              /dimensions[@localtype = 'Altezza']
+          test="every $dim in did/physdescstructured/dimensions[@localtype = 'Altezza']
                 satisfies $dim/text() != ''"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M109: In &lt;c>, quando rappresenta un'unità documentale, deve essere presente,&#x0a;
-      al più, un unico (non ripetibile) did/physdescstructured/dimensions,&#x0a;
-      dove il @physdescstructuredtype del &lt;physdescstructured> vale&#x0a;
-      &quot;materialtype&quot; e dove il @localtype del &lt;dimensions> vale &quot;Larghezza&quot;
+      al più, un unico (non ripetibile)
+      did/physdescstructured/dimensions[@localtype = &quot;Larghezza&quot;]
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="1 >= count( did/physdescstructured[@physdescstructuredtype = 'materialtype']
-                           /dimensions[@localtype = 'Larghezza'])"/>
+          test="1 >= count(did/physdescstructured/dimensions[@localtype = 'Larghezza'])"/>
+        <!-- assert annullato poiche' risultato errato  
         <xs:assert xa:message="[&#x0a;&#x0a;
 M110: In &lt;c>, quando rappresenta un'unità documentale, se è presente un&#x0a;
       did/physdescstructured/dimensions, dove il @physdescstructuredtype del&#x0a;
@@ -2144,6 +2158,8 @@ M110: In &lt;c>, quando rappresenta un'unità documentale, se è presente un&#x0
                      /physfacet/genreform[@localtype = 'TipologiaDocumentaria']
                      /part[@localtype = 'TracciatoSpecifico']/text() = 'Cartografia'
                 else true()"/>
+                -->
+        <!-- assert annullato poiche' risultato errato  
         <xs:assert xa:message="[&#x0a;&#x0a;
 M111: In &lt;c>, quando rappresenta un'unità documentale, se è presente un&#x0a;
       did/physdescstructured/dimensions, dove il @physdescstructuredtype del&#x0a;
@@ -2155,16 +2171,14 @@ M111: In &lt;c>, quando rappresenta un'unità documentale, se è presente un&#x0
           test="every $dim in  did/physdescstructured[@physdescstructuredtype = 'materialtype']
                               /dimensions[@localtype = 'Larghezza']
                 satisfies $dim/@unit != ''"/>
+                -->
         <xs:assert xa:message="[&#x0a;&#x0a;
 M112: In &lt;c>, quando rappresenta un'unità documentale, se è presente un&#x0a;
-      did/physdescstructured/dimensions, dove il @physdescstructuredtype del&#x0a;
-      &lt;physdescstructured> vale &quot;materialtype&quot; e dove il @localtype del&#x0a;
-      &lt;dimensions> vale &quot;Larghezza&quot;, allora &lt;dimensions> deve avere contenuto&quot;
-      non nullo
+      did/physdescstructured/dimensions[@localtype = &quot;Larghezza&quot;], allora&#x0a;
+      &lt;dimensions> deve avere contenuto&quot; non nullo
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="every $dim in  did/physdescstructured[@physdescstructuredtype = 'materialtype']
-                              /dimensions[@localtype = 'Larghezza']
+          test="every $dim in did/physdescstructured/dimensions[@localtype = 'Larghezza']
                 satisfies $dim/text() != ''"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M113: In &lt;c>, quando rappresenta un'unità documentale, deve essere presente,&#x0a;
@@ -5081,13 +5095,14 @@ M167: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, i
       &#x0a;&#x0a;]"
           test="text() != ''"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M168: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, deve essere&#x0a;
-      presente @altrender e il suo valore deve soddisfare una precisa lista di&#x0a;
+M168: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, se è&#x0a;
+      presente @altrender il suo valore deve soddisfare una precisa lista di&#x0a;
       valori ammissibili
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="@altrender != ('Data approssimativa', 'Data attribuita', 'Data incerta',
-                               'Data incerta e attribuita')"/>
+          test="   not(@altrender)
+                or (@altrender != ('Data approssimativa', 'Data attribuita', 'Data incerta',
+                                   'Data incerta e attribuita'))"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M080: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, il valore di&#x0a;
       @notbefore, se presente, deve corrispondere a un numero, positivo, di&#x0a;
