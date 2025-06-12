@@ -1215,16 +1215,16 @@ femminile."
             )
          "/>
 
-      <!-- eac 0737 cpfDescription/identity//nameEntry[@localType="denominazioneContesto"]/part[@localType="intestazione"]/ -->
+      <!-- eac 0737 cpfDescription/identity//nameEntry[@localType="denominazioneCSI"]/part[@localType="intestazioneCSI"]/ -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="&#xa; eac 0734&#xa; cpfDescription/identity/(.|nameEntrySet)/nameEntry[@localType='denominazioneContesto']/part[@localType='intestazione']/&#xa; 'Intestazione' è richiesto"
+         xao:message="&#xa; eac 0734&#xa; cpfDescription/identity/(.|nameEntrySet)/nameEntry[@localType='denominazioneCSI']/part[@localType='intestazioneCSI']/&#xa; 'Intestazione' è richiesto"
          test="
             not(.[normalize-space(lower-case(@localType))='contestostoricoistituzionale'])
             or
             (
              count(
                    .[normalize-space(lower-case(@localType))='contestostoricoistituzionale']/
-                   (.|nameEntrySet)/nameEntry[normalize-space(lower-case(@localType))='denominazionecontesto']/part[normalize-space(lower-case(@localType))='intestazione'][string-length(normalize-space(.)) &gt; 0]
+                   (.|nameEntrySet)/nameEntry[normalize-space(lower-case(@localType))='denominazionecsi']/part[normalize-space(lower-case(@localType))='intestazionecsi'][string-length(normalize-space(.)) &gt; 0]
                   ) = 1
             )
          "/>
@@ -1242,14 +1242,14 @@ femminile."
 
       <!-- eac 0884 cpfDescription/identity//nameEntry[@localType="denominazioneProfilo"]/part[@localType="intestazione"]/ -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="&#xa; eac 0884&#xa; cpfDescription/identity/(.|nameEntrySet)/nameEntry[@localType='denominazioneProfilo']/part[@localType='intestazione']/&#xa; 'Intestazione' è richiesto"
+         xao:message="&#xa; eac 0884&#xa; cpfDescription/identity/(.|nameEntrySet)/nameEntry[@localType='denominazioneProfilo']/part[@localType='intestazioneProfilo']/&#xa; 'Intestazione' è richiesto"
          test="
             not(.[normalize-space(lower-case(@localType))='profiloistituzionale'])
             or
             (
              count(
                    .[normalize-space(lower-case(@localType))='profiloistituzionale']/
-                   (.|nameEntrySet)/nameEntry[normalize-space(lower-case(@localType))='denominazioneprofilo']/part[normalize-space(lower-case(@localType))='intestazione'][string-length(normalize-space(.)) &gt; 0]
+                   (.|nameEntrySet)/nameEntry[normalize-space(lower-case(@localType))='denominazioneprofilo']/part[normalize-space(lower-case(@localType))='intestazioneprofilo'][string-length(normalize-space(.)) &gt; 0]
                   ) = 1
             )
          "/>
