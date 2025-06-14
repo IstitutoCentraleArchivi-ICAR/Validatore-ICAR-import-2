@@ -1510,6 +1510,20 @@ Software."
       <xs:attribute name="vocabularySourceURI" type="xs:anyURI"/>
       <xs:attribute name="valueURI" type="xs:anyURI"/>
       <xs:anyAttribute namespace="##other" processContents="lax"/>
+      
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="&#xa; eac 0694 0697 0699 0701 0846 0849 0851 0853 0994 0997 0999 1001 &#xa; control/sources/source/reference/@linkRole&#xa; lista chiusa con valori:&#xa;
+fonteArchivistica,
+fonteNormativa,
+riferimentoBibliografico,
+riferimentoWeb"
+         test="not(reference/@linkRole[
+                   normalize-space(lower-case(.))!='fontearchivistica'
+               and normalize-space(lower-case(.))!='fontenormativa'
+               and normalize-space(lower-case(.))!='riferimentobibliografico'
+               and normalize-space(lower-case(.))!='riferimentoweb'
+              ])"/>
+      
    </xs:complexType>
    <xs:complexType name="reference" mixed="true">
       <xs:sequence>
@@ -1534,6 +1548,7 @@ Software."
       <xs:attribute name="linkRole" type="xs:anyURI"/>
       <xs:attribute name="linkTitle" type="xs:token"/>
       <xs:anyAttribute namespace="##other" processContents="lax"/>
+      
    </xs:complexType>
    <xs:complexType name="shortCode" mixed="true">
       <xs:attribute name="audience">
