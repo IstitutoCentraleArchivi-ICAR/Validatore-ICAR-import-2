@@ -1658,6 +1658,27 @@ M181: In &lt;c>, quando rappresenta un'unità archivistica, gli eventuali&#x0a;
           xpathDefaultNamespace="##targetNamespace" 
           test="every $s in scopecontent
                 satisfies $s/@localtype = 'DescrizioneContenuto'"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M309: In &lt;c>, quando rappresenta un'unità archivistica, l'eventuale figlio&#x0a;
+      &lt;fileplan> non deve avere più di un figlio &lt;p> con contenuto testuale&#x0a;
+      non nullo
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (fileplan) then 1 >= count(fileplan/p[text() != '']) else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M310: In &lt;c>, quando rappresenta un'unità archivistica, l'eventuale figlio&#x0a;
+      &lt;fileplan> non deve avere più di un figlio &lt;p> che contiene, a sua&#x0a;
+      volta, un figlio &lt;subject>
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (fileplan) then 1 >= count(fileplan/p[subject]) else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M311: In &lt;c>, quando rappresenta un'unità archivistica, l'eventuale figlio&#x0a;
+      &lt;fileplan> non deve contenere nessun figlio &lt;p> con contenuto testuale&#x0a;
+      non nullo e, contemporaneamente, un figlio &lt;subject>
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (fileplan) then not(fileplan/p[subject and (text() != '')]) else true()"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -2860,6 +2881,20 @@ M184: In &lt;c>, quando rappresenta un'unità documentale, è ammesso, al più, 
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(scopecontent[@localtype = 'TrascrizioneEdizione'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M312: In &lt;c>, quando rappresenta un'unità documentale, è ammesso, al più, un&#x0a;
+      fileplan/p/subject[@localtype = &quot;CodiceClassificazione&quot;]/@identifier
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(fileplan/p/subject[@localtype = 'CodiceClassificazione']/@identifier)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M313: In &lt;c>, quando rappresenta un'unità documentale, è ammesso, al più, un&#x0a;
+      fileplan/p/subject[@localtype = &quot;CodiceClassificazione&quot;]/part&#x0a;
+      dove il @localtype del &lt;part> è pari a &quot;Qualifica&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count( fileplan/p/subject[@localtype = 'CodiceClassificazione']
+                           /part[@localtype = 'Qualifica'])"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -5089,11 +5124,13 @@ M166: In &lt;datesingle>, quando @localtype è pari a &quot;DataTestuale&quot;, 
   <xs:complexType name="datesingle.dataSingola">
     <xs:complexContent>
       <xs:extension base="datesingle">
+        <!-- controllo abolito poiche' errato
         <xs:assert xa:message="[&#x0a;&#x0a;
 M167: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, il contenuto&#x0a;
       non può essere vuoto
       &#x0a;&#x0a;]"
           test="text() != ''"/>
+          -->
         <xs:assert xa:message="[&#x0a;&#x0a;
 M168: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, se è&#x0a;
       presente @altrender il suo valore deve soddisfare una precisa lista di&#x0a;
@@ -5121,6 +5158,7 @@ M081: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, i
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="not(@notafter) or matches(@notafter, '^[0-9]{4}$')"/>
+        <!-- controllo abolito poiche' assorbito da M307
         <xs:assert xa:message="[&#x0a;&#x0a;
 M082: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, devono&#x0a;
       essere presenti sia @notbefore che @notafter oppure, in alternativa,&#x0a;
@@ -5128,6 +5166,7 @@ M082: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, d
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 != (count(@notbefore) + count(@notafter))"/>
+          -->
         <xs:assert xa:message="[&#x0a;&#x0a;
 M083: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, se @notbefore&#x0a;
       e @notafter sono entrambi presenti, i loro valori devono soddisfare&#x0a;
@@ -5168,6 +5207,19 @@ M175: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, i
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="not(@notafter) or (@notafter != '0000')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M307: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, deve essere&#x0a;
+      non vuoto il contenuto dell'elemento oppure, in alternativa, presenti e&#x0a;
+      con contenuto non nullo entrambi gli attributi @notafter e @notbefore;&#x0a;
+      non è consentito che siano vere entrambe le cose
+      &#x0a;&#x0a;]"
+          test="   ((text() != '') and not(@notbefore) and not(@notafter))
+                or (not(text()) and (@notbefore != '') and (@notafter != ''))"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M308: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, deve essere&#x0a;
+      presente, con valore non nullo, l'attributo @standarddate
+      &#x0a;&#x0a;]"
+          test="@standarddate != ''"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -5219,11 +5271,13 @@ M081: In &lt;fromdate> il valore di @notafter, se presente, deve corrispondere a
       l'anno 37 a.C. deve essere rappresentato come &quot;0037&quot;)
       &#x0a;&#x0a;]"
           test="not(@notafter) or matches(@notafter, '^[0-9]{4}$')"/>
+        <!-- controllo annullato poiche' assorbito da M307
         <xs:assert xa:message="[&#x0a;&#x0a;
 M082: In &lt;fromdate>, @notbefore e @notafter devono essere o entrambi&#x0a;
       presenti o entrambi assenti
       &#x0a;&#x0a;]"
           test="1 != (count(@notbefore) + count(@notafter))"/>
+          -->
         <xs:assert xa:message="[&#x0a;&#x0a;
 M083: In &lt;fromdate>, se @notbefore e @notafter sono entrambi presenti, i loro&#x0a;
       valori devono soddisfare alcune precise regole
@@ -5260,6 +5314,18 @@ M175: In &lt;fromdate> il valore di @notafter, se presente, non può valere &quo
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="not(@notafter) or (@notafter != '0000')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M307: In &lt;fromdate> deve essere non vuoto il contenuto dell'elemento oppure,&#x0a;
+      in alternativa, presenti e con contenuto non nullo entrambi gli attributi&#x0a;
+      @notafter e @notbefore; non è consentito che siano vere entrambe le cose
+      &#x0a;&#x0a;]"
+          test="   ((text() != '') and not(@notbefore) and not(@notafter))
+                or (not(text()) and (@notbefore != '') and (@notafter != ''))"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M308: In &lt;fromdate> deve essere presente, con valore non nullo,&#x0a;
+      l'attributo @standarddate
+      &#x0a;&#x0a;]"
+          test="@standarddate != ''"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -5289,11 +5355,13 @@ M081: In &lt;todate> il valore di @notafter, se presente, deve corrispondere a u
       l'anno 37 a.C. deve essere rappresentato come &quot;0037&quot;)
       &#x0a;&#x0a;]"
           test="not(@notafter) or matches(@notafter, '^[0-9]{4}$')"/>
+        <!-- controllo annullato poiche' assorbito da M307
         <xs:assert xa:message="[&#x0a;&#x0a;
 M082: In &lt;todate>, @notbefore e @notafter devono essere o entrambi presenti&#x0a;
       o entrambi assenti
       &#x0a;&#x0a;]"
           test="1 != (count(@notbefore) + count(@notafter))"/>
+          -->
         <xs:assert xa:message="[&#x0a;&#x0a;
 M083: In &lt;todate>, se @notbefore e @notafter sono entrambi presenti, i loro&#x0a;
       valori devono soddisfare alcune precise regole
@@ -5330,6 +5398,18 @@ M175: In &lt;todate> il valore di @notafter, se presente, non può valere &quot;
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="not(@notafter) or (@notafter != '0000')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M307: In &lt;todate> deve essere non vuoto il contenuto dell'elemento oppure,&#x0a;
+      in alternativa, presenti e con contenuto non nullo entrambi gli attributi&#x0a;
+      @notafter e @notbefore; non è consentito che siano vere entrambe le cose
+      &#x0a;&#x0a;]"
+          test="   ((text() != '') and not(@notbefore) and not(@notafter))
+                or (not(text()) and (@notbefore != '') and (@notafter != ''))"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M308: In &lt;fromdate> deve essere presente, con valore non nullo,&#x0a;
+      l'attributo @standarddate
+      &#x0a;&#x0a;]"
+          test="@standarddate != ''"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
