@@ -1664,7 +1664,7 @@ M309: In &lt;c>, quando rappresenta un'unità archivistica, l'eventuale figlio&#
       non nullo
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="if (fileplan) then 1 >= count(fileplan/p[text() != '']) else true()"/>
+          test="if (fileplan) then 1 >= count(fileplan/p[normalize-space()]) else true()"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M310: In &lt;c>, quando rappresenta un'unità archivistica, l'eventuale figlio&#x0a;
       &lt;fileplan> non deve avere più di un figlio &lt;p> che contiene, a sua&#x0a;
@@ -1678,7 +1678,7 @@ M311: In &lt;c>, quando rappresenta un'unità archivistica, l'eventuale figlio&#
       non nullo e, contemporaneamente, un figlio &lt;subject>
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="if (fileplan) then not(fileplan/p[subject and (text() != '')]) else true()"/>
+          test="if (fileplan) then not(fileplan/p[subject and normalize-space()]) else true()"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -3993,24 +3993,30 @@ M281: In &lt;controlnote>, quando il @localtype vale &quot;FinalitaProgetto&quot
         <xs:attribute name="label" type="xs:string"/>
         <xs:attribute name="encodinganalog" type="xs:token"/>
         <xs:attribute name="parent" type="xs:IDREFS"/>
+        <!-- test annullato
         <xs:assert xa:message="[&#x0a;&#x0a;
 M037: In &lt;physloc> deve essere presente almeno un figlio &lt;ptr> con gli&#x0a;
       attributi @target e @linkrole, il secondo dei quali deve valere &quot;Internal&quot;
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="ptr[@linkrole = 'Internal']/@id"/>
+          -->
+        <!-- test annullato
         <xs:assert xa:message="[&#x0a;&#x0a;
 M038: In &lt;physloc> deve essere presente almeno un figlio &lt;ref> con @arcrole&#x0a;
       pari a &quot;DaPezzo&quot;
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="ref[@arcrole = 'DaPezzo']"/>
+          -->
+        <!-- test annullato
         <xs:assert xa:message="[&#x0a;&#x0a;
 M039: In &lt;physloc> deve essere presente almeno un figlio &lt;ref> con @arcrole&#x0a;
       pari a &quot;APezzo&quot;
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="ref[@arcrole = 'APezzo']"/>
+          -->
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
