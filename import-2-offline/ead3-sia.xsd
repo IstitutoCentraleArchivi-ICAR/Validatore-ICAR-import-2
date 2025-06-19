@@ -303,7 +303,8 @@ M305: È obbligatorio in &lt;subject>, quando rappresenta un tematismo, che&#x0a
   </xs:complexType>
 
   <!-- M231: creato il tipo "archref.bibl", specializzazione di "archref"
-             quando usato come figlio di "bibliography" -->
+             quando usato come figlio di "bibliography" (tranne quando
+             @altrender e' pari a "LinkFonteArchivistica") -->
   <xs:complexType name="archref.bibl">
     <xs:complexContent>
       <xs:extension base="archref">
@@ -737,10 +738,10 @@ M218: In &lt;bibliography>, quando @localtype è pari a &quot;RiferimentoWeb&quo
     <xs:attribute name="base" type="xs:anyURI"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M049: In &lt;archdesc> non deve essere presente più di un&#x0a;
-      did/langmaterial/language/@lang
+      did/langmaterial[@localtype = &quot;LinguaDescrizione&quot;]/language/@lang
       &#x0a;&#x0a;]"
       xpathDefaultNamespace="##targetNamespace" 
-      test="1 >= count(did/langmaterial/language/@lang)"/>
+      test="1 >= count(did/langmaterial[@localtype = 'LinguaDescrizione']/language/@lang)"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M159: In &lt;archdesc> è ammesso, al più, un unico figlio &lt;odd> con @localtype&#x0a;
       pari ad &quot;Osservazioni&quot;
@@ -749,12 +750,31 @@ M159: In &lt;archdesc> è ammesso, al più, un unico figlio &lt;odd> con @localt
       test="1 >= count(odd[@localtype = 'Osservazioni'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M295: È obbligatorio in &lt;archdesc> che il contenuto degli eventuali&#x0a;
-      did/langmaterial/language/@lang soddisfino lo standard ISO 693-3&#x0a;
-      e quindi, in particolare, corrisponda a esattamente tre lettere minuscole
+      did/langmaterial[@localtype = &quot;LinguaDescrizione&quot;]/language/@lang&#x0a;
+      soddisfino lo standard ISO 693-3 e quindi, in particolare, corrisponda&#x0a;
+      a esattamente tre lettere minuscole
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="every $lang in did/langmaterial/language/@lang
+          test="every $lang in did/langmaterial[@localtype = 'LinguaDescrizione']/language/@lang
                 satisfies matches($lang, '^[a-z]{3}$')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M302: In &lt;archdesc> può essere presente, al più, un unico&#x0a;
+      bibliography/bibliography[@localtype = &quot;LinkFonteNormativa&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(bibliography/bibliography[@localtype = 'LinkFonteNormativa'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M303: In &lt;archdesc> può essere presente, al più, un unico&#x0a;
+      bibliography/bibliography[@localtype = &quot;LinkRiferimentoWeb&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(bibliography/bibliography[@localtype = 'LinkRiferimentoWeb'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M314: In &lt;archdesc> può essere presente al più, un unico&#x0a;
+      bibliography/bibliography[@localtype = &quot;LinkRiferimentoBibliografico&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(bibliography/bibliography[@localtype = 'LinkRiferimentoBibliografico'])"/>
   </xs:complexType>
 
   <!-- M185: creato il tipo "archdesc.strc", derivato per estensione da
@@ -1072,6 +1092,7 @@ M297: In &lt;archdesc>, quando relativo a un progetto, il valore di&#x0a;
                                        'Descrizione Protetta e Risorsa Protetta (login)',
                                        'Descrizione Libera e Risorse Riservata (autorizzazione)',
                                        'Descrizione Riservata e Risorse Riservata (autorizzazione)')"/>
+        <!-- spostato in archdesc.base e in c.base
         <xs:assert xa:message="[&#x0a;&#x0a;
 M302: In &lt;archdesc>, quando rappresenta un progetto, può essere presente,&#x0a;
       al più, un unico&#x0a;
@@ -1079,6 +1100,8 @@ M302: In &lt;archdesc>, quando rappresenta un progetto, può essere presente,&#x
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(bibliography/bibliography[@localtype = 'LinkFonteNormativa'])"/>
+          -->
+        <!-- spostato in archdesc.base e in c.base
         <xs:assert xa:message="[&#x0a;&#x0a;
 M303: In &lt;archdesc>, quando rappresenta un progetto, può essere presente,&#x0a;
       al più, un unico&#x0a;
@@ -1086,6 +1109,16 @@ M303: In &lt;archdesc>, quando rappresenta un progetto, può essere presente,&#x
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(bibliography/bibliography[@localtype = 'LinkRiferimentoWeb'])"/>
+          -->
+        <!-- spostato in archdesc.base e in c.base
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M314: In &lt;archdesc>, quando rappresenta un progetto, può essere presente,&#x0a;
+      al più, un unico&#x0a;
+      bibliography/bibliography[@localtype = &quot;LinkRiferimentoBibliografico&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(bibliography/bibliography[@localtype = 'LinkRiferimentoBibliografico'])"/>
+          -->
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1258,10 +1291,10 @@ M045: In &lt;c> non deve essere presente più di un&#x0a;
         test="1 >= count(did/didnote[@localtype = 'RestauroOAltriInterventi'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M049: In &lt;c> deve essere presente, al più, un unico&#x0a;
-      did/langmaterial/language/@lang
+      did/langmaterial[@localtype = &quot;LinguaDescrizione&quot;]/language/@lang
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="1 >= count(did/langmaterial/language/@lang)"/>
+          test="1 >= count(did/langmaterial[@localtype = 'LinguaDescrizione']/language/@lang)"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M067: In &lt;c> non deve essere presente più di un &lt;accessrestrict> con&#x0a;
       @localtype pari a &quot;CondizioniAccesso&quot;
@@ -1316,12 +1349,31 @@ M159: In &lt;c> è ammesso, al più, un unico figlio &lt;odd> con @localtype par
           test="1 >= count(odd[@localtype = 'Osservazioni'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M295: È obbligatorio in &lt;c> che il contenuto degli eventuali&#x0a;
-      did/langmaterial/language/@lang soddisfino lo standard ISO 693-3&#x0a;
-      e quindi, in particolare, corrisponda a esattamente tre lettere minuscole
+      did/langmaterial/language[@localtype = &quot;LinguaDescrizione&quot;]/@lang&#x0a;
+      soddisfino lo standard ISO 693-3 e quindi, in particolare, corrisponda&#x0a;
+      a esattamente tre lettere minuscole
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="every $lang in did/langmaterial/language/@lang
+          test="every $lang in did/langmaterial[@localtype = 'LinguaDescrizione']/language/@lang
                 satisfies matches($lang, '^[a-z]{3}$')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M302: In &lt;c> può essere presente, al più, un unico&#x0a;
+      bibliography/bibliography[@localtype = &quot;LinkFonteNormativa&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(bibliography/bibliography[@localtype = 'LinkFonteNormativa'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M303: In &lt;c> può essere presente, al più, un unico&#x0a;
+      bibliography/bibliography[@localtype = &quot;LinkRiferimentoWeb&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(bibliography/bibliography[@localtype = 'LinkRiferimentoWeb'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M314: In &lt;c> può essere presente al più, un unico&#x0a;
+      bibliography/bibliography[@localtype = &quot;LinkRiferimentoBibliografico&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(bibliography/bibliography[@localtype = 'LinkRiferimentoBibliografico'])"/>
   </xs:complexType>
 
   <!-- M001: creato il tipo "c.comp" -->
@@ -1811,34 +1863,34 @@ M070: In &lt;c>, quando rappresenta un'unità documentale, deve essere presente,
       al più, un unico (non ripetibile)&#x0a;
       did/physdescstructured/physfacet/genreform dove il&#x0a;
       @physdescstructuredtype di &lt;physdescstructured> vale &quot;materialtype&quot; e&#x0a;
-      dove il @localtype del &lt;relationentry> vale &quot;TipologiaDocumentaria&quot;
+      dove il @localtype del &lt;physfacet> vale &quot;TipologiaDocumentaria&quot;
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count( did/physdescstructured[@physdescstructuredtype = 'materialtype']
-                           /physfacet/genreform[@localtype = 'TipologiaDocumentaria'])"/>
+                           /physfacet[@localtype = 'TipologiaDocumentaria']/genreform)"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M071: In &lt;c>, quando rappresenta un'unità documentale, deve essere presente,&#x0a;
       al più, un unico (non ripetibile)&#x0a;
       did/physdescstructured/physfacet/genreform/part dove il&#x0a;
       @physdescstructuredtype di &lt;physdescstructured> vale &quot;materialtype&quot;,&#x0a;
-      dove il @localtype del &lt;relationentry> vale &quot;TipologiaDocumentaria&quot; e&#x0a;
+      dove il @localtype del &lt;physfacet> vale &quot;TipologiaDocumentaria&quot; e&#x0a;
       dove il @localtype del &lt;part> vale &quot;TracciatoSpecifico&quot;
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count( did/physdescstructured[@physdescstructuredtype = 'materialtype']
-                           /physfacet/genreform[@localtype = 'TipologiaDocumentaria']
+                           /physfacet[@localtype = 'TipologiaDocumentaria']/genreform
                            /part[@localtype = 'TracciatoSpecifico'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M072: In &lt;c>, quando rappresenta un'unità documentale, se sono presenti dei&#x0a;
       did/physdescstructured/physfacet/genreform/part dove i&#x0a;
       @physdescstructuredtype di &lt;physdescstructured> valgono &quot;materialtype&quot;,&#x0a;
-      dove i @localtype dei &lt;relationentry> valgono &quot;TipologiaDocumentaria&quot; e&#x0a;
+      dove i @localtype dei &lt;physfacet> valgono &quot;TipologiaDocumentaria&quot; e&#x0a;
       dove i @localtype dei &lt;part> valgono &quot;TracciatoSpecifico&quot;, allora i&#x0a;
       contenuti dei &lt;part> devono soffisfare una lista chiusa di valori ammissibili
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="every $part in  did/physdescstructured[@physdescstructuredtype = 'materialtype']
-                               /physfacet/genreform[@localtype = 'TipologiaDocumentaria']
+                               /physfacet[@localtype = 'TipologiaDocumentaria']/genreform
                                /part[@localtype = 'TracciatoSpecifico']
                 satisfies $part/text() = ('Audiovisivo', 'Cartografia', 'Carteggio', 'Fotografia',
                                           'Grafica', 'Manoscritto', 'Pergamena')"/>
@@ -1851,12 +1903,12 @@ M072: In &lt;c>, quando rappresenta un'unità documentale, se sono presenti dei&
         <xs:assert xa:message="[&#x0a;&#x0a;
 M073: In &lt;c>, quando rappresenta un'unità documentale, se sono presenti dei&#x0a;
       did/physdescstructured/physfacet/genreform/part dove i @localtype dei&#x0a;
-      &lt;genreform> valgono &quot;Sigillo&quot; e dove i @localtype dei &lt;part> valgono&#x0a;
+      &lt;physfacet> valgono &quot;Sigillo&quot; e dove i @localtype dei &lt;part> valgono&#x0a;
       &quot;Natura&quot;, allora i contenuti dei &lt;part> devono soffisfare una precisa&#x0a;
       lista chiusa di valori ammissibili
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="every $part in  did/physdescstructured/physfacet/genreform[@localtype = 'Sigillo']
+          test="every $part in  did/physdescstructured/physfacet[@localtype = 'Sigillo']/genreform
                                /part[@localtype = 'Natura']
                 satisfies $part/text() = ('Sigillo a una faccia', 'Sigillo a due facce', 'Bolla',
                                           'Sigillo con controsigillo', 'Timbro a umido', 'Timbro a secco',
@@ -1864,24 +1916,24 @@ M073: In &lt;c>, quando rappresenta un'unità documentale, se sono presenti dei&
         <xs:assert xa:message="[&#x0a;&#x0a;
 M074: In &lt;c>, quando rappresenta un'unità documentale, se sono presenti dei&#x0a;
       did/physdescstructured/physfacet/genreform/part dove i @localtype di&#x0a;
-      &lt;genreform> valgono &quot;Sigillo&quot; e dove i @localtype dei &lt;part> valgono&#x0a;
+      &lt;physfacet> valgono &quot;Sigillo&quot; e dove i @localtype dei &lt;part> valgono&#x0a;
       &quot;Materiale&quot;, allora i contenuti dei &lt;part> devono soffisfare una precisa&#x0a;
       lista chiusa di valori ammissibili
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="every $part in  did/physdescstructured/physfacet/genreform[@localtype = 'Sigillo']
+          test="every $part in  did/physdescstructured/physfacet[@localtype = 'Sigillo']/genreform
                                /part[@localtype = 'Materiale']
                 satisfies $part/text() = ('Argilla', 'Cera', 'Ceralacca', 'Oro', 'Piombo', 'Argento',
                                           'Carta', 'Cera sotto carta', 'Inchiostro')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M075: In &lt;c>, quando rappresenta un'unità documentale, se sono presenti dei&#x0a;
       did/physdescstructured/physfacet/genreform/part dove i @localtype dei&#x0a;
-      &lt;genreform> valgono &quot;Sigillo&quot; e dove i @localtype dei &lt;part> valgono&#x0a;
+      &lt;physfacet> valgono &quot;Sigillo&quot; e dove i @localtype dei &lt;part> valgono&#x0a;
       &quot;ModoApposizione&quot;, allora i contenuti dei &lt;part> devono soddisfare una&#x0a;
       precisa lista chiusa di valori ammissibili
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="every $part in  did/physdescstructured/physfacet/genreform[@localtype = 'Sigillo']
+          test="every $part in  did/physdescstructured/physfacet[@localtype = 'Sigillo']/genreform
                                /part[@localtype = 'ModoApposizione']
                 satisfies $part/text() = ('Aderente', 'Aderente incassato', 'Aderente su coda semplice',
                                           'Aderente su coda parigina', 'Aderente en placard', 'Pendente')"/>
@@ -4258,8 +4310,13 @@ M306: Qualora in un &lt;arrangement>, con @localtype pari a &quot;Numerazione&qu
         </xs:element>
         <!-- M231: utilizzata la specializzazione "archref.bibl",
                    di "archref", quando "archref" e' figlio
-                   di "bibliography" -->
-        <xs:element name="archref" type="archref.bibl"/>
+                   di "bibliography", ad eccezione di quando
+                   @altrender e' pari a "LinkFonteArchivistica",
+                   quando si usa la versione base -->
+        <xs:element name="archref">
+          <xs:alternative type="archref"      test="@altrender = 'LinkFonteArchivistica'"/>
+          <xs:alternative type="archref.bibl"/>
+        </xs:element>
         <xs:element name="bibref" type="bibref"/>
       </xs:choice>
     </xs:sequence>
