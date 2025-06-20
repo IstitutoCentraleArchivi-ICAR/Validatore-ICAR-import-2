@@ -782,6 +782,46 @@ M314: In &lt;archdesc> può essere presente al più, un unico&#x0a;
   <xs:complexType name="archdesc.strc">
     <xs:complexContent>
       <xs:extension base="archdesc.base">
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M315: In &lt;archdesc>, quando è in versione minimale a supporto di uno strumento&#x0a;
+      di ricerca, deve essere presente un unico elemento figlio e deve trattarsi&#x0a;
+      di un &lt;did>
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="(1 = count(*)) and (1 = count(did))"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M316: In &lt;archdesc>, quando è in versione minimale a supporto di uno strumento&#x0a;
+      di ricerca, l'unico figlio &lt;did> deve, a sua volta, avere un unico&#x0a;
+      elemento figlio e deve trattarsi di un &lt;unitid>
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="(1 = count(did/*)) and (1 = count(did/unitid))"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M317: In &lt;archdesc>, quando è in versione minimale a supporto di uno strumento&#x0a;
+      di ricerca, l'unico did/unitid contenuto deve avere un testo contenuto nullo
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $id in did/unitid
+                satisfies not($id/text())"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M318: In &lt;archdesc>, quando è in versione minimale a supporto di uno strumento&#x0a;
+      di ricerca, devono essere presenti solo due attributi (@level&#x0a;
+      e @otherlevel)
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="2 = count(@*)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M319: In &lt;archdesc>, quando è in versione minimale a supporto di uno strumento&#x0a;
+      di ricerca, l'unico elemento figlio, &lt;did>, non deve avere attributi
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="0 = count(did/@*)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M320: In &lt;archdesc>, quando è in versione minimale a supporto di uno strumento&#x0a;
+      di ricerca, l'unico did/unitid contenuto non deve avere attributi
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="0 = count(did/unitid/@*)"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -2966,7 +3006,7 @@ M313: In &lt;c>, quando rappresenta un'unità documentale, è ammesso, al più, 
           <xs:alternative type="archdesc.prog" test="    (@level = 'otherlevel')
                                                      and (@otherlevel = 'Progetto')"/>
           <xs:alternative type="archdesc.strc" test="    (@level = 'otherlevel')
-                                                     and (@otherlevel = 'StrumentoRicerca')"/>
+                                                     and (@otherlevel = 'StrumentoDiRicerca')"/>
           <xs:alternative type="archdesc.comp"/>
         </xs:element>
       </xs:sequence>
