@@ -1240,12 +1240,14 @@ M255: In &lt;archdesc>, quando rappresenta un progetto di digitalizzazione, può
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(scopecontent[@localtype = 'NoteProgetto'])"/>
+        <!--
         <xs:assert xa:message="[&#x0a;&#x0a;
 M256: In &lt;archdesc>, quando rappresenta un progetto di digitalizzazione, può&#x0a;
       essere presente, al più, un unico figlio &lt;processinfo>
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(processinfo)"/>
+          -->
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -3094,6 +3096,46 @@ M283: Quando &lt;ead> contiene un &lt;archdesc> con @level pari a &quot;otherlev
                  and not(   control/filedesc/notestmt
                            /controlnote[@localtype = 'TipologiaProgetto']/p/text()
                          = 'Progetto di digitalizzazione')
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M321: Quando &lt;ead> contiene uno Strumento di Ricerca, il contenuto&#x0a;
+      di /control/recordid non può essere vuoto
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (    (archdesc/@level = 'otherlevel')
+                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+            then control/recordid/text() != ''
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M322: Quando &lt;ead> contiene uno Strumento di Ricerca, deve essere presente un&#x0a;
+      (ma solo un)&#x0a;
+      control/filedesc/titlestmt/titleproper[@localtype = &quot;TitoloNormalizzato&quot;]
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (    (archdesc/@level = 'otherlevel')
+                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+            then 1 = count(control/filedesc/titlestmt/titleproper[@localtype = 'TitoloNormalizzato'])
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M323: Quando &lt;ead> contiene uno Strumento di Ricerca, non deve essere nullo il&#x0a;
+      contenuto di&#x0a;
+      control/filedesc/titlestmt/titleproper[@localtype = &quot;TitoloNormalizzato&quot;]
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (    (archdesc/@level = 'otherlevel')
+                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+            then every $tlt in control/filedesc/titlestmt/titleproper[@localtype = 'TitoloNormalizzato']
+                 satisfies $tlt/text() != ''
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M324: Quando &lt;ead> contiene uno Strumento di Ricerca, deve essere presente,&#x0a;
+      al più, un unico&#x0a;
+      control/filedesc/titlestmt/titleproper[@localtype = &quot;TitoloOriginale&quot;]
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (    (archdesc/@level = 'otherlevel')
+                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+            then 1 >= count(control/filedesc/titlestmt/titleproper[@localtype = 'TitoloOriginale'])
             else true()"/>
     </xs:complexType>
   </xs:element>
