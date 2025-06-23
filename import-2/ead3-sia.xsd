@@ -3099,7 +3099,7 @@ M283: Quando &lt;ead> contiene un &lt;archdesc> con @level pari a &quot;otherlev
             else true()"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M321: Quando &lt;ead> contiene uno Strumento di Ricerca, il contenuto&#x0a;
-      di /control/recordid non può essere vuoto
+      di control/recordid non può essere vuoto
       &#x0a;&#x0a;]"
       xpathDefaultNamespace="##targetNamespace" 
       test="if (    (archdesc/@level = 'otherlevel')
@@ -3107,7 +3107,7 @@ M321: Quando &lt;ead> contiene uno Strumento di Ricerca, il contenuto&#x0a;
             then control/recordid/text() != ''
             else true()"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
-M322: Quando &lt;ead> contiene uno Strumento di Ricerca, deve essere presente un&#x0a;
+M322: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere un&#x0a;
       (ma solo un)&#x0a;
       control/filedesc/titlestmt/titleproper[@localtype = &quot;TitoloNormalizzato&quot;]
       &#x0a;&#x0a;]"
@@ -3128,14 +3128,163 @@ M323: Quando &lt;ead> contiene uno Strumento di Ricerca, non deve essere nullo i
                  satisfies $tlt/text() != ''
             else true()"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
-M324: Quando &lt;ead> contiene uno Strumento di Ricerca, deve essere presente,&#x0a;
-      al più, un unico&#x0a;
+M324: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere, al più,&#x0a;
+      un unico&#x0a;
       control/filedesc/titlestmt/titleproper[@localtype = &quot;TitoloOriginale&quot;]
       &#x0a;&#x0a;]"
       xpathDefaultNamespace="##targetNamespace" 
       test="if (    (archdesc/@level = 'otherlevel')
                 and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
             then 1 >= count(control/filedesc/titlestmt/titleproper[@localtype = 'TitoloOriginale'])
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M325: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere, al più,&#x0a;
+      un unico&#x0a;
+      control/filedesc/editionstmt/edition[@localtype = &quot;Tipologia&quot;]
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (    (archdesc/@level = 'otherlevel')
+                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+            then 1 >= count(control/filedesc/editionstmt/edition[@localtype = 'Tipologia'])
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M326: Quando &lt;ead> contiene uno Strumento di Ricerca, il contenuto&#x0a;
+      dell'eventuale&#x0a;
+      control/filedesc/editionstmt/edition[@localtype = &quot;Tipologia&quot;]&#x0a;
+      deve soddisfare una ben precisa lista chiusa di valori ammessi
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (    (archdesc/@level = 'otherlevel')
+                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+            then every $ed in control/filedesc/editionstmt/edition[@localtype = 'Tipologia']
+                 satisfies $ed/text() = ('Banca dati', 'Censimento', 'Elenco',
+                                         'Elenco di consistenza', 'Elenco di versamento',
+                                         'Elenco di deposito', 'Guida', 'Indice',
+                                         'Inventario analitico', 'Inventario sommario',
+                                         'Inventario topografico', 'Regesto', 'Repertorio',
+                                         'Repertorio alfabetico', 'Repertorio cronologico',
+                                         'Spoglio', 'Trascrizione', 'Rubrica')
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M327: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere, al più,&#x0a;
+      un unico&#x0a;
+      control/filedesc/editionstmt/edition[@localtype = &quot;Specificazione&quot;]
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (    (archdesc/@level = 'otherlevel')
+                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+            then 1 >= count(control/filedesc/editionstmt/edition[@localtype = 'Specificazione'])
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M328: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere, al più,&#x0a;
+      un unico&#x0a;
+      control/filedesc/notestmt/controlnote[@localtype = &quot;NoteStoricoRedazionali&quot;]
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (    (archdesc/@level = 'otherlevel')
+                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+            then 1 >= count(control/filedesc/notestmt/controlnote[@localtype = 'NoteStoricoRedazionali'])
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M329: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere, al più,&#x0a;
+      un unico&#x0a;
+      control/filedesc/notestmt/controlnote[@localtype = &quot;DescrizioneIntrinseca&quot;]
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (    (archdesc/@level = 'otherlevel')
+                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+            then 1 >= count(control/filedesc/notestmt/controlnote[@localtype = 'DescrizioneIntrinseca'])
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M330: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere, al più,&#x0a;
+      un unico&#x0a;
+      control/filedesc/notestmt/controlnote[@localtype = &quot;TipoSupporto&quot;]
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (    (archdesc/@level = 'otherlevel')
+                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+            then 1 >= count(control/filedesc/notestmt/controlnote[@localtype = 'TipoSupporto'])
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M331: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere, al più,&#x0a;
+      un unico&#x0a;
+      control/filedesc/notestmt/controlnote[@localtype = &quot;ModalitaRedazione&quot;]
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (    (archdesc/@level = 'otherlevel')
+                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+            then 1 >= count(control/filedesc/notestmt/controlnote[@localtype = 'ModalitaRedazione'])
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M332: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere, al più,&#x0a;
+      un unico&#x0a;
+      control/filedesc/notestmt/controlnote[@localtype = &quot;DescrizioneEstrinseca&quot;]
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (    (archdesc/@level = 'otherlevel')
+                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+            then 1 >= count(control/filedesc/notestmt/controlnote[@localtype = 'DescrizioneEstrinseca'])
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M333: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere, al più,&#x0a;
+      un unico&#x0a;
+      control/filedesc/editionstmt/edition[@localtype = &quot;online&quot;]
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (    (archdesc/@level = 'otherlevel')
+                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+            then 1 >= count(control/filedesc/editionstmt/edition[@localtype = 'online'])
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M334: Quando &lt;ead> contiene uno Strumento di Ricerca, gli eventuali&#x0a;
+      control/representation contenuti devono necessariamente avere&#x0a;
+      l'attributo @arcrole
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (    (archdesc/@level = 'otherlevel')
+                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+            then every $rep in control/representation
+                 satisfies $rep/@arcrole
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M335: Quando &lt;ead> contiene uno Strumento di Ricerca, gli @arcrole degli&#x0a;
+      eventuali control/representation constenuti devono necessariamente&#x0a;
+      soddisfare una precisa lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (    (archdesc/@level = 'otherlevel')
+                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+            then every $rep in control/representation
+                 satisfies $rep/@arcrole = ('Nativo digitale', 'è rappresentazione di',
+                                            'è documentazione di')
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M336: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere, al più,&#x0a;
+      un unico control/languagedeclaration/language
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (    (archdesc/@level = 'otherlevel')
+                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+            then 1 >= count(control/languagedeclaration/language)
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M337: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere, al più,&#x0a;
+      un unico&#x0a;
+      control/filedesc/notestmt/controlnote[@localtype = &quot;Osservazioni&quot;]
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (    (archdesc/@level = 'otherlevel')
+                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+            then 1 >= count(control/filedesc/notestmt/controlnote[@localtype = 'Osservazioni'])
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M338: Quando &lt;ead> contiene uno Strumento di Ricerca, deve avere l'attributo&#x0a;
+      @audience
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (    (archdesc/@level = 'otherlevel')
+                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+            then @audience
             else true()"/>
     </xs:complexType>
   </xs:element>
