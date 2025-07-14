@@ -5492,8 +5492,8 @@ M168: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, s
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="   not(@altrender)
-                or (@altrender != ('Data approssimativa', 'Data attribuita', 'Data incerta',
-                                   'Data incerta e attribuita'))"/>
+                or (@altrender != ('DataApprossimativa', 'DataAttribuita', 'DataIncerta',
+                                   'DataIncertaAttribuita'))"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M080: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, il valore di&#x0a;
       @notbefore, se presente, deve corrispondere a un numero, positivo, di&#x0a;
@@ -5625,8 +5625,8 @@ M014: In &lt;fromdate> non deve essere presente @altrender oppure, se presente, 
       suo contenuto deve soddisfare una lista chiusa di valori ammessi
       &#x0a;&#x0a;]"
           test="   not(@altrender)
-                or (@altrender = ('Data approssimativa', 'Data attribuita', 'Data incerta',
-                                  'Data post quem', 'Data incerta e attribuita'))"/>
+                or (@altrender = ('DataApprossimativa', 'DataAttribuita', 'DataIncerta',
+                                  'DataPostQuem', 'DataIncertaAttribuita'))"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M080: In &lt;fromdate> il valore di @notbefore, se presente, deve corrispondere a&#x0a;
       un numero, positivo, di quattro cifre corrispondente a un anno; i valori&#x0a;
@@ -5718,8 +5718,8 @@ M015: In &lt;todate> non deve essere presente @altrender oppure, se presente, il
       suo contenuto deve soddisfare una lista chiusa di valori ammessi
       &#x0a;&#x0a;]"
           test="   not(@altrender)
-                or (@altrender = ('Data ante quem', 'Data approssimativa', 'Data attribuita',
-                                  'Data incerta', 'DataIncerta e attribuita'))"/>
+                or (@altrender = ('DataAnteQuem', 'DataApprossimativa', 'DataAttribuita',
+                                  'DataIncerta', 'DataIncertaAttribuita'))"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M080: In &lt;todate> il valore di @notbefore, se presente, deve corrispondere a un&#x0a;
       numero, positivo, di quattro cifre corrispondente a un anno; i valori&#x0a;
