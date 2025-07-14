@@ -76,7 +76,7 @@
            eac/cpfDescription/@audience
               valori possibili "external" or "internal" su cui vanno rispettivamente mappati i valori SI o NO.
            eac/control/localControl/term/
-              Luogo della cultura (SI/NO) NB: se il flag ha valore SI, valorizzare l'elemento <term> con la stringa "luogo della cultura"; se il valore è NO il campo non si mappa.
+              Luogo della cultura (SI/NO) NB: se il flag ha valore SI, valorizzare l'elemento <term> con la stringa "Luogo della cultura"; se il valore è NO il campo non si mappa.
               Sala di Studio      (SI/NO) NB: se il flag ha valore SI, valorizzare l'elemento <term> con la stringa "Sala studio"; se il valore è NO il campo non si mappa.
               Tenant (soppresso 241022) identifica un controllo unitario di una responsabilità attribuita (non sempre corrispondente ad un Istituto) cfr: Soprintendenza, soggetti non standardizzati (Regione, …) => traduzione= responsabile tenutario di un ambiente di lavoro
          -->
@@ -85,16 +85,16 @@
          -->
          <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
             xao:message="=&gt;&#xa;eac 0602 0599 0600 &#xa; visibilità e qualifica&#xa; cpfDescription[@audience='internal'] richiede in control/localControl/term uno dei valori&#xa;
-luogo della cultura,
-sala studio."
+Luogo della cultura,
+Sala studio."
             test="
                   not(relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico']][relationType[normalize-space(lower-case(.))='soggetto conservatore']])
                   or
                   not
                   (cpfDescription[normalize-space(lower-case(@audience))='internal']
                    and 
-                   (count(control/localControl/term[normalize-space(lower-case(.))='luogo della cultura'])&gt;0 or
-                    count(control/localControl/term[normalize-space(lower-case(.))='sala studio'        ])&gt;0
+                   (count(control/localControl/term[.='Luogo della cultura'])&gt;0 or
+                    count(control/localControl/term[.='sala studio'        ])&gt;0
                    )
                   )
                  "/>
@@ -217,13 +217,13 @@ Validata (secondo livello),
 Pubblicata,
 Copia parallela."
          test="
-            normalize-space(lower-case(@eac-sia:status))='bozza'
-         or normalize-space(lower-case(@eac-sia:status))='in validazione di primo livello'
-         or normalize-space(lower-case(@eac-sia:status))='validata (primo livello)'
-         or normalize-space(lower-case(@eac-sia:status))='in validazione di secondo livello'
-         or normalize-space(lower-case(@eac-sia:status))='validata (secondo livello)'
-         or normalize-space(lower-case(@eac-sia:status))='pubblicata'
-         or normalize-space(lower-case(@eac-sia:status))='copia parallela'
+            @eac-sia:status='Bozza'
+         or @eac-sia:status='In validazione di primo livello'
+         or @eac-sia:status='Validata (primo livello)'
+         or @eac-sia:status='In validazione di secondo livello'
+         or @eac-sia:status='Validata (secondo livello)'
+         or @eac-sia:status='Pubblicata'
+         or @eac-sia:status='Copia parallela'
          "/>
       <!--
       in alternativa localControl[@localType='status']/term per evitare ricorso a namespace locale -->
@@ -262,22 +262,22 @@ Copia parallela."
          xao:message="=&gt;&#xa;eac 0715 0865 1013&#xa; control/localControl[@localType='Visibilita_FE']/term&#xa; 'Visibilità FE' lista chiusa con valori:&#xa;
 Completa,
 Non visibile,
-Descrizione Libera e Risorsa Protetta (login),
-Descrizione Protetta e Risorsa Protetta (login),
-Descrizione Libera e Risorse Riservata (autorizzazione),
-Descrizione Riservata e Risorse Riservata (autorizzazione)."
+Descrizione libera e risorsa protetta (login),
+Descrizione protetta e risorsa protetta (login),
+Descrizione libera e risorsa riservata (autorizzazione),
+Descrizione riservata e risorsa riservata (autorizzazione)."
       test="(count(localControl[@localType[normalize-space(lower-case(.))='visibilita_fe']]/term) = 1)
              and
             (
              every $v in (localControl[@localType[normalize-space(lower-case(.))='visibilita_fe']]/term)
              satisfies 
              (
-                 normalize-space(lower-case($v))='completa'
-              or normalize-space(lower-case($v))='non visibile'
-              or normalize-space(lower-case($v))='descrizione libera e risorsa protetta (login)'
-              or normalize-space(lower-case($v))='descrizione protetta e risorsa protetta (login)'
-              or normalize-space(lower-case($v))='descrizione libera e risorsa riservata (autorizzazione)'
-              or normalize-space(lower-case($v))='descrizione riservata e risorse riservata (autorizzazione)'
+                 $v='Completa'
+              or $v='Non visibile'
+              or $v='Descrizione libera e risorsa protetta (login)'
+              or $v='Descrizione protetta e risorsa protetta (login)'
+              or $v='Descrizione libera e risorsa riservata (autorizzazione)'
+              or $v='Descrizione riservata e risorsa riservata (autorizzazione)'
              )
             )
            "/>
@@ -377,10 +377,10 @@ Osservazioni."
 
       <!-- eac 0042 ENTE eac/cpfDescription/identity/entityType[@value='corporateBody']
            CONDIZIONE GIURIDICA eac/cpfDescription/description/legalStatuses/legalStatus/term/
-           Lista chiusa: Ente ecclesiastico, Ente privato, Ente pubblico. -->
+           Lista chiusa: Ente di culto, Ente privato, Ente pubblico -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0042&#xa; cpfDescription/description/legalStatuses/legalStatus/term&#xa; 'Condizione giuridica' lista chiusa con valori:&#xa;
-Ente ecclesiastico,
+Ente di culto,
 Ente privato,
 Ente pubblico."
          test="
@@ -388,9 +388,9 @@ Ente pubblico."
                          /description/legalStatuses/legalStatus/term
             satisfies 
             (
-                normalize-space(lower-case($v))='ente ecclesiastico'
-             or normalize-space(lower-case($v))='ente privato'
-             or normalize-space(lower-case($v))='ente pubblico'
+                $v='Ente di culto'
+             or $v='Ente privato'
+             or $v='Ente pubblico'
             )
          "/>
          
@@ -971,8 +971,8 @@ resource                    | Tematismo
       <!-- LUOGHI
       
        agente ente         place[@localType='LuogoEnte'    ]  placeRole                      => Giurisdizione, Sede
-       agente famiglia     place[@localType='LuogoFamiglia']  placeRole                      => domicilio, origine, residenza, sede di attività
-       agente persona      place[@localType='LuogoPersona' ]  placeRole                      => domicilio, morte, nascita, residenza, sede attività
+       agente famiglia     place[@localType='LuogoFamiglia']  placeRole                      => Domicilio, Origine, Residenza, Sede di attività
+       agente persona      place[@localType='LuogoPersona' ]  placeRole                      => Domicilio, Morte, Nascita, Residenza, Sede di attività
        agente conservatore place[@localType='Contatti'     ]  contact/@localType             => PEC
        agente conservatore place[@localType='Sedi'         ]  placeRole                      => Principale, Consultazione, Privato
                                                               address/addressLine/@localType => Localita, Frazione, IndirizzoTestuale, NoteIndirizzo, AccessoDisabili, Servizi, CondizioniDiAccesso
@@ -1145,8 +1145,8 @@ Sedi."
          
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0397&#xa; cpfDescription/description/occupations/occupation/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData&#xa; 'Qualifica della data' lista chiusa con valori:&#xa;
-inizio attività/professione,
-fine attività/professione."
+Inizio attività - professione,
+Fine attività – professione."
          test="
             not(normalize-space(lower-case(identity/entityType/@value))='person')
             or 
@@ -1154,15 +1154,15 @@ fine attività/professione."
              every $v in (description/occupations/occupation/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData)
              satisfies
              (
-                 normalize-space(lower-case($v))='inizio attività/professione'
-              or normalize-space(lower-case($v))='fine attività/professione'
+                 $v='Inizio attività - professione'
+              or $v='Fine attività – professione'
              )
             )
          "/>
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0397&#xa; cpfDescription/description/functions/function/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData&#xa; 'Qualifica della data' lista chiusa con valori:&#xa;
-inizio qualifica,
-fine qualifica."
+Inizio qualifica,
+Fine qualifica."
          test="
             not(normalize-space(lower-case(identity/entityType/@value))='person')
             or 
@@ -1170,8 +1170,8 @@ fine qualifica."
              every $v in (description/functions/function/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData)
              satisfies
              (
-                 normalize-space(lower-case($v))='inizio qualifica'
-              or normalize-space(lower-case($v))='fine qualifica'
+                 $v='Inizio qualifica'
+              or $v='Fine qualifica'
              )
             )
          "/>
@@ -1199,20 +1199,20 @@ Visconte."
              every $v in (description/localDescriptions/localDescription[normalize-space(lower-case(@localType))='titolofamiglia']/term)
              satisfies
              (
-                 normalize-space(lower-case($v))='barone'
-              or normalize-space(lower-case($v))='cavaliere'
-              or normalize-space(lower-case($v))='conte'
-              or normalize-space(lower-case($v))='duca'
-              or normalize-space(lower-case($v))='granduca'
-              or normalize-space(lower-case($v))='imperatore'
-              or normalize-space(lower-case($v))='marchese'
-              or normalize-space(lower-case($v))='nobile'
-              or normalize-space(lower-case($v))='nobile di città'
-              or normalize-space(lower-case($v))='patrizio'
-              or normalize-space(lower-case($v))='principe'
-              or normalize-space(lower-case($v))='re'
-              or normalize-space(lower-case($v))='signore'
-              or normalize-space(lower-case($v))='visconte'
+                 $v='Barone'
+              or $v='Cavaliere'
+              or $v='Conte'
+              or $v='Duca'
+              or $v='Granduca'
+              or $v='Imperatore'
+              or $v='Marchese'
+              or $v='Nobile'
+              or $v='Nobile di città'
+              or $v='Patrizio'
+              or $v='Principe'
+              or $v='Re'
+              or $v='Signore'
+              or $v='Visconte'
              )
             )
          "/>
@@ -1240,20 +1240,20 @@ Visconte."
              every $v in (description/localDescriptions/localDescription[normalize-space(lower-case(@localType))='titolopersona']/term)
              satisfies
              (
-                 normalize-space(lower-case($v))='barone'
-              or normalize-space(lower-case($v))='cavaliere'
-              or normalize-space(lower-case($v))='conte'
-              or normalize-space(lower-case($v))='duca'
-              or normalize-space(lower-case($v))='granduca'
-              or normalize-space(lower-case($v))='imperatore'
-              or normalize-space(lower-case($v))='marchese'
-              or normalize-space(lower-case($v))='nobile'
-              or normalize-space(lower-case($v))='nobile di città'
-              or normalize-space(lower-case($v))='patrizio'
-              or normalize-space(lower-case($v))='principe'
-              or normalize-space(lower-case($v))='re'
-              or normalize-space(lower-case($v))='signore'
-              or normalize-space(lower-case($v))='visconte'
+                 $v='Barone'
+              or $v='Cavaliere'
+              or $v='Conte'
+              or $v='Duca'
+              or $v='Granduca'
+              or $v='Imperatore'
+              or $v='Marchese'
+              or $v='Nobile'
+              or $v='Nobile di città'
+              or $v='Patrizio'
+              or $v='Principe'
+              or $v='Re'
+              or $v='Signore'
+              or $v='Visconte'
              )
             )
          "/>
@@ -1285,7 +1285,7 @@ Privato."
         /relations/relation
         [targetRole[.="Contesto storico istituzionale collegato" or .="Relazione in arrivo - Contesto storico istituzionale a cui è collegato"]
         [targetEntity[@targetType='corporateBody']
-        /relationType 'Qualifica della relazione con altro Contesto' Lista chiusa: Collegato, dipendente, sovraordinato, precedente, successivo -->
+        /relationType 'Qualifica della relazione con altro Contesto' Collegato, Dipendente, Sovraordinato, Precedente, Successivo -->
        <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
           xao:message="=&gt;&#xa;eac 0803 0825&#xa; cpfDescription&#xa; 
 [identity[@localType='ContestoStoricoIstituzionale']/entityType[@value='corporateBody']]&#xa; 
@@ -1294,10 +1294,10 @@ Privato."
 [targetEntity[@targetType='corporateBody]]&#xa; 
 /relationType&#xa; 'Qualifica della relazione con altro Contesto' lista chiusa con valori:&#xa;
 Collegato,
-dipendente,
-sovraordinato,
-precedente,
-successivo."
+Dipendente,
+Sovraordinato,
+Precedente,
+Successivo."
            test="not(.
                      [identity[@localType[normalize-space(lower-case(.))='contestostoricoistituzionale']]/entityType[@value='corporateBody']
                      ]
@@ -1311,11 +1311,11 @@ successivo."
                      ]
                      [targetEntity[@targetType='corporateBody']]
                      /relationType
-                     [    normalize-space(lower-case(.))!='collegato'
-                      and normalize-space(lower-case(.))!='dipendente'
-                      and normalize-space(lower-case(.))!='sovraordinato'
-                      and normalize-space(lower-case(.))!='precedente'
-                      and normalize-space(lower-case(.))!='successivo'
+                     [    .!='Collegato'
+                      and .!='Dipendente'
+                      and .!='Sovraordinato'
+                      and .!='Precedente'
+                      and .!='Successivo'
                      ]
                     )"/>
 
@@ -1325,7 +1325,7 @@ successivo."
         /relations/relation
         [targetRole[.="Profilo istituzionale collegato" or .="Relazione in arrivo - Profilo istituzionale a cui è collegato"]
         [targetEntity[@targetType='corporateBody']
-        /relationType 'Qualifica della relazione' Lista chiusa: Successore, Predecessore -->
+        /relationType 'Qualifica della relazione' Predecessore, Successore, Collegato -->
        <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
           xao:message="=&gt;&#xa;eac 0803 0825&#xa; cpfDescription&#xa; 
 [identity[@localType='ProfiloIstituzionale']/entityType[@value='corporateBody']]&#xa; 
@@ -1333,8 +1333,9 @@ successivo."
 [targetRole[.='Profilo istituzionale collegato' or .='Relazione in arrivo - Profilo istituzionale a cui è collegato']]&#xa; 
 [targetEntity[@targetType='corporateBody]]&#xa; 
 /relationType&#xa; 'Qualifica della relazione' lista chiusa con valori:&#xa;
+Predecessore,
 Successore,
-Predecessore."
+Collegato."
            test="not(.
                      [identity[@localType[normalize-space(lower-case(.))='profiloistituzionale']]/entityType[@value='corporateBody']
                      ]
@@ -1348,8 +1349,9 @@ Predecessore."
                      ]
                      [targetEntity[@targetType='corporateBody']]
                      /relationType
-                     [    normalize-space(lower-case(.))!='successore'
-                      and normalize-space(lower-case(.))!='predecessore'
+                     [    .!='Predecessore'
+                      and .!='Successore'
+                      and .!='Collegato'
                      ]
                     )"/>
 
@@ -1944,9 +1946,9 @@ AcronimoProfilo."
       -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0598&#xa; identity/otherEntityTypes/otherEntityType[@localType='Qualifica']/term/&#xa; 'CONSERVATORE Qualifica' lista chiusa con valori&#xa;
-archivio,
-sezione,
-altra sede."
+Archivio,
+Sezione,
+Altra sede."
          test="not(relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico']][relationType[normalize-space(lower-case(.))='soggetto conservatore']])
                 or 
                not(otherEntityTypes/otherEntityType[normalize-space(lower-case(@localType))='qualifica']/term)
@@ -1954,9 +1956,9 @@ altra sede."
                (count(otherEntityTypes/otherEntityType[normalize-space(lower-case(@localType))='qualifica']/term)=1
                 and 
                 otherEntityTypes/otherEntityType[normalize-space(lower-case(@localType))='qualifica']/term
-                [   normalize-space(lower-case(.))='archivio'
-                 or normalize-space(lower-case(.))='sezione'
-                 or normalize-space(lower-case(.))='altra sede'
+                [   .='Archivio'
+                 or .='Sezione'
+                 or .='Altra sede'
                 ]
                )"/>
 
@@ -1964,46 +1966,49 @@ altra sede."
                  va inserito il valore del campo controllato ??? -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0022&#xa; identity[entityType/@value='corporateBody']/otherEntityTypes/otherEntityType[@localType='Ente']/term&#xa; 'TIPOLOGIA ENTE' è richiesto con valori:&#xa;
-organo o ufficio statale del periodo preunitario,
-organo o ufficio statale del periodo postunitario,
-accademia/ente di cultura,
-arte/ordine/collegio/associazione di categoria,
-associazione civile e di movimento,
-associazione combattentistica e d'arma,
-banca/istituto di credito/ente assicurativo/ente previdenziale,
-comitato di liberazione nazionale/corpo militare della Resistenza,
-comune/città metropolitana/unione di comuni (organo e ufficio),
-corporazione religiosa soppressa,
-ente di gestione di acque, ambiente, energia, territorio, trasporti,
-ente economico e di promozione economica/impresa/studio professionale,
-ente di culto acattolico/associazione acattolica,
-ente di culto cattolico/associazione cattolica,
-ente/istituzione fascista,
-ente ricreativo/sportivo/turistico,
-ente territoriale minore,
-notaio,
-opera pia/istituzione ed ente di assistenza e beneficenza/ospedale,
-ordine cavalleresco,
-organizzazione internazionale,
-organo di informazione e stampa,
-feudo,
-ente sanitario/ente di servizi alla persona,
-partito e movimento politico/associazione politica,
-provincia/provincia autonoma (organo e ufficio),
-rappresentanza diplomatica/ufficio di paesi stranieri con sede in Italia,
-regione/regione a statuto speciale (organo e ufficio),
-scuola/ente di istruzione,
-sindacato/organizzazione sindacale,
-università/ente di ricerca,
-organo centrale di stato di Antico regime,
-organo periferico o locale di stato di Antico regime,
-organo o ufficio di stato di Antico regime,
-organo centrale di stato del periodo napoleonico,
-organo periferico di stato del periodo napoleonico,
-organo centrale di stato della Restaurazione,
-organo periferico di stato della Restaurazione,
-organo e ufficio statale centrale di periodo postunitario,
-organo e ufficio statale periferico di periodo postunitario."
+Accademia/ente di cultura,
+Archivio di Stato,
+Archivio di Stato/Sezione,
+Arte/ordine/collegio/associazione di categoria,
+Associazione civile e di movimento,
+Associazione combattentistica e d'arma,
+Banca/istituto di credito/ente assicurativo/ente previdenziale,
+Comitato di liberazione nazionale/corpo militare della Resistenza,
+Comune/città metropolitana/unione di comuni,
+Corporazione religiosa soppressa,
+Ente conservatore,
+Ente di gestione di acque, ambiente, energia, territorio, trasporti,
+Ente economico e di promozione economica/impresa/studio professionale,
+Ente di culto acattolico/associazione acattolica,
+Ente di culto cattolico/associazione cattolica,
+Ente/istituzione fascista,
+Ente ricreativo/sportivo/turistico,
+Ente territoriale minore,
+Notaio,
+Opera pia/istituzione ed ente di assistenza e beneficenza/ospedale,
+Ordine cavalleresco,
+Organizzazione internazionale,
+Organo di informazione e stampa,
+Feudo,
+Ente sanitario/ente di servizi alla persona,
+Partito e movimento politico/associazione politica,
+Provincia/provincia autonoma (organo e ufficio),
+Rappresentanza diplomatica/ufficio di paesi stranieri con sede in Italia,
+Regione/regione a statuto speciale (organo e ufficio),
+Scuola/ente di istruzione,
+Sindacato/organizzazione sindacale,
+Università/ente di ricerca,
+Organo o ufficio statale del periodo preunitario,
+Organo centrale di stato di Antico regime,
+Organo periferico o locale di stato di Antico regime,
+Organo o ufficio di stato di Antico regime,
+Organo centrale di stato del periodo napoleonico,
+Organo periferico di stato del periodo napoleonico,
+Organo centrale di stato della Restaurazione,
+Organo periferico di stato della Restaurazione,
+Organo e ufficio statale centrale di periodo postunitario,
+Organo e ufficio statale periferico del periodo postunitario,
+Organo o ufficio statale del periodo postunitario."
          test="
           not (
            entityType/@value='corporateBody'
@@ -2020,46 +2025,49 @@ organo e ufficio statale periferico di periodo postunitario."
             every $v in otherEntityTypes/otherEntityType[normalize-space(lower-case(@localType))='ente']/term
             satisfies
             (
-                normalize-space(lower-case($v))='organo o ufficio statale del periodo preunitario'
-             or normalize-space(lower-case($v))='organo o ufficio statale del periodo postunitario'
-             or normalize-space(lower-case($v))='accademia/ente di cultura'
-             or normalize-space(lower-case($v))='arte/ordine/collegio/associazione di categoria'
-             or normalize-space(lower-case($v))='associazione civile e di movimento'
-             or normalize-space(lower-case($v))='associazione combattentistica e d''arma'
-             or normalize-space(lower-case($v))='banca/istituto di credito/ente assicurativo/ente previdenziale'
-             or normalize-space(lower-case($v))='comitato di liberazione nazionale/corpo militare della resistenza'
-             or normalize-space(lower-case($v))='comune/città metropolitana/unione di comuni (organo e ufficio)'
-             or normalize-space(lower-case($v))='corporazione religiosa soppressa'
-             or normalize-space(lower-case($v))='ente di gestione di acque, ambiente, energia, territorio, trasporti'
-             or normalize-space(lower-case($v))='ente economico e di promozione economica/impresa/studio professionale'
-             or normalize-space(lower-case($v))='ente di culto acattolico/associazione acattolica'
-             or normalize-space(lower-case($v))='ente di culto cattolico/associazione cattolica'
-             or normalize-space(lower-case($v))='ente/istituzione fascista'
-             or normalize-space(lower-case($v))='ente ricreativo/sportivo/turistico'
-             or normalize-space(lower-case($v))='ente territoriale minore'
-             or normalize-space(lower-case($v))='notaio'
-             or normalize-space(lower-case($v))='opera pia/istituzione ed ente di assistenza e beneficenza/ospedale'
-             or normalize-space(lower-case($v))='ordine cavalleresco'
-             or normalize-space(lower-case($v))='organizzazione internazionale'
-             or normalize-space(lower-case($v))='organo di informazione e stampa'
-             or normalize-space(lower-case($v))='feudo'
-             or normalize-space(lower-case($v))='ente sanitario/ente di servizi alla persona'
-             or normalize-space(lower-case($v))='partito e movimento politico/associazione politica'
-             or normalize-space(lower-case($v))='provincia/provincia autonoma (organo e ufficio)'
-             or normalize-space(lower-case($v))='rappresentanza diplomatica/ufficio di paesi stranieri con sede in italia'
-             or normalize-space(lower-case($v))='regione/regione a statuto speciale (organo e ufficio)'
-             or normalize-space(lower-case($v))='scuola/ente di istruzione'
-             or normalize-space(lower-case($v))='sindacato/organizzazione sindacale'
-             or normalize-space(lower-case($v))='università/ente di ricerca'
-             or normalize-space(lower-case($v))='organo centrale di stato di antico regime'
-             or normalize-space(lower-case($v))='organo periferico o locale di stato di antico regime'
-             or normalize-space(lower-case($v))='organo o ufficio di stato di antico regime'
-             or normalize-space(lower-case($v))='organo centrale di stato del periodo napoleonico'
-             or normalize-space(lower-case($v))='organo periferico di stato del periodo napoleonico'
-             or normalize-space(lower-case($v))='organo centrale di stato della restaurazione'
-             or normalize-space(lower-case($v))='organo periferico di stato della restaurazione'
-             or normalize-space(lower-case($v))='organo e ufficio statale centrale di periodo postunitario'
-             or normalize-space(lower-case($v))='organo e ufficio statale periferico di periodo postunitario'
+                $v='Accademia/ente di cultura'
+             or $v='Archivio di Stato'
+             or $v='Archivio di Stato/Sezione'
+             or $v='Arte/ordine/collegio/associazione di categoria'
+             or $v='Associazione civile e di movimento'
+             or $v='Associazione combattentistica e d''arma'
+             or $v='Banca/istituto di credito/ente assicurativo/ente previdenziale'
+             or $v='Comitato di liberazione nazionale/corpo militare della Resistenza'
+             or $v='Comune/città metropolitana/unione di comuni'
+             or $v='Corporazione religiosa soppressa'
+             or $v='Ente conservatore'
+             or $v='Ente di gestione di acque, ambiente, energia, territorio, trasporti'
+             or $v='Ente economico e di promozione economica/impresa/studio professionale'
+             or $v='Ente di culto acattolico/associazione acattolica'
+             or $v='Ente di culto cattolico/associazione cattolica'
+             or $v='Ente/istituzione fascista'
+             or $v='Ente ricreativo/sportivo/turistico'
+             or $v='Ente territoriale minore'
+             or $v='Notaio'
+             or $v='Opera pia/istituzione ed ente di assistenza e beneficenza/ospedale'
+             or $v='Ordine cavalleresco'
+             or $v='Organizzazione internazionale'
+             or $v='Organo di informazione e stampa'
+             or $v='Feudo'
+             or $v='Ente sanitario/ente di servizi alla persona'
+             or $v='Partito e movimento politico/associazione politica'
+             or $v='Provincia/provincia autonoma (organo e ufficio)'
+             or $v='Rappresentanza diplomatica/ufficio di paesi stranieri con sede in Italia'
+             or $v='Regione/regione a statuto speciale (organo e ufficio)'
+             or $v='Scuola/ente di istruzione'
+             or $v='Sindacato/organizzazione sindacale'
+             or $v='Università/ente di ricerca'
+             or $v='Organo o ufficio statale del periodo preunitario'
+             or $v='Organo centrale di stato di Antico regime'
+             or $v='Organo periferico o locale di stato di Antico regime'
+             or $v='Organo o ufficio di stato di Antico regime'
+             or $v='Organo centrale di stato del periodo napoleonico'
+             or $v='Organo periferico di stato del periodo napoleonico'
+             or $v='Organo centrale di stato della Restaurazione'
+             or $v='Organo periferico di stato della Restaurazione'
+             or $v='Organo e ufficio statale centrale di periodo postunitario'
+             or $v='Organo e ufficio statale periferico del periodo postunitario'
+             or $v='Organo o ufficio statale del periodo postunitario'
             )
            )
           )
@@ -2105,13 +2113,12 @@ organo e ufficio statale periferico di periodo postunitario."
          "/>
       
       <!-- eac 0089 cpfDescription/identity/nameEntry[@localType="AltraDenominazioneEnte" @status="alternative"]/part[@localType="qualifica"]
-       Altra denominazione, Denominazione parallela, Intestazione parallela, Altro. -->
+       Altra denominazione, Altro, Denominazione parallela - Intestazione parallela -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0089&#xa; cpfDescription/identity/nameEntry[@localType='AltraDenominazioneEnte][@status='alternative']/part[@localType='Qualifica']&#xa; 'Qualifica dell'altra denominazione e intestazione' lista chiusa con valori:&#xa;
 Altra denominazione,
-Denominazione parallela,
-Intestazione parallela,
-Altro."
+Altro,
+Denominazione parallela - Intestazione parallela."
          test="
           not (
            entityType/@value='corporateBody'
@@ -2125,10 +2132,9 @@ Altro."
            every $v in nameEntry[normalize-space(lower-case(@localType))='altradenominazioneente' and normalize-space(lower-case(@status))='alternative']/part[normalize-space(lower-case(@localType))='qualifica']
            satisfies
            (
-               normalize-space(lower-case($v))='altra denominazione'
-            or normalize-space(lower-case($v))='denominazione parallela'
-            or normalize-space(lower-case($v))='intestazione parallela'
-            or normalize-space(lower-case($v))='altro'
+               $v='Altra denominazione'
+            or $v='Altro'
+            or $v='Denominazione parallela - Intestazione parallela'
            )
           )
          "/>
@@ -2163,13 +2169,12 @@ Altro."
          "/>
          
       <!-- eac 0180 cpfDescription/identity/nameEntry[@localType="AltraDenominazioneFamiglia" @status="alternative"]/part[@localType="qualifica"]
-       Altra denominazione, Denominazione parallela, Intestazione parallela, Altro -->
+       Altra denominazione, Altro, Denominazione parallela - Intestazione parallela -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0180&#xa; cpfDescription/identity/nameEntry[@localType='AltraDenominazioneFamiglia][@status='alternative']/part[@localType='Qualifica']&#xa; 'Qualifica dell'altra denominazione e intestazione' lista chiusa con valori:&#xa;
 Altra denominazione,
-Denominazione parallela,
-Intestazione parallela,
-Altro."
+Altro,
+Denominazione parallela - Intestazione parallela."
          test="
           not(normalize-space(lower-case(entityType/@value))='family')
            or
@@ -2177,10 +2182,9 @@ Altro."
            every $v in nameEntry[normalize-space(lower-case(@localType))='altradenominazionefamiglia' and normalize-space(lower-case(@status))='alternative']/part[normalize-space(lower-case(@localType))='qualifica']
            satisfies
            (
-               normalize-space(lower-case($v))='altra denominazione'
-            or normalize-space(lower-case($v))='denominazione parallela'
-            or normalize-space(lower-case($v))='intestazione parallela'
-            or normalize-space(lower-case($v))='altro'
+               $v='Altra denominazione'
+            or $v='Altro'
+            or $v='Denominazione parallela - Intestazione parallela'
            )
           )
          "/>
@@ -2197,13 +2201,12 @@ Altro."
          "/>
          
       <!-- eac 0292 cpfDescription/identity/nameEntry[@localType="AltraDenominazionePersona" @status="alternative"]/part[@localType="qualifica"]
-       Altra denominazione, Denominazione parallela, Intestazione parallela, Altro. -->
+       Altra denominazione, Altro, Denominazione parallela - Intestazione parallela -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0292&#xa; cpfDescription/identity/nameEntry[@localType='AltraDenominazionePersona][@status='alternative']/part[@localType='Qualifica']&#xa; 'Qualifica dell'altra denominazione e intestazione' lista chiusa con valori:&#xa;
 Altra denominazione,
-Denominazione parallela,
-Intestazione parallela,
-Altro."
+Altro,
+Denominazione parallela - Intestazione parallela."
          test="
           not(normalize-space(lower-case(entityType/@value))='person')
            or
@@ -2211,10 +2214,9 @@ Altro."
            every $v in nameEntry[normalize-space(lower-case(@localType))='altradenominazionepersona' and normalize-space(lower-case(@status))='alternative']/part[normalize-space(lower-case(@localType))='qualifica']
            satisfies
            (
-               normalize-space(lower-case($v))='altra denominazione'
-            or normalize-space(lower-case($v))='denominazione parallela'
-            or normalize-space(lower-case($v))='intestazione parallela'
-            or normalize-space(lower-case($v))='altro'
+               $v='Altra denominazione'
+            or $v='Altro'
+            or $v='Denominazione parallela - Intestazione parallela'
            )
           )
          "/>
@@ -2222,8 +2224,8 @@ Altro."
       <!-- eac 0262 cpfDescription/identity/otherEntityTypes/otherEntityType/term/ -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0262&#xa; cpfDescription/identity/otherEntityTypes/otherEntityType[@localType='Genere']/term/&#xa; 'Genere' lista chiusa con valori:&#xa;
-maschile,
-femminile."
+Femminile,
+Maschile."
          test="
             not(normalize-space(lower-case(entityType/@value))='person')
             or 
@@ -2231,8 +2233,8 @@ femminile."
              every $v in otherEntityTypes/otherEntityType[normalize-space(lower-case(@localType))='genere']/term
              satisfies
              (
-                 normalize-space(lower-case($v))='maschile'
-              or normalize-space(lower-case($v))='femminile'
+                 $v='Femminile'
+              or $v='Maschile'
              )
             )
          "/>
@@ -2345,15 +2347,15 @@ Ricorrenza biennale."
              (
               every $v in otherEntityTypes/otherEntityType[normalize-space(lower-case(@localType))='tipoevento']/term satisfies
               (
-                  normalize-space(lower-case($v))='evento terroristico'
-               or normalize-space(lower-case($v))='evento storico'
-               or normalize-space(lower-case($v))='evento politico'
-               or normalize-space(lower-case($v))='evento bellico'
-               or normalize-space(lower-case($v))='ricorrenza'
-               or normalize-space(lower-case($v))='celebrazione'
-               or normalize-space(lower-case($v))='ricorrenza annuale'
-               or normalize-space(lower-case($v))='ricorrenza mensile'
-               or normalize-space(lower-case($v))='ricorrenza biennale'
+                  $v='Evento terroristico'
+               or $v='Evento storico'
+               or $v='Evento politico'
+               or $v='Evento bellico'
+               or $v='Ricorrenza'
+               or $v='Celebrazione'
+               or $v='Ricorrenza annuale'
+               or $v='Ricorrenza mensile'
+               or $v='Ricorrenza biennale'
               )
              )
             )
@@ -2585,7 +2587,7 @@ Ricorrenza biennale."
          </xs:simpleType>
       </xs:attribute>
       <xs:anyAttribute namespace="##other" processContents="lax"/>
-
+<!-- Campo eliminato da SIA
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0705 0855 1003 1079&#xa; control/maintenanceHistory/maintenanceEvent/agent/@eac-sia:tipologiaAgente&#xa; 'Tipologia compilatore' lista chiusa con valori:&#xa;
 Persona,
@@ -2599,7 +2601,7 @@ Software."
              or normalize-space(lower-case($v))='software'
             )
            "/>
-      
+-->
    </xs:complexType>
    <xs:complexType name="source">
       <xs:sequence>
@@ -2764,20 +2766,22 @@ RiferimentoWeb"
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0030 0036 0050 0056 0073 0079 0097 0103 0115 0121 0136 0142 0164 0170 0188 0194 0206 0212 0227 0233 0247 0253 0276 0282 0300 0306 0326 0332 0348 0354 0368 0374 0388 0394 0408 0414 0437 0443 0460 0466 0483 0489 0515 0521 0542 0548 0562 0568 0581 0587 0653 0659 0675 0681 0744 0750 0768 0774 0789 0795 0811 0817 0833 0839 0894 0900 0918 0924 0940 0946 0961 0967 0981 0987 1039 1046&#xa;
 date/@certainty&#xa; 'Validità' lista chiusa con valori:&#xa;
-dataApprossimativa,
-dataAttribuita,
-dataIncerta,
-dataIncertaAttribuita,
-dataPostQuem."
+DataApprossimativa,
+DataAttribuita,
+DataIncerta,
+DataIncertaAttribuita,
+DataPostQuem,
+DataAnteQuem."
          test="
             every $v in (@certainty)
             satisfies
             (
-                normalize-space(lower-case($v))='dataapprossimativa'
-             or normalize-space(lower-case($v))='dataattribuita'
-             or normalize-space(lower-case($v))='dataincerta'
-             or normalize-space(lower-case($v))='dataincertaattribuita'
-             or normalize-space(lower-case($v))='datapostquem'
+                $v='DataApprossimativa'
+             or $v='DataAttribuita'
+             or $v='DataIncerta'
+             or $v='DataIncertaAttribuita'
+             or $v='DataPostQuem'
+             or $v='DataAnteQuem'
             )
            "/>
       
@@ -2787,17 +2791,19 @@ dataPostQuem."
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0026 0046 0069 0093 0111 0132 0160 0184 0202 0223 0243 0272 0296 0322 0344 0364 0384 0404 0433 0456 0479 0511 0538 0558 0577 0649 0671 0740 0764 0785 0807 0829 0890 0914 0936 0957 0977 1034&#xa; 
 date/@eac-sia:tipologiaData&#xa; 'Tipologia data' lista chiusa con valori:&#xa; 
-intervallo di date,
-data singola,
-data aperta,
-data non rilevabile - non rilevata."
+Intervallo di date,
+Data singola,
+Data aperta (a partire da),
+Data aperta (fino a),
+Data non rilevabile - non rilevata."
       test="every $v in (@eac-sia:tipologiaData)
             satisfies 
             (
-                normalize-space(lower-case($v))='intervallo di date'
-             or normalize-space(lower-case($v))='data singola'
-             or normalize-space(lower-case($v))='data aperta'
-             or normalize-space(lower-case($v))='data non rilevabile - non rilevata'
+                $v='Intervallo di date'
+             or $v='Data singola'
+             or $v='Data aperta (a partire da)'
+             or $v='Data aperta (fino a)'
+             or $v='Data non rilevabile - non rilevata'
             )
            "/>
          
@@ -2837,36 +2843,40 @@ data non rilevabile - non rilevata."
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0030 0050 0073 0097 0115 0136 0164 0188 0206 0227 0247 0276 0300 0326 0348 0368 0388 0408 0437 0460 0483 0515 0542 0562 0581 0653 0675 0744 0768 0789 0811 0833 0894 0918 0940 0961 0981 1039 0036 0056 0079 0103 0121 0142 0170 0194 0212 0233 0253 0282 0306 0332 0354 0374 0394 0414 0443 0466 0489 0521 0548 0568 0587 0659 0681 0750 0774 0795 0817 0839 0900 0924 0946 0967 0987 1046&#xa;
 (fromDate|toDate)/@certainty&#xa; 'Validità' lista chiusa con valori:
-dataApprossimativa,
-dataAttribuita,
-dataIncerta,
-dataIncertaAttribuita,
-dataPostQuem."
+DataApprossimativa,
+DataAttribuita,
+DataIncerta,
+DataIncertaAttribuita,
+DataPostQuem,
+DataAnteQuem."
          test="
             every $v in ((fromDate|toDate)/@certainty)
             satisfies
             (
-                normalize-space(lower-case($v))='dataapprossimativa'
-             or normalize-space(lower-case($v))='dataattribuita'
-             or normalize-space(lower-case($v))='dataincerta'
-             or normalize-space(lower-case($v))='dataincertaattribuita'
-             or normalize-space(lower-case($v))='datapostquem'
+                $v='DataApprossimativa'
+             or $v='DataAttribuita'
+             or $v='DataIncerta'
+             or $v='DataIncertaAttribuita'
+             or $v='DataPostQuem'
+             or $v='DataAnteQuem'
             )
            "/>
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0026 0046 0069 0093 0111 0132 0160 0184 0202 0223 0243 0272 0296 0322 0344 0364 0384 0404 0433 0456 0479 0511 0538 0558 0577 0649 0671 0740 0764 0785 0807 0829 0890 0914 0936 0957 0977 1034&#xa; 
 dateRange/@eac-sia:tipologiaData&#xa; 'Tipologia data' lista chiusa con valori:&#xa; 
-intervallo di date,
-data singola,
-data aperta,
-data non rilevabile - non rilevata."
+Intervallo di date,
+Data singola,
+Data aperta (a partire da),
+Data aperta (fino a),
+Data non rilevabile - non rilevata."
       test="every $v in (@eac-sia:tipologiaData)
             satisfies 
             (
-                normalize-space(lower-case($v))='intervallo di date'
-             or normalize-space(lower-case($v))='data singola'
-             or normalize-space(lower-case($v))='data aperta'
-             or normalize-space(lower-case($v))='data non rilevabile - non rilevata'
+                $v='Intervallo di date'
+             or $v='Data singola'
+             or $v='Data aperta (a partire da)'
+             or $v='Data aperta (fino a)'
+             or $v='Data non rilevabile - non rilevata'
             )
            "/>
 
@@ -3264,8 +3274,8 @@ data non rilevabile - non rilevata."
       
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0124&#xa; cpfDescription/description/existDates[@localType='DateEsistenzaEnte']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData&#xa; 'Qualifica della data' è richiesto con valori:&#xa;
-Data di istituzione/costituzione,
-Data di soppressione/cessazione,
+Data di istituzione,
+Data di cessazione - soppressione,
 Date di esistenza."
       test="not(normalize-space(lower-case(@localType))='dateesistenzaente')
             or
@@ -3276,18 +3286,18 @@ Date di esistenza."
               every $v in ((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData)
               satisfies 
               (
-                  normalize-space(lower-case($v))='data di istituzione/costituzione'
-               or normalize-space(lower-case($v))='data di soppressione/cessazione'
-               or normalize-space(lower-case($v))='date di esistenza'
+                  $v='Data di istituzione'
+               or $v='Data di cessazione - soppressione'
+               or $v='Date di esistenza'
               )
              )
             )
            "/>
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0215&#xa; cpfDescription/description/existDates[@localType='DateEsistenzaFamiglia']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData&#xa; 'Qualifica della data' è richiesto con valori:&#xa;
-Data di origine,
+Data di esistenza,
 Data di estinzione,
-Date di esistenza."
+Data di origine."
       test="not(normalize-space(lower-case(@localType))='dateesistenzafamiglia')
             or
             (
@@ -3297,9 +3307,9 @@ Date di esistenza."
               every $v in ((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData)
               satisfies 
               (
-                  normalize-space(lower-case($v))='data di origine'
-               or normalize-space(lower-case($v))='data di estinzione'
-               or normalize-space(lower-case($v))='date di esistenza'
+                  $v='Data di esistenza'
+               or $v='Data di estinzione'
+               or $v='Data di origine'
               )
              )
             )
@@ -3318,9 +3328,9 @@ Date di esistenza."
               every $v in ((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData)
               satisfies 
               (
-                  normalize-space(lower-case($v))='data di nascita'
-               or normalize-space(lower-case($v))='data di morte'
-               or normalize-space(lower-case($v))='date di esistenza'
+                  $v='Data di nascita'
+               or $v='Data di morte'
+               or $v='Date di esistenza'
               )
              )
             )
@@ -3455,14 +3465,15 @@ Detentore di diritti"
           "/>
        <!-- 0427
           eac/cpfDescription/relations/relation[targetRole="Complesso Archivistico"]/relationType/
-             Lista chiusa: Soggetto produttore, Soggetto conservatore, Possessore, Proprietario, Detentore di diritti -->
+             Soggetto conservatore, Soggetto vigilante, Soggetto produttore, Possessore, Proprietario, Detentore dei diritti -->
        <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
           xao:message="=&gt;&#xa;eac 0427&#xa; cpfDescription/relations/relation[targetRole='Complesso Archivistico']/relationType&#xa; 'Qualifica della relazione' è richiesto con valori:&#xa;
-Soggetto produttore,
 Soggetto conservatore,
+Soggetto vigilante,
+Soggetto produttore,
 Possessore,
 Proprietario,
-Detentore di diritti."
+Detentore dei diritti."
           test="not(.[targetRole[normalize-space(lower-case(.))='complesso archivistico']])
                  or
                 (
@@ -3472,21 +3483,22 @@ Detentore di diritti."
                   every $v in (relationType/text())
                   satisfies 
                   (
-                      normalize-space(lower-case($v))='soggetto produttore'
-                   or normalize-space(lower-case($v))='soggetto conservatore'
-                   or normalize-space(lower-case($v))='possessore'
-                   or normalize-space(lower-case($v))='proprietario'
-                   or normalize-space(lower-case($v))='detentore di diritti'
+                      $v='Soggetto conservatore'
+                   or $v='Soggetto vigilante'
+                   or $v='Soggetto produttore'
+                   or $v='Possessore'
+                   or $v='Proprietario'
+                   or $v='Detentore dei diritti'
                   )
                  )
                 )
                "/>
-       <!-- 0446 cpfDescription/relations/relation[targetRole="Complesso Archivistico"][relationType[.='soggetto produttore' or .='soggetto conservatore']]/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData Lista chiusa: data inizio produzione, data fine produzione, data di ingresso presso il conservatore  -->
+       <!-- 0446 cpfDescription/relations/relation[targetRole="Complesso Archivistico"][relationType[.='soggetto produttore' or .='soggetto conservatore']]/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData Data inizio produzione, Data fine produzione, Data di ingresso presso il conservatore  -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0446&#xa; cpfDescription/relations/relation[targetRole='Complesso Archivistico'][relationType[.='soggetto produttore' or .='soggetto conservatore']]/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData&#xa; 'Qualifica della data' lista chiusa con valori:&#xa;
-data inizio produzione,
-data fine produzione,
-data di ingresso presso il conservatore."
+data Data inizio produzione,
+data Data fine produzione,
+data Data di ingresso presso il conservatore."
          test="
             not(.[targetRole[normalize-space(lower-case(.))='complesso archivistico']])
             or
@@ -3496,16 +3508,16 @@ data di ingresso presso il conservatore."
              every $v in ((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData)
              satisfies 
              (
-                 normalize-space(lower-case($v))='data inizio produzione'
-              or normalize-space(lower-case($v))='data fine produzione'
-              or normalize-space(lower-case($v))='data di ingresso presso il conservatore'
+                 $v='Data inizio produzione'
+              or $v='Data fine produzione'
+              or $v='Data di ingresso presso il conservatore'
              )
             )
          "/>
 
        <!-- 0451 eac/cpfDescription/relations/relation[targetRole="unita archivistica"]/targetRole/@localType
             0474 eac/cpfDescription/relations/relation[targetRole="unita documentaria"]/targetRole/@localType
-               Lista chiusa: Destinatario, Mittente, Notaio, Testimone, Autore, Disegnatore, Editore, Incisore, Giudice, Agrimensore, Rilevatore, Miniaturista, Copista, Esecutore, Progettista, Supervisore, Litografo, Fotografo inventore, Fotografo principale, Ideatore, Regista, Committente, Corrispondente, Curatore, Responsabile, Partecipante, Finanziatore, Possessore, Proprietario, Detentore dei diritti.
+               Agrimensore, Autore, Committente, Copista, Corrispondente, Curatore, Destinatario, Detentore dei diritti, Disegnatore, Editore, Esecutore, Finanziatore, Fotografo inventore, Fotografo principale, Giudice, Ideatore, Incisore, Litografo, Miniaturista, Mittente, Notaio, Partecipante, Possessore, Progettista, Proprietario, Regista, Responsabile, Rilevatore, Supervisore, Testimone
        -->
        <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
           xao:message="=&gt;&#xa;eac 0451 0474&#xa; cpfDescription/relations/relation/targetRole[.='Unita Archivistica' or .='Unita Documentaria']/@localType&#xa; 'Ruolo/qualifica' lista chiusa con valori:&#xa;
@@ -3540,36 +3552,36 @@ Rilevatore,
 Supervisore,
 Testimone."
            test="not(./targetRole[normalize-space(lower-case(.))='unita archivistica' or normalize-space(lower-case(.))='unita documentaria']/@localType[
-                     normalize-space(lower-case(.))!='destinatario'
-                 and normalize-space(lower-case(.))!='mittente'
-                 and normalize-space(lower-case(.))!='notaio'
-                 and normalize-space(lower-case(.))!='testimone'
-                 and normalize-space(lower-case(.))!='autore'
-                 and normalize-space(lower-case(.))!='disegnatore'
-                 and normalize-space(lower-case(.))!='editore'
-                 and normalize-space(lower-case(.))!='incisore'
-                 and normalize-space(lower-case(.))!='giudice'
-                 and normalize-space(lower-case(.))!='agrimensore'
-                 and normalize-space(lower-case(.))!='rilevatore'
-                 and normalize-space(lower-case(.))!='miniaturista'
-                 and normalize-space(lower-case(.))!='copista'
-                 and normalize-space(lower-case(.))!='esecutore'
-                 and normalize-space(lower-case(.))!='progettista'
-                 and normalize-space(lower-case(.))!='supervisore'
-                 and normalize-space(lower-case(.))!='litografo'
-                 and normalize-space(lower-case(.))!='fotografo inventore'
-                 and normalize-space(lower-case(.))!='fotografo principale'
-                 and normalize-space(lower-case(.))!='ideatore'
-                 and normalize-space(lower-case(.))!='regista'
-                 and normalize-space(lower-case(.))!='committente'
-                 and normalize-space(lower-case(.))!='corrispondente'
-                 and normalize-space(lower-case(.))!='curatore'
-                 and normalize-space(lower-case(.))!='responsabile'
-                 and normalize-space(lower-case(.))!='partecipante'
-                 and normalize-space(lower-case(.))!='finanziatore'
-                 and normalize-space(lower-case(.))!='possessore'
-                 and normalize-space(lower-case(.))!='proprietario'
-                 and normalize-space(lower-case(.))!='detentore dei diritti'
+                     .!='Agrimensore'
+                 and .!='Autore'
+                 and .!='Committente'
+                 and .!='Copista'
+                 and .!='Corrispondente'
+                 and .!='Curatore'
+                 and .!='Destinatario'
+                 and .!='Detentore dei diritti'
+                 and .!='Disegnatore'
+                 and .!='Editore'
+                 and .!='Esecutore'
+                 and .!='Finanziatore'
+                 and .!='Fotografo inventore'
+                 and .!='Fotografo principale'
+                 and .!='Giudice'
+                 and .!='Ideatore'
+                 and .!='Incisore'
+                 and .!='Litografo'
+                 and .!='Miniaturista'
+                 and .!='Mittente'
+                 and .!='Notaio'
+                 and .!='Partecipante'
+                 and .!='Possessore'
+                 and .!='Progettista'
+                 and .!='Proprietario'
+                 and .!='Regista'
+                 and .!='Responsabile'
+                 and .!='Rilevatore'
+                 and .!='Supervisore'
+                 and .!='Testimone'
                 ])"/>
        <!-- 0452 eac/cpfDescription/relations/relation[targetRole="unita archivistica"]/descriptiveNote/p/
             0475 eac/cpfDescription/relations/relation[targetRole="unita documentaria"]/descriptiveNote/p/
@@ -3600,28 +3612,28 @@ Simbolo,
 Timbro,
 Tradizione orale."
           test="not(.[targetRole[normalize-space(lower-case(.))='unita archivistica' or normalize-space(lower-case(.))='unita documentaria']]/descriptiveNote/p[
-                     normalize-space(lower-case(.))!='analisi diagnostiche'
-                 and normalize-space(lower-case(.))!='analisi iconografica'
-                 and normalize-space(lower-case(.))!='analisi stilistica'
-                 and normalize-space(lower-case(.))!='attributo figurato'
-                 and normalize-space(lower-case(.))!='bibliografia'
-                 and normalize-space(lower-case(.))!='bollo'
-                 and normalize-space(lower-case(.))!='cartiglio'
-                 and normalize-space(lower-case(.))!='contesto'
-                 and normalize-space(lower-case(.))!='documentazione'
-                 and normalize-space(lower-case(.))!='firma'
-                 and normalize-space(lower-case(.))!='fonte archivistica'
-                 and normalize-space(lower-case(.))!='inventario museale'
-                 and normalize-space(lower-case(.))!='iscrizione'
-                 and normalize-space(lower-case(.))!='marchio'
-                 and normalize-space(lower-case(.))!='monogramma'
-                 and normalize-space(lower-case(.))!='nota manoscritta'
-                 and normalize-space(lower-case(.))!='pubblicazione'
-                 and normalize-space(lower-case(.))!='punzone'
-                 and normalize-space(lower-case(.))!='sigla'
-                 and normalize-space(lower-case(.))!='simbolo'
-                 and normalize-space(lower-case(.))!='timbro'
-                 and normalize-space(lower-case(.))!='tradizione orale'
+                     .!='Analisi diagnostiche'
+                 and .!='Analisi iconografica'
+                 and .!='Analisi stilistica'
+                 and .!='Attributo figurato'
+                 and .!='Bibliografia'
+                 and .!='Bollo'
+                 and .!='Cartiglio'
+                 and .!='Contesto'
+                 and .!='Documentazione'
+                 and .!='Firma'
+                 and .!='Fonte archivistica'
+                 and .!='Inventario museale'
+                 and .!='Iscrizione'
+                 and .!='Marchio'
+                 and .!='Monogramma'
+                 and .!='Nota manoscritta'
+                 and .!='Pubblicazione'
+                 and .!='Punzone'
+                 and .!='Sigla'
+                 and .!='Simbolo'
+                 and .!='Timbro'
+                 and .!='Tradizione orale'
                 ])"/>
 
        <!-- eac 0497 cpfDescription/relations/relation[targetRole="Strumento di ricerca"]/relationType
@@ -3632,36 +3644,37 @@ Autore,
 Curatore,
 Supervisore."
            test="not(.[targetRole[normalize-space(lower-case(.))='strumento di ricerca']]/relationType[
-                     normalize-space(lower-case(.))!='autore'
-                 and normalize-space(lower-case(.))!='curatore'
-                 and normalize-space(lower-case(.))!='supervisore'
+                     .!='Autore'
+                 and .!='Curatore'
+                 and .!='Supervisore'
                 ])"/>
 
        <!-- eac 0501 cpfDescription/relations/relation[targetRole="Progetto"]/relationType
-               Lista chiusa: Responsabile, Finanziatore, Partecipante, Supporto, Responsabile scientifico, Responsabile operativo, Coordinatore, Operatore, Promotore, Realizzatore. -->
+               Responsabile, Finanziatore, Responsabile scientifico, Responsabile operativo, Coordinatore, Promotore, Realizzatore, Partecipante, Supporto, Operatore
+               NB: gli ultimi tre ruoli si aggiungono alla lista in caso di Agente coinvolto (diverso da Agente principale, per cui valgono solo i primi sette valori) -->
        <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
           xao:message="=&gt;&#xa;eac 0501&#xa; cpfDescription/relations/relation[targetRole[.='Progetto']]/relationType&#xa; 'Qualificazione della partecipazione al progetto' lista chiusa con valori:&#xa;
 Responsabile,
 Finanziatore,
-Partecipante,
-Supporto,
 Responsabile scientifico,
 Responsabile operativo,
 Coordinatore,
-Operatore,
 Promotore,
-Realizzatore."
+Realizzatore,
+Partecipante,
+Supporto,
+Operatore."
            test="not(.[targetRole[normalize-space(lower-case(.))='progetto']]/relationType[
-                     normalize-space(lower-case(.))!='responsabile'
-                 and normalize-space(lower-case(.))!='finanziatore'
-                 and normalize-space(lower-case(.))!='partecipante'
-                 and normalize-space(lower-case(.))!='supporto'
-                 and normalize-space(lower-case(.))!='responsabile scientifico'
-                 and normalize-space(lower-case(.))!='responsabile operativo'
-                 and normalize-space(lower-case(.))!='coordinatore'
-                 and normalize-space(lower-case(.))!='operatore'
-                 and normalize-space(lower-case(.))!='promotore'
-                 and normalize-space(lower-case(.))!='realizzatore'
+                     .!='Responsabile'
+                 and .!='Finanziatore'
+                 and .!='Responsabile scientifico'
+                 and .!='Responsabile operativo'
+                 and .!='Coordinatore'
+                 and .!='Promotore'
+                 and .!='Realizzatore'
+                 and .!='Partecipante'
+                 and .!='Supporto'
+                 and .!='Operatore'
                 ])"/>
                 
        <!-- eac 0534 0554 0645 0667 cpfDescription/relations/relation[
@@ -3701,14 +3714,14 @@ Associativa."
                      ]/
                      relationType
                      [
-                          normalize-space(lower-case(.))!='identità'
-                      and normalize-space(lower-case(.))!='gerarchica'
-                      and normalize-space(lower-case(.))!='gerarchicapadre'
-                      and normalize-space(lower-case(.))!='gerarchicafiglio'
-                      and normalize-space(lower-case(.))!='temporale'
-                      and normalize-space(lower-case(.))!='temporaleprecedente'
-                      and normalize-space(lower-case(.))!='temporalesuccessiva'
-                      and normalize-space(lower-case(.))!='associativa'
+                          .!='Identità'
+                      and .!='Gerarchica'
+                      and .!='GerarchicaPadre'
+                      and .!='GerarchicaFiglio'
+                      and .!='Temporale'
+                      and .!='TemporalePrecedente'
+                      and .!='TemporaleSuccessiva'
+                      and .!='Associativa'
                      ]
                     )"/>
 
@@ -3726,9 +3739,9 @@ Nativo Digitale,
 È documentazione,
 È rappresentazione di."
            test="not(.[targetRole[normalize-space(lower-case(.))='risorsa digitale collegata']]/relationType[
-                     normalize-space(lower-case(.))!='nativo digitale'
-                 and normalize-space(lower-case(.))!='è documentazione'
-                 and normalize-space(lower-case(.))!='è rappresentazione di'
+                     .!='Nativo digitale'
+                 and .!='È documentazione'
+                 and .!='È rappresentazione di'
                 ])"/>
 
    </xs:complexType>
@@ -3872,13 +3885,13 @@ Supervisione."
          test="every $v in (span[normalize-space(lower-case(@localType))='azione'])
             satisfies 
             (
-                normalize-space(lower-case($v))='importazione'
-             or normalize-space(lower-case($v))='integrazione successiva'
-             or normalize-space(lower-case($v))='prima redazione'
-             or normalize-space(lower-case($v))='raccolta delle informazioni'
-             or normalize-space(lower-case($v))='revisione'
-             or normalize-space(lower-case($v))='rielaborazione'
-             or normalize-space(lower-case($v))='supervisione'
+                $v='Importazione'
+             or $v='Integrazione successiva'
+             or $v='Prima redazione'
+             or $v='Raccolta delle informazioni'
+             or $v='Revisione'
+             or $v='Rielaborazione'
+             or $v='Supervisione'
             )
            "/>
 
@@ -4412,8 +4425,8 @@ Supervisione."
       <!-- LUOGHI
       
        agente ente         place[@localType='LuogoEnte'    ]  placeRole                      => Giurisdizione, Sede
-       agente famiglia     place[@localType='LuogoFamiglia']  placeRole                      => domicilio, origine, residenza, sede di attività
-       agente persona      place[@localType='LuogoPersona' ]  placeRole                      => domicilio, morte, nascita, residenza, sede attività
+       agente famiglia     place[@localType='LuogoFamiglia']  placeRole                      => Domicilio, Origine, Residenza, Sede di attività
+       agente persona      place[@localType='LuogoPersona' ]  placeRole                      => Domicilio, Morte, Nascita, Residenza, Sede di attività
        agente conservatore place[@localType='Contatti'     ]  contact/@localType             => PEC
        agente conservatore place[@localType='Sedi'         ]  placeRole                      => Principale, Consultazione, Privato
                                                               address/addressLine/@localType => Localita, Frazione, IndirizzoTestuale, NoteIndirizzo, AccessoDisabili, Servizi, CondizioniDiAccesso
@@ -4436,7 +4449,7 @@ PEC."
          test="
             every $v in .[@localType]/contact/@localType
             satisfies (
-             normalize-space(lower-case($v))='pec'
+             $v='PEC'
             )
          "/>
        <!--
@@ -4450,9 +4463,9 @@ Privato."
          test="
             every $v in .[@localType[normalize-space(lower-case(.))='sedi']]/placeRole
             satisfies (
-                 normalize-space(lower-case($v))='principale'
-              or normalize-space(lower-case($v))='consultazione'
-              or normalize-space(lower-case($v))='privato'
+                 $v='Principale'
+              or $v='Consultazione'
+              or $v='Privato'
             )
          "/>
        <!--
@@ -4575,45 +4588,45 @@ Sede."
             every $v in .[@localType[normalize-space(lower-case(.))='luogoente']]/placeRole
             satisfies 
             (
-                normalize-space(lower-case($v))='giurisdizione'
-             or normalize-space(lower-case($v))='sede'
+                $v='Giurisdizione'
+             or $v='Sede'
             )
          "/>
 
-      <!-- 0219 "Qualifica luogo" Lista chiusa: domicilio, origine, residenza, sede di attività. -->
+      <!-- 0219 "Qualifica luogo" Lista chiusa: Domicilio, Origine, Residenza, Sede di attività. -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0219&#xa; cpfDescription/description/places/place[@localType='LuogoFamiglia']/placeRole/&#xa; 'Qualifica luogo' lista chiusa con valori:&#xa;
-domicilio,
-origine,
-residenza,
-sede di attività."
+Domicilio,
+Origine,
+Residenza,
+Sede di attività."
          test="
             every $v in .[@localType[normalize-space(lower-case(.))='luogofamiglia']]/placeRole
             satisfies 
             (
-                normalize-space(lower-case($v))='domicilio'
-             or normalize-space(lower-case($v))='origine'
-             or normalize-space(lower-case($v))='residenza'
-             or normalize-space(lower-case($v))='sede di attività'
+                $v='Domicilio'
+             or $v='Origine'
+             or $v='Residenza'
+             or $v='Sede di attività'
             )
          "/>
-      <!-- 0339 "Qualifica della relazione" Lista chiusa: domicilio, morte, nascita, residenza, sede attività. -->
+      <!-- 0339 "Qualifica della relazione" Lista chiusa: Domicilio, Morte, Nascita, Residenza, Sede di attività. -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0339&#xa; cpfDescription/description/places/place[@localType='LuogoPersona']/placeRole/&#xa; 'Qualifica luogo' lista chiusa con valori:&#xa;
-domicilio,
-morte,
-nascita,
-residenza,
-sede di attività."
+Domicilio,
+Morte,
+Nascita,
+Residenza,
+Sede di attività."
          test="
             every $v in .[@localType[normalize-space(lower-case(.))='luogopersona']]/placeRole
             satisfies 
             (
-                normalize-space(lower-case($v))='domicilio'
-             or normalize-space(lower-case($v))='morte'
-             or normalize-space(lower-case($v))='nascita'
-             or normalize-space(lower-case($v))='residenza'
-             or normalize-space(lower-case($v))='sede di attività'
+                $v='Domicilio'
+             or $v='Morte'
+             or $v='Nascita'
+             or $v='Residenza'
+             or $v='Sede di attività'
             )
          "/>
 
