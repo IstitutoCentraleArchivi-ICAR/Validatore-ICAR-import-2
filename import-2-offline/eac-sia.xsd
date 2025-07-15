@@ -1103,7 +1103,54 @@ Sedi."
              or normalize-space(lower-case($v))='sedi'
             ))
          "/>
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac 0124&#xa; cpfDescription/description/existDates/@localType ammette valore&#xa;
+DateEsistenzaEnte"
+         test="
+            not(
+             identity/entityType/@value='corporateBody'
+              and
+             not(identity/@localType[normalize-space(lower-case(.))='profiloistituzionale' or normalize-space(lower-case(.))='contestostoricoistituzionale'])
+              and
+             not(identity/entityType[normalize-space(lower-case(@eac-sia:tipoLocale))='evento'])
+            )
+            or
+            (
+             every $v in description/existDates/@localType satisfies(
+             normalize-space(lower-case($v))='dateesistenzaente')
+            )
+         "/>
          
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac 0215&#xa; cpfDescription/description/existDates/@localType ammette valore&#xa;
+DateEsistenzaFamiglia"
+         test="
+            not(
+             normalize-space(lower-case(identity/entityType/@value))='family'
+            )
+            or
+            (
+             every $v in description/existDates/@localType satisfies(
+             normalize-space(lower-case($v))='dateesistenzafamiglia')
+            )
+         "/>
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac 0335&#xa; cpfDescription/description/existDates/@localType ammette valore&#xa;
+DateEsistenzaPersona"
+         test="
+            not(
+             normalize-space(lower-case(identity/entityType/@value))='person'
+            )
+            or
+            (
+             every $v in description/existDates/@localType satisfies(
+             normalize-space(lower-case($v))='dateesistenzapersona')
+            )
+         "/>
+
+
       <!-- eac 0124 ENTE eac/cpfDescription/identity/entityType[@value='corporateBody']
            Qualifica della data eac/cpfDescription/description/existDates[@localType='DateEsistenzaEnte']/dateSet/date/@eac-sia:qualificaData
            OBBLIGATORIO
@@ -3496,9 +3543,9 @@ Detentore dei diritti."
        <!-- 0446 cpfDescription/relations/relation[targetRole="Complesso Archivistico"][relationType[.='soggetto produttore' or .='soggetto conservatore']]/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData Data inizio produzione, Data fine produzione, Data di ingresso presso il conservatore  -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0446&#xa; cpfDescription/relations/relation[targetRole='Complesso Archivistico'][relationType[.='soggetto produttore' or .='soggetto conservatore']]/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData&#xa; 'Qualifica della data' lista chiusa con valori:&#xa;
-data Data inizio produzione,
-data Data fine produzione,
-data Data di ingresso presso il conservatore."
+Data inizio produzione,
+Data fine produzione,
+Data di ingresso presso il conservatore."
          test="
             not(.[targetRole[normalize-space(lower-case(.))='complesso archivistico']])
             or
