@@ -1150,6 +1150,57 @@ DateEsistenzaPersona"
             )
          "/>
 
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac 1050&#xa; cpfDescription/description/functions/function/@localType ammette valore&#xa;
+Qualifica"
+         test="
+            not(
+             normalize-space(lower-case(identity/entityType/@value))='person'
+            )
+            or
+            (
+             every $v in ddescription/functions/function/@localType satisfies(
+             normalize-space(lower-case($v))='qualifica')
+            )
+         "/>
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac&#xa; valore non atteso in cpfDescription/description/functions/function/@localType"
+         test="
+            not(
+             not(normalize-space(lower-case(identity/entityType/@value))='person')
+            )
+            or
+            (
+             count(description/functions/function[@localType]) = 0
+            )
+         "/>
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac 1050&#xa; cpfDescription/description/biogHist/@localType ammette valore&#xa;
+DescrizioneEvento"
+         test="
+            not(
+             identity/entityType[normalize-space(lower-case(@eac-sia:tipoLocale))='evento']
+            )
+            or
+            (
+             every $v in ddescription/biogHist/@localType satisfies(
+             normalize-space(lower-case($v))='descrizioneevento')
+            )
+         "/>
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac&#xa; valore non atteso in cpfDescription/description/biogHist/@localType"
+         test="
+            not(
+             not(identity/entityType[normalize-space(lower-case(@eac-sia:tipoLocale))='evento'])
+            )
+            or
+            (
+             count(description/biogHist[@localType]) = 0
+            )
+         "/>
 
       <!-- eac 0124 ENTE eac/cpfDescription/identity/entityType[@value='corporateBody']
            Qualifica della data eac/cpfDescription/description/existDates[@localType='DateEsistenzaEnte']/dateSet/date/@eac-sia:qualificaData
@@ -3499,6 +3550,29 @@ Detentore di diritti"
                 )
                "/>
        -->
+
+       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+          xao:message="=&gt;&#xa;eac&#xa; cpfDescription/relations/relation[targetRole[.='AgenteCollegato']]/targetEntity/part/@localType ammette valore&#xa;
+RuoloAgente"
+          test="
+           not(targetRole[normalize-space(lower-case(.))='agente collegato'])
+            or
+           (
+            every $v in targetEntity/part/@localType satisfies
+            normalize-space(lower-case($v)) = 'ruoloagente'
+           )
+          "/>
+
+       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+          xao:message="=&gt;&#xa;eac&#xa; valore non atteso in cpfDescription/relations/relation/targetEntity/part/@localType"
+          test="
+           targetRole[normalize-space(lower-case(.))='agente collegato']
+            or
+           (
+            count(targetEntity/part[@localType]) = 0
+           )
+          "/>
+
        <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
           xao:message="=&gt;&#xa;eac&#xa; cpfDescription/relations/relation RELAZIONI targetEntity/@targetType e targetRole sono richiesti"
           test="
