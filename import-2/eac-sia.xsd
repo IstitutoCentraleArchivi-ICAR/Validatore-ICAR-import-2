@@ -975,7 +975,7 @@ resource                    | Tematismo
        agente persona      place[@localType='LuogoPersona' ]  placeRole                      => Domicilio, Morte, Nascita, Residenza, Sede di attività
        agente conservatore place[@localType='Contatti'     ]  contact/@localType             => PEC
        agente conservatore place[@localType='Sedi'         ]  placeRole                      => Principale, Consultazione, Privato
-                                                              address/addressLine/@localType => Localita, Frazione, IndirizzoTestuale, NoteIndirizzo, AccessoDisabili, Servizi, CondizioniDiAccesso
+                                                              address/addressLine/@localType => Localita/Frazione, IndirizzoTestuale, NoteIndirizzo, AccessoDisabili, Servizi, CondizioniDiAccesso
                                                               dateSet/@localType             => GiorniDiApertura
                                                                                              dateRange/@localType => lunedì, martedì, mercoledì, giovedì, venerdì, sabato, domenica, ?festivi
                                                                                                                   fromDate/@localType => orarioInizio
@@ -4550,7 +4550,7 @@ Supervisione."
        agente persona      place[@localType='LuogoPersona' ]  placeRole                      => Domicilio, Morte, Nascita, Residenza, Sede di attività
        agente conservatore place[@localType='Contatti'     ]  contact/@localType             => PEC
        agente conservatore place[@localType='Sedi'         ]  placeRole                      => Principale, Consultazione, Privato
-                                                              address/addressLine/@localType => Localita, Frazione, IndirizzoTestuale, NoteIndirizzo, AccessoDisabili, Servizi, CondizioniDiAccesso
+                                                              address/addressLine/@localType => Localita/Frazione, IndirizzoTestuale, NoteIndirizzo, AccessoDisabili, Servizi, CondizioniDiAccesso
                                                               dateSet/@localType             => GiorniDiApertura
                                                                                              dateRange/@localType => lunedì, martedì, mercoledì, giovedì, venerdì, sabato, domenica, ?festivi
                                                                                                                   fromDate/@localType => orarioInizio
@@ -4591,12 +4591,11 @@ Privato."
          "/>
        <!--
        agente conservatore place[@localType='Sedi'         ]  
-                                                              address/addressLine/@localType => Localita, Frazione, IndirizzoTestuale, NoteIndirizzo, AccessoDisabili, Servizi, CondizioniDiAccesso
+                                                              address/addressLine/@localType => Localita/Frazione, IndirizzoTestuale, NoteIndirizzo, AccessoDisabili, Servizi, CondizioniDiAccesso
        -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0612&#xa; cpfDescription/description/places/place[@localType='Sedi']/address/addressLine/@localType SEDE CONSERVATORE lista chiusa con valori:&#xa;
-Localita,
-Frazione,
+Localita/Frazione,
 IndirizzoTestuale,
 NoteIndirizzo,
 AccessoDisabili,
@@ -4605,8 +4604,7 @@ CondizioniDiAccesso."
          test="
             every $v in .[@localType[normalize-space(lower-case(.))='sedi']]/address/addressLine/@localType
             satisfies (
-                 normalize-space(lower-case($v))='localita'
-              or normalize-space(lower-case($v))='frazione'
+                 normalize-space(lower-case($v))='localita/frazione'
               or normalize-space(lower-case($v))='indirizzotestuale'
               or normalize-space(lower-case($v))='noteindirizzo'
               or normalize-space(lower-case($v))='accessodisabili'
@@ -5100,6 +5098,31 @@ Sede di attività."
             <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
             <xs:attribute name="coordinateSystem" use="required" type="xs:token"/>
             <xs:anyAttribute namespace="##other" processContents="lax"/>
+            <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+               xao:message="=&gt;&#xa;eac 0626 0627&#xa; geographicCoordinates/@coordinateSystem ammette valore WGS84."
+               test="
+                   every $v in @coordinateSystem
+                   satisfies 
+                   (
+                       normalize-space(lower-case($v))='wgs84'
+                   )
+               "/>
+            <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+               xao:message="=&gt;&#xa;eac 0626 0627&#xa; geographicCoordinates/@eac-sia:tipoCoordinata è richiesto con valori:&#xa;
+Latitudine,
+Longitudine."
+               test="
+                  (.[@eac-sia:tipoCoordinata])
+                  and
+                  (
+                   every $v in @eac-sia:tipoCoordinata
+                   satisfies 
+                   (
+                       normalize-space(lower-case($v))='latitudine'
+                    or normalize-space(lower-case($v))='longitudine'
+                   )
+                  )
+               "/>
          </xs:extension>
       </xs:simpleContent>
    </xs:complexType>
