@@ -419,10 +419,8 @@ Ente pubblico."
          
          relations/relation/targetEntity/@targetType  relations/relation/targetRole
           corporateBody/family/person                  Soggetto produttore collegato
-          corporateBody/family/person                  Relazione in arrivo - Soggetto produttore a cui è collegato
           corporateBody                                Profilo istituzionale collegato
           corporateBody/family/person                  Soggetto conservatore collegato
-          corporateBody/family/person                  Relazione in arrivo - Soggetto conservatore a cui è collegato
           resource                                     Risorsa digitale collegata
           resource                                     Complesso Archivistico
           resource                                     Unita Archivistica
@@ -438,10 +436,8 @@ Ente pubblico."
 targetEntity/@targetType    | targetRole&#xa;
 ----------------------------|--------------------------------------------------------------&#xa;
 corporateBody/family/person | Soggetto produttore collegato&#xa;
-corporateBody/family/person | Relazione in arrivo - Soggetto produttore a cui è collegato&#xa;
 corporateBody               | Profilo istituzionale collegato&#xa;
 corporateBody/family/person | Soggetto conservatore collegato&#xa;
-corporateBody/family/person | Relazione in arrivo - Soggetto conservatore a cui è collegato&#xa;
 resource                    | Risorsa digitale collegata&#xa;
 resource                    | Complesso Archivistico&#xa;
 resource                    | Unita Archivistica&#xa;
@@ -469,11 +465,9 @@ resource                    | Tematismo&#xa;
            every $v in relations/relation/targetRole satisfies
            (
                normalize-space(lower-case($v))='soggetto produttore collegato'
-            or normalize-space(lower-case($v))='relazione in arrivo - soggetto produttore a cui è collegato'
             or normalize-space(lower-case($v))='profilo istituzionale collegato'
             
             or normalize-space(lower-case($v))='soggetto conservatore collegato'
-            or normalize-space(lower-case($v))='relazione in arrivo - soggetto conservatore a cui è collegato'
             
             or normalize-space(lower-case($v))='risorsa digitale collegata'
             or normalize-space(lower-case($v))='complesso archivistico'
@@ -487,11 +481,9 @@ resource                    | Tematismo&#xa;
            )
           )
           and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='soggetto produttore collegato'                                ]]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='relazione in arrivo - soggetto produttore a cui è collegato'  ]]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
           and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='profilo istituzionale collegato'                              ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
           
           and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='soggetto conservatore collegato'                              ]]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='relazione in arrivo - soggetto conservatore a cui è collegato']]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
           
           and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='risorsa digitale collegata'                                   ]]/targetEntity/@targetType satisfies ($v = 'resource'))
           and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico'                                       ]]/targetEntity/@targetType satisfies ($v = 'resource'))
@@ -519,7 +511,6 @@ resource                    | Tematismo&#xa;
          
          relations/relation/targetEntity/@targetType  relations/relation/targetRole
           corporateBody/family/person                  Soggetto produttore collegato
-          corporateBody/family/person                  Relazione in arrivo - Soggetto produttore a cui è collegato
           corporateBody                                Profilo istituzionale collegato
           resource                                     Risorsa digitale collegata
           resource                                     Complesso Archivistico
@@ -536,7 +527,6 @@ resource                    | Tematismo&#xa;
 targetEntity/@targetType    | targetRole&#xa;
 ----------------------------|------------------------------------------------------------&#xa;
 corporateBody/family/person | Soggetto produttore collegato&#xa;
-corporateBody/family/person | Relazione in arrivo - Soggetto produttore a cui è collegato&#xa;
 corporateBody               | Profilo istituzionale collegato&#xa;
 resource                    | Risorsa digitale collegata&#xa;
 resource                    | Complesso Archivistico&#xa;
@@ -568,7 +558,6 @@ resource                    | Tematismo&#xa;
            every $v in relations/relation/targetRole satisfies
            (
                normalize-space(lower-case($v))='soggetto produttore collegato'
-            or normalize-space(lower-case($v))='relazione in arrivo - soggetto produttore a cui è collegato'
             or normalize-space(lower-case($v))='profilo istituzionale collegato'
             
             or normalize-space(lower-case($v))='risorsa digitale collegata'
@@ -583,7 +572,6 @@ resource                    | Tematismo&#xa;
            )
           )
           and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='soggetto produttore collegato'                              ]]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='relazione in arrivo - soggetto produttore a cui è collegato']]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
           and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='profilo istituzionale collegato'                            ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
           
           and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='risorsa digitale collegata'                                 ]]/targetEntity/@targetType satisfies ($v = 'resource'))
@@ -612,7 +600,6 @@ resource                    | Tematismo&#xa;
          
          relations/relation/targetEntity/@targetType  relations/relation/targetRole
           corporateBody/family/person                  Soggetto conservatore collegato
-          corporateBody/family/person                  Relazione in arrivo - Soggetto conservatore a cui è collegato
           resource                                     Risorsa digitale collegata
           resource                                     Complesso Archivistico
           resource                                     Unita Archivistica
@@ -628,7 +615,6 @@ resource                    | Tematismo&#xa;
 targetEntity/@targetType    | targetRole&#xa;
 ----------------------------|--------------------------------------------------------------&#xa;
 corporateBody/family/person | Soggetto conservatore collegato&#xa;
-corporateBody/family/person | Relazione in arrivo - Soggetto conservatore a cui è collegato&#xa;
 resource                    | Risorsa digitale collegata&#xa;
 resource                    | Complesso Archivistico&#xa;
 resource                    | Unita Archivistica&#xa;
@@ -659,7 +645,6 @@ resource                    | Tematismo&#xa;
            every $v in relations/relation/targetRole satisfies
            (
                normalize-space(lower-case($v))='soggetto conservatore collegato'
-            or normalize-space(lower-case($v))='relazione in arrivo - soggetto conservatore a cui è collegato'
             
             or normalize-space(lower-case($v))='risorsa digitale collegata'
             or normalize-space(lower-case($v))='complesso archivistico'
@@ -673,7 +658,6 @@ resource                    | Tematismo&#xa;
            )
           )
           and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='soggetto conservatore collegato'                              ]]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='relazione in arrivo - soggetto conservatore a cui è collegato']]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
           
           and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='risorsa digitale collegata'                                   ]]/targetEntity/@targetType satisfies ($v = 'resource'))
           and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico'                                       ]]/targetEntity/@targetType satisfies ($v = 'resource'))
@@ -792,7 +776,6 @@ agent                    | sameAs&#xa;
           agent                                        Agente collegato
           corporateBody                                Profilo istituzionale collegato
           corporateBody                                Contesto storico istituzionale collegato
-          corporateBody                                Relazione in arrivo - Contesto storico istituzionale a cui è collegato
       -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0760 0781 0802 0824 CONTESTO STORICO ISTITUZIONALE relations/relation&#xa;
@@ -801,7 +784,6 @@ targetEntity/@targetType | targetRole&#xa;
 agent                    | Agente collegato&#xa;
 corporateBody            | Profilo istituzionale collegato&#xa;
 corporateBody            | Contesto storico istituzionale collegato&#xa;
-corporateBody            | Relazione in arrivo - Contesto storico istituzionale a cui è collegato&#xa;
          "
          test="
          not
@@ -818,13 +800,11 @@ corporateBody            | Relazione in arrivo - Contesto storico istituzionale 
                normalize-space(lower-case($v))='agente collegato'
             or normalize-space(lower-case($v))='profilo istituzionale collegato'
             or normalize-space(lower-case($v))='contesto storico istituzionale collegato'
-            or normalize-space(lower-case($v))='relazione in arrivo - contesto storico istituzionale a cui è collegato'
            )
           )
           and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='agente collegato'                                                      ]]/targetEntity/@targetType satisfies ($v = 'agent'))
           and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='profilo istituzionale collegato'                                       ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
           and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='contesto storico istituzionale collegato'                              ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='relazione in arrivo - contesto storico istituzionale a cui è collegato']]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
          ) 
          "/>
          
@@ -854,7 +834,6 @@ corporateBody            | sameAs&#xa;
          relations/relation/targetEntity/@targetType  relations/relation/targetRole
           corporateBody                                Soggetto produttore collegato
           corporateBody                                Profilo istituzionale collegato
-          corporateBody                                Relazione in arrivo - Profilo istituzionale a cui è collegato
           corporateBody                                Contesto storico istituzionale collegato
       -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
@@ -863,7 +842,6 @@ targetEntity/@targetType | targetRole&#xa;
 -------------------------|--------------------------------------------------------------&#xa;
 corporateBody            | Soggetto produttore collegato&#xa;
 corporateBody            | Profilo istituzionale collegato&#xa;
-corporateBody            | Relazione in arrivo - Profilo istituzionale a cui è collegato&#xa;
 corporateBody            | Contesto storico istituzionale collegato&#xa;
          "
          test="
@@ -880,13 +858,11 @@ corporateBody            | Contesto storico istituzionale collegato&#xa;
            (
                normalize-space(lower-case($v))='soggetto produttore collegato'
             or normalize-space(lower-case($v))='profilo istituzionale collegato'
-            or normalize-space(lower-case($v))='relazione in arrivo - profilo istituzionale a cui è collegato'
             or normalize-space(lower-case($v))='contesto storico istituzionale collegato'
            )
           )
           and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='soggetto produttore collegato'                                ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
           and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='profilo istituzionale collegato'                              ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='relazione in arrivo - profilo istituzionale a cui è collegato']]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
           and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='contesto storico istituzionale collegato'                     ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
          ) 
          "/>
@@ -1381,14 +1357,14 @@ Privato."
        cpfDescription
         [identity[@localType="ContestoStoricoIstituzionale"]/entityType[@value="corporateBody"]]
         /relations/relation
-        [targetRole[.="Contesto storico istituzionale collegato" or .="Relazione in arrivo - Contesto storico istituzionale a cui è collegato"]
+        [targetRole[.="Contesto storico istituzionale collegato"]
         [targetEntity[@targetType='corporateBody']
         /relationType 'Qualifica della relazione con altro Contesto' Collegato, Dipendente, Sovraordinato, Precedente, Successivo -->
        <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
           xao:message="=&gt;&#xa;eac 0803 0825&#xa; cpfDescription&#xa; 
 [identity[@localType='ContestoStoricoIstituzionale']/entityType[@value='corporateBody']]&#xa; 
 /relations/relation&#xa; 
-[targetRole[.='Contesto storico istituzionale collegato' or.='Relazione in arrivo - Contesto storico istituzionale a cui è collegato']]&#xa; 
+[targetRole[.='Contesto storico istituzionale collegato']]&#xa; 
 [targetEntity[@targetType='corporateBody]]&#xa; 
 /relationType&#xa; 'Qualifica della relazione con altro Contesto' lista chiusa con valori:&#xa;
 Collegato,
@@ -1403,8 +1379,6 @@ Successivo."
                      [targetRole
                       [
                        normalize-space(lower-case(.))='contesto storico istituzionale collegato'
-                       or
-                       normalize-space(lower-case(.))='relazione in arrivo - contesto storico istituzionale a cui è collegato'
                       ]
                      ]
                      [targetEntity[@targetType='corporateBody']]
@@ -1421,14 +1395,14 @@ Successivo."
        cpfDescription
         [identity[@localType="ProfiloIstituzionale"]/entityType[@value="corporateBody"]]
         /relations/relation
-        [targetRole[.="Profilo istituzionale collegato" or .="Relazione in arrivo - Profilo istituzionale a cui è collegato"]
+        [targetRole[.="Profilo istituzionale collegato"]
         [targetEntity[@targetType='corporateBody']
         /relationType 'Qualifica della relazione' Predecessore, Successore, Collegato -->
        <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
           xao:message="=&gt;&#xa;eac 0803 0825&#xa; cpfDescription&#xa; 
 [identity[@localType='ProfiloIstituzionale']/entityType[@value='corporateBody']]&#xa; 
 /relations/relation&#xa; 
-[targetRole[.='Profilo istituzionale collegato' or .='Relazione in arrivo - Profilo istituzionale a cui è collegato']]&#xa; 
+[targetRole[.='Profilo istituzionale collegato']]&#xa; 
 [targetEntity[@targetType='corporateBody]]&#xa; 
 /relationType&#xa; 'Qualifica della relazione' lista chiusa con valori:&#xa;
 Predecessore,
@@ -1441,8 +1415,6 @@ Collegato."
                      [targetRole
                       [
                        normalize-space(lower-case(.))='profilo istituzionale collegato'
-                       or
-                       normalize-space(lower-case(.))='relazione in arrivo - profilo istituzionale a cui è collegato'
                       ]
                      ]
                      [targetEntity[@targetType='corporateBody']]
@@ -3800,18 +3772,14 @@ Operatore."
                 
        <!-- eac 0534 0554 0645 0667 cpfDescription/relations/relation[
        targetRole="Soggetto produttore collegato" or
-       targetRole="Relazione in arrivo - Soggetto produttore a cui è collegato" or
-       targetRole="Soggetto conservatore collegato" or
-       targetRole="Relazione in arrivo - Soggetto conservatore a cui è collegato"
+       targetRole="Soggetto conservatore collegato"
        ]/relationType
                Lista chiusa: Identità, Gerarchica, GerarchicaPadre, GerarchicaFiglio, Temporale, TemporalePrecedente, TemporaleSuccessiva, Associativa. -->
        <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
           xao:message="=&gt;&#xa;eac 0534 0554 0645 0667&#xa; cpfDescription/relations/relation[targetRole[
 
 .='Soggetto produttore collegato' or
-.='Relazione in arrivo - Soggetto produttore a cui è collegato' or
-.='Soggetto conservatore collegato' or
-.='Relazione in arrivo - Soggetto conservatore a cui è collegato'
+.='Soggetto conservatore collegato'
 
 ]]/relationType&#xa; 'Qualifica della relazione' lista chiusa con valori:&#xa;
 
@@ -3828,9 +3796,7 @@ Associativa."
                       targetRole
                       [
                           normalize-space(lower-case(.))='soggetto produttore collegato'
-                       or normalize-space(lower-case(.))='relazione in arrivo - soggetto produttore a cui è collegato'
                        or normalize-space(lower-case(.))='soggetto conservatore collegato'
-                       or normalize-space(lower-case(.))='relazione in arrivo - soggetto conservatore a cui è collegato'
                       ]
                      ]/
                      relationType
