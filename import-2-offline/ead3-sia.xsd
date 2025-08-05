@@ -2289,14 +2289,15 @@ M129: In &lt;c>, quando rappresenta un'unità documentale, se è presente un&#x0
       @physdescstructuredtype del &lt;physdescstructured> vale &quot;materialtype&quot; e&#x0a;
       dove il @localtype del &lt;physfacet> vale &quot;TipologiaSpecifica&quot;, allora,&#x0a;
       quando l'unità documentale rappresenta un &quot;Audiovisivo&quot;, il contenuto&#x0a;
-      del &lt;part> deve soddisfare una precisa lista chiusa di valori ammissibili
+      del &lt;part> deve soddisfare una precisa lista chiusa di valori&#x0a;
+      emmissibili
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="if ( did/physdescstructured[@physdescstructuredtype = 'materialtype']
                     /physfacet[@localtype = 'TipologiaDocumentaria']
                     /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Audiovisivo')
                 then every $part in  did/physdescstructured[@physdescstructuredtype = 'materialtype']
-                                    /physfacet['TipologiaSpecifica']/genreform/part
+                                    /physfacet[@localtype = 'TipologiaSpecifica']/genreform/part
                      satisfies $part/text() = ('Documentario', 'Film', 'Intervista',
                                                'Presentazione', 'Videointervista')
                 else true()"/>
