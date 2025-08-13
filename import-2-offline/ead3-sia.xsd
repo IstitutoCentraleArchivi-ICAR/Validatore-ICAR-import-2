@@ -2224,7 +2224,7 @@ M125: In &lt;c>, quando rappresenta un'unità documentale, se è presente un&#x0
           xpathDefaultNamespace="##targetNamespace" 
           test="if ( did/physdescstructured[@physdescstructuredtype = 'materialtype']
                     /physfacet[@localtype = 'TipologiaDocumentaria']
-                    /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Fotografia')
+                    /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Grafica')
                 then every $phys in  did/physdescstructured[@physdescstructuredtype = 'materialtype']
                                     /physfacet[@localtype = 'Tecnica']
                      satisfies $phys/text() = ('Acquaforte', 'Acquerello', 'Acquatina', 'Algrafia', 'Altro',
@@ -3391,21 +3391,24 @@ M301: In &lt;control>, qualora sia presente un&#x0a;
   </xs:complexType>
 
   <xs:complexType name="recordid" mixed="true">
-    <xs:attributeGroup ref="am.common"/>
+    <!-- M483: rimosso il gruppo "am.common" e l'attributo @instanceurl,
+               non utilizzati -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
-    <xs:attribute name="instanceurl" type="xs:anyURI"/>
   </xs:complexType>
 
   <xs:complexType name="otherrecordid" mixed="true">
-    <xs:attributeGroup ref="am.common"/>
+    <!-- M468: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
     <xs:attribute name="localtype" type="xs:token"/>
   </xs:complexType>
 
   <xs:complexType name="representation" mixed="true">
-    <xs:attributeGroup ref="am.common"/>
+    <!-- M489: rimossi i gruppi "am.common", non utilizzato, e "am.simplelink",
+               non utilizzato con le eccezioni di @href e @arcrole;
+               recuperati @href e @arcref -->
+    <xs:attribute name="href" type="xs:token"/>
+    <xs:attribute name="arcrole" type="xs:anyURI"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
-    <xs:attributeGroup ref="am.simplelink"/>
     <xs:attribute name="localtype" type="xs:token"/>
   </xs:complexType>
 
@@ -3428,7 +3431,7 @@ M301: In &lt;control>, qualora sia presente un&#x0a;
       <xs:element name="author" type="author" minOccurs="0" maxOccurs="unbounded"/>
       <!-- M398: rimosso "sponsor" in quanto non utilizzato -->
     </xs:sequence>
-    <xs:attributeGroup ref="am.common"/>
+    <!-- M500: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
   </xs:complexType>
 
@@ -3449,7 +3452,7 @@ M301: In &lt;control>, qualora sia presente un&#x0a;
       <xs:element name="num" type="num"/>
       <xs:element name="p" type="p"/>
     </xs:choice>
-    <xs:attributeGroup ref="am.common"/>
+    <!-- M480: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
   </xs:complexType>
 
@@ -3459,12 +3462,12 @@ M301: In &lt;control>, qualora sia presente un&#x0a;
     <xs:sequence>
       <xs:element name="controlnote" type="controlnote" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attributeGroup ref="am.common"/>
+    <!-- M464: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
   </xs:complexType>
 
   <xs:complexType name="maintenancestatus" mixed="true">
-    <xs:attributeGroup ref="am.common"/>
+    <!-- M461: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
     <xs:attribute name="value" use="required">
       <xs:simpleType>
@@ -3483,7 +3486,7 @@ M301: In &lt;control>, qualora sia presente un&#x0a;
   </xs:complexType>
 
   <xs:complexType name="publicationstatus" mixed="true">
-    <xs:attributeGroup ref="am.common"/>
+    <!-- M479: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
     <xs:attribute name="value" use="required">
       <xs:simpleType>
@@ -3526,43 +3529,19 @@ M301: In &lt;control>, qualora sia presente un&#x0a;
   </xs:complexType>
 
   <xs:complexType name="term" mixed="true">
-    <xs:attributeGroup ref="am.common"/>
+    <!-- M497: rimossi i gruppi "am.common", non utilizzato, e "am.access.no.normal",
+               non utilizzato con l'eccezione di @identifier, e gli attributi
+               @transliteration e @lastdatetimeverified, non utilizzati;
+               recuperato @identifier -->
+    <xs:attribute name="identifier" type="xs:token"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
-    <xs:attribute name="transliteration" type="xs:NMTOKEN"/>
-    <xs:attribute name="lastdatetimeverified">
-      <xs:simpleType>
-        <xs:union>
-          <xs:simpleType>
-            <xs:restriction base="xs:date">
-              <xs:maxInclusive value="2099-12-31"/>
-            </xs:restriction>
-          </xs:simpleType>
-          <xs:simpleType>
-            <xs:restriction base="xs:gYear">
-              <xs:maxInclusive value="2099"/>
-            </xs:restriction>
-          </xs:simpleType>
-          <xs:simpleType>
-            <xs:restriction base="xs:gYearMonth">
-              <xs:maxInclusive value="2099-12"/>
-            </xs:restriction>
-          </xs:simpleType>
-          <xs:simpleType>
-            <xs:restriction base="xs:dateTime">
-              <xs:maxInclusive value="2099-12-31T23:59:59"/>
-            </xs:restriction>
-          </xs:simpleType>
-        </xs:union>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attributeGroup ref="am.access.no.normal"/>
   </xs:complexType>
 
   <xs:complexType name="maintenancehistory">
     <xs:sequence>
       <xs:element name="maintenanceevent" type="maintenanceevent" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attributeGroup ref="am.common"/>
+    <!-- M460: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
   </xs:complexType>
 
@@ -3575,7 +3554,7 @@ M301: In &lt;control>, qualora sia presente un&#x0a;
       <xs:element name="eventdescription" type="eventdescription" minOccurs="0"
                   maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attributeGroup ref="am.common"/>
+    <!-- M459: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
   </xs:complexType>
 
@@ -3657,10 +3636,9 @@ M301: In &lt;control>, qualora sia presente un&#x0a;
     <xs:sequence>
       <xs:element name="source" type="source" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attributeGroup ref="am.common"/>
+    <!-- M494: rimosso il gruppo "am.common" e l'attributo @base, non utilizzati -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
     <xs:attribute name="localtype" type="xs:token"/>
-    <xs:attribute name="base" type="xs:anyURI"/>
   </xs:complexType>
 
   <xs:complexType name="source">
@@ -3669,69 +3647,27 @@ M301: In &lt;control>, qualora sia presente un&#x0a;
       <!-- M384: rimosso "objectxmlwrap" in quanto non utilizzato -->
       <xs:element name="descriptivenote" type="descriptivenote" minOccurs="0"/>
     </xs:sequence>
-    <xs:attributeGroup ref="am.common"/>
+    <!-- M492: rimossi i gruppi "am.common", non utilizzato, e "am.simplelink",
+               non utilizzato con le eccezioni di @href e @linkrole,
+               e l'attributo @lastdatetimeverified, non utilizzato;
+               recuperati @href e @arcref -->
+    <xs:attribute name="href" type="xs:token"/>
+    <xs:attribute name="linkrole" type="xs:anyURI"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
-    <xs:attribute name="lastdatetimeverified">
-      <xs:simpleType>
-        <xs:union>
-          <xs:simpleType>
-            <xs:restriction base="xs:date">
-              <xs:maxInclusive value="2099-12-31"/>
-            </xs:restriction>
-          </xs:simpleType>
-          <xs:simpleType>
-            <xs:restriction base="xs:gYear">
-              <xs:maxInclusive value="2099"/>
-            </xs:restriction>
-          </xs:simpleType>
-          <xs:simpleType>
-            <xs:restriction base="xs:gYearMonth">
-              <xs:maxInclusive value="2099-12"/>
-            </xs:restriction>
-          </xs:simpleType>
-          <xs:simpleType>
-            <xs:restriction base="xs:dateTime">
-              <xs:maxInclusive value="2099-12-31T23:59:59"/>
-            </xs:restriction>
-          </xs:simpleType>
-        </xs:union>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attributeGroup ref="am.simplelink"/>
   </xs:complexType>
 
   <xs:complexType name="sourceentry" mixed="true">
-    <xs:attributeGroup ref="am.common"/>
+    <!-- M493: rimosso il gruppo "am.common" e l'attributo @transliteration,
+               non utilizzati -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
-    <xs:attribute name="transliteration" type="xs:NMTOKEN"/>
   </xs:complexType>
 
   <xs:complexType name="titleproper">
     <xs:complexContent>
       <xs:extension base="m.mixed.basic">
-        <xs:attributeGroup ref="am.common"/>
+        <!-- M499: rimossi il gruppo "am.common" e l'attributo @render,
+                   non utilizzati -->
         <xs:attribute name="localtype" type="xs:token"/>
-        <xs:attribute name="render">
-          <xs:simpleType>
-            <xs:restriction base="xs:token">
-              <xs:enumeration value="altrender"/>
-              <xs:enumeration value="bold"/>
-              <xs:enumeration value="bolddoublequote"/>
-              <xs:enumeration value="bolditalic"/>
-              <xs:enumeration value="boldsinglequote"/>
-              <xs:enumeration value="boldsmcaps"/>
-              <xs:enumeration value="boldunderline"/>
-              <xs:enumeration value="doublequote"/>
-              <xs:enumeration value="italic"/>
-              <xs:enumeration value="nonproport"/>
-              <xs:enumeration value="singlequote"/>
-              <xs:enumeration value="smcaps"/>
-              <xs:enumeration value="sub"/>
-              <xs:enumeration value="super"/>
-              <xs:enumeration value="underline"/>
-            </xs:restriction>
-          </xs:simpleType>
-        </xs:attribute>
         <xs:attribute name="encodinganalog" type="xs:token"/>
       </xs:extension>
     </xs:complexContent>
@@ -3740,7 +3676,7 @@ M301: In &lt;control>, qualora sia presente un&#x0a;
   <xs:complexType name="subtitle">
     <xs:complexContent>
       <xs:extension base="m.mixed.basic">
-        <xs:attributeGroup ref="am.common"/>
+        <!-- M496: rimosso il gruppo "am.common", non utilizzato -->
         <xs:attribute name="localtype" type="xs:token"/>
         <xs:attribute name="encodinganalog" type="xs:token"/>
       </xs:extension>
@@ -3842,9 +3778,8 @@ M281: In &lt;controlnote>, quando il @localtype vale &quot;FinalitaProgetto&quot
       <xs:element name="agencyname" type="agencyname" maxOccurs="unbounded"/>
       <xs:element name="descriptivenote" type="descriptivenote" minOccurs="0"/>
     </xs:sequence>
-    <xs:attributeGroup ref="am.common"/>
+    <!-- M458: rimossi i gruppi "am.common" e "am.countrycode", non utilizzati -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
-    <xs:attributeGroup ref="am.countrycode"/>
   </xs:complexType>
 
   <!-- M357: rimosso il tipo "agencycode" in quanto non utilizzato -->
@@ -3949,7 +3884,7 @@ M281: In &lt;controlnote>, quando il @localtype vale &quot;FinalitaProgetto&quot
   <xs:complexType name="materialspec">
     <xs:complexContent>
       <xs:extension base="m.mixed.basic">
-        <xs:attributeGroup ref="am.common"/>
+        <!-- M462: rimosso il gruppo "am.common", non utilizzato -->
         <xs:attribute name="label" type="xs:string"/>
         <xs:attribute name="encodinganalog" type="xs:token"/>
         <xs:attribute name="localtype" type="xs:token"/>
@@ -3962,9 +3897,9 @@ M281: In &lt;controlnote>, quando il @localtype vale &quot;FinalitaProgetto&quot
   <xs:complexType name="physdesc">
     <xs:complexContent>
       <xs:extension base="m.mixed.basic">
-        <xs:attributeGroup ref="am.common"/>
+        <!-- M472: rimossi il gruppo "am.common" e l'attributo @label,
+                   non utilizzati -->
         <xs:attribute name="localtype" type="xs:token"/>
-        <xs:attribute name="label" type="xs:string"/>
         <xs:attribute name="encodinganalog" type="xs:token"/>
       </xs:extension>
     </xs:complexContent>
@@ -3973,11 +3908,10 @@ M281: In &lt;controlnote>, quando il @localtype vale &quot;FinalitaProgetto&quot
   <xs:complexType name="physloc">
     <xs:complexContent>
       <xs:extension base="m.mixed.basic">
-        <xs:attributeGroup ref="am.common"/>
+        <!-- M475: rimossi il gruppo "am.common" e gli attributi
+                   @label e @parent, non utilizzati -->
         <xs:attribute name="localtype" type="xs:token"/>
-        <xs:attribute name="label" type="xs:string"/>
         <xs:attribute name="encodinganalog" type="xs:token"/>
-        <xs:attribute name="parent" type="xs:IDREFS"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -3994,8 +3928,8 @@ M281: In &lt;controlnote>, quando il @localtype vale &quot;FinalitaProgetto&quot
       </xs:choice>
       <xs:element name="descriptivenote" type="descriptivenote" minOccurs="0"/>
     </xs:sequence>
-    <xs:attributeGroup ref="am.common"/>
-    <xs:attribute name="label" type="xs:string"/>
+    <!-- M473: rimossi il gruppo "am.common" e gli attributi @label
+               e @otherphysdescstructuredtype, non utilizzati -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
     <xs:attribute name="physdescstructuredtype" use="required">
       <xs:simpleType>
@@ -4007,14 +3941,13 @@ M281: In &lt;controlnote>, quando il @localtype vale &quot;FinalitaProgetto&quot
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
-    <xs:attribute name="otherphysdescstructuredtype" type="xs:token"/>
     <xs:attributeGroup ref="a.coverage"/>
   </xs:complexType>
 
   <xs:complexType name="quantity" mixed="true">
-    <xs:attributeGroup ref="am.common"/>
+    <!-- M481: rimosso il gruppo "am.common" e l'attributo @approximate,
+               non utilizzati -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
-    <xs:attribute name="approximate" type="av.boolean"/>
   </xs:complexType>
 
   <xs:complexType name="unittype" mixed="true">
@@ -4033,24 +3966,21 @@ M281: In &lt;controlnote>, quando il @localtype vale &quot;FinalitaProgetto&quot
       <xs:element name="daterange" type="daterange"/>
       <xs:element name="dateset" type="dateset"/>
     </xs:choice>
-    <xs:attributeGroup ref="am.common"/>
-    <xs:attribute name="label" type="xs:string"/>
-    <xs:attributeGroup ref="a.unitdatetype"/>
-    <xs:attribute name="datechar" type="xs:token"/>
+    <!-- M502: rimossi i gruppi "am.common", "a.unitdatetime", "am.dates.era"
+               e "am.dates.calendar", e gli attributi @label e @datechar,
+               non utilizzati -->
     <xs:attribute name="certainty" type="xs:NMTOKEN"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
-    <xs:attributeGroup ref="am.dates.era"/>
-    <xs:attributeGroup ref="am.dates.calendar"/>
   </xs:complexType>
 
   <xs:complexType name="unittitle">
     <xs:complexContent>
       <xs:extension base="m.mixed.basic.plus.access">
-        <xs:attributeGroup ref="am.common"/>
+        <!-- M503: rimossi il gruppo "am.common" e l'attributo @normal,
+                   non utilizzati -->
         <xs:attribute name="label" type="xs:string"/>
         <xs:attribute name="encodinganalog" type="xs:token"/>
         <xs:attribute name="localtype" type="xs:token"/>
-        <xs:attribute name="normal" type="xs:token"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -4058,12 +3988,11 @@ M281: In &lt;controlnote>, quando il @localtype vale &quot;FinalitaProgetto&quot
   <xs:complexType name="unitid">
     <xs:complexContent>
       <xs:extension base="m.mixed.basic">
-        <xs:attributeGroup ref="am.common"/>
+        <!-- M502: rimossi i gruppi "am.common" e "am.countrycode",
+                   e gli attributi @identifier e @repositorycode,
+                   non utilizzati -->
         <xs:attribute name="localtype" type="xs:token"/>
         <xs:attribute name="label" type="xs:string"/>
-        <xs:attributeGroup ref="am.countrycode"/>
-        <xs:attribute name="repositorycode" type="xs:token"/>
-        <xs:attribute name="identifier"/>
         <xs:attribute name="encodinganalog" type="xs:token"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M005: se &lt;unitid> ha @localtype pari a &quot;AltroId&quot;, allora deve anche avere&#x0a;
@@ -4253,7 +4182,7 @@ M306: Qualora in un &lt;arrangement>, con @localtype pari a &quot;Numerazione&qu
         <xs:element name="odd" type="odd"/>
       </xs:choice>
     </xs:sequence>
-    <xs:attributeGroup ref="am.common"/>
+    <!-- M466: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="localtype" type="xs:token"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
@@ -4282,7 +4211,7 @@ M258: In &lt;odd>, quando @localtype è pari a &quot;Osservazioni&quot;, non dev
         <xs:element name="originalsloc" type="originalsloc"/>
       </xs:choice>
     </xs:sequence>
-    <xs:attributeGroup ref="am.common"/>
+    <!-- M467: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
     <xs:attribute name="localtype" type="xs:token"/>
   </xs:complexType>
@@ -4297,7 +4226,7 @@ M258: In &lt;odd>, quando @localtype è pari a &quot;Osservazioni&quot;, non dev
         <xs:element name="phystech" type="phystech"/>
       </xs:choice>
     </xs:sequence>
-    <xs:attributeGroup ref="am.common"/>
+    <!-- M476: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
     <xs:attribute name="localtype" type="xs:token"/>
   </xs:complexType>
@@ -4325,7 +4254,7 @@ M258: In &lt;odd>, quando @localtype è pari a &quot;Osservazioni&quot;, non dev
         </xs:element>
       </xs:choice>
     </xs:sequence>
-    <xs:attributeGroup ref="am.common"/>
+    <!-- M477: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="localtype" type="xs:token"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
   </xs:complexType>
@@ -4340,7 +4269,7 @@ M258: In &lt;odd>, quando @localtype è pari a &quot;Osservazioni&quot;, non dev
         <xs:element name="bibref" type="bibref"/>
       </xs:choice>
     </xs:sequence>
-    <xs:attributeGroup ref="am.common"/>
+    <!-- M485: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="localtype" type="xs:token"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
   </xs:complexType>
@@ -4353,7 +4282,7 @@ M258: In &lt;odd>, quando @localtype è pari a &quot;Osservazioni&quot;, non dev
         <xs:element name="scopecontent" type="scopecontent"/>
       </xs:choice>
     </xs:sequence>
-    <xs:attributeGroup ref="am.common"/>
+    <!-- M490: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="localtype" type="xs:token"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
   </xs:complexType>
@@ -4368,6 +4297,7 @@ M258: In &lt;odd>, quando @localtype è pari a &quot;Osservazioni&quot;, non dev
         <xs:element name="userestrict" type="userestrict"/>
       </xs:choice>
     </xs:sequence>
+    <!-- M504: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attributeGroup ref="am.common"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
     <xs:attribute name="localtype" type="xs:token"/>
@@ -4443,8 +4373,9 @@ M258: In &lt;odd>, quando @localtype è pari a &quot;Osservazioni&quot;, non dev
     <xs:sequence>
       <xs:element name="part" type="part" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attributeGroup ref="am.common"/>
-    <xs:attributeGroup ref="am.access"/>
+    <!-- M463: rimossi il gruppo "am.common", non utilizzato, e "am.access",
+               non utilizzato ad eccezione di @source; recuperato @source -->
+    <xs:attribute name="source" type="xs:token"/>
     <xs:attribute name="localtype" type="xs:token"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
     <xs:attribute name="relator" type="xs:token"/>
@@ -4456,8 +4387,9 @@ M258: In &lt;odd>, quando @localtype è pari a &quot;Osservazioni&quot;, non dev
     <xs:sequence>
       <xs:element name="part" type="part" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attributeGroup ref="am.common"/>
-    <xs:attributeGroup ref="am.access"/>
+    <!-- M471: rimossi il gruppo "am.common", non utilizzato, e "am.access",
+               non utilizzato ad eccezione di @source; recuperato @source -->
+    <xs:attribute name="source" type="xs:token"/>
     <xs:attribute name="localtype" type="xs:token"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
     <xs:attribute name="relator" type="xs:token"/>
@@ -4467,8 +4399,13 @@ M258: In &lt;odd>, quando @localtype è pari a &quot;Osservazioni&quot;, non dev
     <xs:sequence>
       <xs:element name="part" type="part" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attributeGroup ref="am.common"/>
-    <xs:attributeGroup ref="am.access"/>
+    <!-- M495: rimossi i gruppi "am.common", non utilizzato con le eccezioni
+               di @lang e @id, e "am.access", non utilizzato con le eccezioni
+               di @identifier e @source; recuperati @lang, @id, @identifier e @source -->
+    <xs:attribute name="lang" type="xs:NMTOKEN"/>
+    <xs:attribute name="id" type="xs:ID"/>
+    <xs:attribute name="identifier" type="xs:token"/>
+    <xs:attribute name="source" type="xs:token"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
     <xs:attribute name="localtype" type="xs:token"/>
     <xs:attribute name="relator" type="xs:token"/>
@@ -4478,41 +4415,20 @@ M258: In &lt;odd>, quando @localtype è pari a &quot;Osservazioni&quot;, non dev
     <xs:sequence>
       <xs:element name="part" type="part" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attributeGroup ref="am.common"/>
+    <!-- M498: rimossi i gruppi "am.common" e "am.access", e
+               gli attributi @relator e @render, non utilizzati -->
     <xs:attribute name="localtype" type="xs:token"/>
-    <xs:attributeGroup ref="am.access"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
-    <xs:attribute name="relator" type="xs:token"/>
-    <xs:attribute name="render">
-      <xs:simpleType>
-        <xs:restriction base="xs:token">
-          <xs:enumeration value="altrender"/>
-          <xs:enumeration value="bold"/>
-          <xs:enumeration value="bolddoublequote"/>
-          <xs:enumeration value="bolditalic"/>
-          <xs:enumeration value="boldsinglequote"/>
-          <xs:enumeration value="boldsmcaps"/>
-          <xs:enumeration value="boldunderline"/>
-          <xs:enumeration value="doublequote"/>
-          <xs:enumeration value="italic"/>
-          <xs:enumeration value="nonproport"/>
-          <xs:enumeration value="singlequote"/>
-          <xs:enumeration value="smcaps"/>
-          <xs:enumeration value="sub"/>
-          <xs:enumeration value="super"/>
-          <xs:enumeration value="underline"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
   </xs:complexType>
 
   <xs:complexType name="part">
     <xs:complexContent>
       <xs:extension base="m.mixed.basic.date">
-        <xs:attributeGroup ref="am.common"/>
+        <!-- M470: rimossi il gruppo "am.common", non utilizzato, e "am.access.no.normal",
+                   non utilizzato ad eccezione di @identifier; recuperato @identifier -->
+        <xs:attribute name="identifier" type="xs:token"/>
         <xs:attribute name="encodinganalog" type="xs:token"/>
         <xs:attribute name="localtype" type="xs:token"/>
-        <xs:attributeGroup ref="am.access.no.normal"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -4523,7 +4439,7 @@ M258: In &lt;odd>, quando @localtype è pari a &quot;Osservazioni&quot;, non dev
   <xs:complexType name="p">
     <xs:complexContent>
       <xs:extension base="m.para.content">
-        <xs:attributeGroup ref="am.common"/>
+        <!-- M469: rimosso il gruppo "am.common", non utilizzato -->
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -4629,10 +4545,9 @@ M295: È obbligatorio in &lt;language> che, se presente l'attributo @lang, il su
   </xs:complexType>
 
   <xs:complexType name="script" mixed="true">
-    <xs:attributeGroup ref="am.common"/>
+    <!-- M491: rimossi il gruppo "am.common" e gli attributi
+               @scriptcode e @label, non utilizzati -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
-    <xs:attribute name="label" type="xs:string"/>
-    <xs:attribute name="scriptcode" type="xs:NMTOKEN"/>
   </xs:complexType>
 
   <!-- physdescstructured blocks -->
@@ -4650,9 +4565,9 @@ M295: È obbligatorio in &lt;language> che, se presente l'attributo @lang, il su
   <xs:complexType name="physfacet">
     <xs:complexContent>
       <xs:extension base="m.mixed.basic.plus.access">
-        <xs:attributeGroup ref="am.common"/>
+        <!-- M474: rimossi i gruppi "am.common" e "am.access.no.normal",
+                   non utilizzati -->
         <xs:attribute name="encodinganalog" type="xs:token"/>
-        <xs:attributeGroup ref="am.access.no.normal"/>
         <xs:attribute name="localtype" type="xs:token"/>
       </xs:extension>
     </xs:complexContent>
@@ -5043,7 +4958,9 @@ M339: In &lt;fromdate> il valore di @standarddate deve essere in formato ISO 860
   <xs:complexType name="todate">
     <xs:complexContent>
       <xs:extension base="m.datesingle">
-        <xs:attributeGroup ref="am.common"/>
+        <!-- M501: rimosso il gruppo "am.common", non utilizzato
+                   con l'eccezione di @altrender; recuperato @altrender -->
+        <xs:attribute name="altrender" type="xs:token"/>
         <xs:attribute name="localtype" type="xs:token"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M015: In &lt;todate> non deve essere presente @altrender oppure, se presente, il&#x0a;
@@ -5246,7 +5163,7 @@ M173: In &lt;dateset>, quando contiene un &lt;datesingle> con @localtype pari a&
   <xs:complexType name="num">
     <xs:complexContent>
       <xs:extension base="m.mixed.basic">
-        <xs:attributeGroup ref="am.common"/>
+        <!-- M465: rimosso il gruppo "am.common", non utilizzato -->
         <xs:attribute name="localtype" type="xs:token"/>
         <xs:attribute name="encodinganalog" type="xs:token"/>
       </xs:extension>
@@ -5256,37 +5173,20 @@ M173: In &lt;dateset>, quando contiene un &lt;datesingle> con @localtype pari a&
   <xs:complexType name="quote">
     <xs:complexContent>
       <xs:extension base="m.mixed.basic">
-        <xs:attributeGroup ref="am.common"/>
+        <!-- M482: rimosso il gruppo "am.common" e l'attributo @render,
+                   non utilizzati -->
         <xs:attribute name="localtype" type="xs:token"/>
-        <xs:attribute name="render">
-          <xs:simpleType>
-            <xs:restriction base="xs:token">
-              <xs:enumeration value="altrender"/>
-              <xs:enumeration value="bold"/>
-              <xs:enumeration value="bolddoublequote"/>
-              <xs:enumeration value="bolditalic"/>
-              <xs:enumeration value="boldsinglequote"/>
-              <xs:enumeration value="boldsmcaps"/>
-              <xs:enumeration value="boldunderline"/>
-              <xs:enumeration value="doublequote"/>
-              <xs:enumeration value="italic"/>
-              <xs:enumeration value="nonproport"/>
-              <xs:enumeration value="singlequote"/>
-              <xs:enumeration value="smcaps"/>
-              <xs:enumeration value="sub"/>
-              <xs:enumeration value="super"/>
-              <xs:enumeration value="underline"/>
-            </xs:restriction>
-          </xs:simpleType>
-        </xs:attribute>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
 
   <xs:complexType name="ptr">
-    <xs:attributeGroup ref="am.common.empty"/>
-    <xs:attributeGroup ref="am.internal.ptr"/>
-    <xs:attribute name="entityref" type="xs:ENTITY"/>
+    <!-- M478: rimossi il gruppo "am.common.empy", non utilizzato con l'eccezione
+               di @id, il gruppo "am.internal.ptr", non utilizzato con l'eccezione
+               di @linkrole, e l'attributo @entityref, non utilizzato;
+               recuperati @id e @linkrole -->
+    <xs:attribute name="id" type="xs:ID"/>
+    <xs:attribute name="linkrole" type="xs:anyURI"/>
   </xs:complexType>
 
   <xs:complexType name="ref" mixed="true">
@@ -5303,9 +5203,15 @@ M173: In &lt;dateset>, quando contiene un &lt;datesingle> con @localtype pari a&
       <xs:element name="date" type="date"/>
       <xs:group ref="m.access"/>
     </xs:choice>
-    <xs:attributeGroup ref="am.common"/>
-    <xs:attributeGroup ref="am.internal.ptr"/>
-    <xs:attribute name="entityref" type="xs:ENTITY"/>
+    <!-- M484: rimossi il gruppo "am.common", non utilizzato con l'eccezione di @id,
+               il gruppo "am.internal.ptr", non utilizzato con l'eccezione di @arcrole,
+               @href, @linktitle, e @linkrole, e l'attributo @entityref, non utilizzato;
+               recuperati @id, @arcrole, @href, @linktitle, e @linkrole -->
+    <xs:attribute name="id" type="xs:ID"/>
+    <xs:attribute name="arcrole" type="xs:anyURI"/>
+    <xs:attribute name="href" type="xs:token"/>
+    <xs:attribute name="linktitle" type="xs:token"/>
+    <xs:attribute name="linkrole" type="xs:anyURI"/>
   </xs:complexType>
 
   <!-- DSC -->
@@ -5343,10 +5249,10 @@ M173: In &lt;dateset>, quando contiene un &lt;datesingle> con @localtype pari a&
     <xs:sequence>
       <xs:element name="relation" type="relation" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attributeGroup ref="am.common"/>
+    <!-- M488: rimossi il gruppo "am.common" e l'attributo @base,
+               non utilizzati -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
     <xs:attribute name="localtype" type="xs:token"/>
-    <xs:attribute name="base" type="xs:anyURI"/>
   </xs:complexType>
 
   <xs:complexType name="relation">
@@ -5361,7 +5267,11 @@ M173: In &lt;dateset>, quando contiene un &lt;datesingle> con @localtype pari a&
       <xs:element name="geogname" type="geogname" minOccurs="0"/>
       <xs:element name="descriptivenote" type="descriptivenote" minOccurs="0"/>
     </xs:sequence>
-    <xs:attributeGroup ref="am.common"/>
+    <!-- M486: rimossi il gruppo "am.common", non utilizzato, il gruppo
+               "am.simplelink", non utilizzato con l'eccezione di @arcrole,
+                e l'attributo @lastdatetimeverified, non utilizzato;
+                recuperato @arcrole -->
+    <xs:attribute name="arcrole" type="xs:anyURI"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
     <xs:attribute name="relationtype" use="required">
       <xs:simpleType>
@@ -5374,40 +5284,13 @@ M173: In &lt;dateset>, quando contiene un &lt;datesingle> con @localtype pari a&
       </xs:simpleType>
     </xs:attribute>
     <xs:attribute name="otherrelationtype" type="xs:token"/>
-    <xs:attribute name="lastdatetimeverified">
-      <xs:simpleType>
-        <xs:union>
-          <xs:simpleType>
-            <xs:restriction base="xs:date">
-              <xs:maxInclusive value="2099-12-31"/>
-            </xs:restriction>
-          </xs:simpleType>
-          <xs:simpleType>
-            <xs:restriction base="xs:gYear">
-              <xs:maxInclusive value="2099"/>
-            </xs:restriction>
-          </xs:simpleType>
-          <xs:simpleType>
-            <xs:restriction base="xs:gYearMonth">
-              <xs:maxInclusive value="2099-12"/>
-            </xs:restriction>
-          </xs:simpleType>
-          <xs:simpleType>
-            <xs:restriction base="xs:dateTime">
-              <xs:maxInclusive value="2099-12-31T23:59:59"/>
-            </xs:restriction>
-          </xs:simpleType>
-        </xs:union>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attributeGroup ref="am.simplelink"/>
   </xs:complexType>
 
   <xs:complexType name="relationentry" mixed="true">
-    <xs:attributeGroup ref="am.common"/>
+    <!-- M487: rimossi il gruppo "am.common" e l'attributo @transliteration,
+               non utilizzati -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
     <xs:attribute name="localtype" type="xs:token"/>
-    <xs:attribute name="transliteration" type="xs:NMTOKEN"/>
   </xs:complexType>
 
   <!-- M384: rimosso il tipo "objectxmlwrap" in quanto non utilizzato -->
