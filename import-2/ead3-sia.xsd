@@ -2732,6 +2732,222 @@ M353: In &lt;c>, quando rappresenta un'unità documentale, deve essere&#x0a;
     </xs:complexContent>
   </xs:complexType>
 
+  <!-- M506: creato il tipo "controlaccess.auth", versione semplificata
+             di "controlaccess" per contenere Toponimi e Soggetti -->
+  <xs:complexType name="controlaccess.auth">
+    <xs:sequence>
+      <xs:choice maxOccurs="unbounded">
+        <!-- M507: utilizzato "geogname.auth" al posto di "geogname" -->
+        <xs:element name="geogname" type="geogname.auth"/>
+        <!-- M508: utilizzato "subject.auth" al posto di "subject" -->
+        <xs:element name="subject" type="subject.auth"/>
+      </xs:choice>
+    </xs:sequence>
+    <xs:attribute name="localtype" type="xs:token"/>
+    <xs:attribute name="encodinganalog" type="xs:token"/>
+  </xs:complexType>
+
+  <!-- M507: creato il tipo "geogname.auth", estensione di
+             "geogname" da utilizzare in "controlaccess.auth" -->
+  <xs:complexType name="geogname.auth">
+    <xs:complexContent>
+      <xs:extension base="geogname">
+        <xs:attribute name="lang" type="xs:NMTOKEN"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M509: in &lt;geogname>, quando rappresenta un toponimo, i valori degli eventuali&#x0a;
+      part[@localtype = &quot;AltroAuthority&quot;]/@source devono soddisfare&#x0a;
+      una precisa lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $src in part[@localtype = 'AltroAutority']/@source
+                satisfies $src = ('VIAF', 'ISNI', 'SNAC')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M510: in &lt;geogname>, quando rappresenta un toponimo, deve necessariamente&#x0a;
+      essere presente un part[@altrender = &quot;StatusScheda&quot;] con contenuto&#x0a;
+      non nullo
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="part[@altrender = 'StatusScheda']/text() != ''"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M511: in &lt;geogname>, quando rappresenta un toponimo, non può essere presente&#x0a;
+      più di un part[@altrender = &quot;StatusScheda&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="2 > count(part[@altrender = 'StatusScheda'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M512: in &lt;geogname>, quando rappresenta un toponimo, deve necessariamente&#x0a;
+      essere presente un part[@localtype = &quot;Intestazione&quot;] con contenuto&#x0a;
+      non nullo
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="part[@localtype = 'Intestazione']/text() != ''"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M513: in &lt;geogname>, quando rappresenta un toponimo, deve necessariamente&#x0a;
+      essere presente un part[@localtype = &quot;Toponimo&quot;] con contenuto&#x0a;
+      non nullo
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="part[@localtype = 'Toponimo']/text() != ''"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M514: in &lt;geogname>, quando rappresenta un toponimo, non può essere presente&#x0a;
+      più di un part[@localtype = &quot;ToponimoStorico&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="2 > count(part[@localtype = 'ToponimoStorico'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M515: in &lt;geogname>, quando rappresenta un toponimo, non può essere presente&#x0a;
+      più di un part[@localtype = &quot;Stato&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="2 > count(part[@localtype = 'Stato'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M516: in &lt;geogname>, quando rappresenta un toponimo, il contenuto degli&#x0a;
+      eventuali part[@localtype = &quot;Stato&quot;] devono soddisfare una precisa&#x0a;
+      lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $part in part[@localtype = 'Stato']
+                satisfies $part/text() = ('Italia', 'Estero')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M517: in &lt;geogname>, quando rappresenta un toponimo, non può essere presente&#x0a;
+      più di un geographiccoordinates[@altrender = &quot;Latitudine&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="2 > count(geographiccoordinates[@altrender = 'Latitudine'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M518: in &lt;geogname>, quando rappresenta un toponimo, non può essere presente&#x0a;
+      più di un geographiccoordinates[@altrender = &quot;Longitudine&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="2 > count(geographiccoordinates[@altrender = 'Longitudine'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M519: in &lt;geogname>, quando rappresenta un toponimo, non può essere presente&#x0a;
+      più di un part[@localtype = &quot;Annotazioni&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="2 > count(part[@localtype = 'Annotazioni'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M520: in &lt;geogname>, quando rappresenta un toponimo, deve essere presente,&#x0a;
+      con valore non nullo, l'attributo @id
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="@id != ''"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M521: in &lt;geogname>, quando rappresenta un toponimo, il contenuto degli&#x0a;
+      eventuali part/ref[@arcrole = &quot;Compilatore&quot;]/name[@localtype = &quot;Azione&quot;]&#x0a;
+      deve soddisfare una precisa lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $name in part/ref[@arcrole = 'Compilatore']/name[@localtype = 'Azione']
+                satisfies $name/text() = ('Importazione', 'Integrazione successiva',
+                                          'Prima redazione', 'Raccolta delle informazioni',
+                                          'Revisione', 'Rielaborazione', 'Supervisione')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M531: in &lt;geogname>, quando rappresenta un toponimo, deve essere presente&#x0a;
+      l'attributo @altrender e il suo valore deve soddisfare una precisa&#x0a;
+      lista chiusa di valori ammissibili.
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="@altrender = ('Completa', 'Non visibile',
+                              'Descrizione Libera e Risorsa Protetta (login)',
+                              'Descrizione Protetta e Risorsa Protetta (login)',
+                              'Descrizione Libera e Risorse Riservata (autorizzazione)',
+                              'Descrizione Riservata e Risorse Riservata (autorizzazione)')"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- M508: creato il tipo "subject.auth", versione semplificata
+             di "subject", per contenere Soggetti -->
+  <xs:complexType name="subject.auth">
+    <xs:sequence>
+      <xs:element name="part" type="part" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="lang" type="xs:NMTOKEN"/>
+    <xs:attribute name="id" type="xs:ID"/>
+    <xs:attribute name="source" type="xs:token"/>
+    <xs:attribute name="encodinganalog" type="xs:token"/>
+    <xs:attribute name="localtype" type="xs:token"/>
+    <xs:attribute name="relator" type="xs:token"/>
+    <xs:attribute name="altrender" type="xs:token"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M522: in &lt;subject>, quando rappresenta un soggetto, i valori degli eventuali&#x0a;
+      part[@localtype = &quot;AltroAuthority&quot;]/@source devono soddisfare&#x0a;
+      una precisa lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $src in part[@localtype = 'AltroAutority']/@source
+            satisfies $src = ('VIAF', 'ISNI', 'SNAC')"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M523: in &lt;subject>, quando rappresenta un soggetto, deve necessariamente&#x0a;
+      essere presente un part[@altrender = &quot;StatusScheda&quot;] con contenuto&#x0a;
+      non nullo
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="part[@altrender = 'StatusScheda']/text() != ''"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M524: in &lt;subject>, quando rappresenta un soggetto, non può essere presente&#x0a;
+      più di un part[@altrender = &quot;StatusScheda&quot;]
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="2 > count(part[@altrender = 'StatusScheda'])"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M525: in &lt;subject>, quando rappresenta un soggetto, deve necessariamente&#x0a;
+      essere presente un part[@localtype = &quot;Lemma&quot;] con contenuto non nullo&#x0a;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="part[@localtype = 'Lemma']/text() != ''"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M526: in &lt;subject>, quando rappresenta un soggetto, deve essere presente,&#x0a;
+      con valore non nullo, l'attributo @source
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="@source != ''"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M527: in &lt;subject>, quando rappresenta un soggetto, deve essere presente,&#x0a;
+      con valore non nullo, l'attributo @id
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="@id != ''"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M528: in &lt;subject>, quando rappresenta un soggetto, ogni eventuale&#x0a;
+      part/ref[@arcrole = &quot;SoggettoCorrelato&quot;] deve avere l'attributo @source&#x0a;
+      con valore non nullo
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $ref in part/ref[@arcrole = 'SoggettoCorrelato']
+            satisfies $ref/@source != ''"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M529: in &lt;subject>, quando rappresenta un soggetto, i valori degli eventuali&#x0a;
+      part/ref[@arcrole = &quot;SoggettoCorrelato&quot;]/@linkrole devono soddisfare&#x0a;
+      una precisa lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $role in part/ref[@arcrole = 'SoggettoCorrelato']/@linkrole
+            satisfies $role = ('Più generale', 'Più specifico', 'Associativo')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M530: in &lt;subject>, quando rappresenta un soggetto, il contenuto degli&#x0a;
+      eventuali part/ref[@arcrole = &quot;Compilatore&quot;]/name[@localtype = &quot;Azione&quot;]&#x0a;
+      deve soddisfare una precisa lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $name in part/ref[@arcrole = 'Compilatore']/name[@localtype = 'Azione']
+                satisfies $name/text() = ('Importazione', 'Integrazione successiva',
+                                          'Prima redazione', 'Raccolta delle informazioni',
+                                          'Revisione', 'Rielaborazione', 'Supervisione')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M532: in &lt;subject>, quando rappresenta un soggetto, deve essere presente&#x0a;
+      l'attributo @altrender e il suo valore deve soddisfare una precisa&#x0a;
+      lista chiusa di valori ammissibili.
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="@altrender = ('Completa', 'Non visibile',
+                              'Descrizione Libera e Risorsa Protetta (login)',
+                              'Descrizione Protetta e Risorsa Protetta (login)',
+                              'Descrizione Libera e Risorse Riservata (autorizzazione)',
+                              'Descrizione Riservata e Risorse Riservata (autorizzazione)')"/>
+  </xs:complexType>
+
   <!-- end ICAR extra types -->
 
   <!-- ELEMENTS -->
@@ -5387,7 +5603,13 @@ M173: In &lt;dateset>, quando contiene un &lt;datesingle> con @localtype pari a&
       <xs:element name="arrangement" type="arrangement"/>
       <xs:element name="bibliography" type="bibliography"/>
       <!-- M358: rimosso "bioghist" in quanto non utilizzato -->
-      <xs:element name="controlaccess" type="controlaccess"/>
+      <!-- M506: introdotto l'uso del tipo "controlaccess.auth" nel caso
+                 il @localtype dell'elemento "controlaccess" sia pari
+                 ad "Authority" -->
+      <xs:element name="controlaccess">
+        <xs:alternative type="controlaccess.auth" test="@localtype = 'Authority'"/>
+        <xs:alternative type="controlaccess"/>
+      </xs:element>
       <xs:element name="custodhist" type="custodhist"/>
       <xs:element name="fileplan" type="fileplan"/>
       <!-- M374: rimosso "index" in quanto non utilizzato -->
