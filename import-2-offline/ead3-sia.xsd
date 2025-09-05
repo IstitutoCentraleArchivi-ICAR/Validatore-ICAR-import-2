@@ -4655,7 +4655,9 @@ M258: In &lt;odd>, quando @localtype è pari a &quot;Osservazioni&quot;, non dev
   <xs:complexType name="p">
     <xs:complexContent>
       <xs:extension base="m.para.content">
-        <!-- M469: rimosso il gruppo "am.common", non utilizzato -->
+        <!-- M469: rimosso il gruppo "am.common", non utilizzato,
+                   ma recuperato @altrender -->
+        <xs:attribute name="altrender" type="xs:token"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -4764,6 +4766,7 @@ M295: È obbligatorio in &lt;language> che, se presente l'attributo @lang, il su
     <!-- M491: rimossi il gruppo "am.common" e gli attributi
                @scriptcode e @label, non utilizzati -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
+    <xs:attribute name="scriptcode" type="xs:NMTOKEN"/>
   </xs:complexType>
 
   <!-- physdescstructured blocks -->
