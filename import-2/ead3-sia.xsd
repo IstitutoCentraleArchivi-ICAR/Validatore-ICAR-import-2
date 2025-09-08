@@ -2340,21 +2340,21 @@ M132: In &lt;c>, quando rappresenta un'unità documentale, deve essere presente,
       al più, un unico (non ripetibile)&#x0a;
       did/physdescstructured/physfacet/genreform/part, dove il&#x0a;
       @physdescstructuredtype del &lt;physdescstructured> vale &quot;materialtype&quot; e&#x0a;
-      dove il @localtype di &lt;genreform> vale &quot;StadioDocumento&quot;
+      dove il @localtype di &lt;physfacet> vale &quot;StadioDocumento&quot;
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count( did/physdescstructured[@physdescstructuredtype = 'materialtype']
-                           /physfacet/genreform[@localtype = 'StadioDocumento']/part)"/>
+                           /physfacet[@localtype = 'StadioDocumento']/genreform/part)"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M133: In &lt;c>, quando rappresenta un'unità documentale, se è presente un&#x0a;
       did/physdescstructured/physfacet/genreform/part, dove il&#x0a;
       @physdescstructuredtype del &lt;physdescstructured> vale &quot;materialtype&quot; e&#x0a;
-      dove il @localtype di &lt;genreform> vale &quot;StadioDocumento&quot;, allora l'unità&#x0a;
+      dove il @localtype di &lt;physfacet> vale &quot;StadioDocumento&quot;, allora l'unità&#x0a;
       documentale deve rappresentare o un &quot;Manoscritto&quot;, o una &quot;Pergamena&quot;
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="if ( did/physdescstructured[@physdescstructuredtype = 'materialtype']
-                    /physfacet/genreform[@localtype = 'StadioDocumento']/part)
+                    /physfacet[@localtype = 'StadioDocumento']/genreform/part)
                 then    did/physdescstructured[@physdescstructuredtype = 'materialtype']
                        /physfacet[@localtype = 'TipologiaDocumentaria']
                        /genreform/part[@localtype = 'TracciatoSpecifico']/text()
@@ -2364,13 +2364,13 @@ M133: In &lt;c>, quando rappresenta un'unità documentale, se è presente un&#x0
 M134: In &lt;c>, quando rappresenta un'unità documentale, se è presente un&#x0a;
       did/physdescstructured/physfacet/genreform, dove il&#x0a;
       @physdescstructuredtype del &lt;physdescstructured> vale &quot;materialtype&quot; e&#x0a;
-      dove il @localtype del &lt;genreform> vale &quot;StadioDocumento&quot;, allora il&#x0a;
+      dove il @localtype del &lt;physfacet> vale &quot;StadioDocumento&quot;, allora il&#x0a;
       contenuto del &lt;part> deve soddisfare una precisa lista chiusa di valori&#x0a;
       ammissibili
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="every $part in  did/physdescstructured[@physdescstructuredtype = 'materialtype']
-                               /physfacet/genreform[@localtype = 'StadioDocumento']/part
+                               /physfacet[@localtype = 'StadioDocumento']/genreform/part
                 satisfies $part/text() = ('Minuta', 'Originale', 'Copia autentica',
                                           'Copia semplice', 'Copia tarda', 'Copia coeva')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
@@ -2460,18 +2460,6 @@ M142: In &lt;c>, quando rappresenta un'unità documentale, se è presente un&#x0
                      /physfacet[@localtype = 'TipologiaDocumentaria']
                      /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Fotografia'
                 else true()"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M143: In &lt;c>, quando rappresenta un'unità documentale, deve essere presente,&#x0a;
-      al più, un unico (non ripetibile)&#x0a;
-      scopecontent[@localtype = &quot;SoggettoIdentificato&quot;]/p/subject/part, o con&#x0a;
-      lo &lt;scopecontent> figlio di &lt;c>, o discendente di un ulteriore&#x0a;
-      &lt;scopecontent>, figlio di &lt;c>
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="1 >= (  count( scopecontent[@localtype = 'SoggettoIdentificato']
-                              /p/subject/part)
-                      + count( scopecontent//scopecontent[@localtype = 'SoggettoIdentificato']
-                              /p/subject/part))"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M144: In &lt;c>, quando rappresenta un'unità documentale, se è presente un&#x0a;
       did/physdescstructured/physfacet, dove il @physdescstructuredtype del&#x0a;
@@ -3206,15 +3194,6 @@ M335: Quando &lt;ead> contiene uno Strumento di Ricerca, gli @arcrole degli&#x0a
                                             'è documentazione di')
             else true()"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
-M336: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere, al più,&#x0a;
-      un unico control/languagedeclaration/language/@langcode
-      &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="if (    (archdesc/@level = 'otherlevel')
-                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
-            then 1 >= count(control/languagedeclaration/language/@langcode)
-            else true()"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
 M337: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere, al più,&#x0a;
       un unico&#x0a;
       control/filedesc/notestmt/controlnote[@localtype = &quot;Osservazioni&quot;]
@@ -3793,34 +3772,9 @@ M301: In &lt;control>, qualora sia presente un&#x0a;
   </xs:complexType>
 
   <xs:complexType name="eventdatetime" mixed="true">
-    <xs:attributeGroup ref="am.common"/>
+    <!-- M534: rimossi il gruppo "am.common" e l'attributo @standarddatetime,
+               non utilizzati -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
-    <xs:attribute name="standarddatetime">
-      <xs:simpleType>
-        <xs:union>
-          <xs:simpleType>
-            <xs:restriction base="xs:date">
-              <xs:maxInclusive value="2099-12-31"/>
-            </xs:restriction>
-          </xs:simpleType>
-          <xs:simpleType>
-            <xs:restriction base="xs:gYear">
-              <xs:maxInclusive value="2099"/>
-            </xs:restriction>
-          </xs:simpleType>
-          <xs:simpleType>
-            <xs:restriction base="xs:gYearMonth">
-              <xs:maxInclusive value="2099-12"/>
-            </xs:restriction>
-          </xs:simpleType>
-          <xs:simpleType>
-            <xs:restriction base="xs:dateTime">
-              <xs:maxInclusive value="2099-12-31T23:59:59"/>
-            </xs:restriction>
-          </xs:simpleType>
-        </xs:union>
-      </xs:simpleType>
-    </xs:attribute>
   </xs:complexType>
 
   <xs:complexType name="agenttype" mixed="true">
@@ -3843,7 +3797,7 @@ M301: In &lt;control>, qualora sia presente un&#x0a;
   </xs:complexType>
 
   <xs:complexType name="eventdescription" mixed="true">
-    <xs:attributeGroup ref="am.common"/>
+    <!-- M535: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
     <xs:attribute name="localtype" type="xs:token"/>
   </xs:complexType>
@@ -3866,8 +3820,7 @@ M301: In &lt;control>, qualora sia presente un&#x0a;
     <!-- M492: rimossi i gruppi "am.common", non utilizzato, e "am.simplelink",
                non utilizzato con le eccezioni di @href e @linkrole,
                e l'attributo @lastdatetimeverified, non utilizzato;
-               recuperati @href e @arcref -->
-    <xs:attribute name="href" type="xs:token"/>
+               recuperato @linkrole -->
     <xs:attribute name="linkrole" type="xs:anyURI"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
   </xs:complexType>
@@ -4558,10 +4511,10 @@ M258: In &lt;odd>, quando @localtype è pari a &quot;Osservazioni&quot;, non dev
     <xs:sequence>
       <xs:element name="part" type="part" maxOccurs="unbounded"/>
     </xs:sequence>
-    <!-- M449: rimossi i gruppi "am.common" e "am.access", non utilizzati -->
+    <!-- M449: rimossi i gruppi "am.common" e "am.access", e l'attributo @relator,
+               non utilizzati -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
     <xs:attribute name="localtype" type="xs:token"/>
-    <xs:attribute name="relator" type="xs:token"/>
   </xs:complexType>
 
   <xs:complexType name="geogname">
@@ -4763,8 +4716,8 @@ M295: È obbligatorio in &lt;language> che, se presente l'attributo @lang, il su
   </xs:complexType>
 
   <xs:complexType name="script" mixed="true">
-    <!-- M491: rimossi il gruppo "am.common" e gli attributi
-               @scriptcode e @label, non utilizzati -->
+    <!-- M491: rimossi il gruppo "am.common" e l'attributo
+               @label, non utilizzato -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
     <xs:attribute name="scriptcode" type="xs:NMTOKEN"/>
   </xs:complexType>
@@ -5443,18 +5396,8 @@ M173: In &lt;dateset>, quando contiene un &lt;datesingle> con @localtype pari a&
       <!-- M402: rimosso "thead" in quanto non utilizzato -->
       <xs:group minOccurs="0" ref="m.cOrC01"/>
     </xs:sequence>
-    <xs:attributeGroup ref="am.common"/>
-    <xs:attribute name="dsctype">
-      <xs:simpleType>
-        <xs:restriction base="xs:token">
-          <xs:enumeration value="analyticover"/>
-          <xs:enumeration value="combined"/>
-          <xs:enumeration value="in-depth"/>
-          <xs:enumeration value="otherdsctype"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attribute name="otherdsctype" type="xs:token"/>
+    <!-- M533: rimossi il gruppo "am.common" e gli attributi @dsctype
+               e @otherdsctype, non utilizzati -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
   </xs:complexType>
 
