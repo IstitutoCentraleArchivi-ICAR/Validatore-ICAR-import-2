@@ -937,6 +937,12 @@ M304: In &lt;archdesc>, quando rappresenta un complesso archivistico, gli&#x0a;
                                 /relationentry/@localtype)
                 satisfies $type = ('Soggetto conservatore', 'Soggetto vigilante', 'Proprietario',
                                    'Possessore', 'Detentore di diritti', 'Soggetto produttore')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M536: In &lt;archdesc> non è ammesso più di un&#x0a;
+      did/unittitle[@localtype = &quot;IntegrazioneDenominazione&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/unittitle[@localtype = 'IntegrazioneDenominazione'])"/>
         <xs:assert test="1 >= count(e3:userestrict)"/> <!-- ??? -->
       </xs:extension>
     </xs:complexContent>
@@ -1372,6 +1378,12 @@ M304: In &lt;c>, quando rappresenta un complesso archivistico, gli eventuali&#x0
                                 /relationentry/@localtype)
                 satisfies $type = ('Soggetto conservatore', 'Soggetto vigilante', 'Proprietario',
                                    'Possessore', 'Detentore di diritti', 'Soggetto produttore')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M536: In &lt;c>, quando rappresenta un compesso archivistico, non è ammesso&#x0a;
+      più di un did/unittitle[@localtype = &quot;IntegrazioneDenominazione&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/unittitle[@localtype = 'IntegrazioneDenominazione'])"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -4922,7 +4934,7 @@ M168: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, s
           xpathDefaultNamespace="##targetNamespace" 
           test="   not(@altrender)
                 or (@altrender != ('DataApprossimativa', 'DataAttribuita', 'DataIncerta',
-                                   'DataIncertaAttribuita'))"/>
+                                   'DataAnteQuem', 'DataPostQuem', 'DataIncertaAttribuita'))"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M080: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, il valore di&#x0a;
       @notbefore, se presente, deve corrispondere a un numero, positivo, di&#x0a;
@@ -5051,7 +5063,7 @@ M014: In &lt;fromdate> non deve essere presente @altrender oppure, se presente, 
       &#x0a;&#x0a;]"
           test="   not(@altrender)
                 or (@altrender = ('DataApprossimativa', 'DataAttribuita', 'DataIncerta',
-                                  'DataPostQuem', 'DataIncertaAttribuita'))"/>
+                                  'DataAnteQuem', 'DataPostQuem', 'DataIncertaAttribuita'))"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M080: In &lt;fromdate> il valore di @notbefore, se presente, deve corrispondere a&#x0a;
       un numero, positivo, di quattro cifre corrispondente a un anno; i valori&#x0a;
@@ -5139,8 +5151,8 @@ M015: In &lt;todate> non deve essere presente @altrender oppure, se presente, il
       suo contenuto deve soddisfare una lista chiusa di valori ammessi
       &#x0a;&#x0a;]"
           test="   not(@altrender)
-                or (@altrender = ('DataAnteQuem', 'DataApprossimativa', 'DataAttribuita',
-                                  'DataIncerta', 'DataIncertaAttribuita'))"/>
+                or (@altrender = ('DataAnteQuem', 'DataPostQuem', 'DataApprossimativa',
+                                  'DataAttribuita', 'DataIncerta', 'DataIncertaAttribuita'))"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M080: In &lt;todate> il valore di @notbefore, se presente, deve corrispondere a un&#x0a;
       numero, positivo, di quattro cifre corrispondente a un anno; i valori&#x0a;
