@@ -2950,6 +2950,551 @@ M532: in &lt;subject>, quando rappresenta un soggetto, deve essere presente&#x0a
                               'Descrizione Riservata e Risorse Riservata (autorizzazione)')"/>
   </xs:complexType>
 
+  <!-- M162: creata specializzazione, di "datesingle" da utilizzare in
+             "dateset" quando @localhost pari a "DataTestuale" -->
+  <xs:complexType name="datesingle.dataTestuale">
+    <xs:complexContent>
+      <xs:extension base="datesingle">
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M165: In &lt;datesingle>, quando @localtype è pari a &quot;DataTestuale&quot;, il contenuto&#x0a;
+      non può essere vuoto
+      &#x0a;&#x0a;]"
+          test="text() != ''"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M166: In &lt;datesingle>, quando @localtype è pari a &quot;DataTestuale&quot;, deve essere&#x0a;
+      presente @altrender e il suo valore deve soddisfare una precisa lista di&#x0a;
+      valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="   not(@altrender)
+                or (@altrender != ('Intervallo di date', 'Data singola', 'Data aperta (a partire da)',
+                                   'Data aperta (fino a)', 'Data non rilevata/non rilevabile'))"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M543: In &lt;datesingle>, quando @localtype è pari a &quot;DataTestuale&quot;,&#x0a;
+      @standarddate non deve essere presente
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="not(@standarddate)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M544: In &lt;datesingle>, quando @localtype è pari a &quot;DataTestuale&quot;,&#x0a;
+      @notbefore non deve essere presente
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="not(@notbefore)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M545: In &lt;datesingle>, quando @localtype è pari a &quot;DataTestuale&quot;,&#x0a;
+      @notafter non deve essere presente
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="not(@notafter)"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- M163: creata specializzazione, di "datesingle" da utilizzare in
+             "dateset" quando @localhost pari a "DataSingola" -->
+  <xs:complexType name="datesingle.dataSingola">
+    <xs:complexContent>
+      <xs:extension base="datesingle">
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M168: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, se è&#x0a;
+      presente @altrender il suo valore deve soddisfare una precisa lista di&#x0a;
+      valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="   not(@altrender)
+                or (@altrender != ('DataApprossimativa', 'DataAttribuita', 'DataIncerta',
+                                   'DataAnteQuem', 'DataPostQuem', 'DataIncertaAttribuita'))"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M080: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, il valore di&#x0a;
+      @notbefore, se presente, deve corrispondere a un numero, positivo, di&#x0a;
+      quattro cifre corrispondente a un anno; i valori precedenti all'anno 1000&#x0a;
+      richiedono degli zeri sulla sinistra (esempio: l'anno 37 a.C. deve essere&#x0a;
+      rappresentato come &quot;0037&quot;)
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="not(@notbefore) or matches(@notbefore, '^[0-9]{4}$')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M081: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, il valore di&#x0a;
+      @notafter, se presente, deve corrispondere a un numero, positivo, di&#x0a;
+      quattro cifre corrispondente a un anno; i valori precedenti all'anno 1000&#x0a;
+      richiedono degli zeri sulla sinistra (esempio: l'anno 37 a.C. deve essere&#x0a;
+      rappresentato come &quot;0037&quot;)
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="not(@notafter) or matches(@notafter, '^[0-9]{4}$')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M083: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, se @notbefore&#x0a;
+      e @notafter sono entrambi presenti, i loro valori devono soddisfare&#x0a;
+      alcune precise regole
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (@notbefore)
+                then    (    ( 1 = (number(@notbefore) mod 100))
+                         and (number(@notafter) =  9 + number(@notbefore)))
+                     or (    (46 = (number(@notbefore) mod 100))
+                         and (number(@notafter) =  9 + number(@notbefore)))
+                     or (    (91 = (number(@notbefore) mod 100))
+                         and (number(@notafter) =  9 + number(@notbefore)))
+                     or (    ( 1 = (number(@notbefore) mod 100))
+                         and (number(@notafter) = 24 + number(@notbefore)))
+                     or (    (26 = (number(@notbefore) mod 100))
+                         and (number(@notafter) = 24 + number(@notbefore)))
+                     or (    (51 = (number(@notbefore) mod 100))
+                         and (number(@notafter) = 24 + number(@notbefore)))
+                     or (    (76 = (number(@notbefore) mod 100))
+                         and (number(@notafter) = 24 + number(@notbefore)))
+                     or (    ( 1 = (number(@notbefore) mod 100))
+                         and (number(@notafter) = 49 + number(@notbefore)))
+                     or (    (51 = (number(@notbefore) mod 100))
+                         and (number(@notafter) = 49 + number(@notbefore)))
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M174: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, il valore di&#x0a;
+      @notbefore, se presente, non può valere &quot;0000&quot; (valore non&#x0a;
+      accettabile per un attributo che indica un anno)
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="not(@notbefore) or (@notbefore != '0000')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M175: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, il valore di&#x0a;
+      @notafter, se presente, non può valere &quot;0000&quot; (valore non&#x0a;
+      accettabile per un attributo che indica un anno)
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="not(@notafter) or (@notafter != '0000')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M307: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, deve essere&#x0a;
+      non vuoto il contenuto dell'elemento oppure, in alternativa, presenti e&#x0a;
+      con contenuto non nullo entrambi gli attributi @notafter e @notbefore;&#x0a;
+      non è consentito che siano vere entrambe le cose
+      &#x0a;&#x0a;]"
+          test="   ((text() != '') and not(@notbefore) and not(@notafter))
+                or (not(text()) and (@notbefore != '') and (@notafter != ''))"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M308: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, deve essere&#x0a;
+      presente, con valore non nullo, l'attributo @standarddate
+      &#x0a;&#x0a;]"
+          test="@standarddate != ''"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M339: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, il valore&#x0a;
+      di @standarddate deve essere in formato ISO 8601 esteso; sono ammesse&#x0a;
+      le varianti &quot;AAAA-MM-GG&quot;, &quot;AAAA-MM&quot; e &quot;AAAA&quot;; non è quindi ammesso&#x0a;
+      il formato ISO 8601 base (&quot;AAAAMMGG&quot; o &quot;AAAAMM&quot;)
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (@standarddate)
+                then matches(@standarddate, '^[0-9]{4}(-(0[1-9]|1[0-2])(-(0[1-9]|[12][0-9]|3[0-1]))??)??$')
+                else true()"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- M164: creata specializzazione, di "datesingle" da utilizzare in
+             "dateset" quando @localhost pari a "NoteAllaDatazione" -->
+  <xs:complexType name="datesingle.noteAllaDatazione">
+    <xs:complexContent>
+      <xs:extension base="datesingle">
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M345: In &lt;datesingle>, quando @localtype è pari a &quot;NoteAllaDatazione&quot;,&#x0a;
+      @standarddate non deve essere presente
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="not(@standarddate)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M546: In &lt;datesingle>, quando @localtype è pari a &quot;NoteAllaDatazione&quot;,&#x0a;
+      il contenuto dell'elemento non può essere nullo
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="text() != ''"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M547: In &lt;datesingle>, quando @localtype è pari a &quot;NoteAllaDatazione&quot;,&#x0a;
+      @altrender non deve essere presente
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="not(altrender)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M548: In &lt;datesingle>, quando @localtype è pari a &quot;NoteAllaDatazione&quot;,&#x0a;
+      @notbefore non deve essere presente
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="not(notbefore)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M549: In &lt;datesingle>, quando @localtype è pari a &quot;NoteAllaDatazione&quot;,&#x0a;
+      @notafter non deve essere presente
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="not(notafter)"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- M537: creata specializzazione, di "datesingle" da utilizzare in
+             "dateset" quando @localhost pari a "QualificaData" -->
+  <xs:complexType name="datesingle.qualificaData">
+    <xs:complexContent>
+      <xs:extension base="datesingle">
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M538: In &lt;datesingle>, quando @localtype è pari a &quot;QualificaData&quot;,&#x0a;
+      il contenuto dell'elemento non può essere nullo
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="text() != ''"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M539: In &lt;datesingle>, quando @localtype è pari a &quot;QualificaData&quot;,&#x0a;
+      @standarddate non deve essere presente
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="not(@standarddate)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M540: In &lt;datesingle>, quando @localtype è pari a &quot;QualificaData&quot;,&#x0a;
+      @altrender non deve essere presente
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="not(@altrender)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M541: In &lt;datesingle>, quando @localtype è pari a &quot;QualificaData&quot;,&#x0a;
+      @notbefore non deve essere presente
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="not(@notbefore)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M542: In &lt;datesingle>, quando @localtype è pari a &quot;QualificaData&quot;,&#x0a;
+      @notafter non deve essere presente
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="not(@notafter)"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- M550: creata specializzazione, di "date" da utilizzare in
+             "publicationstmt" quando @localhost pari a "DataTestuale" -->
+  <xs:complexType name="date.dataTestuale">
+    <xs:complexContent>
+      <xs:extension base="date">
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M559: In &lt;date>, quando @localtype è pari a &quot;DataTestuale&quot;, il contenuto&#x0a;
+      non può essere vuoto
+      &#x0a;&#x0a;]"
+          test="text() != ''"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M560: In &lt;date>, quando @localtype è pari a &quot;DataTestuale&quot;, se è&#x0a;
+      presente @altrender, il suo valore deve soddisfare una precisa lista di&#x0a;
+      valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="   not(@altrender)
+                or (@altrender != ('Intervallo di date', 'Data singola', 'Data aperta (a partire da)',
+                                   'Data aperta (fino a)', 'Data non rilevata/non rilevabile'))"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M563: In &lt;date>, quando @localtype è pari a &quot;DataTestuale&quot;,&#x0a;
+      @normal non deve essere presente
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="not(@normal)"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- M551: creata specializzazione, di "date" da utilizzare in
+             "publicationstmt" quando @localhost pari a "QualificaData" -->
+  <xs:complexType name="date.qualificaData">
+    <xs:complexContent>
+      <xs:extension base="date">
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M559: In &lt;date>, quando @localtype è pari a &quot;QualificaData&quot;, il contenuto&#x0a;
+      non può essere vuoto
+      &#x0a;&#x0a;]"
+          test="text() != ''"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M562: In &lt;date>, quando @localtype è pari a &quot;QualificaData&quot;,&#x0a;
+      @altrender non deve essere presente
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="not(@altrender)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M563: In &lt;date>, quando @localtype è pari a &quot;QualificaData&quot;,&#x0a;
+      @normal non deve essere presente
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="not(@normal)"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- M552: creata specializzazione, di "date" da utilizzare in
+             "publicationstmt" quando @localhost pari a "DataSingola" -->
+  <xs:complexType name="date.dataSingola">
+    <xs:complexContent>
+      <xs:extension base="date">
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M559: In &lt;date>, quando @localtype è pari a &quot;DataSingola&quot;, il contenuto&#x0a;
+      non può essere vuoto
+      &#x0a;&#x0a;]"
+          test="text() != ''"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M561: In &lt;date>, quando @localtype è pari a &quot;DataSingola&quot;, se è&#x0a;
+      presente @altrender, il suo valore deve soddisfare una precisa lista di&#x0a;
+      valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="   not(@altrender)
+                or (@altrender = ('DataApprossimativa', 'DataAttribuita', 'DataIncerta',
+                                  'DataAnteQuem', 'DataPostQuem', 'DataIncertaAttribuita'))"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M564: In &lt;date>, quando @localtype è pari a &quot;DataSingola&quot;,&#x0a;
+      @normal deve essere presente
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="@normal"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M565: In &lt;date>, quando @localtype è pari a &quot;DataSingola&quot;, il valore&#x0a;
+      di @normal deve essere in formato ISO 8601 esteso; sono ammesse&#x0a;
+      le varianti &quot;AAAA-MM-GG&quot;, &quot;AAAA-MM&quot; e &quot;AAAA&quot;; non è quindi ammesso&#x0a;
+      il formato ISO 8601 base (&quot;AAAAMMGG&quot; o &quot;AAAAMM&quot;)
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (@normal)
+                then matches(@normal, '^[0-9]{4}(-(0[1-9]|1[0-2])(-(0[1-9]|[12][0-9]|3[0-1]))??)??$')
+                else true()"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- M553: creata specializzazione, di "date" da utilizzare in
+             "publicationstmt" quando @localhost pari a "DataSingolaSecolo" -->
+  <xs:complexType name="date.dataSingolaSecolo">
+    <xs:complexContent>
+      <xs:extension base="date">
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M559: In &lt;date>, quando @localtype è pari a &quot;DataSingolaSecolo&quot;, il contenuto&#x0a;
+      non può essere vuoto
+      &#x0a;&#x0a;]"
+          test="text() != ''"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M561: In &lt;date>, quando @localtype è pari a &quot;DataSingolaSecolo&quot;, se è&#x0a;
+      presente @altrender, il suo valore deve soddisfare una precisa lista di&#x0a;
+      valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="   not(@altrender)
+                or (@altrender = ('DataApprossimativa', 'DataAttribuita', 'DataIncerta',
+                                  'DataAnteQuem', 'DataPostQuem', 'DataIncertaAttribuita'))"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M564: In &lt;date>, quando @localtype è pari a &quot;DataSingolaSecolo&quot;,&#x0a;
+      @normal deve essere presente
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="@normal"/>
+        <!-- il terzo parametro, 'x', del matches(), serve a spezzare il secondo argomento
+             su piu' linee ignorando gli spazi intermedi -->
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M566: In &lt;date>, quando @localtype è pari a &quot;DataSingolaSecolo&quot;, il valore&#x0a;
+      di @normal deve essere costituito da due date, separate da uno slash&#x0a;
+      (carattere '/'), in formato ISO 8601 esteso nella forma &quot;AAAA-MM-GG&quot;;&#x0a;
+      non è quindi ammesso il formato ISO 8601 base (&quot;AAAAMMGG&quot;)
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (@normal)
+                then matches(@normal, '^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[0-1])
+                                       /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[0-1])$',
+                             'x')
+                else true()"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- M554: creata specializzazione, di "date" da utilizzare in
+             "publicationstmt" quando @localhost pari a "EstremoRemoto" -->
+  <xs:complexType name="date.estremoRemoto">
+    <xs:complexContent>
+      <xs:extension base="date">
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M559: In &lt;date>, quando @localtype è pari a &quot;EstremoRemoto&quot;, il contenuto&#x0a;
+      non può essere vuoto
+      &#x0a;&#x0a;]"
+          test="text() != ''"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M561: In &lt;date>, quando @localtype è pari a &quot;EstremoRemoto&quot;, se è&#x0a;
+      presente @altrender, il suo valore deve soddisfare una precisa lista di&#x0a;
+      valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="   not(@altrender)
+                or (@altrender = ('DataApprossimativa', 'DataAttribuita', 'DataIncerta',
+                                  'DataAnteQuem', 'DataPostQuem', 'DataIncertaAttribuita'))"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M564: In &lt;date>, quando @localtype è pari a &quot;EstremoRemoto&quot;,&#x0a;
+      @normal deve essere presente
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="@normal"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M565: In &lt;date>, quando @localtype è pari a &quot;EstremoRemoto&quot;, il valore&#x0a;
+      di @normal deve essere in formato ISO 8601 esteso; sono ammesse&#x0a;
+      le varianti &quot;AAAA-MM-GG&quot;, &quot;AAAA-MM&quot; e &quot;AAAA&quot;; non è quindi ammesso&#x0a;
+      il formato ISO 8601 base (&quot;AAAAMMGG&quot; o &quot;AAAAMM&quot;)
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (@normal)
+                then matches(@normal, '^[0-9]{4}(-(0[1-9]|1[0-2])(-(0[1-9]|[12][0-9]|3[0-1]))??)??$')
+                else true()"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- M555: creata specializzazione, di "date" da utilizzare in
+             "publicationstmt" quando @localhost pari a "EstremoRemotoSecolo" -->
+  <xs:complexType name="date.estremoRemotoSecolo">
+    <xs:complexContent>
+      <xs:extension base="date">
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M559: In &lt;date>, quando @localtype è pari a &quot;EstremoRemotoSecolo&quot;,&#x0a;
+      il contenuto non può essere vuoto
+      &#x0a;&#x0a;]"
+          test="text() != ''"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M561: In &lt;date>, quando @localtype è pari a &quot;EstremoRemotoSecolo&quot;, se è&#x0a;
+      presente @altrender, il suo valore deve soddisfare una precisa lista di&#x0a;
+      valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="   not(@altrender)
+                or (@altrender = ('DataApprossimativa', 'DataAttribuita', 'DataIncerta',
+                                  'DataAnteQuem', 'DataPostQuem', 'DataIncertaAttribuita'))"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M564: In &lt;date>, quando @localtype è pari a &quot;EstremoRemotoSecolo&quot;,&#x0a;
+      @normal deve essere presente
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="@normal"/>
+        <!-- il terzo parametro, 'x', del matches(), serve a spezzare il secondo argomento
+             su piu' linee ignorando gli spazi intermedi -->
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M566: In &lt;date>, quando @localtype è pari a &quot;EstremoRemotoSecolo&quot;, il valore&#x0a;
+      di @normal deve essere costituito da due date, separate da uno slash&#x0a;
+      (carattere '/'), in formato ISO 8601 esteso nella forma &quot;AAAA-MM-GG&quot;;&#x0a;
+      non è quindi ammesso il formato ISO 8601 base (&quot;AAAAMMGG&quot;)
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (@normal)
+                then matches(@normal, '^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[0-1])
+                                       /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[0-1])$',
+                             'x')
+                else true()"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- M556: creata specializzazione, di "date" da utilizzare in
+             "publicationstmt" quando @localhost pari a "EstremoRecente" -->
+  <xs:complexType name="date.estremoRecente">
+    <xs:complexContent>
+      <xs:extension base="date">
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M559: In &lt;date>, quando @localtype è pari a &quot;EstremoRecente&quot;, il contenuto&#x0a;
+      non può essere vuoto
+      &#x0a;&#x0a;]"
+          test="text() != ''"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M561: In &lt;date>, quando @localtype è pari a &quot;EstremoRecente&quot;, se è&#x0a;
+      presente @altrender, il suo valore deve soddisfare una precisa lista di&#x0a;
+      valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="   not(@altrender)
+                or (@altrender = ('DataApprossimativa', 'DataAttribuita', 'DataIncerta',
+                                  'DataAnteQuem', 'DataPostQuem', 'DataIncertaAttribuita'))"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M564: In &lt;date>, quando @localtype è pari a &quot;EstremoRecente&quot;,&#x0a;
+      @normal deve essere presente
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="@normal"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M565: In &lt;date>, quando @localtype è pari a &quot;EstremoRecente&quot;, il valore&#x0a;
+      di @normal deve essere in formato ISO 8601 esteso; sono ammesse&#x0a;
+      le varianti &quot;AAAA-MM-GG&quot;, &quot;AAAA-MM&quot; e &quot;AAAA&quot;; non è quindi ammesso&#x0a;
+      il formato ISO 8601 base (&quot;AAAAMMGG&quot; o &quot;AAAAMM&quot;)
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (@normal)
+                then matches(@normal, '^[0-9]{4}(-(0[1-9]|1[0-2])(-(0[1-9]|[12][0-9]|3[0-1]))??)??$')
+                else true()"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- M557: creata specializzazione, di "date" da utilizzare in
+             "publicationstmt" quando @localhost pari a "EstremoRecenteSecolo" -->
+  <xs:complexType name="date.estremoRecenteSecolo">
+    <xs:complexContent>
+      <xs:extension base="date">
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M559: In &lt;date>, quando @localtype è pari a &quot;EstremoRecenteSecolo&quot;,&#x0a;
+      il contenuto non può essere vuoto
+      &#x0a;&#x0a;]"
+          test="text() != ''"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M561: In &lt;date>, quando @localtype è pari a &quot;EstremoRecenteSecolo&quot;, se è&#x0a;
+      presente @altrender, il suo valore deve soddisfare una precisa lista di&#x0a;
+      valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="   not(@altrender)
+                or (@altrender = ('DataApprossimativa', 'DataAttribuita', 'DataIncerta',
+                                  'DataAnteQuem', 'DataPostQuem', 'DataIncertaAttribuita'))"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M564: In &lt;date>, quando @localtype è pari a &quot;EstremoRecenteSecolo&quot;,&#x0a;
+      @normal deve essere presente
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="@normal"/>
+        <!-- il terzo parametro, 'x', del matches(), serve a spezzare il secondo argomento
+             su piu' linee ignorando gli spazi intermedi -->
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M566: In &lt;date>, quando @localtype è pari a &quot;EstremoRecenteSecolo&quot;, il valore&#x0a;
+      di @normal deve essere costituito da due date, separate da uno slash&#x0a;
+      (carattere '/'), in formato ISO 8601 esteso nella forma &quot;AAAA-MM-GG&quot;;&#x0a;
+      non è quindi ammesso il formato ISO 8601 base (&quot;AAAAMMGG&quot;)
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (@normal)
+                then matches(@normal, '^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[0-1])
+                                       /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[0-1])$',
+                             'x')
+                else true()"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- M558: creata specializzazione, di "date" da utilizzare in
+             "publicationstmt" quando @localhost pari a "NoteAllaDatazione" -->
+  <xs:complexType name="date.noteAllaDatazione">
+    <xs:complexContent>
+      <xs:extension base="date">
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M559: In &lt;date>, quando @localtype è pari a &quot;DataTestuale&quot;, il contenuto&#x0a;
+      non può essere vuoto
+      &#x0a;&#x0a;]"
+          test="text() != ''"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M562: In &lt;date>, quando @localtype è pari a &quot;DataTestuale&quot;,&#x0a;
+      @altrender non deve essere presente
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="not(@altrender)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M563: In &lt;date>, quando @localtype è pari a &quot;QualificaData&quot;,&#x0a;
+      @normal non deve essere presente
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="not(@normal)"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
   <!-- end ICAR extra types -->
 
   <!-- ELEMENTS -->
@@ -3656,7 +4201,36 @@ M301: In &lt;control>, qualora sia presente un&#x0a;
   <xs:complexType name="publicationstmt">
     <xs:choice maxOccurs="unbounded">
       <!-- M392: rimosso "publisher" in quanto non utilizzato -->
-      <xs:element name="date" type="date"/>
+      <!-- M550: introdotta specializzazione di "date" per quando
+                 @localtype e' pari a "DataTestuale" -->
+      <!-- M551: introdotta specializzazione di "date" per quando
+                 @localtype e' pari a "QualificaData" -->
+      <!-- M552: introdotta specializzazione di "date" per quando
+                 @localtype e' pari a "DataSingola" -->
+      <!-- M553: introdotta specializzazione di "date" per quando
+                 @localtype e' pari a "DataSingolaSecolo" -->
+      <!-- M554: introdotta specializzazione di "date" per quando
+                 @localtype e' pari a "EstremoRemoto" -->
+      <!-- M555: introdotta specializzazione di "date" per quando
+                 @localtype e' pari a "EstremoRemotoSecolo" -->
+      <!-- M556: introdotta specializzazione di "date" per quando
+                 @localtype e' pari a "EstremoRecente" -->
+      <!-- M557: introdotta specializzazione di "date" per quando
+                 @localtype e' pari a "EstremoRecenteSecolo" -->
+      <!-- M558: introdotta specializzazione di "date" per quando
+                 @localtype e' pari a "NoteAllaDatazione" -->
+      <xs:element name="date">
+        <xs:alternative type="date.dataTestuale"         test="@localtype = 'DataTestuale'"/>
+        <xs:alternative type="date.qualificaData"        test="@localtype = 'QualificaData'"/>
+        <xs:alternative type="date.dataSingola"          test="@localtype = 'DataSingola'"/>
+        <xs:alternative type="date.dataSingolaSecolo"    test="@localtype = 'DataSingolaSecolo'"/>
+        <xs:alternative type="date.estremoRemoto"        test="@localtype = 'EstremoRemoto'"/>
+        <xs:alternative type="date.estremoRemotoSecolo"  test="@localtype = 'EstremoRemotoSecolo'"/>
+        <xs:alternative type="date.estremoRecente"       test="@localtype = 'EstremoRecente'"/>
+        <xs:alternative type="date.estremoRecenteSecolo" test="@localtype = 'EstremoRecenteSecolo'"/>
+        <xs:alternative type="date.noteAllaDatazione"    test="@localtype = 'NoteAllaDatazione'"/>
+        <xs:alternative type="datesingle"/>
+      </xs:element>
       <!-- M355: rimosso "address" in quanto non utilizzato -->
       <xs:element name="num" type="num"/>
       <xs:element name="p" type="p"/>
@@ -4825,236 +5399,6 @@ M295: È obbligatorio in &lt;language> che, se presente l'attributo @lang, il su
                    a parte @altrender, e recuperato @altrender -->
         <xs:attribute name="altrender" type="xs:token"/>
         <xs:attribute name="localtype" type="xs:token"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M176: In &lt;datesingle>, quando @localtype non è pari a &quot;DataSingola&quot;, non deve&#x0a;
-      essere presente @notbefore
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="(@localtype = 'DataSingola') or not(@notbefore)"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M177: In &lt;datesingle>, quando @localtype non è pari a &quot;DataSingola&quot;, non deve&#x0a;
-      essere presente @notafter
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="(@localtype = 'DataSingola') or not(@notafter)"/>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-
-  <!-- M162: creata specializzazione, di "datesingle" da utilizzare in
-             "dateset" quando @localhost pari a "DataTestuale" -->
-  <xs:complexType name="datesingle.dataTestuale">
-    <xs:complexContent>
-      <xs:extension base="datesingle">
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M165: In &lt;datesingle>, quando @localtype è pari a &quot;DataTestuale&quot;, il contenuto&#x0a;
-      non può essere vuoto
-      &#x0a;&#x0a;]"
-          test="text() != ''"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M166: In &lt;datesingle>, quando @localtype è pari a &quot;DataTestuale&quot;, deve essere&#x0a;
-      presente @altrender e il suo valore deve soddisfare una precisa lista di&#x0a;
-      valori ammissibili
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="   not(@altrender)
-                or (@altrender != ('Intervallo di date', 'Data singola', 'Data aperta (a partire da)',
-                                   'Data aperta (fino a)', 'Data non rilevata/non rilevabile'))"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M543: In &lt;datesingle>, quando @localtype è pari a &quot;DataTestuale&quot;,&#x0a;
-      @standarddate non deve essere presente
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="not(@standarddate)"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M544: In &lt;datesingle>, quando @localtype è pari a &quot;DataTestuale&quot;,&#x0a;
-      @notbefore non deve essere presente
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="not(@notbefore)"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M545: In &lt;datesingle>, quando @localtype è pari a &quot;DataTestuale&quot;,&#x0a;
-      @notafter non deve essere presente
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="not(@notafter)"/>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-
-  <!-- M163: creata specializzazione, di "datesingle" da utilizzare in
-             "dateset" quando @localhost pari a "DataSingola" -->
-  <xs:complexType name="datesingle.dataSingola">
-    <xs:complexContent>
-      <xs:extension base="datesingle">
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M168: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, se è&#x0a;
-      presente @altrender il suo valore deve soddisfare una precisa lista di&#x0a;
-      valori ammissibili
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="   not(@altrender)
-                or (@altrender != ('DataApprossimativa', 'DataAttribuita', 'DataIncerta',
-                                   'DataAnteQuem', 'DataPostQuem', 'DataIncertaAttribuita'))"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M080: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, il valore di&#x0a;
-      @notbefore, se presente, deve corrispondere a un numero, positivo, di&#x0a;
-      quattro cifre corrispondente a un anno; i valori precedenti all'anno 1000&#x0a;
-      richiedono degli zeri sulla sinistra (esempio: l'anno 37 a.C. deve essere&#x0a;
-      rappresentato come &quot;0037&quot;)
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="not(@notbefore) or matches(@notbefore, '^[0-9]{4}$')"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M081: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, il valore di&#x0a;
-      @notafter, se presente, deve corrispondere a un numero, positivo, di&#x0a;
-      quattro cifre corrispondente a un anno; i valori precedenti all'anno 1000&#x0a;
-      richiedono degli zeri sulla sinistra (esempio: l'anno 37 a.C. deve essere&#x0a;
-      rappresentato come &quot;0037&quot;)
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="not(@notafter) or matches(@notafter, '^[0-9]{4}$')"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M083: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, se @notbefore&#x0a;
-      e @notafter sono entrambi presenti, i loro valori devono soddisfare&#x0a;
-      alcune precise regole
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="if (@notbefore)
-                then    (    ( 1 = (number(@notbefore) mod 100))
-                         and (number(@notafter) =  9 + number(@notbefore)))
-                     or (    (46 = (number(@notbefore) mod 100))
-                         and (number(@notafter) =  9 + number(@notbefore)))
-                     or (    (91 = (number(@notbefore) mod 100))
-                         and (number(@notafter) =  9 + number(@notbefore)))
-                     or (    ( 1 = (number(@notbefore) mod 100))
-                         and (number(@notafter) = 24 + number(@notbefore)))
-                     or (    (26 = (number(@notbefore) mod 100))
-                         and (number(@notafter) = 24 + number(@notbefore)))
-                     or (    (51 = (number(@notbefore) mod 100))
-                         and (number(@notafter) = 24 + number(@notbefore)))
-                     or (    (76 = (number(@notbefore) mod 100))
-                         and (number(@notafter) = 24 + number(@notbefore)))
-                     or (    ( 1 = (number(@notbefore) mod 100))
-                         and (number(@notafter) = 49 + number(@notbefore)))
-                     or (    (51 = (number(@notbefore) mod 100))
-                         and (number(@notafter) = 49 + number(@notbefore)))
-                else true()"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M174: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, il valore di&#x0a;
-      @notbefore, se presente, non può valere &quot;0000&quot; (valore non&#x0a;
-      accettabile per un attributo che indica un anno)
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="not(@notbefore) or (@notbefore != '0000')"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M175: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, il valore di&#x0a;
-      @notafter, se presente, non può valere &quot;0000&quot; (valore non&#x0a;
-      accettabile per un attributo che indica un anno)
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="not(@notafter) or (@notafter != '0000')"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M307: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, deve essere&#x0a;
-      non vuoto il contenuto dell'elemento oppure, in alternativa, presenti e&#x0a;
-      con contenuto non nullo entrambi gli attributi @notafter e @notbefore;&#x0a;
-      non è consentito che siano vere entrambe le cose
-      &#x0a;&#x0a;]"
-          test="   ((text() != '') and not(@notbefore) and not(@notafter))
-                or (not(text()) and (@notbefore != '') and (@notafter != ''))"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M308: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, deve essere&#x0a;
-      presente, con valore non nullo, l'attributo @standarddate
-      &#x0a;&#x0a;]"
-          test="@standarddate != ''"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M339: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, il valore&#x0a;
-      di @standarddate deve essere in formato ISO 8601 esteso; sono ammesse&#x0a;
-      le varianti &quot;AAAA-MM-GG&quot;, &quot;AAAA-MM&quot; e &quot;AAAA&quot;; non è quindi ammesso&#x0a;
-      il formato ISO 8601 base (&quot;AAAAMMGG&quot; o &quot;AAAAMM&quot;)
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="if (@standarddate)
-                then matches(@standarddate, '^[0-9]{4}(-(0[1-9]|1[0-2])(-(0[1-9]|[12][0-9]|3[0-1]))??)??$')
-                else true()"/>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-
-  <!-- M164: creata specializzazione, di "datesingle" da utilizzare in
-             "dateset" quando @localhost pari a "NoteAllaDatazione" -->
-  <xs:complexType name="datesingle.noteAllaDatazione">
-    <xs:complexContent>
-      <xs:extension base="datesingle">
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M345: In &lt;datesingle>, quando @localtype è pari a &quot;NoteAllaDatazione&quot;,&#x0a;
-      @standarddate non deve essere presente
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="not(@standarddate)"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M546: In &lt;datesingle>, quando @localtype è pari a &quot;NoteAllaDatazione&quot;,&#x0a;
-      il contenuto dell'elemento non può essere nullo
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="text() != ''"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M547: In &lt;datesingle>, quando @localtype è pari a &quot;NoteAllaDatazione&quot;,&#x0a;
-      @altrender non deve essere presente
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="not(altrender)"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M548: In &lt;datesingle>, quando @localtype è pari a &quot;NoteAllaDatazione&quot;,&#x0a;
-      @notbefore non deve essere presente
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="not(notbefore)"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M549: In &lt;datesingle>, quando @localtype è pari a &quot;NoteAllaDatazione&quot;,&#x0a;
-      @notafter non deve essere presente
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="not(notafter)"/>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-
-  <!-- M537: creata specializzazione, di "datesingle" da utilizzare in
-             "dateset" quando @localhost pari a "QualificaData" -->
-  <xs:complexType name="datesingle.qualificaData">
-    <xs:complexContent>
-      <xs:extension base="datesingle">
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M538: In &lt;datesingle>, quando @localtype è pari a &quot;QualificaData&quot;,&#x0a;
-      il contenuto dell'elemento non può essere nullo
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="text() != ''"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M539: In &lt;datesingle>, quando @localtype è pari a &quot;QualificaData&quot;,&#x0a;
-      @standarddate non deve essere presente
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="not(@standarddate)"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M540: In &lt;datesingle>, quando @localtype è pari a &quot;QualificaData&quot;,&#x0a;
-      @altrender non deve essere presente
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="not(@altrender)"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M541: In &lt;datesingle>, quando @localtype è pari a &quot;QualificaData&quot;,&#x0a;
-      @notbefore non deve essere presente
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="not(@notbefore)"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M542: In &lt;datesingle>, quando @localtype è pari a &quot;QualificaData&quot;,&#x0a;
-      @notafter non deve essere presente
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="not(@notafter)"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
