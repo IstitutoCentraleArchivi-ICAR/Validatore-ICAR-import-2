@@ -715,11 +715,6 @@ M008: È obbligatoria, in &lt;archdesc>, la presenza di @level
           xpathDefaultNamespace="##targetNamespace" 
           test="@level"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M003: È obbligatorio che in &lt;archdesc> sia presente almeno un did/unitid
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="did/unitid"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
 M006: È obbligatorio che in &lt;archdesc> sia presente uno, e un solo,&#x0a;
       &lt;processinfo> con @localtype pari a &quot;StatusScheda&quot;
       &#x0a;&#x0a;]"
@@ -926,6 +921,26 @@ M180: In &lt;archdesc>, gli eventuali figli &lt;scopecontent> devono avere @loca
           test="every $s in scopecontent
                 satisfies $s/@localtype = 'AmbitiEContenuto'"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
+M296: È obbligatoria in &lt;archdesc>, quando relativo a un complesso&#x0a;
+      archivistico, la presenza di un (e un solo)&#x0a;
+      accessrestrict/accessrestrict[@localtype = &quot;VisibilitaFE&quot;]/p
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 = count(accessrestrict/accessrestrict[@localtype = 'VisibilitaFE']/p)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M297: In &lt;archdesc>, quando relativo a un complesso archivistico, il valore di&#x0a;
+      accessrestrict/accessrestrict[@localtype = &quot;VisibilitaFE&quot;]/p&#x0a;
+      deve soddisfare il contenuto di una precisa lista chiusa di valori&#x0a;
+      ammessi
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $p in accessrestrict/accessrestrict[@localtype = 'VisibilitaFE']/p
+                satisfies $p/text() = ('Completa', 'Non visibile',
+                                       'Descrizione Libera e Risorsa Protetta (login)',
+                                       'Descrizione Protetta e Risorsa Protetta (login)',
+                                       'Descrizione Libera e Risorse Riservata (autorizzazione)',
+                                       'Descrizione Riservata e Risorse Riservata (autorizzazione)')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
 M304: In &lt;archdesc>, quando rappresenta un complesso archivistico, gli&#x0a;
       eventuali valori di&#x0a;
        relations/relation[@relationtype = &quot;cpfrelation&quot;]&#x0a;
@@ -943,7 +958,56 @@ M536: In &lt;archdesc> non è ammesso più di un&#x0a;
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(did/unittitle[@localtype = 'IntegrazioneDenominazione'])"/>
-        <xs:assert test="1 >= count(e3:userestrict)"/> <!-- ??? -->
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M567: In &lt;arcdesc>, quando rappresenta un complesso archivistico, deve essere&#x0a;
+      presente un, e solo un, did/unitid privo di @localtype
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 = count(did/unitid[not(@localtype)])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M568: In &lt;arcdesc>, quando rappresenta un complesso archivistico, nel&#x0a;
+      did/unitid privo di @localtype deve essere presente un @label&#x0a;
+      con valore non nullo
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $unit in (did/unitid[not(@localtype)])
+                satisfies $unit[@label != '']"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M569: In &lt;archdesc>, quando rappresenta un complesso archivistico, nel&#x0a;
+      did/unitid privo di @localtype il contenuto testuale deve essere&#x0a;
+      non nullo
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $unit in (did/unitid[not(@localtype)])
+                satisfies $unit/text() != ''"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M570: In &lt;arcdesc>, quando rappresenta un complesso archivistico, nel&#x0a;
+      did/unitid privo di @localtype deve essere presente un @identifier&#x0a;
+      con valore non nullo
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $unit in (did/unitid[not(@localtype)])
+                satisfies $unit[@identifier != '']"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M571: In &lt;archdesc>, quando rappresenta un complesso archivistico, deve essere&#x0a;
+      presente, al più, un unico&#x0a;
+      did/didnote[@localtype = &quot;PeriodizzazioneOTipologia&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/didnote[@localtype = 'PeriodizzazioneOTipologia'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M572: In &lt;archdesc>, quando rappresenta un complesso archivistico,&#x0a;
+      è obbligatorio che il contenuto di&#x0a;
+      processinfo[@localtype = &quot;StatusScheda&quot;]/p soddisfi una ben precisa&#x0a;
+      lista chiusa di valori possibili ammessi
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $p in processinfo[@localtype = 'StatusScheda']/p
+                satisfies $p/text() = ('Bozza', 'In validazione di primo livello',
+                                       'Validata (primo livello)',
+                                       'In validazione di secondo livello',
+                                       'Validata (secondo livello)', 'Pubblicata',
+                                       'Copia parallela')"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1100,148 +1164,207 @@ M256: In &lt;archdesc>, quando rappresenta un progetto di digitalizzazione, può
     </xs:attribute>
     <xs:attributeGroup ref="am.desc.base"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
-M003: È obbligatorio che in &lt;c> sia presente almeno un did/unitid
-      &#x0a;&#x0a;]"
-        xpathDefaultNamespace="##targetNamespace" 
-        test="did/unitid"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
 M006: È obbligatorio che in &lt;c> sia presente uno, e un solo, &lt;processinfo> con&#x0a;
       @localtype pari a &quot;StatusScheda&quot;
       &#x0a;&#x0a;]"
-        xpathDefaultNamespace="##targetNamespace" 
-        test="1 = count(processinfo[@localtype = 'StatusScheda'])"/>
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 = count(processinfo[@localtype = 'StatusScheda'])"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M007: È obbligatorio che, in &lt;c>, il &lt;processinfo> con @localtype pari a&#x0a;
       &quot;StatusScheda&quot; abbia almeno un figlio &lt;p>
       &#x0a;&#x0a;]"
-        xpathDefaultNamespace="##targetNamespace" 
-        test="processinfo[@localtype = 'StatusScheda']/p"/>
+      xpathDefaultNamespace="##targetNamespace" 
+      test="processinfo[@localtype = 'StatusScheda']/p"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M033: In &lt;c> non è ammesso un figlio &lt;accessrestrict> diretto con @localtype&#x0a;
       pari a &quot;NoteCondizioniAccesso&quot;
       &#x0a;&#x0a;]"
-        xpathDefaultNamespace="##targetNamespace" 
-        test="not(accessrestrict[@localtype = 'NoteCondizioniAccesso'])"/>
+      xpathDefaultNamespace="##targetNamespace" 
+      test="not(accessrestrict[@localtype = 'NoteCondizioniAccesso'])"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M034: &lt;c> non è ammesso più di un&#x0a;
        accessrestrict[@localtype = &quot;CondizioniAccesso&quot;]&#x0a;
       /accessrestrict[@localtype = &quot;NoteCondizioniAccesso&quot;]
       &#x0a;&#x0a;]"
-        xpathDefaultNamespace="##targetNamespace" 
-        test="1 >= count( accessrestrict[@localtype = 'CondizioniAccesso']
-                         /accessrestrict[@localtype = 'NoteCondizioniAccesso'])"/>
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count( accessrestrict[@localtype = 'CondizioniAccesso']
+                       /accessrestrict[@localtype = 'NoteCondizioniAccesso'])"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M035: In &lt;c> non è ammesso un figlio &lt;userestrict> diretto con @localtype pari&#x0a;
       a &quot;NoteCondizioniUtilizzo&quot;
       &#x0a;&#x0a;]"
-        xpathDefaultNamespace="##targetNamespace" 
-        test="not(userestrict[@localtype = 'NoteCondizioniUtilizzo'])"/>
+      xpathDefaultNamespace="##targetNamespace" 
+      test="not(userestrict[@localtype = 'NoteCondizioniUtilizzo'])"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M036: &lt;c> non ammette più di discendente (e comunque non figlio diretto)&#x0a;
       &lt;userestrict> con @localtype pari a &quot;NoteCondizioniUtilizzo&quot;
       &#x0a;&#x0a;]"
-        xpathDefaultNamespace="##targetNamespace" 
-        test="1 >= count(userestrict//userestrict[@localtype = 'NoteCondizioniUtilizzo'])"/>
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(userestrict//userestrict[@localtype = 'NoteCondizioniUtilizzo'])"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M042: In &lt;c> non deve essere presente più di un&#x0a;
       did/physdescstructured/descriptivenote
       &#x0a;&#x0a;]"
-        xpathDefaultNamespace="##targetNamespace" 
-        test="1 >= count(did/physdescstructured/descriptivenote)"/>
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(did/physdescstructured/descriptivenote)"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M043: In &lt;c> non deve essere presente più di un&#x0a;
       did/didnote[@localtype = &quot;StatoDiConservazione&quot;])
       &#x0a;&#x0a;]"
-        xpathDefaultNamespace="##targetNamespace" 
-        test="1 >= count(did/didnote[@localtype = 'StatoDiConservazione'])"/>
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(did/didnote[@localtype = 'StatoDiConservazione'])"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M044: In &lt;c> non deve essere presente più di un&#x0a;
       did/didnote[@localtype = &quot;CondizioniDelMateriale&quot;])
       &#x0a;&#x0a;]"
-        xpathDefaultNamespace="##targetNamespace" 
-        test="1 >= count(did/didnote[@localtype = 'CondizioniDelMateriale'])"/>
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(did/didnote[@localtype = 'CondizioniDelMateriale'])"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M045: In &lt;c> non deve essere presente più di un&#x0a;
       did/didnote[@localtype = &quot;RestauroOAltriInterventi&quot;])
       &#x0a;&#x0a;]"
-        xpathDefaultNamespace="##targetNamespace" 
-        test="1 >= count(did/didnote[@localtype = 'RestauroOAltriInterventi'])"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(did/didnote[@localtype = 'RestauroOAltriInterventi'])"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
 M049: In &lt;c> deve essere presente, al più, un unico&#x0a;
       did/langmaterial[@localtype = &quot;LinguaDescrizione&quot;]/language/@lang
       &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="1 >= count(did/langmaterial[@localtype = 'LinguaDescrizione']/language/@lang)"/>
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(did/langmaterial[@localtype = 'LinguaDescrizione']/language/@lang)"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M067: In &lt;c> non deve essere presente più di un &lt;accessrestrict> con&#x0a;
       @localtype pari a &quot;CondizioniAccesso&quot;
       &#x0a;&#x0a;]"
-        xpathDefaultNamespace="##targetNamespace" 
-        test="1 >= count(accessrestrict[@localtype = 'CondizioniAccesso'])"/>
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(accessrestrict[@localtype = 'CondizioniAccesso'])"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M068: In &lt;c> l'eventuale figlio &lt;accessrestrict>, con @localtype pari&#x0a;
       a &quot;CondizioniAccesso&quot; deve avere almeno un figlio &lt;p>
       &#x0a;&#x0a;]"
-        xpathDefaultNamespace="##targetNamespace" 
-        test="every $acc in accessrestrict[@localtype = 'CondizioniAccesso']
-              satisfies $acc/p"/>
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $acc in accessrestrict[@localtype = 'CondizioniAccesso']
+            satisfies $acc/p"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M076: In &lt;c>, se sono presenti degli&#x0a;
       accessrestrict[@localtype = &quot;CondizioniAccesso&quot;]/p, allora i contenuti dei&#x0a;
       &lt;p> devono soddisfare una precisa lista chiusa di valori ammissibili
       &#x0a;&#x0a;]"
-        xpathDefaultNamespace="##targetNamespace" 
-        test="every $p in accessrestrict[@localtype = 'CondizioniAccesso']/p
-              satisfies $p/text() = ('Liberamente accessibile', 'Parzialmente accessibile',
-                                     'Non accessibile', 'Accessibile previa autorizzazione')"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $p in accessrestrict[@localtype = 'CondizioniAccesso']/p
+            satisfies $p/text() = ('Liberamente accessibile', 'Parzialmente accessibile',
+                                   'Non accessibile', 'Accessibile previa autorizzazione')"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
 M077: In &lt;c>, se sono presenti dei userestrict/p, allora i contenuti dei &lt;p>&#x0a;
       devono soddisfare una precisa lista chiusa di valori ammissibili
       &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="every $p in userestrict/p
-                satisfies $p/text() = ('Riproduzione libera', 'Riproduzione negata',
-                                       'Riproduzione a  pagamento', 'Riproduzione a fini di studio e ricerca',
-                                       'Riproduzione sottoposta ad autorizzazione')"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $p in userestrict/p
+            satisfies $p/text() = ('Riproduzione libera', 'Riproduzione negata',
+                                   'Riproduzione a  pagamento', 'Riproduzione a fini di studio e ricerca',
+                                   'Riproduzione sottoposta ad autorizzazione')"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
 M078: In &lt;c>, se sono presenti dei&#x0a;
       did/didnote[@localtype = &quot;StatoDiConservazione&quot;], allora i contenuti&#x0a;
       dei &lt;didnote> devono soddisfare una precisa lista chiusa di valori&#x0a;
       ammissibili
       &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="every $note in did/didnote[@localtype = 'StatoDiConservazione']
-                satisfies $note/text() = ('Pessimo', 'Mediocre', 'Discreto', 'Buono', 'Ottimo')"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $note in did/didnote[@localtype = 'StatoDiConservazione']
+            satisfies $note/text() = ('Pessimo', 'Mediocre', 'Discreto', 'Buono', 'Ottimo')"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
 M161: In &lt;c> non deve essere presente più di un &lt;arrangement> con @localtype&#x0a;
       pari a &quot;CriteriOrdinamento&quot;
       &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="1 >= count(arrangement[@localtype = 'CriteriOrdinamento'])"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(arrangement[@localtype = 'CriteriOrdinamento'])"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
 M159: In &lt;c> è ammesso, al più, un unico figlio &lt;odd> con @localtype pari&#x0a;
       ad &quot;Osservazioni&quot;
       &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="1 >= count(odd[@localtype = 'Osservazioni'])"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(odd[@localtype = 'Osservazioni'])"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M296: È obbligatoria in &lt;c> la presenza di un (e un solo)&#x0a;
+      accessrestrict/accessrestrict[@localtype = &quot;VisibilitaFE&quot;]/p
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 = count(accessrestrict/accessrestrict[@localtype = 'VisibilitaFE']/p)"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M297: In &lt;c> il valore di&#x0a;
+      accessrestrict/accessrestrict[@localtype = &quot;VisibilitaFE&quot;]/p&#x0a;
+      deve soddisfare il contenuto di una precisa lista chiusa di valori&#x0a;
+      ammessi
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $p in accessrestrict/accessrestrict[@localtype = 'VisibilitaFE']/p
+            satisfies $p/text() = ('Completa', 'Non visibile',
+                                   'Descrizione Libera e Risorsa Protetta (login)',
+                                   'Descrizione Protetta e Risorsa Protetta (login)',
+                                   'Descrizione Libera e Risorse Riservata (autorizzazione)',
+                                   'Descrizione Riservata e Risorse Riservata (autorizzazione)')"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
 M302: In &lt;c> può essere presente, al più, un unico&#x0a;
       bibliography/bibliography[@localtype = &quot;LinkFonteNormativa&quot;]
       &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="1 >= count(bibliography/bibliography[@localtype = 'LinkFonteNormativa'])"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(bibliography/bibliography[@localtype = 'LinkFonteNormativa'])"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
 M303: In &lt;c> può essere presente, al più, un unico&#x0a;
       bibliography/bibliography[@localtype = &quot;LinkRiferimentoWeb&quot;]
       &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="1 >= count(bibliography/bibliography[@localtype = 'LinkRiferimentoWeb'])"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(bibliography/bibliography[@localtype = 'LinkRiferimentoWeb'])"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
 M314: In &lt;c> può essere presente al più, un unico&#x0a;
       bibliography/bibliography[@localtype = &quot;LinkRiferimentoBibliografico&quot;]
       &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="1 >= count(bibliography/bibliography[@localtype = 'LinkRiferimentoBibliografico'])"/>
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(bibliography/bibliography[@localtype = 'LinkRiferimentoBibliografico'])"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M567: In &lt;c> deve essere presente un, e solo un, did/unitid privo&#x0a;
+      di @localtype
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 = count(did/unitid[not(@localtype)])"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M568: In &lt;c>, nel did/unitid privo di @localtype, deve essere presente&#x0a;
+      un @label con valore non nullo
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $unit in (did/unitid[not(@localtype)])
+            satisfies $unit[@label != '']"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M569: In &lt;c>, nel did/unitid privo di @localtype, il contenuto testuale deve&#x0a;
+      essere non nullo
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $unit in (did/unitid[not(@localtype)])
+            satisfies $unit/text() != ''"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M570: In &lt;c>, nel did/unitid privo di @localtype, deve essere presente&#x0a;
+      un @identifier con valore non nullo
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $unit in (did/unitid[not(@localtype)])
+            satisfies $unit[@identifier != '']"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M571: In &lt;c> deve essere presente, al più, un unico&#x0a;
+      did/didnote[@localtype = &quot;PeriodizzazioneOTipologia&quot;]
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(did/didnote[@localtype = 'PeriodizzazioneOTipologia'])"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M572: In &lt;c> è obbligatorio che il contenuto di&#x0a;
+      processinfo[@localtype = &quot;StatusScheda&quot;]/p soddisfi una ben precisa&#x0a;
+      lista chiusa di valori possibili ammessi
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $p in processinfo[@localtype = 'StatusScheda']/p
+            satisfies $p/text() = ('Bozza', 'In validazione di primo livello',
+                                   'Validata (primo livello)',
+                                   'In validazione di secondo livello',
+                                   'Validata (secondo livello)', 'Pubblicata',
+                                   'Copia parallela')"/>
   </xs:complexType>
 
   <!-- M001: creato il tipo "c.comp" -->
@@ -2755,6 +2878,8 @@ M353: In &lt;c>, quando rappresenta un'unità documentale, deve essere&#x0a;
     <xs:complexContent>
       <xs:extension base="geogname">
         <xs:attribute name="lang" type="xs:NMTOKEN"/>
+        <xs:attribute name="id" type="xs:ID"/>
+        <xs:attribute name="altrender" type="xs:token"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M509: in &lt;geogname>, quando rappresenta un toponimo, i valori degli eventuali&#x0a;
       part[@localtype = &quot;AltroAuthority&quot;]/@source devono soddisfare&#x0a;
@@ -2836,12 +2961,13 @@ M520: in &lt;geogname>, quando rappresenta un toponimo, deve essere presente,&#x
           test="@id != ''"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M521: in &lt;geogname>, quando rappresenta un toponimo, il contenuto degli&#x0a;
-      eventuali part/ref[@arcrole = &quot;Compilatore&quot;]/name[@localtype = &quot;Azione&quot;]&#x0a;
+      eventuali&#x0a;
+      part/ref[@arcrole = &quot;Compilatore&quot;]/name[@localtype = &quot;Azione&quot;]/part&#x0a;
       deve soddisfare una precisa lista chiusa di valori ammissibili
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="every $name in part/ref[@arcrole = 'Compilatore']/name[@localtype = 'Azione']
-                satisfies $name/text() = ('Importazione', 'Integrazione successiva',
+          test="every $part in part/ref[@arcrole = 'Compilatore']/name[@localtype = 'Azione']/part
+                satisfies $part/text() = ('Importazione', 'Integrazione successiva',
                                           'Prima redazione', 'Raccolta delle informazioni',
                                           'Revisione', 'Rielaborazione', 'Supervisione')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
@@ -2855,6 +2981,18 @@ M531: in &lt;geogname>, quando rappresenta un toponimo, deve essere presente&#x0
                               'Descrizione Protetta e Risorsa Protetta (login)',
                               'Descrizione Libera e Risorse Riservata (autorizzazione)',
                               'Descrizione Riservata e Risorse Riservata (autorizzazione)')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M573: In &lt;geogname>, quando rappresenta un toponimo, è obbligatorio che&#x0a;
+      il contenuto di part[@localtype = &quot;StatusScheda&quot;] soddisfi una ben&#x0a;
+      precisa lista chiusa di valori possibili ammessi
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $part in part[@localtype = 'StatusScheda']
+                satisfies $part/text() = ('Bozza', 'In validazione di primo livello',
+                                          'Validata (primo livello)',
+                                          'In validazione di secondo livello',
+                                          'Validata (secondo livello)', 'Pubblicata',
+                                          'Copia parallela')"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -2929,12 +3067,13 @@ M529: in &lt;subject>, quando rappresenta un soggetto, i valori degli eventuali&
             satisfies $role = ('Più generale', 'Più specifico', 'Associativo')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M530: in &lt;subject>, quando rappresenta un soggetto, il contenuto degli&#x0a;
-      eventuali part/ref[@arcrole = &quot;Compilatore&quot;]/name[@localtype = &quot;Azione&quot;]&#x0a;
+      eventuali&#x0a;
+      part/ref[@arcrole = &quot;Compilatore&quot;]/name[@localtype = &quot;Azione&quot;]/part&#x0a;
       deve soddisfare una precisa lista chiusa di valori ammissibili
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="every $name in part/ref[@arcrole = 'Compilatore']/name[@localtype = 'Azione']
-                satisfies $name/text() = ('Importazione', 'Integrazione successiva',
+          test="every $part in part/ref[@arcrole = 'Compilatore']/name[@localtype = 'Azione']/part
+                satisfies $part/text() = ('Importazione', 'Integrazione successiva',
                                           'Prima redazione', 'Raccolta delle informazioni',
                                           'Revisione', 'Rielaborazione', 'Supervisione')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
@@ -2948,6 +3087,18 @@ M532: in &lt;subject>, quando rappresenta un soggetto, deve essere presente&#x0a
                               'Descrizione Protetta e Risorsa Protetta (login)',
                               'Descrizione Libera e Risorse Riservata (autorizzazione)',
                               'Descrizione Riservata e Risorse Riservata (autorizzazione)')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M573: In &lt;subject>, quando rappresenta un soggetto, è obbligatorio che&#x0a;
+      il contenuto di part[@localtype = &quot;StatusScheda&quot;] soddisfi una ben&#x0a;
+      precisa lista chiusa di valori possibili ammessi
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $part in part[@localtype = 'StatusScheda']
+                satisfies $part/text() = ('Bozza', 'In validazione di primo livello',
+                                          'Validata (primo livello)',
+                                          'In validazione di secondo livello',
+                                          'Validata (secondo livello)', 'Pubblicata',
+                                          'Copia parallela')"/>
   </xs:complexType>
 
   <!-- M162: creata specializzazione, di "datesingle" da utilizzare in
@@ -3010,19 +3161,23 @@ M080: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, i
       @notbefore, se presente, deve corrispondere a un numero, positivo, di&#x0a;
       quattro cifre corrispondente a un anno; i valori precedenti all'anno 1000&#x0a;
       richiedono degli zeri sulla sinistra (esempio: l'anno 37 a.C. deve essere&#x0a;
-      rappresentato come &quot;0037&quot;)
+      rappresentato come &quot;0037&quot;). Sono eccezionalmente ammessi anche valori&#x0a;
+      nella forma &quot;AAAA-MM&quot; e &quot;AAAA-MM-GG&quot; ma solo a patto che il valore del&#x0a;
+      mese (MM) e l'eventuale valore del giorno (GG) siano entrambi pari esattamente&#x0a;
+      a &quot;01&quot;.
       &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="not(@notbefore) or matches(@notbefore, '^[0-9]{4}$')"/>
+          test="not(@notbefore) or matches(@notbefore, '^[0-9]{4}(-01(-01)??)??$')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M081: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, il valore di&#x0a;
       @notafter, se presente, deve corrispondere a un numero, positivo, di&#x0a;
       quattro cifre corrispondente a un anno; i valori precedenti all'anno 1000&#x0a;
       richiedono degli zeri sulla sinistra (esempio: l'anno 37 a.C. deve essere&#x0a;
-      rappresentato come &quot;0037&quot;)
+      rappresentato come &quot;0037&quot;). Sono eccezionalmente ammessi anche valori&#x0a;
+      nella forma &quot;AAAA-MM&quot; e &quot;AAAA-MM-GG&quot; ma solo a patto che il valore del&#x0a;
+      mese (MM) sia esattamente pari a &quot;12&quot; e che l'eventuale valore del&#x0a;
+      giorno (GG) sia pari esattamente pari a &quot;31&quot;.
       &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="not(@notafter) or matches(@notafter, '^[0-9]{4}$')"/>
+          test="not(@notafter) or matches(@notafter, '^[0-9]{4}(-12(-31)??)??$')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M083: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, se @notbefore&#x0a;
       e @notafter sono entrambi presenti, i loro valori devono soddisfare&#x0a;
@@ -3030,39 +3185,48 @@ M083: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, s
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="if (@notbefore)
-                then    (    ( 1 = (number(@notbefore) mod 100))
-                         and (number(@notafter) =  9 + number(@notbefore)))
-                     or (    (46 = (number(@notbefore) mod 100))
-                         and (number(@notafter) =  9 + number(@notbefore)))
-                     or (    (91 = (number(@notbefore) mod 100))
-                         and (number(@notafter) =  9 + number(@notbefore)))
-                     or (    ( 1 = (number(@notbefore) mod 100))
-                         and (number(@notafter) = 24 + number(@notbefore)))
-                     or (    (26 = (number(@notbefore) mod 100))
-                         and (number(@notafter) = 24 + number(@notbefore)))
-                     or (    (51 = (number(@notbefore) mod 100))
-                         and (number(@notafter) = 24 + number(@notbefore)))
-                     or (    (76 = (number(@notbefore) mod 100))
-                         and (number(@notafter) = 24 + number(@notbefore)))
-                     or (    ( 1 = (number(@notbefore) mod 100))
-                         and (number(@notafter) = 49 + number(@notbefore)))
-                     or (    (51 = (number(@notbefore) mod 100))
-                         and (number(@notafter) = 49 + number(@notbefore)))
+                then    (    ( 1 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              =  9 + number(substring(@notbefore, 1, 4))))
+                     or (    (46 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              =  9 + number(substring(@notbefore, 1, 4))))
+                     or (    (91 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              =  9 + number(substring(@notbefore, 1, 4))))
+                     or (    ( 1 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              = 24 + number(substring(@notbefore, 1, 4))))
+                     or (    (26 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              = 24 + number(substring(@notbefore, 1, 4))))
+                     or (    (51 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              = 24 + number(substring(@notbefore, 1, 4))))
+                     or (    (76 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              = 24 + number(substring(@notbefore, 1, 4))))
+                     or (    ( 1 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              = 49 + number(substring(@notbefore, 1, 4))))
+                     or (    (51 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              = 49 + number(substring(@notbefore, 1, 4))))
                 else true()"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M174: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, il valore di&#x0a;
-      @notbefore, se presente, non può valere &quot;0000&quot; (valore non&#x0a;
-      accettabile per un attributo che indica un anno)
+M174: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, il valore&#x0a;
+      dell'anno in @notbefore, se presente, non può valere &quot;0000&quot; (valore&#x0a;
+      non accettabile per un anno)
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="not(@notbefore) or (@notbefore != '0000')"/>
+          test="not(@notbefore) or (substring(@notbefore, 1, 4) != '0000')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M175: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, il valore di&#x0a;
-      @notafter, se presente, non può valere &quot;0000&quot; (valore non&#x0a;
-      accettabile per un attributo che indica un anno)
+M175: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, il valore&#x0a;
+      dell'anno in @notafter, se presente, non può valere &quot;0000&quot; (valore&#x0a;
+      non accettabile per un anno)
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="not(@notafter) or (@notafter != '0000')"/>
+          test="not(@notafter) or (substring(@notafter, 1, 4) != '0000')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M307: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, deve essere&#x0a;
       non vuoto il contenuto dell'elemento oppure, in alternativa, presenti e&#x0a;
@@ -3526,311 +3690,299 @@ M563: In &lt;date>, quando @localtype è pari a &quot;QualificaData&quot;,&#x0a;
         </xs:simpleType>
       </xs:attribute>
       <xs:assert xa:message="[&#x0a;&#x0a;
-M002: &lt;ead> non può contenere più di un&#x0a;
-      control/localcontrol[@localtype = &quot;AcronimoDiSistema&quot;]/term
-      &#x0a;&#x0a;]"
-        xpathDefaultNamespace="##targetNamespace" 
-        test="2 > count(control/localcontrol[@localtype = 'AcronimoDiSistema']/term)"/>
-      <xs:assert xa:message="[&#x0a;&#x0a;
-M004: &lt;ead> non può contenere più di un
-      control/localcontrol[@localtype = &quot;IdentificativoDiSistema&quot;]/term
-      &#x0a;&#x0a;]"
-        xpathDefaultNamespace="##targetNamespace" 
-        test="2 > count(control/localcontrol[@localtype = 'IdentificativoDiSistema']/term)"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
 M277: Quando &lt;ead> contiene almeno un&#x0a;
       control/filedesc/notestmt/controlnote[@localtype = &quot;TipologiaProgetto&quot;]/p&#x0a;
       il cui contenuto è pari a &quot;Progetto di digitalizzazione&quot;, l'&lt;archdesc>&#x0a;
       contenuto deve avere @level pari a &quot;otherlevel&quot; e @otherlevel pari&#x0a;
       a &quot;ProgettoDigitalizzazione&quot;
       &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="if (   control/filedesc/notestmt/controlnote[@localtype = 'TipologiaProgetto']/p/text()
-                = 'Progetto di digitalizzazione')
-            then     archdesc/@level = 'otherlevel'
-                 and archdesc/@otherlevel = 'ProgettoDigitalizzazione'
-            else true()"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (   control/filedesc/notestmt/controlnote[@localtype = 'TipologiaProgetto']/p/text()
+                  = 'Progetto di digitalizzazione')
+              then     archdesc/@level = 'otherlevel'
+                   and archdesc/@otherlevel = 'ProgettoDigitalizzazione'
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
 M278: Quando &lt;ead> contiene almeno un&#x0a;
       control/filedesc/notestmt/controlnote[@localtype = &quot;TipologiaProgetto&quot;]/p&#x0a;
       ma il contenuto di nessuno di questi è pari&#x0a;
       a &quot;Progetto di digitalizzazione&quot;, l'&lt;archdesc> contenuto deve avere&#x0a;
       @level pari a &quot;otherlevel&quot; e @otherlevel pari a &quot;Progetto&quot;
       &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="if (   control/filedesc/notestmt/controlnote[@localtype = 'TipologiaProgetto']/p
-                and not(  control/filedesc/notestmt/controlnote[@localtype = 'TipologiaProgetto']/p/text()
-                        = 'Progetto di digitalizzazione'))
-            then     archdesc/@level = 'otherlevel'
-                 and archdesc/@otherlevel = 'Progetto'
-            else true()"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (   control/filedesc/notestmt/controlnote[@localtype = 'TipologiaProgetto']/p
+                  and not(  control/filedesc/notestmt/controlnote[@localtype = 'TipologiaProgetto']/p/text()
+                          = 'Progetto di digitalizzazione'))
+              then     archdesc/@level = 'otherlevel'
+                   and archdesc/@otherlevel = 'Progetto'
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
 M282: Quando &lt;ead> contiene un &lt;archdesc> con @level pari a &quot;otherlevel&quot;&#x0a;
       e @otherlevel pari a &quot;ProgettoDigitalizzazione&quot;, deve essere presente un&#x0a;
       control/filedesc/notestmt/controlnote[@localtype = &quot;TipologiaProgetto&quot;]/p&#x0a;
       il cui contenuto è pari a &quot;Progetto di digitalizzazione&quot;
       &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="if (    (archdesc/@level = 'otherlevel')
-                and (archdesc/@otherlevel = 'ProgettoDigitalizzazione'))
-            then   control/filedesc/notestmt/controlnote[@localtype = 'TipologiaProgetto']/p/text()
-                 = 'Progetto di digitalizzazione'
-            else true()"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'ProgettoDigitalizzazione'))
+              then   control/filedesc/notestmt/controlnote[@localtype = 'TipologiaProgetto']/p/text()
+                   = 'Progetto di digitalizzazione'
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
 M283: Quando &lt;ead> contiene un &lt;archdesc> con @level pari a &quot;otherlevel&quot;&#x0a;
       e @otherlevel pari a &quot;Progetto&quot;, devono essere presenti&#x0a;
       control/filedesc/notestmt/controlnote[@localtype = &quot;TipologiaProgetto&quot;]/p&#x0a;
       il contenuto di nessuno dei quali, però, può essere pari&#x0a;
       a &quot;Progetto di digitalizzazione&quot;
       &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="if (    (archdesc/@level = 'otherlevel')
-                and (archdesc/@otherlevel = 'Progetto'))
-            then     control/filedesc/notestmt/controlnote[@localtype = 'TipologiaProgetto']/p
-                 and not(   control/filedesc/notestmt
-                           /controlnote[@localtype = 'TipologiaProgetto']/p/text()
-                         = 'Progetto di digitalizzazione')
-            else true()"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'Progetto'))
+              then     control/filedesc/notestmt/controlnote[@localtype = 'TipologiaProgetto']/p
+                   and not(   control/filedesc/notestmt
+                             /controlnote[@localtype = 'TipologiaProgetto']/p/text()
+                           = 'Progetto di digitalizzazione')
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
 M321: Quando &lt;ead> contiene uno Strumento di Ricerca, il contenuto&#x0a;
       di control/recordid non può essere vuoto
       &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="if (    (archdesc/@level = 'otherlevel')
-                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
-            then control/recordid/text() != ''
-            else true()"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+              then control/recordid/text() != ''
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
 M322: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere un&#x0a;
       (ma solo un)&#x0a;
       control/filedesc/titlestmt/titleproper[@localtype = &quot;TitoloNormalizzato&quot;]
       &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="if (    (archdesc/@level = 'otherlevel')
-                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
-            then 1 = count(control/filedesc/titlestmt/titleproper[@localtype = 'TitoloNormalizzato'])
-            else true()"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+              then 1 = count(control/filedesc/titlestmt/titleproper[@localtype = 'TitoloNormalizzato'])
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
 M323: Quando &lt;ead> contiene uno Strumento di Ricerca, non deve essere nullo il&#x0a;
       contenuto di&#x0a;
       control/filedesc/titlestmt/titleproper[@localtype = &quot;TitoloNormalizzato&quot;]
       &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="if (    (archdesc/@level = 'otherlevel')
-                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
-            then every $tlt in control/filedesc/titlestmt/titleproper[@localtype = 'TitoloNormalizzato']
-                 satisfies $tlt/text() != ''
-            else true()"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+              then every $tlt in control/filedesc/titlestmt/titleproper[@localtype = 'TitoloNormalizzato']
+                   satisfies $tlt/text() != ''
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
 M324: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere, al più,&#x0a;
       un unico&#x0a;
       control/filedesc/titlestmt/titleproper[@localtype = &quot;TitoloOriginale&quot;]
       &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="if (    (archdesc/@level = 'otherlevel')
-                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
-            then 1 >= count(control/filedesc/titlestmt/titleproper[@localtype = 'TitoloOriginale'])
-            else true()"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+              then 1 >= count(control/filedesc/titlestmt/titleproper[@localtype = 'TitoloOriginale'])
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
 M325: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere, al più,&#x0a;
       un unico&#x0a;
       control/filedesc/editionstmt/edition[@localtype = &quot;Tipologia&quot;]
       &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="if (    (archdesc/@level = 'otherlevel')
-                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
-            then 1 >= count(control/filedesc/editionstmt/edition[@localtype = 'Tipologia'])
-            else true()"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+              then 1 >= count(control/filedesc/editionstmt/edition[@localtype = 'Tipologia'])
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
 M326: Quando &lt;ead> contiene uno Strumento di Ricerca, il contenuto&#x0a;
       dell'eventuale&#x0a;
       control/filedesc/editionstmt/edition[@localtype = &quot;Tipologia&quot;]&#x0a;
       deve soddisfare una ben precisa lista chiusa di valori ammessi
       &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="if (    (archdesc/@level = 'otherlevel')
-                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
-            then every $ed in control/filedesc/editionstmt/edition[@localtype = 'Tipologia']
-                 satisfies $ed/text() = ('Banca dati', 'Censimento', 'Elenco',
-                                         'Elenco di consistenza', 'Elenco di versamento',
-                                         'Elenco di deposito', 'Guida', 'Indice',
-                                         'Inventario analitico', 'Inventario sommario',
-                                         'Inventario topografico', 'Regesto', 'Repertorio',
-                                         'Repertorio alfabetico', 'Repertorio cronologico',
-                                         'Spoglio', 'Trascrizione', 'Rubrica')
-            else true()"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+              then every $ed in control/filedesc/editionstmt/edition[@localtype = 'Tipologia']
+                   satisfies $ed/text() = ('Banca dati', 'Censimento', 'Elenco',
+                                           'Elenco di consistenza', 'Elenco di versamento',
+                                           'Elenco di deposito', 'Guida', 'Indice',
+                                           'Inventario analitico', 'Inventario sommario',
+                                           'Inventario topografico', 'Regesto', 'Repertorio',
+                                           'Repertorio alfabetico', 'Repertorio cronologico',
+                                           'Spoglio', 'Trascrizione', 'Rubrica')
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
 M327: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere, al più,&#x0a;
       un unico&#x0a;
       control/filedesc/editionstmt/edition[@localtype = &quot;Specificazione&quot;]
       &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="if (    (archdesc/@level = 'otherlevel')
-                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
-            then 1 >= count(control/filedesc/editionstmt/edition[@localtype = 'Specificazione'])
-            else true()"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+              then 1 >= count(control/filedesc/editionstmt/edition[@localtype = 'Specificazione'])
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
 M328: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere, al più,&#x0a;
       un unico&#x0a;
       control/filedesc/notestmt/controlnote[@localtype = &quot;NoteStoricoRedazionali&quot;]
       &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="if (    (archdesc/@level = 'otherlevel')
-                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
-            then 1 >= count(control/filedesc/notestmt/controlnote[@localtype = 'NoteStoricoRedazionali'])
-            else true()"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+              then 1 >= count(control/filedesc/notestmt/controlnote[@localtype = 'NoteStoricoRedazionali'])
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
 M329: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere, al più,&#x0a;
       un unico&#x0a;
       control/filedesc/notestmt/controlnote[@localtype = &quot;DescrizioneIntrinseca&quot;]
       &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="if (    (archdesc/@level = 'otherlevel')
-                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
-            then 1 >= count(control/filedesc/notestmt/controlnote[@localtype = 'DescrizioneIntrinseca'])
-            else true()"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+              then 1 >= count(control/filedesc/notestmt/controlnote[@localtype = 'DescrizioneIntrinseca'])
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
 M330: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere, al più,&#x0a;
       un unico&#x0a;
       control/filedesc/notestmt/controlnote[@localtype = &quot;TipoSupporto&quot;]
       &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="if (    (archdesc/@level = 'otherlevel')
-                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
-            then 1 >= count(control/filedesc/notestmt/controlnote[@localtype = 'TipoSupporto'])
-            else true()"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+              then 1 >= count(control/filedesc/notestmt/controlnote[@localtype = 'TipoSupporto'])
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
 M331: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere, al più,&#x0a;
       un unico&#x0a;
       control/filedesc/notestmt/controlnote[@localtype = &quot;ModalitaRedazione&quot;]
       &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="if (    (archdesc/@level = 'otherlevel')
-                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
-            then 1 >= count(control/filedesc/notestmt/controlnote[@localtype = 'ModalitaRedazione'])
-            else true()"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+              then 1 >= count(control/filedesc/notestmt/controlnote[@localtype = 'ModalitaRedazione'])
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
 M332: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere, al più,&#x0a;
       un unico&#x0a;
       control/filedesc/notestmt/controlnote[@localtype = &quot;DescrizioneEstrinseca&quot;]
       &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="if (    (archdesc/@level = 'otherlevel')
-                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
-            then 1 >= count(control/filedesc/notestmt/controlnote[@localtype = 'DescrizioneEstrinseca'])
-            else true()"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+              then 1 >= count(control/filedesc/notestmt/controlnote[@localtype = 'DescrizioneEstrinseca'])
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
 M333: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere, al più,&#x0a;
       un unico&#x0a;
       control/filedesc/editionstmt/edition[@localtype = &quot;online&quot;]
       &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="if (    (archdesc/@level = 'otherlevel')
-                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
-            then 1 >= count(control/filedesc/editionstmt/edition[@localtype = 'Online'])
-            else true()"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+              then 1 >= count(control/filedesc/editionstmt/edition[@localtype = 'Online'])
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
 M334: Quando &lt;ead> contiene uno Strumento di Ricerca, gli eventuali&#x0a;
       control/representation contenuti devono necessariamente avere&#x0a;
       l'attributo @arcrole
       &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="if (    (archdesc/@level = 'otherlevel')
-                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
-            then every $rep in control/representation
-                 satisfies $rep/@arcrole
-            else true()"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+              then every $rep in control/representation
+                   satisfies $rep/@arcrole
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
 M335: Quando &lt;ead> contiene uno Strumento di Ricerca, gli @arcrole degli&#x0a;
       eventuali control/representation constenuti devono necessariamente&#x0a;
       soddisfare una precisa lista chiusa di valori ammissibili
       &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="if (    (archdesc/@level = 'otherlevel')
-                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
-            then every $rep in control/representation
-                 satisfies $rep/@arcrole = ('Nativo digitale', 'è rappresentazione di',
-                                            'è documentazione di')
-            else true()"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+              then every $rep in control/representation
+                   satisfies $rep/@arcrole = ('Nativo digitale', 'è rappresentazione di',
+                                              'è documentazione di')
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
 M337: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere, al più,&#x0a;
       un unico&#x0a;
       control/filedesc/notestmt/controlnote[@localtype = &quot;Osservazioni&quot;]
       &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="if (    (archdesc/@level = 'otherlevel')
-                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
-            then 1 >= count(control/filedesc/notestmt/controlnote[@localtype = 'Osservazioni'])
-            else true()"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+              then 1 >= count(control/filedesc/notestmt/controlnote[@localtype = 'Osservazioni'])
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
 M338: Quando &lt;ead> contiene uno Strumento di Ricerca, deve avere l'attributo&#x0a;
       @audience
       &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="if (    (archdesc/@level = 'otherlevel')
-                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
-            then @audience
-            else true()"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+              then @audience
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
 M346: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere un&#x0a;
       (ma solo un) control/localcontrol[@localtype = &quot;AcronimoDiSistema&quot;]/term
       &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="if (    (archdesc/@level = 'otherlevel')
-                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
-            then 1 = count(control/localcontrol[@localtype = 'AcronimoDiSistema']/term)
-            else true()"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+              then 1 = count(control/localcontrol[@localtype = 'AcronimoDiSistema']/term)
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
 M347: Quando &lt;ead> contiene uno Strumento di Ricerca, non deve essere nullo il&#x0a;
       contenuto di control/localcontrol[@localtype = &quot;AcronimoDiSistema&quot;]/term
       &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="if (    (archdesc/@level = 'otherlevel')
-                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
-            then every $trm in control/localcontrol[@localtype = 'AcronimoDiSistema']/term
-                 satisfies $trm/text() != ''
-            else true()"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+              then every $trm in control/localcontrol[@localtype = 'AcronimoDiSistema']/term
+                   satisfies $trm/text() != ''
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
 M348: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere un&#x0a;
       (ma solo un)&#x0a;
       control/localcontrol[@localtype = &quot;IdentificativoDiSistema&quot;]/term
       &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="if (    (archdesc/@level = 'otherlevel')
-                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
-            then 1 = count(control/localcontrol[@localtype = 'IdentificativoDiSistema']/term)
-            else true()"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+              then 1 = count(control/localcontrol[@localtype = 'IdentificativoDiSistema']/term)
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
 M349: Quando &lt;ead> contiene uno Strumento di Ricerca, non deve essere nullo il&#x0a;
       contenuto di&#x0a;
       control/localcontrol[@localtype = &quot;IdentificativoDiSistema&quot;]/term
       &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="if (    (archdesc/@level = 'otherlevel')
-                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
-            then every $trm in control/localcontrol[@localtype = 'IdentificativoDiSistema']/term
-                 satisfies $trm/text() != ''
-            else true()"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+              then every $trm in control/localcontrol[@localtype = 'IdentificativoDiSistema']/term
+                   satisfies $trm/text() != ''
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
 M350: Quando &lt;ead> contiene uno Strumento di Ricerca, deve&#x0a;
       obbligatoriamente contenere control/publicationstatus
       &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="if (    (archdesc/@level = 'otherlevel')
-                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
-            then 1 = count(control/publicationstatus)
-            else true()"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+              then 1 = count(control/publicationstatus)
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
 M351: Quando &lt;ead> contiene uno Strumento di Ricerca, il valore di&#x0a;
       control/publicationstatus/@value deve essere pari a &quot;published&quot; oppure&#x0a;
       a &quot;inprocess&quot;
       &#x0a;&#x0a;]"
       xpathDefaultNamespace="##targetNamespace" 
-      test="if (    (archdesc/@level = 'otherlevel')
-                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
-            then every $pub in control/publicationstatus
-                 satisfies $pub/@value = ('published', 'inprocess')
-            else true()"/>
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+              then every $pub in control/publicationstatus
+                   satisfies $pub/@value = ('published', 'inprocess')
+              else true()"/>
     </xs:complexType>
   </xs:element>
 
@@ -5182,9 +5334,12 @@ M258: In &lt;odd>, quando @localtype è pari a &quot;Osservazioni&quot;, non dev
     <xs:complexContent>
       <xs:extension base="m.mixed.basic.date">
         <!-- M470: rimossi il gruppo "am.common", non utilizzato, e "am.access.no.normal",
-                   non utilizzato ad eccezione di @identifier; recuperato @identifier -->
+                   non utilizzato ad eccezione di @identifier, @source e @altrender;
+                   recuperati @identifier, @source e @altrender -->
         <xs:attribute name="identifier" type="xs:token"/>
         <xs:attribute name="encodinganalog" type="xs:token"/>
+        <xs:attribute name="altrender" type="xs:token"/>
+        <xs:attribute name="source" type="xs:token"/>
         <xs:attribute name="localtype" type="xs:token"/>
       </xs:extension>
     </xs:complexContent>
@@ -5436,52 +5591,68 @@ M014: In &lt;fromdate> non deve essere presente @altrender oppure, se presente, 
 M080: In &lt;fromdate> il valore di @notbefore, se presente, deve corrispondere a&#x0a;
       un numero, positivo, di quattro cifre corrispondente a un anno; i valori&#x0a;
       precedenti all'anno 1000 richiedono degli zeri sulla sinistra (esempio:&#x0a;
-      l'anno 37 a.C. deve essere rappresentato come &quot;0037&quot;)
+      l'anno 37 a.C. deve essere rappresentato come &quot;0037&quot;). Sono&#x0a;
+      eccezionalmente ammessi anche valori nella forma &quot;AAAA-MM&quot;&#x0a;
+      e &quot;AAAA-MM-GG&quot; ma solo a patto che il valore del mese (MM) e l'eventuale&#x0a;
+      valore del giorno (GG) siano entrambi pari esattamente a &quot;01&quot;.
       &#x0a;&#x0a;]"
-          test="not(@notbefore) or matches(@notbefore, '^[0-9]{4}$')"/>
+          test="not(@notbefore) or matches(@notbefore, '^[0-9]{4}(-01(-01)??)??$')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M081: In &lt;fromdate> il valore di @notafter, se presente, deve corrispondere a&#x0a;
       un numero, positivo, di quattro cifre corrispondente a un anno; i valori&#x0a;
       precedenti all'anno 1000 richiedono degli zeri sulla sinistra (esempio:&#x0a;
-      l'anno 37 a.C. deve essere rappresentato come &quot;0037&quot;)
+      l'anno 37 a.C. deve essere rappresentato come &quot;0037&quot;). Sono&#x0a;
+      eccezionalmente ammessi anche valori nella forma &quot;AAAA-MM&quot;&#x0a;
+      e &quot;AAAA-MM-GG&quot; ma solo a patto che il valore del mese (MM) sia&#x0a;
+      esattamente pari a &quot;12&quot; e che l'eventuale valore del giorno (GG) sia&#x0a;
+      pari esattamente pari a &quot;31&quot;.
       &#x0a;&#x0a;]"
-          test="not(@notafter) or matches(@notafter, '^[0-9]{4}$')"/>
+          test="not(@notafter) or matches(@notafter, '^[0-9]{4}(-12(-31)??)??$')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M083: In &lt;fromdate>, se @notbefore e @notafter sono entrambi presenti, i loro&#x0a;
       valori devono soddisfare alcune precise regole
       &#x0a;&#x0a;]"
           test="if (@notbefore)
-                then    (    ( 1 = (number(@notbefore) mod 100))
-                         and (number(@notafter) =  9 + number(@notbefore)))
-                     or (    (46 = (number(@notbefore) mod 100))
-                         and (number(@notafter) =  9 + number(@notbefore)))
-                     or (    (91 = (number(@notbefore) mod 100))
-                         and (number(@notafter) =  9 + number(@notbefore)))
-                     or (    ( 1 = (number(@notbefore) mod 100))
-                         and (number(@notafter) = 24 + number(@notbefore)))
-                     or (    (26 = (number(@notbefore) mod 100))
-                         and (number(@notafter) = 24 + number(@notbefore)))
-                     or (    (51 = (number(@notbefore) mod 100))
-                         and (number(@notafter) = 24 + number(@notbefore)))
-                     or (    (76 = (number(@notbefore) mod 100))
-                         and (number(@notafter) = 24 + number(@notbefore)))
-                     or (    ( 1 = (number(@notbefore) mod 100))
-                         and (number(@notafter) = 49 + number(@notbefore)))
-                     or (    (51 = (number(@notbefore) mod 100))
-                         and (number(@notafter) = 49 + number(@notbefore)))
+                then    (    ( 1 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              =  9 + number(substring(@notbefore, 1, 4))))
+                     or (    (46 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              =  9 + number(substring(@notbefore, 1, 4))))
+                     or (    (91 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              =  9 + number(substring(@notbefore, 1, 4))))
+                     or (    ( 1 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              = 24 + number(substring(@notbefore, 1, 4))))
+                     or (    (26 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              = 24 + number(substring(@notbefore, 1, 4))))
+                     or (    (51 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              = 24 + number(substring(@notbefore, 1, 4))))
+                     or (    (76 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              = 24 + number(substring(@notbefore, 1, 4))))
+                     or (    ( 1 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              = 49 + number(substring(@notbefore, 1, 4))))
+                     or (    (51 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              = 49 + number(substring(@notbefore, 1, 4))))
                 else true()"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M174: In &lt;fromdate> il valore di @notbefore, se presente, non può valere &quot;0000&quot;&#x0a;
-      (valore non accettabile per un attributo che indica un anno)
+M174: In &lt;fromdate> il valore dell'anno in @notbefore, se presente, non può&#x0a;
+      valere &quot;0000&quot; (valore non accettabile per un anno)
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="not(@notbefore) or (@notbefore != '0000')"/>
+          test="not(@notbefore) or (substring(@notbefore, 1, 4) != '0000')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M175: In &lt;fromdate> il valore di @notafter, se presente, non può valere &quot;0000&quot;&#x0a;
-      (valore non accettabile per un attributo che indica un anno)
+M175: In &lt;fromdate> il valore dell'anno in @notafter, se presente, non può&#x0a;
+      valere &quot;0000&quot; (valore non accettabile per un anno)
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="not(@notafter) or (@notafter != '0000')"/>
+          test="not(@notafter) or (substring(@notafter, 1, 4) != '0000')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M307: In &lt;fromdate> deve essere non vuoto il contenuto dell'elemento oppure,&#x0a;
       in alternativa, presenti e con contenuto non nullo entrambi gli attributi&#x0a;
@@ -5525,52 +5696,68 @@ M015: In &lt;todate> non deve essere presente @altrender oppure, se presente, il
 M080: In &lt;todate> il valore di @notbefore, se presente, deve corrispondere a un&#x0a;
       numero, positivo, di quattro cifre corrispondente a un anno; i valori&#x0a;
       precedenti all'anno 1000 richiedono degli zeri sulla sinistra (esempio:&#x0a;
-      l'anno 37 a.C. deve essere rappresentato come &quot;0037&quot;)
+      l'anno 37 a.C. deve essere rappresentato come &quot;0037&quot;). Sono&#x0a;
+      eccezionalmente ammessi anche valori nella forma &quot;AAAA-MM&quot;&#x0a;
+      e &quot;AAAA-MM-GG&quot; ma solo a patto che il valore del mese (MM) e l'eventuale&#x0a;
+      valore del giorno (GG) siano entrambi pari esattamente a &quot;01&quot;.
       &#x0a;&#x0a;]"
-          test="not(@notbefore) or matches(@notbefore, '^[0-9]{4}$')"/>
+          test="not(@notbefore) or matches(@notbefore, '^[0-9]{4}(-01(-01)??)??$')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M081: In &lt;todate> il valore di @notafter, se presente, deve corrispondere a un&#x0a;
       numero, positivo, di quattro cifre corrispondente a un anno; i valori&#x0a;
       precedenti all'anno 1000 richiedono degli zeri sulla sinistra (esempio:&#x0a;
-      l'anno 37 a.C. deve essere rappresentato come &quot;0037&quot;)
+      l'anno 37 a.C. deve essere rappresentato come &quot;0037&quot;). Sono&#x0a;
+      eccezionalmente ammessi anche valori nella forma &quot;AAAA-MM&quot;&#x0a;
+      e &quot;AAAA-MM-GG&quot; ma solo a patto che il valore del mese (MM) sia&#x0a;
+      esattamente pari a &quot;12&quot; e che l'eventuale valore del giorno (GG) sia&#x0a;
+      pari esattamente pari a &quot;31&quot;.
       &#x0a;&#x0a;]"
-          test="not(@notafter) or matches(@notafter, '^[0-9]{4}$')"/>
+          test="not(@notafter) or matches(@notafter, '^[0-9]{4}(-12(-31)??)??$')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M083: In &lt;todate>, se @notbefore e @notafter sono entrambi presenti, i loro&#x0a;
       valori devono soddisfare alcune precise regole
       &#x0a;&#x0a;]"
           test="if (@notbefore)
-                then    (    ( 1 = (number(@notbefore) mod 100))
-                         and (number(@notafter) =  9 + number(@notbefore)))
-                     or (    (46 = (number(@notbefore) mod 100))
-                         and (number(@notafter) =  9 + number(@notbefore)))
-                     or (    (91 = (number(@notbefore) mod 100))
-                         and (number(@notafter) =  9 + number(@notbefore)))
-                     or (    ( 1 = (number(@notbefore) mod 100))
-                         and (number(@notafter) = 24 + number(@notbefore)))
-                     or (    (26 = (number(@notbefore) mod 100))
-                         and (number(@notafter) = 24 + number(@notbefore)))
-                     or (    (51 = (number(@notbefore) mod 100))
-                         and (number(@notafter) = 24 + number(@notbefore)))
-                     or (    (76 = (number(@notbefore) mod 100))
-                         and (number(@notafter) = 24 + number(@notbefore)))
-                     or (    ( 1 = (number(@notbefore) mod 100))
-                         and (number(@notafter) = 49 + number(@notbefore)))
-                     or (    (51 = (number(@notbefore) mod 100))
-                         and (number(@notafter) = 49 + number(@notbefore)))
+                then    (    ( 1 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              =  9 + number(substring(@notbefore, 1, 4))))
+                     or (    (46 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              =  9 + number(substring(@notbefore, 1, 4))))
+                     or (    (91 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              =  9 + number(substring(@notbefore, 1, 4))))
+                     or (    ( 1 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              = 24 + number(substring(@notbefore, 1, 4))))
+                     or (    (26 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              = 24 + number(substring(@notbefore, 1, 4))))
+                     or (    (51 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              = 24 + number(substring(@notbefore, 1, 4))))
+                     or (    (76 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              = 24 + number(substring(@notbefore, 1, 4))))
+                     or (    ( 1 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              = 49 + number(substring(@notbefore, 1, 4))))
+                     or (    (51 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              = 49 + number(substring(@notbefore, 1, 4))))
                 else true()"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M174: In &lt;todate> il valore di @notbefore, se presente, non può valere &quot;0000&quot;&#x0a;
-      (valore non accettabile per un attributo che indica un anno)
+M174: In &lt;todate> il valore dell'anno in @notbefore, se presente, non può&#x0a;
+      valere &quot;0000&quot; (valore non accettabile per un anno)
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="not(@notbefore) or (@notbefore != '0000')"/>
+          test="not(@notbefore) or (substring(@notbefore, 1, 4) != '0000')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M175: In &lt;todate> il valore di @notafter, se presente, non può valere &quot;0000&quot;&#x0a;
-      (valore non accettabile per un attributo che indica un anno)
+M175: In &lt;tofate> il valore dell'anno in @notafter, se presente, non può&#x0a;
+      valere &quot;0000&quot; (valore non accettabile per un anno)
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="not(@notafter) or (@notafter != '0000')"/>
+          test="not(@notafter) or (substring(@notafter, 1, 4) != '0000')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M307: In &lt;todate> deve essere non vuoto il contenuto dell'elemento oppure,&#x0a;
       in alternativa, presenti e con contenuto non nullo entrambi gli attributi&#x0a;
