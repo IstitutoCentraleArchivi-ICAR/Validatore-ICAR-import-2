@@ -2828,7 +2828,15 @@ RiferimentoWeb"
              or normalize-space(lower-case($v))='secolo'
             )
          "/>
-      
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac &#xa; date[@localType='EstremoCronologicoTestuale'] richiede contenuto"
+         test="
+            not(normalize-space(lower-case(@localType))='estremocronologicotestuale')
+             or 
+            (string-length(normalize-space(.)) &gt; 0)
+         "/>
+         
       <!-- 
        eac 0030 0036 0050 0056 0073 0079 0097 0103 0115 0121 0136 0142 0164 0170 0188 0194 0206 0212 0227 0233 0247 0253 0276 0282 0300 0306 0326 0332 0348 0354 0368 0374 0388 0394 0408 0414 0437 0443 0460 0466 0483 0489 0515 0521 0542 0548 0562 0568 0581 0587 0653 0659 0675 0681 0744 0750 0768 0774 0789 0795 0811 0817 0833 0839 0894 0900 0918 0924 0940 0946 0961 0967 0981 0987 1039 1046
        date/@certainty 'Validità' Lista chiusa: dataApprossimativa, dataAttribuita, dataIncerta, dataIncertaAttribuita, dataPostQuem.
@@ -4087,6 +4095,77 @@ Supervisione."
             )
          "/>
          
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac &#xa; fromDate[@localType='EstremoCronologicoTestuale'] richiede contenuto"
+         test="
+            not(normalize-space(lower-case(@localType))='estremocronologicotestuale')
+             or 
+            (string-length(normalize-space(.)) &gt; 0)
+         "/>
+<!--
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac &#xa; fromDate[@localType='Secolo'] non ammette contenuto"
+         test="
+            not(normalize-space(lower-case(@localType))='secolo')
+             or 
+            (string-length(normalize-space(.)) = 0)
+         "/>
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac &#xa; fromDate[@localType='Secolo'] richiede @notBefore e @notAfter"
+         test="
+            if(normalize-space(lower-case(@localType))='secolo')
+            then
+            (@notBefore and @notafter)
+            else true()
+         "/>
+         
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac &#xa; fromDate[@localType='Secolo'] ammette i seguenti valori negli attributi notBefore e notAfter&#xa;
+ notBefore | notAfter |&#xa;
+ ==========|==========|==================&#xa;
+   nn01    |     nn10 | primo decennio   &#xa;
+   nn46    |     nn55 | decennio centrale&#xa;
+   nn91    | (nn+1)00 | ultimo decennio  &#xa;
+   nn01    |     nn25 | primo quarto     &#xa;
+   nn26    |     nn50 | secondo quarto   &#xa;
+   nn51    |     nn75 | terzo quarto     &#xa;
+   nn76    | (nn+1)00 | ultimo quarto    &#xa;
+   nn01    |     nn50 | prima metà       &#xa;
+   nn51    | (nn+1)00 | seconda metà"
+         test="
+            if (@localType[normalize-space(lower-case(.))='secolo'] and @notBefore and @notAfter)
+            then
+            (
+             (
+              (string-length(normalize-space(string(@notBefore))) &gt; 0)
+               and
+              (string-length(normalize-space(string(@notAfter))) &gt; 0)
+             )
+              and
+             (
+                 (    ( 1 = (number(@notBefore) mod 100))
+                  and (number(@notAfter) =  9 + number(@notBefore)))
+              or (    (46 = (number(@notBefore) mod 100))
+                  and (number(@notAfter) =  9 + number(@notBefore)))
+              or (    (91 = (number(@notBefore) mod 100))
+                  and (number(@notAfter) =  9 + number(@notBefore)))
+              or (    ( 1 = (number(@notBefore) mod 100))
+                  and (number(@notAfter) = 24 + number(@notBefore)))
+              or (    (26 = (number(@notBefore) mod 100))
+                  and (number(@notAfter) = 24 + number(@notBefore)))
+              or (    (51 = (number(@notBefore) mod 100))
+                  and (number(@notAfter) = 24 + number(@notBefore)))
+              or (    (76 = (number(@notBefore) mod 100))
+                  and (number(@notAfter) = 24 + number(@notBefore)))
+              or (    ( 1 = (number(@notBefore) mod 100))
+                  and (number(@notAfter) = 49 + number(@notBefore)))
+              or (    (51 = (number(@notBefore) mod 100))
+                  and (number(@notAfter) = 49 + number(@notBefore)))
+             )
+            )
+            else true()
+         "/>
+ -->
    </xs:complexType>
    <xs:complexType name="toDate" mixed="true">
       <xs:attribute name="audience">
@@ -4139,6 +4218,14 @@ Supervisione."
             )
          "/>
          
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac &#xa; toDate[@localType='EstremoCronologicoTestuale'] richiede contenuto"
+         test="
+            not(normalize-space(lower-case(@localType))='estremocronologicotestuale')
+             or 
+            (string-length(normalize-space(.)) &gt; 0)
+         "/>
+
    </xs:complexType>
    <xs:complexType name="part">
       <xs:simpleContent>
