@@ -3050,14 +3050,6 @@ M527: in &lt;subject>, quando rappresenta un soggetto, deve essere presente,&#x0
       xpathDefaultNamespace="##targetNamespace" 
       test="@id != ''"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
-M528: in &lt;subject>, quando rappresenta un soggetto, ogni eventuale&#x0a;
-      part/ref[@arcrole = &quot;SoggettoCorrelato&quot;] deve avere l'attributo @source&#x0a;
-      con valore non nullo
-      &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="every $ref in part/ref[@arcrole = 'SoggettoCorrelato']
-            satisfies $ref/@source != ''"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
 M529: in &lt;subject>, quando rappresenta un soggetto, i valori degli eventuali&#x0a;
       part/ref[@arcrole = &quot;SoggettoCorrelato&quot;]/@linkrole devono soddisfare&#x0a;
       una precisa lista chiusa di valori ammissibili
@@ -4885,7 +4877,7 @@ M281: In &lt;controlnote>, quando il @localtype vale &quot;FinalitaProgetto&quot
   <xs:complexType name="unittitle">
     <xs:complexContent>
       <xs:extension base="m.mixed.basic.plus.access">
-        <!-- M503: rimossi il gruppo "am.common" e l'attributo @normal,
+        <!-- M504: rimossi il gruppo "am.common" e l'attributo @normal,
                    non utilizzati -->
         <xs:attribute name="label" type="xs:string"/>
         <xs:attribute name="encodinganalog" type="xs:token"/>
@@ -4897,12 +4889,12 @@ M281: In &lt;controlnote>, quando il @localtype vale &quot;FinalitaProgetto&quot
   <xs:complexType name="unitid">
     <xs:complexContent>
       <xs:extension base="m.mixed.basic">
-        <!-- M502: rimossi i gruppi "am.common" e "am.countrycode",
-                   e gli attributi @identifier e @repositorycode,
-                   non utilizzati -->
+        <!-- M503: rimossi i gruppi "am.common" e "am.countrycode",
+                   e l'attributo @repositorycode, non utilizzato -->
         <xs:attribute name="localtype" type="xs:token"/>
         <xs:attribute name="label" type="xs:string"/>
         <xs:attribute name="encodinganalog" type="xs:token"/>
+        <xs:attribute name="identifier"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M005: se &lt;unitid> ha @localtype pari a &quot;AltroId&quot;, allora deve anche avere&#x0a;
       @label
@@ -5206,7 +5198,7 @@ M258: In &lt;odd>, quando @localtype è pari a &quot;Osservazioni&quot;, non dev
         <xs:element name="userestrict" type="userestrict"/>
       </xs:choice>
     </xs:sequence>
-    <!-- M504: rimosso il gruppo "am.common", non utilizzato -->
+    <!-- M505: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attributeGroup ref="am.common"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
     <xs:attribute name="localtype" type="xs:token"/>
