@@ -877,13 +877,14 @@ M076: In &lt;archdesc>, se sono presenti degli&#x0a;
                 satisfies $p/text() = ('Liberamente accessibile', 'Parzialmente accessibile',
                                        'Non accessibile', 'Accessibile previa autorizzazione')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M077: In &lt;archdesc>, se sono presenti dei userestrict/p, allora i contenuti&#x0a;
-      dei &lt;p> devono soddisfare una precisa lista chiusa di valori ammissibili
+M077: In &lt;archdesc>, se sono presenti degli&#x0a;
+      userestrict[@localtype = &quot;Riproduzione&quot;]/p, allora i contenuti dei &lt;p>&#x0a;
+      devono soddisfare una precisa lista chiusa di valori ammissibili
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="every $p in userestrict/p
+          test="every $p in userestrict[@localtype = 'Riproduzione']/p
                 satisfies $p/text() = ('Riproduzione libera', 'Riproduzione negata',
-                                       'Riproduzione a  pagamento', 'Riproduzione a fini di studio e ricerca',
+                                       'Riproduzione a pagamento', 'Riproduzione a fini di studio e ricerca',
                                        'Riproduzione sottoposta ad autorizzazione')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M078: In &lt;archdesc>, se sono presenti dei&#x0a;
@@ -1022,6 +1023,23 @@ M577: In &lt;archdesc>, quando rappresenta un complesso archivistico, non può&#
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="not(did/unitdatestructured/dateset/datesingle[@localtype = 'DataTopica'])"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M580: In &lt;archdesc>, quando rappresenta un complesso archivistico,&#x0a;
+      è obbligatorio che eventuali figli &lt;userestric> abbiano l'attributo&#x0a;
+      @localtype pari o a &quot;Pubblicazione&quot; o pari a &quot;Riproduzione&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $user in userestrict
+            satisfies $user/@localtype = ('Pubblicazione', 'Riproduzione')"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M581: In &lt;archdesc>, quando rappresenta un complesso archivistico,&#x0a;
+      è obbligatorio che in eventuali userestric/userestrict il valore&#x0a;
+      dell'attributo @localtype del secondo &lt;userestrict> (il nipote&#x0a;
+      di &lt;archdesc>) sia pari a &quot;NoteCondizioniUtilizzo&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $user in userestrict/userestrict
+            satisfies $user/@localtype = 'NoteCondizioniUtilizzo'"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1275,13 +1293,14 @@ M076: In &lt;c>, se sono presenti degli&#x0a;
             satisfies $p/text() = ('Liberamente accessibile', 'Parzialmente accessibile',
                                    'Non accessibile', 'Accessibile previa autorizzazione')"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
-M077: In &lt;c>, se sono presenti dei userestrict/p, allora i contenuti dei &lt;p>&#x0a;
+M077: In &lt;c>, se sono presenti degli&#x0a;
+      userestrict[@localtype = &quot;Riproduzione&quot;]/p, allora i contenuti dei &lt;p>&#x0a;
       devono soddisfare una precisa lista chiusa di valori ammissibili
       &#x0a;&#x0a;]"
       xpathDefaultNamespace="##targetNamespace" 
-      test="every $p in userestrict/p
+      test="every $p in userestrict[@localtype = 'Riproduzione']/p
             satisfies $p/text() = ('Riproduzione libera', 'Riproduzione negata',
-                                   'Riproduzione a  pagamento', 'Riproduzione a fini di studio e ricerca',
+                                   'Riproduzione a pagamento', 'Riproduzione a fini di studio e ricerca',
                                    'Riproduzione sottoposta ad autorizzazione')"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M078: In &lt;c>, se sono presenti dei&#x0a;
@@ -1394,6 +1413,21 @@ M576: In &lt;c> non può essere presente nessun&#x0a;
       xpathDefaultNamespace="##targetNamespace" 
       test="not( relations/relation[@relationtype = 'cpfrelation']
                 /dateset/datesingle[@localtype = 'DataTopica'])"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M580: In &lt;c> è obblicatorio che eventuali figli &lt;userestric> abbiano&#x0a;
+      l'attributo @localtype pari o a &quot;Pubblicazione&quot; o pari a &quot;Riproduzione&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $user in userestrict
+            satisfies $user/@localtype = ('Pubblicazione', 'Riproduzione')"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M581: In &lt;c> è obbligatorio che in eventuali userestric/userestrict il valore&#x0a;
+      dell'attributo @localtype del secondo &lt;userestrict> (il nipote&#x0a;
+      di &lt;archdesc>) sia pari a &quot;NoteCondizioniUtilizzo&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $user in userestrict/userestrict
+            satisfies $user/@localtype = 'NoteCondizioniUtilizzo'"/>
   </xs:complexType>
 
   <!-- M001: creato il tipo "c.comp" -->
