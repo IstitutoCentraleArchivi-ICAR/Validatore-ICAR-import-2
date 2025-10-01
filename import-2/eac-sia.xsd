@@ -3123,6 +3123,7 @@ DataAnteQuem."
              or $v='DataAnteQuem'
             )
            "/>
+           
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0026 0046 0069 0093 0111 0132 0160 0184 0202 0223 0243 0272 0296 0322 0344 0364 0384 0404 0433 0456 0479 0511 0538 0558 0577 0649 0671 0740 0764 0785 0807 0829 0890 0914 0936 0957 0977 1034&#xa; 
 dateRange/@eac-sia:tipologiaData&#xa; 'Tipologia data' lista chiusa con valori:&#xa; 
@@ -3141,9 +3142,17 @@ Data non rilevabile - non rilevata."
              or $v='Data non rilevabile - non rilevata'
             )
            "/>
-<!--
- TODO se tipologiaData data aperta verificare la presenza dell'elemento opportuno
--->
+           
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac&#xa;dateRange con data aperta ammette solo l'estremo corrispondente fromDate o toDate."
+      test="if (@eac-sia:tipologiaData = 'Data aperta (a partire da)')
+            then (count(toDate) = 0)
+            else
+            if (@eac-sia:tipologiaData = 'Data aperta (fino a)')
+            then (count(fromDate) = 0)
+            else true()
+           "/>
+
    </xs:complexType>
    <xs:complexType name="entityType">
       <xs:attribute name="audience">
