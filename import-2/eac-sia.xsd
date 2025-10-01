@@ -88,10 +88,10 @@
 Luogo della cultura,
 Sala studio."
             test="
-                  not(relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico']][relationType[normalize-space(lower-case(.))='soggetto conservatore']])
+                  not(relations/relation[targetRole[.='Complesso Archivistico']][relationType[.='Soggetto conservatore']])
                   or
                   not
-                  (cpfDescription[normalize-space(lower-case(@audience))='internal']
+                  (cpfDescription[@audience='internal']
                    and 
                    (count(control/localControl/term[.='Luogo della cultura'])&gt;0 or
                     count(control/localControl/term[.='sala studio'        ])&gt;0
@@ -256,7 +256,7 @@ Copia parallela."
            Acronimo di sistema	obbligatorio non ripetibile	control/localControl[@localType='AcronimoSistema']/term/ -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0004 0720 0870 1018&#xa; control/localControl[@localType='AcronimoSistema']/term/&#xa; 'Acronimo di sistema' è richiesto e univoco"
-         test="count(localControl[normalize-space(lower-case(@localType))='acronimosistema']/term)=1 and string-length(normalize-space(localControl[normalize-space(lower-case(@localType))='acronimosistema']/term))>0"/>
+         test="count(localControl[@localType='AcronimoSistema']/term)=1 and string-length(normalize-space(localControl[@localType='AcronimoSistema']/term))>0"/>
 
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0715 0865 1013&#xa; control/localControl[@localType='Visibilita_FE']/term&#xa; 'Visibilità FE' lista chiusa con valori:&#xa;
@@ -266,10 +266,10 @@ Descrizione libera e risorsa protetta (login),
 Descrizione protetta e risorsa protetta (login),
 Descrizione libera e risorsa riservata (autorizzazione),
 Descrizione riservata e risorsa riservata (autorizzazione)."
-      test="(count(localControl[@localType[normalize-space(lower-case(.))='visibilita_fe']]/term) = 1)
+      test="(count(localControl[@localType[.='Visibilita_FE']]/term) = 1)
              and
             (
-             every $v in (localControl[@localType[normalize-space(lower-case(.))='visibilita_fe']]/term)
+             every $v in (localControl[@localType[.='Visibilita_FE']]/term)
              satisfies 
              (
                  $v='Completa'
@@ -314,13 +314,13 @@ Descrizione riservata e risorsa riservata (autorizzazione)."
 Note alla descrizione,
 Osservazioni."
          test="
-            not(relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico']][relationType[normalize-space(lower-case(.))='soggetto conservatore']])
+            not(relations/relation[targetRole[.='Complesso Archivistico']][relationType[.='Soggetto conservatore']])
              or
             ( 
              every $v in description/localDescriptions/localDescription[not(@localType)]/term
              satisfies (
-                   normalize-space(lower-case($v))='note alla descrizione'
-                or normalize-space(lower-case($v))='osservazioni'
+                   $v='Note alla descrizione'
+                or $v='Osservazioni'
              )
             ) 
          "/>
@@ -328,11 +328,11 @@ Osservazioni."
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac &#xa; cpfDescription/description/localDescriptions/localDescription[not(@localType)]/term ammette il valore 'Osservazioni'."
          test="
-            relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico']][relationType[normalize-space(lower-case(.))='soggetto conservatore']]
+            relations/relation[targetRole[.='Complesso Archivistico']][relationType[.='Soggetto conservatore']]
              or
             ( 
              every $v in description/localDescriptions/localDescription[not(@localType)]/term
-             satisfies (normalize-space(lower-case($v))='osservazioni')
+             satisfies ($v='Osservazioni')
             ) 
          "/>
          
@@ -340,7 +340,7 @@ Osservazioni."
          xao:message="=&gt;&#xa;eac &#xa; valore non atteso o assente per CONSERVATORE in cpfDescription/description/generalContext/@localType"
          test="
             not (
-             descriptions/relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico']][relationType[normalize-space(lower-case(.))='soggetto conservatore']]
+             descriptions/relations/relation[targetRole[.='Complesso Archivistico']][relationType[.='Soggetto conservatore']]
             )
             or
             (
@@ -349,8 +349,8 @@ Osservazioni."
               $v/@localType
                and
               ( 
-                  normalize-space(lower-case($v/@localType))='descrizionepatrimonio'
-               or normalize-space(lower-case($v/@localType))='politichegestioneacquisizione'
+                  $v/@localType='DescrizionePatrimonio'
+               or $v/@localType='PoliticheGestioneAcquisizione'
               )
              )
             )
@@ -362,7 +362,7 @@ Osservazioni."
             not (
              identity/entityType[@value='corporateBody']
               and
-             identity[normalize-space(lower-case(@localType))='contestostoricoistituzionale']
+             identity[@localType='ContestoStoricoIstituzionale']
             )
             or
             (
@@ -370,7 +370,7 @@ Osservazioni."
              satisfies (
               $v/@localType
                and
-              normalize-space(lower-case($v/@localType))='descrizionecsi'
+              $v/@localType='DescrizioneCSI'
              )
             )
            "/>
@@ -451,49 +451,45 @@ resource                    | Tematismo&#xa;
          test="
          not
          (
-          not(identity/@localType[normalize-space(lower-case(.))='profiloistituzionale' or normalize-space(lower-case(.))='contestostoricoistituzionale'])
+          not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
            and
-          not(identity/entityType[normalize-space(lower-case(@eac-sia:tipoLocale))='evento'])
+          not(identity/entityType[@eac-sia:tipoLocale='Evento'])
            and
-          relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico']][relationType[normalize-space(lower-case(.))='soggetto produttore']]
+          relations/relation[targetRole[.='Complesso Archivistico']][relationType[.='Soggetto produttore']]
            and
-          relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico']][relationType[normalize-space(lower-case(.))='soggetto conservatore']]
+          relations/relation[targetRole[.='Complesso Archivistico']][relationType[.='Soggetto conservatore']]
          )
          or
          (
           (
            every $v in relations/relation/targetRole satisfies
            (
-               normalize-space(lower-case($v))='soggetto produttore collegato'
-            or normalize-space(lower-case($v))='profilo istituzionale collegato'
-            
-            or normalize-space(lower-case($v))='soggetto conservatore collegato'
-            
-            or normalize-space(lower-case($v))='risorsa digitale collegata'
-            or normalize-space(lower-case($v))='complesso archivistico'
-            or normalize-space(lower-case($v))='unita archivistica'
-            or normalize-space(lower-case($v))='unita documentaria'
-            or normalize-space(lower-case($v))='strumento di ricerca'
-            or normalize-space(lower-case($v))='progetto'
-            or normalize-space(lower-case($v))='evento'
-            or normalize-space(lower-case($v))='contesto storico istituzionale collegato'
-            or normalize-space(lower-case($v))='tematismo'
+               $v='Soggetto produttore collegato'
+            or $v='Profilo istituzionale collegato'
+            or $v='Soggetto conservatore collegato'
+            or $v='Risorsa digitale collegata'
+            or $v='Complesso Archivistico'
+            or $v='Unita Archivistica'
+            or $v='Unita Documentaria'
+            or $v='Strumento di ricerca'
+            or $v='Progetto'
+            or $v='Evento'
+            or $v='Contesto storico istituzionale collegato'
+            or $v='Tematismo'
            )
           )
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='soggetto produttore collegato'                                ]]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='profilo istituzionale collegato'                              ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
-          
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='soggetto conservatore collegato'                              ]]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
-          
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='risorsa digitale collegata'                                   ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico'                                       ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='unita archivistica'                                           ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='unita documentaria'                                           ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='strumento di ricerca'                                         ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='progetto'                                                     ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='evento'                                                       ]]/targetEntity/@targetType satisfies ($v = 'function'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='contesto storico istituzionale collegato'                     ]]/targetEntity/@targetType satisfies ($v = 'agent'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='tematismo'                                                    ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Soggetto produttore collegato'                                ]]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
+          and (every $v in relations/relation[targetRole[.='Profilo istituzionale collegato'                              ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
+          and (every $v in relations/relation[targetRole[.='Soggetto conservatore collegato'                              ]]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
+          and (every $v in relations/relation[targetRole[.='Risorsa digitale collegata'                                   ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Complesso Archivistico'                                       ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Unita Archivistica'                                           ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Unita Documentaria'                                           ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Strumento di ricerca'                                         ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Progetto'                                                     ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Evento'                                                       ]]/targetEntity/@targetType satisfies ($v = 'function'))
+          and (every $v in relations/relation[targetRole[.='Contesto storico istituzionale collegato'                     ]]/targetEntity/@targetType satisfies ($v = 'agent'))
+          and (every $v in relations/relation[targetRole[.='Tematismo'                                                    ]]/targetEntity/@targetType satisfies ($v = 'resource'))
          ) 
          "/>
       <!--
@@ -541,15 +537,15 @@ resource                    | Tematismo&#xa;
          test="
          not
          (
-          not(identity/@localType[normalize-space(lower-case(.))='profiloistituzionale' or normalize-space(lower-case(.))='contestostoricoistituzionale'])
+          not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
            and
-          not(identity/entityType[normalize-space(lower-case(@eac-sia:tipoLocale))='evento'])
+          not(identity/entityType[@eac-sia:tipoLocale='Evento'])
            and
-          relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico']][relationType[normalize-space(lower-case(.))='soggetto produttore']]
+          relations/relation[targetRole[.='Complesso Archivistico']][relationType[.='Soggetto produttore']]
            and
           not 
           (
-           relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico']][relationType[normalize-space(lower-case(.))='soggetto conservatore']]
+           relations/relation[targetRole[.='Complesso Archivistico']][relationType[.='Soggetto conservatore']]
           )
          )
          or
@@ -557,32 +553,32 @@ resource                    | Tematismo&#xa;
           (
            every $v in relations/relation/targetRole satisfies
            (
-               normalize-space(lower-case($v))='soggetto produttore collegato'
-            or normalize-space(lower-case($v))='profilo istituzionale collegato'
+               $v='Soggetto produttore collegato'
+            or $v='Profilo istituzionale collegato'
             
-            or normalize-space(lower-case($v))='risorsa digitale collegata'
-            or normalize-space(lower-case($v))='complesso archivistico'
-            or normalize-space(lower-case($v))='unita archivistica'
-            or normalize-space(lower-case($v))='unita documentaria'
-            or normalize-space(lower-case($v))='strumento di ricerca'
-            or normalize-space(lower-case($v))='progetto'
-            or normalize-space(lower-case($v))='evento'
-            or normalize-space(lower-case($v))='contesto storico istituzionale collegato'
-            or normalize-space(lower-case($v))='tematismo'
+            or $v='Risorsa digitale collegata'
+            or $v='Complesso Archivistico'
+            or $v='Unita Archivistica'
+            or $v='Unita Documentaria'
+            or $v='Strumento di ricerca'
+            or $v='Progetto'
+            or $v='Evento'
+            or $v='Contesto storico istituzionale collegato'
+            or $v='Tematismo'
            )
           )
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='soggetto produttore collegato'                              ]]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='profilo istituzionale collegato'                            ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
+          and (every $v in relations/relation[targetRole[.='Soggetto produttore collegato'           ]]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
+          and (every $v in relations/relation[targetRole[.='Profilo istituzionale collegato'         ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
           
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='risorsa digitale collegata'                                 ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico'                                     ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='unita archivistica'                                         ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='unita documentaria'                                         ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='strumento di ricerca'                                       ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='progetto'                                                   ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='evento'                                                     ]]/targetEntity/@targetType satisfies ($v = 'function'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='contesto storico istituzionale collegato'                   ]]/targetEntity/@targetType satisfies ($v = 'agent'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='tematismo'                                                  ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Risorsa digitale collegata'              ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Complesso Archivistico'                  ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Unita Archivistica'                      ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Unita Documentaria'                      ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Strumento di ricerca'                    ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Progetto'                                ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Evento'                                  ]]/targetEntity/@targetType satisfies ($v = 'function'))
+          and (every $v in relations/relation[targetRole[.='Contesto storico istituzionale collegato']]/targetEntity/@targetType satisfies ($v = 'agent'))
+          and (every $v in relations/relation[targetRole[.='Tematismo'                               ]]/targetEntity/@targetType satisfies ($v = 'resource'))
          ) 
          "/>
       <!--
@@ -628,15 +624,15 @@ resource                    | Tematismo&#xa;
          test="
          not
          (
-          not(identity/@localType[normalize-space(lower-case(.))='profiloistituzionale' or normalize-space(lower-case(.))='contestostoricoistituzionale'])
+          not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
            and
-          not(identity/entityType[normalize-space(lower-case(@eac-sia:tipoLocale))='evento'])
+          not(identity/entityType[@eac-sia:tipoLocale='Evento'])
            and
-          relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico']][relationType[normalize-space(lower-case(.))='soggetto conservatore']]
+          relations/relation[targetRole[.='Complesso Archivistico']][relationType[.='Soggetto conservatore']]
            and
           not 
           (
-           relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico']][relationType[normalize-space(lower-case(.))='soggetto produttore']]
+           relations/relation[targetRole[.='Complesso Archivistico']][relationType[.='Soggetto produttore']]
           )
          )
          or
@@ -644,30 +640,28 @@ resource                    | Tematismo&#xa;
           (
            every $v in relations/relation/targetRole satisfies
            (
-               normalize-space(lower-case($v))='soggetto conservatore collegato'
-            
-            or normalize-space(lower-case($v))='risorsa digitale collegata'
-            or normalize-space(lower-case($v))='complesso archivistico'
-            or normalize-space(lower-case($v))='unita archivistica'
-            or normalize-space(lower-case($v))='unita documentaria'
-            or normalize-space(lower-case($v))='strumento di ricerca'
-            or normalize-space(lower-case($v))='progetto'
-            or normalize-space(lower-case($v))='evento'
-            or normalize-space(lower-case($v))='contesto storico istituzionale collegato'
-            or normalize-space(lower-case($v))='tematismo'
+               $v='Soggetto conservatore collegato'
+            or $v='Risorsa digitale collegata'
+            or $v='Complesso Archivistico'
+            or $v='Unita Archivistica'
+            or $v='Unita Documentaria'
+            or $v='Strumento di ricerca'
+            or $v='Progetto'
+            or $v='Evento'
+            or $v='Contesto storico istituzionale collegato'
+            or $v='Tematismo'
            )
           )
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='soggetto conservatore collegato'                              ]]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
-          
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='risorsa digitale collegata'                                   ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico'                                       ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='unita archivistica'                                           ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='unita documentaria'                                           ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='strumento di ricerca'                                         ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='progetto'                                                     ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='evento'                                                       ]]/targetEntity/@targetType satisfies ($v = 'function'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='contesto storico istituzionale collegato'                     ]]/targetEntity/@targetType satisfies ($v = 'agent'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='tematismo'                                                    ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Soggetto conservatore collegato'                              ]]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
+          and (every $v in relations/relation[targetRole[.='Risorsa digitale collegata'                                   ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Complesso Archivistico'                                       ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Unita Archivistica'                                           ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Unita Documentaria'                                           ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Strumento di ricerca'                                         ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Progetto'                                                     ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Evento'                                                       ]]/targetEntity/@targetType satisfies ($v = 'function'))
+          and (every $v in relations/relation[targetRole[.='Contesto storico istituzionale collegato'                     ]]/targetEntity/@targetType satisfies ($v = 'agent'))
+          and (every $v in relations/relation[targetRole[.='Tematismo'                                                    ]]/targetEntity/@targetType satisfies ($v = 'resource'))
          ) 
          "/>
       <!--
@@ -704,19 +698,19 @@ resource                 | Tematismo&#xa;
          test="
          not
          (
-          not(identity/@localType[normalize-space(lower-case(.))='profiloistituzionale' or normalize-space(lower-case(.))='contestostoricoistituzionale'])
+          not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
            and
-          not(identity/entityType[normalize-space(lower-case(@eac-sia:tipoLocale))='evento'])
+          not(identity/entityType[@eac-sia:tipoLocale='Evento'])
            and
           not
           (
-           relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico']]
+           relations/relation[targetRole[.='Complesso Archivistico']]
             [
              relationType
              [
-              normalize-space(lower-case(.))='soggetto produttore'
+              .='Soggetto produttore'
                or
-              normalize-space(lower-case(.))='soggetto conservatore'
+              .='Soggetto conservatore'
              ]
             ]
           )
@@ -726,26 +720,26 @@ resource                 | Tematismo&#xa;
           (
            every $v in relations/relation/targetRole satisfies
            (
-               normalize-space(lower-case($v))='risorsa digitale collegata'
-            or normalize-space(lower-case($v))='complesso archivistico'
-            or normalize-space(lower-case($v))='unita archivistica'
-            or normalize-space(lower-case($v))='unita documentaria'
-            or normalize-space(lower-case($v))='strumento di ricerca'
-            or normalize-space(lower-case($v))='progetto'
-            or normalize-space(lower-case($v))='evento'
-            or normalize-space(lower-case($v))='contesto storico istituzionale collegato'
-            or normalize-space(lower-case($v))='tematismo'
+               $v='Risorsa digitale collegata'
+            or $v='Complesso Archivistico'
+            or $v='Unita Archivistica'
+            or $v='Unita Documentaria'
+            or $v='Strumento di ricerca'
+            or $v='Progetto'
+            or $v='Evento'
+            or $v='Contesto storico istituzionale collegato'
+            or $v='Tematismo'
            )
           )
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='risorsa digitale collegata'              ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico'                  ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='unita archivistica'                      ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='unita documentaria'                      ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='strumento di ricerca'                    ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='progetto'                                ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='evento'                                  ]]/targetEntity/@targetType satisfies ($v = 'function'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='contesto storico istituzionale collegato']]/targetEntity/@targetType satisfies ($v = 'agent'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='tematismo'                               ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Risorsa digitale collegata'              ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Complesso Archivistico'                  ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Unita Archivistica'                      ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Unita Documentaria'                      ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Strumento di ricerca'                    ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Progetto'                                ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Evento'                                  ]]/targetEntity/@targetType satisfies ($v = 'function'))
+          and (every $v in relations/relation[targetRole[.='Contesto storico istituzionale collegato']]/targetEntity/@targetType satisfies ($v = 'agent'))
+          and (every $v in relations/relation[targetRole[.='Tematismo'                               ]]/targetEntity/@targetType satisfies ($v = 'resource'))
          ) 
          "/>
          
@@ -757,12 +751,12 @@ agent                    | sameAs&#xa;
          "
          test="
           not (
-           not(identity/@localType[normalize-space(lower-case(.))='profiloistituzionale' or normalize-space(lower-case(.))='contestostoricoistituzionale'])
+           not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
             and
-           not(identity/entityType[normalize-space(lower-case(@eac-sia:tipoLocale))='evento'])
+           not(identity/entityType[@eac-sia:tipoLocale='Evento'])
           )
           or (
-           every $v in relations/relation[relationType[normalize-space(lower-case(.))='sameas']]/targetEntity/@targetype satisfies ($v = 'agent')
+           every $v in relations/relation[relationType[.='sameAs']]/targetEntity/@targetype satisfies ($v = 'agent')
           ) 
          "/>
          
@@ -790,21 +784,21 @@ corporateBody            | Contesto storico istituzionale collegato&#xa;
          (
           identity/entityType[@value='corporateBody']
            and
-          identity[normalize-space(lower-case(@localType))='contestostoricoistituzionale']
+          identity[@localType='ContestoStoricoIstituzionale']
          )
          or
          (
           (
            every $v in relations/relation/targetRole satisfies
            (
-               normalize-space(lower-case($v))='agente collegato'
-            or normalize-space(lower-case($v))='profilo istituzionale collegato'
-            or normalize-space(lower-case($v))='contesto storico istituzionale collegato'
+               $v='Agente collegato'
+            or $v='Profilo istituzionale collegato'
+            or $v='Contesto storico istituzionale collegato'
            )
           )
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='agente collegato'                                                      ]]/targetEntity/@targetType satisfies ($v = 'agent'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='profilo istituzionale collegato'                                       ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='contesto storico istituzionale collegato'                              ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
+          and (every $v in relations/relation[targetRole[.='Agente collegato'                                                      ]]/targetEntity/@targetType satisfies ($v = 'agent'))
+          and (every $v in relations/relation[targetRole[.='Arofilo istituzionale collegato'                                       ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
+          and (every $v in relations/relation[targetRole[.='Contesto storico istituzionale collegato'                              ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
          ) 
          "/>
          
@@ -818,10 +812,10 @@ corporateBody            | sameAs&#xa;
           not (
            identity/entityType[@value='corporateBody']
             and
-           identity[normalize-space(lower-case(@localType))='contestostoricoistituzionale']
+           identity[@localType='ContestoStoricoIstituzionale']
           )
           or (
-           every $v in relations/relation[relationType[normalize-space(lower-case(.))='sameas']]/targetEntity/@targetype satisfies ($v = 'corporateBody')
+           every $v in relations/relation[relationType[.='sameAs']]/targetEntity/@targetype satisfies ($v = 'corporateBody')
           ) 
          "/>
 
@@ -849,21 +843,21 @@ corporateBody            | Contesto storico istituzionale collegato&#xa;
          (
           identity/entityType[@value='corporateBody']
            and
-          identity[normalize-space(lower-case(@localType))='profiloistituzionale']
+          identity[@localType='ProfiloIstituzionale']
          )
          or
          (
           (
            every $v in relations/relation/targetRole satisfies
            (
-               normalize-space(lower-case($v))='soggetto produttore collegato'
-            or normalize-space(lower-case($v))='profilo istituzionale collegato'
-            or normalize-space(lower-case($v))='contesto storico istituzionale collegato'
+               $v='Soggetto produttore collegato'
+            or $v='Profilo istituzionale collegato'
+            or $v='Contesto storico istituzionale collegato'
            )
           )
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='soggetto produttore collegato'                                ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='profilo istituzionale collegato'                              ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='contesto storico istituzionale collegato'                     ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
+          and (every $v in relations/relation[targetRole[.='Soggetto produttore collegato'                                ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
+          and (every $v in relations/relation[targetRole[.='Profilo istituzionale collegato'                              ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
+          and (every $v in relations/relation[targetRole[.='Contesto storico istituzionale collegato'                     ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
          ) 
          "/>
          
@@ -877,10 +871,10 @@ corporateBody            | sameAs&#xa;
           not (
            identity/entityType[@value='corporateBody']
             and
-           identity[normalize-space(lower-case(@localType))='profiloistituzionale']
+           identity[@localType='ProfiloIstituzionale']
           )
           or (
-           every $v in relations/relation[relationType[normalize-space(lower-case(.))='sameas']]/targetEntity/@targetype satisfies ($v = 'corporateBody')
+           every $v in relations/relation[relationType[.='sameAs']]/targetEntity/@targetype satisfies ($v = 'corporateBody')
           ) 
          "/>
          
@@ -917,9 +911,9 @@ resource                    | Tematismo
           identity/entityType[@value='corporateBody']
           and
           (
-           identity/entityType[normalize-space(lower-case(@eac-sia:tipoLocale))='evento']
+           identity/entityType[@eac-sia:tipoLocale='Evento']
             or
-           identity[normalize-space(lower-case(@localType))='evento']
+           identity[@localType='Evento']
           )
          )
          or
@@ -927,18 +921,18 @@ resource                    | Tematismo
           (
            every $v in relations/relation/targetRole satisfies
            (
-              normalize-space(lower-case($v))='agente collegato'
-            or normalize-space(lower-case($v))='complesso archivistico'
-            or normalize-space(lower-case($v))='unita archivistica'
-            or normalize-space(lower-case($v))='unita documentaria'
-            or normalize-space(lower-case($v))='tematismo'
+               $v='Agente collegato'
+            or $v='Complesso Archivistico'
+            or $v='Unita Archivistica'
+            or $v='Unita Documentaria'
+            or $v='Tematismo'
            )
           )
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='agente collegato'      ]]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico']]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='unita archivistica'    ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='unita documentaria'    ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[normalize-space(lower-case(.))='tematismo'             ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Agente collegato'      ]]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
+          and (every $v in relations/relation[targetRole[.='Complesso Archivistico']]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Unita Archivistica'    ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Unita Documentaria'    ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Tematismo'             ]]/targetEntity/@targetType satisfies ($v = 'resource'))
          ) 
          "/>
       
@@ -967,13 +961,13 @@ LuogoEvento."
             not (
              identity/entityType[@value='corporateBody']
               and ( 
-              identity[normalize-space(lower-case(@localType))='evento']
+              identity[@localType='Evento']
                or
-              identity/entityType[normalize-space(lower-case(@eac-sia:tipoLocale))='evento']
+              identity/entityType[@eac-sia:tipoLocale='Evento']
              )
             )
             or
-            (every $v in description/places/place/@localType satisfies (normalize-space(lower-case($v))='luogoevento'))
+            (every $v in description/places/place/@localType satisfies ($v='LuogoEvento'))
          "/>
 
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
@@ -983,14 +977,14 @@ LuogoEnte."
             not (
              identity/entityType[@value='corporateBody']
               and
-             not(identity/@localType[normalize-space(lower-case(.))='profiloistituzionale' or normalize-space(lower-case(.))='contestostoricoistituzionale'])
+             not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
               and
-             not(identity/entityType[normalize-space(lower-case(@eac-sia:tipoLocale))='evento'])
+             not(identity/entityType[@eac-sia:tipoLocale='Evento'])
               and
-             not(relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico']][relationType[normalize-space(lower-case(.))='soggetto conservatore']])
+             not(relations/relation[targetRole[.='Complesso Archivistico']][relationType[.='Soggetto conservatore']])
             )
             or
-            (every $v in description/places/place/@localType satisfies (normalize-space(lower-case($v))='luogoente'))
+            (every $v in description/places/place/@localType satisfies ($v='LuogoEnte'))
          "/>
 
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
@@ -1002,17 +996,17 @@ Sedi."
             not (
              identity/entityType[@value='corporateBody']
               and
-             not(identity/@localType[normalize-space(lower-case(.))='profiloistituzionale' or normalize-space(lower-case(.))='contestostoricoistituzionale'])
+             not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
               and
-             not(identity/entityType[normalize-space(lower-case(@eac-sia:tipoLocale))='evento'])
+             not(identity/entityType[@eac-sia:tipoLocale='Evento'])
               and
-             relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico']][relationType[normalize-space(lower-case(.))='soggetto conservatore']]
+             relations/relation[targetRole[.='Complesso Archivistico']][relationType[.='Soggetto conservatore']]
             )
             or
             (every $v in description/places/place/@localType satisfies (
-                normalize-space(lower-case($v))='luogoente'
-             or normalize-space(lower-case($v))='contatti'
-             or normalize-space(lower-case($v))='sedi'
+                $v='LuogoEnte'
+             or $v='Contatti'
+             or $v='Sedi'
             ))
          "/>
          
@@ -1023,10 +1017,10 @@ LuogoFamiglia."
             not (
              identity/entityType[@value='family']
               and
-             not(relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico']][relationType[normalize-space(lower-case(.))='soggetto conservatore']])
+             not(relations/relation[targetRole[.='Complesso Archivistico']][relationType[.='Soggetto conservatore']])
             )
             or
-            (every $v in description/places/place/@localType satisfies (normalize-space(lower-case($v))='luogofamiglia'))
+            (every $v in description/places/place/@localType satisfies ($v='LuogoFamiglia'))
          "/>
 
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
@@ -1038,13 +1032,13 @@ Sedi."
             not (
              identity/entityType[@value='family']
               and
-             relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico']][relationType[normalize-space(lower-case(.))='soggetto conservatore']]
+             relations/relation[targetRole[.='Complesso Archivistico']][relationType[.='Soggetto conservatore']]
             )
             or
             (every $v in description/places/place/@localType satisfies (
-                normalize-space(lower-case($v))='luogofamiglia'
-             or normalize-space(lower-case($v))='contatti'
-             or normalize-space(lower-case($v))='sedi'
+                $v='LuogoFamiglia'
+             or $v='Contatti'
+             or $v='Sedi'
             ))
          "/>
          
@@ -1055,10 +1049,10 @@ LuogoPersona."
             not (
              identity/entityType[@value='person']
               and
-             not(relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico']][relationType[normalize-space(lower-case(.))='soggetto conservatore']])
+             not(relations/relation[targetRole[.='Complesso Archivistico']][relationType[.='Soggetto conservatore']])
             )
             or
-            (every $v in description/places/place/@localType satisfies (normalize-space(lower-case($v))='luogopersona'))
+            (every $v in description/places/place/@localType satisfies ($v='LuogoPersona'))
          "/>
 
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
@@ -1070,13 +1064,13 @@ Sedi."
             not (
              identity/entityType[@value='person']
               and
-             relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico']][relationType[normalize-space(lower-case(.))='soggetto conservatore']]
+             relations/relation[targetRole[.='Complesso Archivistico']][relationType[.='Soggetto conservatore']]
             )
             or
             (every $v in description/places/place/@localType satisfies (
-                normalize-space(lower-case($v))='luogopersona'
-             or normalize-space(lower-case($v))='contatti'
-             or normalize-space(lower-case($v))='sedi'
+                $v='LuogoPersona'
+             or $v='Contatti'
+             or $v='Sedi'
             ))
          "/>
 
@@ -1087,14 +1081,14 @@ DateEsistenzaEnte"
             not(
              identity/entityType/@value='corporateBody'
               and
-             not(identity/@localType[normalize-space(lower-case(.))='profiloistituzionale' or normalize-space(lower-case(.))='contestostoricoistituzionale'])
+             not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
               and
-             not(identity/entityType[normalize-space(lower-case(@eac-sia:tipoLocale))='evento'])
+             not(identity/entityType[@eac-sia:tipoLocale='Evento'])
             )
             or
             (
-             every $v in description/existDates/@localType satisfies(
-             normalize-space(lower-case($v))='dateesistenzaente')
+             every $v in description/existDates/@localType satisfies
+             ($v='DateEsistenzaEnte')
             )
          "/>
          
@@ -1103,12 +1097,12 @@ DateEsistenzaEnte"
 DateEsistenzaFamiglia"
          test="
             not(
-             normalize-space(lower-case(identity/entityType/@value))='family'
+             identity/entityType/@value[.='family']
             )
             or
             (
-             every $v in description/existDates/@localType satisfies(
-             normalize-space(lower-case($v))='dateesistenzafamiglia')
+             every $v in description/existDates/@localType satisfies
+             ($v='DateEsistenzaFamiglia')
             )
          "/>
 
@@ -1117,12 +1111,12 @@ DateEsistenzaFamiglia"
 DateEsistenzaPersona"
          test="
             not(
-             normalize-space(lower-case(identity/entityType/@value))='person'
+             identity/entityType/@value[.='person']
             )
             or
             (
-             every $v in description/existDates/@localType satisfies(
-             normalize-space(lower-case($v))='dateesistenzapersona')
+             every $v in description/existDates/@localType satisfies
+             ($v='DateEsistenzaPersona')
             )
          "/>
 
@@ -1131,12 +1125,12 @@ DateEsistenzaPersona"
 Qualifica"
          test="
             not(
-             normalize-space(lower-case(identity/entityType/@value))='person'
+             identity/entityType/@value[.='person']
             )
             or
             (
-             every $v in ddescription/functions/function/@localType satisfies(
-             normalize-space(lower-case($v))='qualifica')
+             every $v in description/functions/function/@localType satisfies
+             ($v='Qualifica')
             )
          "/>
 
@@ -1144,7 +1138,7 @@ Qualifica"
          xao:message="=&gt;&#xa;eac&#xa; valore non atteso in cpfDescription/description/functions/function/@localType"
          test="
             not(
-             not(normalize-space(lower-case(identity/entityType/@value))='person')
+             not(identity/entityType/@value[.='person'])
             )
             or
             (
@@ -1157,12 +1151,12 @@ Qualifica"
 DescrizioneEvento"
          test="
             not(
-             identity/entityType[normalize-space(lower-case(@eac-sia:tipoLocale))='evento']
+             identity/entityType[@eac-sia:tipoLocale='Evento']
             )
             or
             (
-             every $v in ddescription/biogHist/@localType satisfies(
-             normalize-space(lower-case($v))='descrizioneevento')
+             every $v in ddescription/biogHist/@localType satisfies
+             ($v='DescrizioneEvento')
             )
          "/>
 
@@ -1170,7 +1164,7 @@ DescrizioneEvento"
          xao:message="=&gt;&#xa;eac&#xa; valore non atteso in cpfDescription/description/biogHist/@localType"
          test="
             not(
-             not(identity/entityType[normalize-space(lower-case(@eac-sia:tipoLocale))='evento'])
+             not(identity/entityType[@eac-sia:tipoLocale='Evento'])
             )
             or
             (
@@ -1189,31 +1183,31 @@ DescrizioneEvento"
             not(
              identity/entityType/@value='corporateBody'
               and
-             not(identity/@localType[normalize-space(lower-case(.))='profiloistituzionale' or normalize-space(lower-case(.))='contestostoricoistituzionale'])
+             not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
               and
-             not(identity/entityType[normalize-space(lower-case(@eac-sia:tipoLocale))='evento'])
+             not(identity/entityType[@eac-sia:tipoLocale='Evento'])
             )
             or
             (
-             count(description/existDates[normalize-space(lower-case(@localType))='dateesistenzaente']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData[string-length(normalize-space(.)) &gt; 0]) &gt; 0
+             count(description/existDates[@localType[.='DateEsistenzaEnte']]/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData[string-length(normalize-space(.)) &gt; 0]) &gt; 0
             )
          "/>
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0215&#xa; cpfDescription/description/existDates[@localType='DateEsistenzaFamiglia']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData&#xa; 'Qualifica della data' è richiesto"
          test="
-            not(normalize-space(lower-case(identity/entityType/@value))='family')
+            not(identity/entityType/@value[.='family'])
             or
             (
-             count(description/existDates[normalize-space(lower-case(@localType))='dateesistenzafamiglia']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData[string-length(normalize-space(.)) &gt; 0]) &gt; 0
+             count(description/existDates[@localType='DateEsistenzaFamiglia']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData[string-length(normalize-space(.)) &gt; 0]) &gt; 0
             )
          "/>
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0335&#xa; cpfDescription/description/existDates[@localType='DateEsistenzaPersona']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData&#xa; 'Qualifica della data' è richiesto"
          test="
-            not(normalize-space(lower-case(identity/entityType/@value))='person')
+            not(identity/entityType/@value[.='person'])
             or
             (
-             count(description/existDates[normalize-space(lower-case(@localType))='dateesistenzapersona']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData[string-length(normalize-space(.)) &gt; 0]) &gt; 0
+             count(description/existDates[@localType='DateEsistenzaPersona']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData[string-length(normalize-space(.)) &gt; 0]) &gt; 0
             )
          "/>
          
@@ -1222,7 +1216,7 @@ DescrizioneEvento"
 Inizio attività - professione,
 Fine attività – professione."
          test="
-            not(normalize-space(lower-case(identity/entityType/@value))='person')
+            not(identity/entityType/@value[.='person'])
             or 
             (
              every $v in (description/occupations/occupation/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData)
@@ -1238,7 +1232,7 @@ Fine attività – professione."
 Inizio qualifica,
 Fine qualifica."
          test="
-            not(normalize-space(lower-case(identity/entityType/@value))='person')
+            not(identity/entityType/@value[.='person'])
             or 
             (
              every $v in (description/functions/function/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData)
@@ -1267,10 +1261,10 @@ Re,
 Signore,
 Visconte."
          test="
-            not(normalize-space(lower-case(identity/entityType/@value))='family')
+            not(identity/entityType/@value[.='family'])
             or 
             (
-             every $v in (description/localDescriptions/localDescription[normalize-space(lower-case(@localType))='titolofamiglia']/term)
+             every $v in (description/localDescriptions/localDescription[@localType='TitoloFamiglia']/term)
              satisfies
              (
                  $v='Barone'
@@ -1308,10 +1302,10 @@ Re,
 Signore,
 Visconte."
          test="
-            not(normalize-space(lower-case(identity/entityType/@value))='person')
+            not(identity/entityType/@value[.='person'])
             or 
             (
-             every $v in (description/localDescriptions/localDescription[normalize-space(lower-case(@localType))='titolopersona']/term)
+             every $v in (description/localDescriptions/localDescription[@localType[.='TitoloPersona']]/term)
              satisfies
              (
                  $v='Barone'
@@ -1373,12 +1367,12 @@ Sovraordinato,
 Precedente,
 Successivo."
            test="not(.
-                     [identity[@localType[normalize-space(lower-case(.))='contestostoricoistituzionale']]/entityType[@value='corporateBody']
+                     [identity[@localType[.='ContestoStoricoIstituzionale']]/entityType[@value='corporateBody']
                      ]
                      /relations/relation
                      [targetRole
                       [
-                       normalize-space(lower-case(.))='contesto storico istituzionale collegato'
+                       .='Contesto storico istituzionale collegato'
                       ]
                      ]
                      [targetEntity[@targetType='corporateBody']]
@@ -1409,12 +1403,12 @@ Predecessore,
 Successore,
 Collegato."
            test="not(.
-                     [identity[@localType[normalize-space(lower-case(.))='profiloistituzionale']]/entityType[@value='corporateBody']
+                     [identity[@localType[.='ProfiloIstituzionale']]/entityType[@value='corporateBody']
                      ]
                      /relations/relation
                      [targetRole
                       [
-                       normalize-space(lower-case(.))='profilo istituzionale collegato'
+                       .='Profilo istituzionale collegato'
                       ]
                      ]
                      [targetEntity[@targetType='corporateBody']]
@@ -1784,9 +1778,9 @@ ContestoStoricoIstituzionale."
          test="not(@localType)
                 or 
                (@localType
-                [   normalize-space(lower-case(.))='profiloistituzionale'
-                 or normalize-space(lower-case(.))='contestostoricoistituzionale'
-                 or normalize-space(lower-case(.))='evento'
+                [   .='ProfiloIstituzionale'
+                 or .='ContestoStoricoIstituzionale'
+                 or .='Evento'
                 ]
                )"/>
                
@@ -1798,17 +1792,17 @@ AcronimoEnte."
          test="not (
                 entityType/@value='corporateBody'
                  and
-                not(@localType[normalize-space(lower-case(.))='profiloistituzionale' or normalize-space(lower-case(.))='contestostoricoistituzionale'])
+                not(@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
                  and
-                not(entityType[normalize-space(lower-case(@eac-sia:tipoLocale))='evento'])
+                not(entityType[@eac-sia:tipoLocale='Evento'])
                )
                 or 
                (
-                every $v in nameEntry[normalize-space(lower-case(@localType))='denominazioneente']/part/@localType
+                every $v in nameEntry[@localType='DenominazioneEnte']/part/@localType
                 satisfies
-                (   normalize-space(lower-case($v))='intestazioneprincipaleente'
-                 or normalize-space(lower-case($v))='denominazioneprincipaleente'
-                 or normalize-space(lower-case($v))='acronimoente'
+                (   $v='IntestazionePrincipaleEnte'
+                 or $v='DenominazionePrincipaleEnte'
+                 or $v='AcronimoEnte'
                 )
                )"/>
                
@@ -1819,16 +1813,16 @@ AltraDenominazioneEnte."
          test="not (
                 entityType/@value='corporateBody'
                  and
-                not(@localType[normalize-space(lower-case(.))='profiloistituzionale' or normalize-space(lower-case(.))='contestostoricoistituzionale'])
+                not(@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
                  and
-                not(entityType[normalize-space(lower-case(@eac-sia:tipoLocale))='evento'])
+                not(entityType[@eac-sia:tipoLocale='Evento'])
                )
                 or 
                (
                 every $v in nameEntry/@localType
                 satisfies
-                (   normalize-space(lower-case($v))='denominazioneente'
-                 or normalize-space(lower-case($v))='altradenominazioneente'
+                (   $v='DenominazioneEnte'
+                 or $v='AltraDenominazioneEnte'
                 )
                )"/>
                
@@ -1841,18 +1835,18 @@ Qualifica."
          test="not (
                 entityType/@value='corporateBody'
                  and
-                not(@localType[normalize-space(lower-case(.))='profiloistituzionale' or normalize-space(lower-case(.))='contestostoricoistituzionale'])
+                not(@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
                  and
-                not(entityType[normalize-space(lower-case(@eac-sia:tipoLocale))='evento'])
+                not(entityType[@eac-sia:tipoLocale='Evento'])
                )
                 or 
                (
-                every $v in nameEntry[normalize-space(lower-case(@localType))='altradenominazioneente']/part/@localType
+                every $v in nameEntry[@localType='AltraDenominazioneEnte']/part/@localType
                 satisfies
-                (   normalize-space(lower-case($v))='altraintestazione'
-                 or normalize-space(lower-case($v))='altradenominazione'
-                 or normalize-space(lower-case($v))='altroacronimo'
-                 or normalize-space(lower-case($v))='qualifica'
+                (   $v='AltraIntestazione'
+                 or $v='AltraDenominazione'
+                 or $v='AltroAcronimo'
+                 or $v='Qualifica'
                 )
                )"/>
                
@@ -1863,10 +1857,10 @@ DenominazionePrincipaleFamiglia."
          test="not(entityType/@value='family')
                 or 
                (
-                every $v in nameEntry[normalize-space(lower-case(@localType))='denominazionefamiglia']/part/@localType
+                every $v in nameEntry[@localType='DenominazioneFamiglia']/part/@localType
                 satisfies
-                (   normalize-space(lower-case($v))='intestazioneprincipalefamiglia'
-                 or normalize-space(lower-case($v))='denominazioneprincipalefamiglia'
+                (   $v='IntestazionePrincipaleFamiglia'
+                 or $v='DenominazionePrincipaleFamiglia'
                 )
                )"/>
 
@@ -1879,8 +1873,8 @@ AltraDenominazioneFamiglia."
                (
                 every $v in nameEntry/@localType
                 satisfies
-                (   normalize-space(lower-case($v))='denominazionefamiglia'
-                 or normalize-space(lower-case($v))='altradenominazionefamiglia'
+                (   $v='DenominazioneFamiglia'
+                 or $v='AltraDenominazioneFamiglia'
                 )
                )"/>
 
@@ -1892,11 +1886,11 @@ Qualifica."
          test="not(entityType/@value='family')
                 or 
                (
-                every $v in nameEntry[normalize-space(lower-case(@localType))='altradenominazionefamiglia']/part/@localType
+                every $v in nameEntry[@localType='AltraDenominazioneFamiglia']/part/@localType
                 satisfies
-                (   normalize-space(lower-case($v))='intestazione'
-                 or normalize-space(lower-case($v))='denominazione'
-                 or normalize-space(lower-case($v))='qualifica'
+                (   $v='Intestazione'
+                 or $v='Denominazione'
+                 or $v='Qualifica'
                 )
                )"/>
 
@@ -1912,15 +1906,15 @@ Origine-provenienzaPersona."
          test="not(entityType/@value='person')
                 or 
                (
-                every $v in nameEntry[normalize-space(lower-case(@localType))='denominazionepersona']/part/@localType
+                every $v in nameEntry[@localType='DenominazionePersona']/part/@localType
                 satisfies
-                (   normalize-space(lower-case($v))='intestazionepersona'
-                 or normalize-space(lower-case($v))='nomepersona'
-                 or normalize-space(lower-case($v))='cognomepersona'
-                 or normalize-space(lower-case($v))='patronimico'
-                 or normalize-space(lower-case($v))='pseudonimo'
-                 or normalize-space(lower-case($v))='soprannomepersona'
-                 or normalize-space(lower-case($v))='origine-provenienzapersona'
+                (   $v='IntestazionePersona'
+                 or $v='NomePersona'
+                 or $v='CognomePersona'
+                 or $v='Patronimico'
+                 or $v='Pseudonimo'
+                 or $v='SoprannomePersona'
+                 or $v='Origine-provenienzaPersona'
                 )
                )"/>
 
@@ -1933,8 +1927,8 @@ AltraDenominazionePersona."
                (
                 every $v in nameEntry/@localType
                 satisfies
-                (   normalize-space(lower-case($v))='denominazionepersona'
-                 or normalize-space(lower-case($v))='altradenominazionepersona'
+                (   $v='DenominazionePersona'
+                 or $v='AltraDenominazionePersona'
                 )
                )"/>
 
@@ -1947,51 +1941,51 @@ Qualifica."
          test="not(entityType/@value='person')
                 or 
                (
-                every $v in nameEntry[normalize-space(lower-case(@localType))='AltraDenominazionepersona']/part/@localType
+                every $v in nameEntry[@localType='AltraDenominazionepersona']/part/@localType
                 satisfies
-                (   normalize-space(lower-case($v))='intestazionepersona'
-                 or normalize-space(lower-case($v))='nomepersona'
-                 or normalize-space(lower-case($v))='cognomepersona'
-                 or normalize-space(lower-case($v))='qualifica'
+                (   $v='IntestazionePersona'
+                 or $v='NomePersona'
+                 or $v='CognomePersona'
+                 or $v='Qualifica'
                 )
                )"/>
 
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0734 &#xa; contesto storico istituzionale ammette in identity/nameEntry/@localType il valore&#xa;
 DenominazioneCSI."
-         test="not(normalize-space(lower-case(@localType))='contestostoricoistituzionale')
+         test="not(@localType='ContestoStoricoIstituzionale')
                 or 
                (
                 every $v in nameEntry/@localType
                 satisfies
                 (
-                 normalize-space(lower-case($v))='denominazionecsi'
+                 $v='DenominazioneCSI'
                 )
                )"/>
 
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0734 &#xa; contesto storico istituzionale ammette in identity/nameEntry[@localType='DenominazioneCSI']/part/@localType il valore&#xa;
 IntestazioneCSI."
-         test="not(normalize-space(lower-case(@localType))='contestostoricoistituzionale')
+         test="not(@localType='ContestoStoricoIstituzionale')
                 or 
                (
-                every $v in nameEntry[normalize-space(lower-case(@localType))='denominazionecsi']/part/@localType
+                every $v in nameEntry[@localType='DenominazioneCSI']/part/@localType
                 satisfies
                 (
-                 normalize-space(lower-case($v))='intestazionecsi'
+                 $v='IntestazioneCSI'
                 )
                )"/>
 
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0884 0885 &#xa; profilo istituzionale ammette in identity/nameEntry/@localType il valore&#xa;
 DenominazioneProfilo."
-         test="not(normalize-space(lower-case(@localType))='profiloistituzionale')
+         test="not(@localType='ProfiloIstituzionale')
                 or 
                (
                 every $v in nameEntry/@localType
                 satisfies
                 (
-                 normalize-space(lower-case($v))='denominazioneprofilo'
+                 $v='DenominazioneProfilo'
                 )
                )"/>
 
@@ -1999,14 +1993,14 @@ DenominazioneProfilo."
          xao:message="=&gt;&#xa;eac 0734 &#xa; profilo istituzionale ammette in identity/nameEntry[@localType='DenominazioneProfilo']/part/@localType i valori&#xa;
 IntestazioneProfilo,
 AcronimoProfilo."
-         test="not(normalize-space(lower-case(@localType))='profiloistituzionale')
+         test="not(@localType='ProfiloIstituzionale')
                 or 
                (
-                every $v in nameEntry[normalize-space(lower-case(@localType))='denominazioneprofilo']/part/@localType
+                every $v in nameEntry[@localType='DenominazioneProfilo']/part/@localType
                 satisfies
                 (
-                    normalize-space(lower-case($v))='intestazioneprofilo'
-                 or normalize-space(lower-case($v))='acronimoprofilo'
+                    $v='IntestazioneProfilo'
+                 or $v='AcronimoProfilo'
                 )
                )"/>
 
@@ -2019,13 +2013,13 @@ AcronimoProfilo."
 Archivio,
 Sezione,
 Altra sede."
-         test="not(relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico']][relationType[normalize-space(lower-case(.))='soggetto conservatore']])
+         test="not(relations/relation[targetRole[.='Complesso Archivistico']][relationType[.='Soggetto conservatore']])
                 or 
-               not(otherEntityTypes/otherEntityType[normalize-space(lower-case(@localType))='qualifica']/term)
+               not(otherEntityTypes/otherEntityType[@localType='Qualifica']/term)
                 or 
-               (count(otherEntityTypes/otherEntityType[normalize-space(lower-case(@localType))='qualifica']/term)=1
+               (count(otherEntityTypes/otherEntityType[@localType='Qualifica']/term)=1
                 and 
-                otherEntityTypes/otherEntityType[normalize-space(lower-case(@localType))='qualifica']/term
+                otherEntityTypes/otherEntityType[@localType='Qualifica']/term
                 [   .='Archivio'
                  or .='Sezione'
                  or .='Altra sede'
@@ -2083,16 +2077,16 @@ Organo o ufficio statale del periodo postunitario."
           not (
            entityType/@value='corporateBody'
             and
-           not(@localType[normalize-space(lower-case(.))='profiloistituzionale' or normalize-space(lower-case(.))='contestostoricoistituzionale'])
+           not(@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
             and
-           not(entityType[normalize-space(lower-case(@eac-sia:tipoLocale))='evento'])
+           not(entityType[@eac-sia:tipoLocale='Evento'])
           )
            or
           (
-           string-length(normalize-space(otherEntityTypes/otherEntityType[normalize-space(lower-case(@localType))='ente']/term))&gt;0
+           string-length(normalize-space(otherEntityTypes/otherEntityType[@localType='Ente']/term))&gt;0
            and
            (
-            every $v in otherEntityTypes/otherEntityType[normalize-space(lower-case(@localType))='ente']/term
+            every $v in otherEntityTypes/otherEntityType[@localType='Ente']/term
             satisfies
             (
                 $v='Accademia/ente di cultura'
@@ -2153,15 +2147,15 @@ Organo o ufficio statale del periodo postunitario."
           not (
            entityType/@value='corporateBody'
             and
-           not(@localType[normalize-space(lower-case(.))='profiloistituzionale' or normalize-space(lower-case(.))='contestostoricoistituzionale'])
+           not(@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
             and
-           not(entityType[normalize-space(lower-case(@eac-sia:tipoLocale))='evento'])
+           not(entityType[@eac-sia:tipoLocale='Evento'])
           )
           or
           (
-           count(nameEntry[normalize-space(lower-case(@localType))='denominazioneente']/part[normalize-space(lower-case(@localType))='intestazioneprincipaleente'][string-length(normalize-space(.))>0]) = 1
+           count(nameEntry[@localType='DenominazioneEnte']/part[@localType='IntestazionePrincipaleEnte'][string-length(normalize-space(.))>0]) = 1
            and
-           count(nameEntry[normalize-space(lower-case(@localType))='denominazioneente']/part[normalize-space(lower-case(@localType))='denominazioneprincipaleente'][string-length(normalize-space(.))>0]) = 1
+           count(nameEntry[@localType='DenominazioneEnte']/part[@localType='DenominazionePrincipaleEnte'][string-length(normalize-space(.))>0]) = 1
           )
          "/>
 
@@ -2171,13 +2165,13 @@ Organo o ufficio statale del periodo postunitario."
           not (
            entityType/@value='corporateBody'
             and
-           not(@localType[normalize-space(lower-case(.))='profiloistituzionale' or normalize-space(lower-case(.))='contestostoricoistituzionale'])
+           not(@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
             and
-           not(entityType[normalize-space(lower-case(@eac-sia:tipoLocale))='evento'])
+           not(entityType[@eac-sia:tipoLocale='Evento'])
           )
            or
           (
-           every $v in nameEntry[normalize-space(lower-case(@localType))='altradenominazioneente']
+           every $v in nameEntry[@localType='AltraDenominazioneEnte']
            satisfies ($v[@status = 'alternative'])
           )
          "/>
@@ -2193,13 +2187,13 @@ Denominazione parallela - Intestazione parallela."
           not (
            entityType/@value='corporateBody'
             and
-           not(@localType[normalize-space(lower-case(.))='profiloistituzionale' or normalize-space(lower-case(.))='contestostoricoistituzionale'])
+           not(@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
             and
-           not(entityType[normalize-space(lower-case(@eac-sia:tipoLocale))='evento'])
+           not(entityType[@eac-sia:tipoLocale='Evento'])
           )
            or
           (
-           every $v in nameEntry[normalize-space(lower-case(@localType))='altradenominazioneente' and normalize-space(lower-case(@status))='alternative']/part[normalize-space(lower-case(@localType))='qualifica']
+           every $v in nameEntry[@localType='AltraDenominazioneEnte' and @status='alternative']/part[@localType='Qualifica']
            satisfies
            (
                $v='Altra denominazione'
@@ -2213,27 +2207,27 @@ Denominazione parallela - Intestazione parallela."
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0154&#xa; cpfDescription/identity/nameEntry/part[@localType='IntestazionePrincipaleFamiglia']&#xa; 'Intestazione principale' è richiesto e univoco"
          test="
-          not(normalize-space(lower-case(entityType/@value))='family')
+          not(entityType/@value='family')
            or
-          count(nameEntry/part[normalize-space(lower-case(@localType))='intestazioneprincipalefamiglia'][string-length(normalize-space(lower-case(.))) &gt; 0]) = 1
+          count(nameEntry/part[@localType='IntestazionePrincipaleFamiglia'][string-length(normalize-space(lower-case(.))) &gt; 0]) = 1
          "/>
 
       <!-- eac 0154 cpfDescription/identity/nameEntry/part[@localType="DenominazionePrincipaleFamiglia"]/ -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0154&#xa; cpfDescription/identity/nameEntry/part[@localType='DenominazionePrincipaleFamiglia']&#xa; 'Denominazione principale' è richiesto e univoco"
          test="
-          not(normalize-space(lower-case(entityType/@value))='family')
+          not(entityType/@value='family')
            or
-          count(nameEntry/part[normalize-space(lower-case(@localType))='denominazioneprincipalefamiglia'][string-length(normalize-space(lower-case(.))) &gt; 0]) = 1
+          count(nameEntry/part[@localType='DenominazionePrincipaleFamiglia'][string-length(normalize-space(lower-case(.))) &gt; 0]) = 1
          "/>
 
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac cpfDescription/identity/nameEntry[@localType='AltraDenominazioneFamiglia] richiede [@status='alternative']"
          test="
-          not(normalize-space(lower-case(entityType/@value))='family')
+          not(entityType/@value='family')
            or
           (
-           every $v in nameEntry[normalize-space(lower-case(@localType))='altradenominazionefamiglia']
+           every $v in nameEntry[@localType='AltraDenominazioneFamiglia']
            satisfies ($v[@status = 'alternative'])
           )
          "/>
@@ -2246,10 +2240,10 @@ Altra denominazione,
 Altro,
 Denominazione parallela - Intestazione parallela."
          test="
-          not(normalize-space(lower-case(entityType/@value))='family')
+          not(entityType/@value='family')
            or
           (
-           every $v in nameEntry[normalize-space(lower-case(@localType))='altradenominazionefamiglia' and normalize-space(lower-case(@status))='alternative']/part[normalize-space(lower-case(@localType))='qualifica']
+           every $v in nameEntry[@localType='AltraDenominazioneFamiglia' and @status='alternative']/part[@localType='Qualifica']
            satisfies
            (
                $v='Altra denominazione'
@@ -2262,10 +2256,10 @@ Denominazione parallela - Intestazione parallela."
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac cpfDescription/identity/nameEntry[@localType='AltraDenominazionePersona] richiede [@status='alternative']"
          test="
-          not(normalize-space(lower-case(entityType/@value))='person')
+          not(entityType/@value='person')
            or
           (
-           every $v in nameEntry[normalize-space(lower-case(@localType))='altradenominazionepersona']
+           every $v in nameEntry[@localType='AltraDenominazionePersona']
            satisfies ($v[@status = 'alternative'])
           )
          "/>
@@ -2278,10 +2272,10 @@ Altra denominazione,
 Altro,
 Denominazione parallela - Intestazione parallela."
          test="
-          not(normalize-space(lower-case(entityType/@value))='person')
+          not(entityType/@value='person')
            or
           (
-           every $v in nameEntry[normalize-space(lower-case(@localType))='altradenominazionepersona' and normalize-space(lower-case(@status))='alternative']/part[normalize-space(lower-case(@localType))='qualifica']
+           every $v in nameEntry[@localType='AltraDenominazionePersona' and @status='alternative']/part[@localType='Qualifica']
            satisfies
            (
                $v='Altra denominazione'
@@ -2297,10 +2291,10 @@ Denominazione parallela - Intestazione parallela."
 Femminile,
 Maschile."
          test="
-            not(normalize-space(lower-case(entityType/@value))='person')
+            not(entityType/@value='person')
             or 
             (
-             every $v in otherEntityTypes/otherEntityType[normalize-space(lower-case(@localType))='genere']/term
+             every $v in otherEntityTypes/otherEntityType[@localType='Genere']/term
              satisfies
              (
                  $v='Femminile'
@@ -2313,10 +2307,10 @@ Maschile."
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0267 &#xa;cpfDescription/identity/nameEntry/part[@localType='CognomePersona']&#xa; 'Cognome' è richiesto e univoco"
          test="
-            not(normalize-space(lower-case(entityType/@value))='person')
+            not(entityType/@value='person')
             or 
             (
-             count(nameEntry[normalize-space(lower-case(@localType))='denominazionepersona']/part[normalize-space(lower-case(@localType))='cognomepersona'][string-length(normalize-space(.)) &gt; 0]) = 1
+             count(nameEntry[@localType='DenominazionePersona']/part[@localType='CognomePersona'][string-length(normalize-space(.)) &gt; 0]) = 1
             )
          "/>
 
@@ -2324,64 +2318,64 @@ Maschile."
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0265&#xa; cpfDescription/identity/nameEntry/part[@localType='IntestazionePersona']&#xa; 'Intestazione principale' è richiesto e univoco"
          test="
-            not(normalize-space(lower-case(entityType/@value))='person')
+            not(entityType/@value='person')
             or 
             (
-             count(nameEntry[normalize-space(lower-case(@localType))='denominazionepersona']/part[normalize-space(lower-case(@localType))='intestazionepersona'][string-length(normalize-space(.)) &gt; 0]) = 1
+             count(nameEntry[@localType='DenominazionePersona']/part[@localType='IntestazionePersona'][string-length(normalize-space(.)) &gt; 0]) = 1
             )
          "/>
 
-      <!-- eac 0721 cpfDescription/identity[@localType="ContestoStoricoIstituzionale"][entityType[@value="corporateBody"]]/identityId/ -->
+      <!-- eac 0721 cpfDescription/identity[@localType="ContestoStoricoIstituzionale"][entityType[@value="corporateBody"]]/identityId/ --><!-- cambiato percorso con identificativo di sistema con rimossa obbligatorietà
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0721&#xa; cpfDescription/identity[@localType='ContestoStoricoIstituzionale'][entityType[@value='corporateBody']]identityId&#xa; 'Identificativo per il Contesto' è richiesto"
          test="
-            not(.[normalize-space(lower-case(@localType))='contestostoricoistituzionale'][entityType[@value='corporateBody']])
+            not(.[@localType='ContestoStoricoIstituzionale'][entityType[@value='corporateBody']])
             or 
             (
-             count(.[normalize-space(lower-case(@localType))='contestostoricoistituzionale'][entityType[@value='corporateBody']]/identityId[string-length(normalize-space(.)) &gt; 0]) = 1
+             count(.[@localType='ContestoStoricoIstituzionale'][entityType[@value='corporateBody']]/identityId[string-length(normalize-space(.)) &gt; 0]) = 1
             )
-         "/>
+         "/> -->
 
       <!-- eac 0737 cpfDescription/identity//nameEntry[@localType="DenominazioneCSI"]/part[@localType="IntestazioneCSI"]/ -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0734&#xa; cpfDescription/identity/(.|nameEntrySet)/nameEntry[@localType='DenominazioneCSI']/part[@localType='IntestazioneCSI']/&#xa; 'Intestazione' è richiesto"
          test="
-            not(.[normalize-space(lower-case(@localType))='contestostoricoistituzionale'])
+            not(.[@localType='ContestoStoricoIstituzionale'])
             or
             (
              count(
-                   .[normalize-space(lower-case(@localType))='contestostoricoistituzionale']/
-                   (.|nameEntrySet)/nameEntry[normalize-space(lower-case(@localType))='denominazionecsi']/part[normalize-space(lower-case(@localType))='intestazionecsi'][string-length(normalize-space(.)) &gt; 0]
+                   .[@localType='ContestoStoricoIstituzionale']/
+                   (.|nameEntrySet)/nameEntry[@localType='DenominazioneCSI']/part[@localType='IntestazioneCSI'][string-length(normalize-space(.)) &gt; 0]
                   ) = 1
             )
          "/>
 
-      <!-- eac 0871 cpfDescription/identity[@localType="ProfiloIstituzionale"][entityType[@value="corporateBody"]]/identityId/ -->
+      <!-- eac 0871 cpfDescription/identity[@localType="ProfiloIstituzionale"][entityType[@value="corporateBody"]]/identityId/ --><!-- cambiato percorso con identificativo di sistema con rimossa obbligatorietà
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0871&#xa; cpfDescription/identity[@localType='ProfiloIstituzionale'][entityType[@value='corporateBody']]identityId&#xa; 'Identificativo per il Profilo' è richiesto"
          test="
-            not(.[normalize-space(lower-case(@localType))='profiloistituzionale'][entityType[@value='corporateBody']])
+            not(.[@localType='ProfiloIstituzionale'][entityType[@value='corporateBody']])
             or 
             (
-             count(.[normalize-space(lower-case(@localType))='profiloistituzionale'][entityType[@value='corporateBody']]/identityId[string-length(normalize-space(.)) &gt; 0]) = 1
+             count(.[@localType='ProfiloIstituzionale'][entityType[@value='corporateBody']]/identityId[string-length(normalize-space(.)) &gt; 0]) = 1
             )
-         "/>
+         "/> -->
 
       <!-- eac 0884 cpfDescription/identity//nameEntry[@localType="DenominazioneProfilo"]/part[@localType="Intestazione"]/ -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0884&#xa; cpfDescription/identity/(.|nameEntrySet)/nameEntry[@localType='DenominazioneProfilo']/part[@localType='IntestazioneProfilo']/&#xa; 'Intestazione' è richiesto"
          test="
-            not(.[normalize-space(lower-case(@localType))='profiloistituzionale'])
+            not(.[@localType='ProfiloIstituzionale'])
             or
             (
              count(
-                   .[normalize-space(lower-case(@localType))='profiloistituzionale']/
-                   (.|nameEntrySet)/nameEntry[normalize-space(lower-case(@localType))='denominazioneprofilo']/part[normalize-space(lower-case(@localType))='intestazioneprofilo'][string-length(normalize-space(.)) &gt; 0]
+                   .[@localType='ProfiloIstituzionale']/
+                   (.|nameEntrySet)/nameEntry[@localType='DenominazioneProfilo']/part[@localType='IntestazioneProfilo'][string-length(normalize-space(.)) &gt; 0]
                   ) = 1
             )
          "/>
          
-      <!-- eac 1019 eac/cpfDescription/identity/entityType[@value="corporateBody"][@eac-sia:tipoLocale="Evento"]/identityId/  -->
+      <!-- eac 1019 eac/cpfDescription/identity/entityType[@value="corporateBody"][@eac-sia:tipoLocale="Evento"]/identityId/  --><!-- cambiato percorso con identificativo di sistema con rimossa obbligatorietà
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 1019&#xa; cpfDescription/identity[@localType='Evento']/entityType[@value='corporateBody']/identityId&#xa; 'Identificativo per l'evento' è richiesto"
          test="
@@ -2390,7 +2384,7 @@ Maschile."
             (
              count(.[normalize-space(lower-case(@localType))='evento'][entityType[@value='corporateBody']]/identityId[string-length(normalize-space(.)) &gt; 0]) = 1
             )
-         "/>
+         "/> -->
 
       <!-- eac 1027 eac/cpfDescription/identity/otherEntityTypes/otherEntityType[@localType="TipoEvento"]/term/ -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
@@ -2406,16 +2400,16 @@ Ricorrenza mensile,
 Ricorrenza biennale."
          test="
             not (
-             normalize-space(lower-case(@localType))='evento'
+             @localType='Evento'
               or 
-             entityType[normalize-space(lower-case(@eac-sia:tipoLocale))='evento']
+             entityType[@eac-sia:tipoLocale='Evento']
             )
             or
             (
-             count(otherEntityTypes/otherEntityType[normalize-space(lower-case(@localType))='tipoevento']/term[string-length(normalize-space(.)) &gt; 0]) = 1
+             count(otherEntityTypes/otherEntityType[@localType='TipoEvento']/term[string-length(normalize-space(.)) &gt; 0]) = 1
              and
              (
-              every $v in otherEntityTypes/otherEntityType[normalize-space(lower-case(@localType))='tipoevento']/term satisfies
+              every $v in otherEntityTypes/otherEntityType[@localType='TipoEvento']/term satisfies
               (
                   $v='Evento terroristico'
                or $v='Evento storico'
@@ -2436,13 +2430,13 @@ Ricorrenza biennale."
          xao:message="=&gt;&#xa;eac 1030&#xa; cpfDescription/identity/nameEntry[@localType='DenominazioneEvento']/part&#xa; 'Denominazione' è richiesto"
          test="
             not (
-             normalize-space(lower-case(@localType))='evento'
+             @localType='Evento'
               or 
-             entityType[normalize-space(lower-case(@eac-sia:tipoLocale))='evento']
+             entityType[@eac-sia:tipoLocale='Evento']
             )
             or
             (
-             count(nameEntry[normalize-space(lower-case(@localType))='denominazioneevento']/part[string-length(normalize-space(.)) &gt; 0]) &gt; 0
+             count(nameEntry[@localType='DenominazioneEvento']/part[string-length(normalize-space(.)) &gt; 0]) &gt; 0
             )
          "/>
 
@@ -2710,10 +2704,10 @@ FonteNormativa,
 RiferimentoBibliografico,
 RiferimentoWeb"
          test="not(reference/@linkRole[
-                   normalize-space(lower-case(.))!='fontearchivistica'
-               and normalize-space(lower-case(.))!='fontenormativa'
-               and normalize-space(lower-case(.))!='riferimentobibliografico'
-               and normalize-space(lower-case(.))!='riferimentoweb'
+                   .!='FonteArchivistica'
+               and .!='FonteNormativa'
+               and .!='RiferimentoBibliografico'
+               and .!='RiferimentoWeb'
               ])"/>
       
    </xs:complexType>
@@ -2816,27 +2810,95 @@ RiferimentoWeb"
          </xs:simpleType>
       </xs:attribute>
       <xs:anyAttribute namespace="##other" processContents="lax"/>
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac &#xa; @standardDate|@notBefore|@notAfter formato atteso YYYY-MM-GG o YYYY-MM o YYYY"
+         test="
+            every $v in (@standardDate|@notBefore|@notAfter)
+            satisfies (
+             (string-length(string($v)) = 4 and string-length(translate(string($v),'0123456789',''))=0)
+             or
+             (string-length(string($v)) = 7 and string-length(translate(string($v),'0123456789',''))=1 and string-length(translate(substring(string($v),1,4),'0123456789',''))=0)
+             or
+             (string-length(string($v)) = 10 and string-length(translate(string($v),'0123456789',''))=2 and string-length(translate(substring(string($v),1,4),'0123456789',''))=0 and string-length(translate(substring(string($v),6,2),'0123456789',''))=0)
+            )
+         "/>
       
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac &#xa; valore non atteso in date/@localType"
          test="
             every $v in @localType
             satisfies (
-                normalize-space(lower-case($v))='estremocronologicotestuale'
-             or normalize-space(lower-case($v))='periododichiusura'
-             or normalize-space(lower-case($v))='notealladatazione'
-             or normalize-space(lower-case($v))='secolo'
+                $v='EstremoCronologicoTestuale'
+             or $v='PeriodoDiChiusura'
+             or $v='NoteAllaDatazione'
+             or $v='Secolo'
             )
          "/>
 
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac &#xa; date[@localType='EstremoCronologicoTestuale'] richiede contenuto"
          test="
-            not(normalize-space(lower-case(@localType))='estremocronologicotestuale')
+            not(@localType='EstremoCronologicoTestuale')
              or 
             (string-length(normalize-space(.)) &gt; 0)
          "/>
          
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac &#xa; fromDate[@localType='Secolo'] richiede @notBefore e @notAfter"
+         test="
+            if(@localType='Secolo')
+            then
+            (@notBefore and @notafter)
+            else true()
+         "/>
+         
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac &#xa; la codifica del secolo ammette solo valori controllatie (con mese e giorno estremi 01-01, 12-31)&#xa;
+ ----------+-----------+--------------&#xa;
+ notBefore | notAafter |&#xa;
+ ----------+-----------+--------------&#xa;
+   nn01    |     nn10  | Inizio&#xa;
+   nn46    |     nn55  | Metà&#xa;
+   nn91    | (nn+1)00  | Fine&#xa;
+   nn01    |     nn25  | Primo quarto&#xa;
+   nn26    |     nn50  | Secondo quarto&#xa;
+   nn51    |     nn75  | Terzo quarto&#xa;
+   nn76    | (nn+1)00  | Ultimo quarto&#xa;
+   nn01    |     nn50  | Prima metà&#xa;
+   nn51    | (nn+1)00  | Seconda metà&#xa;
+ ----------+-----------+--------------&#xa;
+"
+         test="
+            if ((not(@localType) or (@localType='Secolo')) and @notBefore and @notAfter)
+            then
+            (
+             (
+                 (string-length(string(@notBefore)) =  4)
+              or (string-length(string(@notBefore)) =  7 and starts-with(substring(string(@notBefore),6,2),'01'))
+              or (string-length(string(@notBefore)) = 10 and starts-with(substring(string(@notBefore),6,5),'01-01'))
+             )
+              and
+             (
+                 (string-length(string(@notAfter)) =  4)
+              or (string-length(string(@notAfter)) =  7 and starts-with(substring(string(@notAfter),6,2),'12'))
+              or (string-length(string(@notAfter)) = 10 and starts-with(substring(string(@notAfter),6,5),'12-31'))
+             )
+              and
+             (
+                 (    ( 1 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) =  9 + number(substring(string(@notBefore),1,4))))
+              or (    (46 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) =  9 + number(substring(string(@notBefore),1,4))))
+              or (    (91 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) =  9 + number(substring(string(@notBefore),1,4))))
+              or (    ( 1 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 24 + number(substring(string(@notBefore),1,4))))
+              or (    (26 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 24 + number(substring(string(@notBefore),1,4))))
+              or (    (51 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 24 + number(substring(string(@notBefore),1,4))))
+              or (    (76 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 24 + number(substring(string(@notBefore),1,4))))
+              or (    ( 1 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 49 + number(substring(string(@notBefore),1,4))))
+              or (    (51 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 49 + number(substring(string(@notBefore),1,4))))
+             )
+            )
+            else true()
+         "/>
       <!-- 
        eac 0030 0036 0050 0056 0073 0079 0097 0103 0115 0121 0136 0142 0164 0170 0188 0194 0206 0212 0227 0233 0247 0253 0276 0282 0300 0306 0326 0332 0348 0354 0368 0374 0388 0394 0408 0414 0437 0443 0460 0466 0483 0489 0515 0521 0542 0548 0562 0568 0581 0587 0653 0659 0675 0681 0744 0750 0768 0774 0789 0795 0811 0817 0833 0839 0894 0900 0918 0924 0940 0946 0961 0967 0981 0987 1039 1046
        date/@certainty 'Validità' Lista chiusa: dataApprossimativa, dataAttribuita, dataIncerta, dataIncertaAttribuita, dataPostQuem.
@@ -3355,7 +3417,7 @@ Data non rilevabile - non rilevata."
 Data di istituzione,
 Data di cessazione - soppressione,
 Date di esistenza."
-      test="not(normalize-space(lower-case(@localType))='dateesistenzaente')
+      test="not(@localType[.='DateEsistenzaEnte'])
             or
             (
              (count((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData) &gt; 0)
@@ -3376,7 +3438,7 @@ Date di esistenza."
 Data di esistenza,
 Data di estinzione,
 Data di origine."
-      test="not(normalize-space(lower-case(@localType))='dateesistenzafamiglia')
+      test="not(@localType='DateEsistenzaFamiglia')
             or
             (
              (count((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData) &gt; 0)
@@ -3397,7 +3459,7 @@ Data di origine."
 Data di nascita,
 Data di morte,
 Date di esistenza."
-      test="not(normalize-space(lower-case(@localType))='dateesistenzapersona')
+      test="not(@localType='DateEsistenzaPersona')
             or
             (
              (count((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData) &gt; 0)
@@ -3535,18 +3597,18 @@ Detentore di diritti"
           xao:message="=&gt;&#xa;eac&#xa; cpfDescription/relations/relation[targetRole[.='AgenteCollegato']]/targetEntity/part/@localType ammette valore&#xa;
 RuoloAgente"
           test="
-           not(targetRole[normalize-space(lower-case(.))='agente collegato'])
+           not(targetRole[.='Agente collegato'])
             or
            (
             every $v in targetEntity/part/@localType satisfies
-            normalize-space(lower-case($v)) = 'ruoloagente'
+            normalize-space(lower-case($v)) = 'RuoloAgente'
            )
           "/>
 
        <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
           xao:message="=&gt;&#xa;eac&#xa; valore non atteso in cpfDescription/relations/relation/targetEntity/part/@localType"
           test="
-           targetRole[normalize-space(lower-case(.))='agente collegato']
+           targetRole[.='Agente collegato']
             or
            (
             count(targetEntity/part[@localType]) = 0
@@ -3556,7 +3618,7 @@ RuoloAgente"
        <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
           xao:message="=&gt;&#xa;eac&#xa; cpfDescription/relations/relation RELAZIONI targetEntity/@targetType e targetRole sono richiesti"
           test="
-           relationType[normalize-space(lower-case(.))='sameas']
+           relationType[.='sameAs']
             or
            (
             targetRole[string-length(normalize-space(.))&gt;0]
@@ -3575,7 +3637,7 @@ Soggetto produttore,
 Possessore,
 Proprietario,
 Detentore dei diritti."
-          test="not(.[targetRole[normalize-space(lower-case(.))='complesso archivistico']])
+          test="not(.[targetRole[.='Complesso Archivistico']])
                  or
                 (
                  (count(relationType) &gt; 0)
@@ -3596,14 +3658,14 @@ Detentore dei diritti."
                "/>
        <!-- 0446 cpfDescription/relations/relation[targetRole="Complesso Archivistico"][relationType[.='soggetto produttore' or .='soggetto conservatore']]/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData Data inizio produzione, Data fine produzione, Data di ingresso presso il conservatore  -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac 0446&#xa; cpfDescription/relations/relation[targetRole='Complesso Archivistico'][relationType[.='soggetto produttore' or .='soggetto conservatore']]/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData&#xa; 'Qualifica della data' lista chiusa con valori:&#xa;
+         xao:message="=&gt;&#xa;eac 0446&#xa; cpfDescription/relations/relation[targetRole='Complesso Archivistico'][relationType[.='Soggetto produttore' or .='Soggetto conservatore']]/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData&#xa; 'Qualifica della data' lista chiusa con valori:&#xa;
 Data inizio produzione,
 Data fine produzione,
 Data di ingresso presso il conservatore."
          test="
-            not(.[targetRole[normalize-space(lower-case(.))='complesso archivistico']])
+            not(.[targetRole[.='Complesso Archivistico']])
             or
-            not(.[relationType[normalize-space(lower-case(.))='soggetto produttore' or normalize-space(lower-case(.))='soggetto conservatore']])
+            not(.[relationType[.='Soggetto produttore' or .='Soggetto conservatore']])
             or 
             (
              every $v in ((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData)
@@ -3652,7 +3714,7 @@ Responsabile,
 Rilevatore,
 Supervisore,
 Testimone."
-           test="not(./targetRole[normalize-space(lower-case(.))='unita archivistica' or normalize-space(lower-case(.))='unita documentaria']/@localType[
+           test="not(./targetRole[.='Unita Archivistica' or .='Unita Documentaria']/@localType[
                      .!='Agrimensore'
                  and .!='Autore'
                  and .!='Committente'
@@ -3712,7 +3774,7 @@ Sigla,
 Simbolo,
 Timbro,
 Tradizione orale."
-          test="not(.[targetRole[normalize-space(lower-case(.))='unita archivistica' or normalize-space(lower-case(.))='unita documentaria']]/descriptiveNote/p[
+          test="not(.[targetRole[.='Unita Archivistica' or .='Unita Documentaria']]/descriptiveNote/p[
                      .!='Analisi diagnostiche'
                  and .!='Analisi iconografica'
                  and .!='Analisi stilistica'
@@ -3744,7 +3806,7 @@ Tradizione orale."
 Autore,
 Curatore,
 Supervisore."
-           test="not(.[targetRole[normalize-space(lower-case(.))='strumento di ricerca']]/relationType[
+           test="not(.[targetRole[.='Strumento di ricerca']]/relationType[
                      .!='Autore'
                  and .!='Curatore'
                  and .!='Supervisore'
@@ -3765,7 +3827,7 @@ Realizzatore,
 Partecipante,
 Supporto,
 Operatore."
-           test="not(.[targetRole[normalize-space(lower-case(.))='progetto']]/relationType[
+           test="not(.[targetRole[.='Progetto']]/relationType[
                      .!='Responsabile'
                  and .!='Finanziatore'
                  and .!='Responsabile scientifico'
@@ -3803,8 +3865,8 @@ Associativa."
                      [
                       targetRole
                       [
-                          normalize-space(lower-case(.))='soggetto produttore collegato'
-                       or normalize-space(lower-case(.))='soggetto conservatore collegato'
+                          .='Soggetto produttore collegato'
+                       or .='Soggetto conservatore collegato'
                       ]
                      ]/
                      relationType
@@ -3824,7 +3886,7 @@ Associativa."
                Lista chiusa: corporateBody. -->
        <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
           xao:message="=&gt;&#xa;eac 0573&#xa; cpfDescription/relations/relation[targetRole[.='Profilo istituzionbale collegato']]&#xa; ammette in targetEntity/@targetType 'corporateBody'"
-           test="not(.[targetRole[normalize-space(lower-case(.))='profilo istituzionale collegato']]/targetEntity[@targetType!='corporateBody'])"/>
+           test="not(.[targetRole[.='Profilo istituzionale collegato']]/targetEntity[@targetType!='corporateBody'])"/>
 
        <!-- eac 0690 cpfDescription/relations/relation[targetRole="Risorsa digitale collegata"]/relationType
                Lista chiusa: Nativo Digitale, È documentazione, È rappresentazione di. -->
@@ -3833,7 +3895,7 @@ Associativa."
 Nativo Digitale,
 È documentazione,
 È rappresentazione di."
-           test="not(.[targetRole[normalize-space(lower-case(.))='risorsa digitale collegata']]/relationType[
+           test="not(.[targetRole[.='Risorsa digitale collegata']]/relationType[
                      .!='Nativo digitale'
                  and .!='È documentazione'
                  and .!='È rappresentazione di'
@@ -3963,8 +4025,8 @@ Nativo Digitale,
             every $v in (span/@localType)
             satisfies 
             (
-                normalize-space(lower-case($v))='azione'
-             or normalize-space(lower-case($v))='noteredazionali'
+                $v='Azione'
+             or $v='NoteRedazionali'
             )
            "/>
       
@@ -3977,7 +4039,7 @@ Raccolta delle informazioni,
 Revisione,
 Rielaborazione,
 Supervisione."
-         test="every $v in (span[normalize-space(lower-case(@localType))='azione'])
+         test="every $v in (span[@localType='Azione'])
             satisfies 
             (
                 $v='Importazione'
@@ -4085,87 +4147,101 @@ Supervisione."
       <xs:anyAttribute namespace="##other" processContents="lax"/>
       
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac &#xa; @standardDate|@notBefore|@notAfter formato atteso YYYY-MM-GG o YYYY-MM o YYYY"
+         test="
+            every $v in (@standardDate|@notBefore|@notAfter)
+            satisfies (
+             (string-length(string($v)) = 4 and string-length(translate(string($v),'0123456789',''))=0)
+             or
+             (string-length(string($v)) = 7 and string-length(translate(string($v),'0123456789',''))=1 and string-length(translate(substring(string($v),1,4),'0123456789',''))=0)
+             or
+             (string-length(string($v)) = 10 and string-length(translate(string($v),'0123456789',''))=2 and string-length(translate(substring(string($v),1,4),'0123456789',''))=0 and string-length(translate(substring(string($v),6,2),'0123456789',''))=0)
+            )
+         "/>
+      
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac &#xa; valore non atteso in fromDate/@localType"
          test="
             every $v in @localType
             satisfies (
-                normalize-space(lower-case($v))='estremocronologicotestuale'
-             or normalize-space(lower-case($v))='orarioinizio'
-             or normalize-space(lower-case($v))='secolo'
+                $v='EstremoCronologicoTestuale'
+             or $v='OrarioInizio'
+             or $v='Secolo'
             )
          "/>
          
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac &#xa; fromDate[@localType='EstremoCronologicoTestuale'] richiede contenuto"
          test="
-            not(normalize-space(lower-case(@localType))='estremocronologicotestuale')
+            not(@localType='EstremoCronologicoTestuale')
              or 
             (string-length(normalize-space(.)) &gt; 0)
          "/>
-<!--
+<!-- contenuto ammesso
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac &#xa; fromDate[@localType='Secolo'] non ammette contenuto"
          test="
             not(normalize-space(lower-case(@localType))='secolo')
              or 
             (string-length(normalize-space(.)) = 0)
-         "/>
+         "/> -->
+
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac &#xa; fromDate[@localType='Secolo'] richiede @notBefore e @notAfter"
          test="
-            if(normalize-space(lower-case(@localType))='secolo')
+            if(@localType='Secolo')
             then
             (@notBefore and @notafter)
             else true()
          "/>
          
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac &#xa; fromDate[@localType='Secolo'] ammette i seguenti valori negli attributi notBefore e notAfter&#xa;
- notBefore | notAfter |&#xa;
- ==========|==========|==================&#xa;
-   nn01    |     nn10 | primo decennio   &#xa;
-   nn46    |     nn55 | decennio centrale&#xa;
-   nn91    | (nn+1)00 | ultimo decennio  &#xa;
-   nn01    |     nn25 | primo quarto     &#xa;
-   nn26    |     nn50 | secondo quarto   &#xa;
-   nn51    |     nn75 | terzo quarto     &#xa;
-   nn76    | (nn+1)00 | ultimo quarto    &#xa;
-   nn01    |     nn50 | prima metà       &#xa;
-   nn51    | (nn+1)00 | seconda metà"
+         xao:message="=&gt;&#xa;eac &#xa; la codifica del secolo ammette solo valori controllatie (con mese e giorno estremi 01-01, 12-31)&#xa;
+ ----------+-----------+--------------&#xa;
+ notBefore | notAafter |&#xa;
+ ----------+-----------+--------------&#xa;
+   nn01    |     nn10  | Inizio&#xa;
+   nn46    |     nn55  | Metà&#xa;
+   nn91    | (nn+1)00  | Fine&#xa;
+   nn01    |     nn25  | Primo quarto&#xa;
+   nn26    |     nn50  | Secondo quarto&#xa;
+   nn51    |     nn75  | Terzo quarto&#xa;
+   nn76    | (nn+1)00  | Ultimo quarto&#xa;
+   nn01    |     nn50  | Prima metà&#xa;
+   nn51    | (nn+1)00  | Seconda metà&#xa;
+ ----------+-----------+--------------&#xa;
+"
          test="
-            if (@localType[normalize-space(lower-case(.))='secolo'] and @notBefore and @notAfter)
+            if ((not(@localType) or (@localType='Secolo')) and @notBefore and @notAfter)
             then
             (
              (
-              (string-length(normalize-space(string(@notBefore))) &gt; 0)
-               and
-              (string-length(normalize-space(string(@notAfter))) &gt; 0)
+                 (string-length(string(@notBefore)) =  4)
+              or (string-length(string(@notBefore)) =  7 and starts-with(substring(string(@notBefore),6,2),'01'))
+              or (string-length(string(@notBefore)) = 10 and starts-with(substring(string(@notBefore),6,5),'01-01'))
              )
               and
              (
-                 (    ( 1 = (number(@notBefore) mod 100))
-                  and (number(@notAfter) =  9 + number(@notBefore)))
-              or (    (46 = (number(@notBefore) mod 100))
-                  and (number(@notAfter) =  9 + number(@notBefore)))
-              or (    (91 = (number(@notBefore) mod 100))
-                  and (number(@notAfter) =  9 + number(@notBefore)))
-              or (    ( 1 = (number(@notBefore) mod 100))
-                  and (number(@notAfter) = 24 + number(@notBefore)))
-              or (    (26 = (number(@notBefore) mod 100))
-                  and (number(@notAfter) = 24 + number(@notBefore)))
-              or (    (51 = (number(@notBefore) mod 100))
-                  and (number(@notAfter) = 24 + number(@notBefore)))
-              or (    (76 = (number(@notBefore) mod 100))
-                  and (number(@notAfter) = 24 + number(@notBefore)))
-              or (    ( 1 = (number(@notBefore) mod 100))
-                  and (number(@notAfter) = 49 + number(@notBefore)))
-              or (    (51 = (number(@notBefore) mod 100))
-                  and (number(@notAfter) = 49 + number(@notBefore)))
+                 (string-length(string(@notAfter)) =  4)
+              or (string-length(string(@notAfter)) =  7 and starts-with(substring(string(@notAfter),6,2),'12'))
+              or (string-length(string(@notAfter)) = 10 and starts-with(substring(string(@notAfter),6,5),'12-31'))
+             )
+              and
+             (
+                 (    ( 1 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) =  9 + number(substring(string(@notBefore),1,4))))
+              or (    (46 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) =  9 + number(substring(string(@notBefore),1,4))))
+              or (    (91 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) =  9 + number(substring(string(@notBefore),1,4))))
+              or (    ( 1 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 24 + number(substring(string(@notBefore),1,4))))
+              or (    (26 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 24 + number(substring(string(@notBefore),1,4))))
+              or (    (51 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 24 + number(substring(string(@notBefore),1,4))))
+              or (    (76 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 24 + number(substring(string(@notBefore),1,4))))
+              or (    ( 1 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 49 + number(substring(string(@notBefore),1,4))))
+              or (    (51 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 49 + number(substring(string(@notBefore),1,4))))
              )
             )
             else true()
          "/>
- -->
+      
    </xs:complexType>
    <xs:complexType name="toDate" mixed="true">
       <xs:attribute name="audience">
@@ -4206,24 +4282,93 @@ Supervisione."
          </xs:simpleType>
       </xs:attribute>
       <xs:anyAttribute namespace="##other" processContents="lax"/>
-      
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac &#xa; @standardDate|@notBefore|@notAfter formato atteso YYYY-MM-GG o YYYY-MM o YYYY"
+         test="
+            every $v in (@standardDate|@notBefore|@notAfter)
+            satisfies (
+             (string-length(string($v)) = 4 and string-length(translate(string($v),'0123456789',''))=0)
+             or
+             (string-length(string($v)) = 7 and string-length(translate(string($v),'0123456789',''))=1 and string-length(translate(substring(string($v),1,4),'0123456789',''))=0)
+             or
+             (string-length(string($v)) = 10 and string-length(translate(string($v),'0123456789',''))=2 and string-length(translate(substring(string($v),1,4),'0123456789',''))=0 and string-length(translate(substring(string($v),6,2),'0123456789',''))=0)
+            )
+         "/>
+
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac &#xa; valore non atteso in toDate/@localType"
          test="
             every $v in @localType
             satisfies (
-                normalize-space(lower-case($v))='estremocronologicotestuale'
-             or normalize-space(lower-case($v))='orariofine'
-             or normalize-space(lower-case($v))='secolo'
+                $v='EstremoCronologicoTestuale'
+             or $v='OrarioFine'
+             or $v='Secolo'
             )
          "/>
          
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac &#xa; toDate[@localType='EstremoCronologicoTestuale'] richiede contenuto"
          test="
-            not(normalize-space(lower-case(@localType))='estremocronologicotestuale')
+            not(@localType='EstremoCronologicoTestuale')
              or 
             (string-length(normalize-space(.)) &gt; 0)
+         "/>
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac &#xa; fromDate[@localType='Secolo'] richiede @notBefore e @notAfter"
+         test="
+            if(@localType='Secolo')
+            then
+            (@notBefore and @notafter)
+            else true()
+         "/>
+         
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac &#xa; la codifica del secolo ammette solo valori controllatie (con mese e giorno estremi 01-01, 12-31)&#xa;
+ ----------+-----------+--------------&#xa;
+ notBefore | notAafter |&#xa;
+ ----------+-----------+--------------&#xa;
+   nn01    |     nn10  | Inizio&#xa;
+   nn46    |     nn55  | Metà&#xa;
+   nn91    | (nn+1)00  | Fine&#xa;
+   nn01    |     nn25  | Primo quarto&#xa;
+   nn26    |     nn50  | Secondo quarto&#xa;
+   nn51    |     nn75  | Terzo quarto&#xa;
+   nn76    | (nn+1)00  | Ultimo quarto&#xa;
+   nn01    |     nn50  | Prima metà&#xa;
+   nn51    | (nn+1)00  | Seconda metà&#xa;
+ ----------+-----------+--------------&#xa;
+"
+         test="
+            if ((not(@localType) or (@localType='Secolo')) and @notBefore and @notAfter)
+            then
+            (
+             (
+                 (string-length(string(@notBefore)) =  4)
+              or (string-length(string(@notBefore)) =  7 and starts-with(substring(string(@notBefore),6,2),'01'))
+              or (string-length(string(@notBefore)) = 10 and starts-with(substring(string(@notBefore),6,5),'01-01'))
+             )
+              and
+             (
+                 (string-length(string(@notAfter)) =  4)
+              or (string-length(string(@notAfter)) =  7 and starts-with(substring(string(@notAfter),6,2),'12'))
+              or (string-length(string(@notAfter)) = 10 and starts-with(substring(string(@notAfter),6,5),'12-31'))
+             )
+              and
+             (
+                 (    ( 1 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) =  9 + number(substring(string(@notBefore),1,4))))
+              or (    (46 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) =  9 + number(substring(string(@notBefore),1,4))))
+              or (    (91 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) =  9 + number(substring(string(@notBefore),1,4))))
+              or (    ( 1 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 24 + number(substring(string(@notBefore),1,4))))
+              or (    (26 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 24 + number(substring(string(@notBefore),1,4))))
+              or (    (51 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 24 + number(substring(string(@notBefore),1,4))))
+              or (    (76 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 24 + number(substring(string(@notBefore),1,4))))
+              or (    ( 1 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 49 + number(substring(string(@notBefore),1,4))))
+              or (    (51 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 49 + number(substring(string(@notBefore),1,4))))
+             )
+            )
+            else true()
          "/>
 
    </xs:complexType>
@@ -4635,7 +4780,7 @@ Principale,
 Consultazione,
 Privato."
          test="
-            every $v in .[@localType[normalize-space(lower-case(.))='sedi']]/placeRole
+            every $v in .[@localType[.='Sedi']]/placeRole
             satisfies (
                  $v='Principale'
               or $v='Consultazione'
@@ -4655,14 +4800,14 @@ AccessoDisabili,
 Servizi,
 CondizioniDiAccesso."
          test="
-            every $v in .[@localType[normalize-space(lower-case(.))='sedi']]/address/addressLine/@localType
+            every $v in .[@localType[.='Sedi']]/address/addressLine/@localType
             satisfies (
-                 normalize-space(lower-case($v))='localita/frazione'
-              or normalize-space(lower-case($v))='indirizzotestuale'
-              or normalize-space(lower-case($v))='noteindirizzo'
-              or normalize-space(lower-case($v))='accessodisabili'
-              or normalize-space(lower-case($v))='servizi'
-              or normalize-space(lower-case($v))='condizionidiaccesso'
+                 $v='Localita/Frazione'
+              or $v='IndirizzoTestuale'
+              or $v='NoteIndirizzo'
+              or $v='AccessoDisabili'
+              or $v='Servizi'
+              or $v='CondizioniDiAccesso'
             )
          "/>
       <!--
@@ -4673,9 +4818,9 @@ CondizioniDiAccesso."
          xao:message="=&gt;&#xa;eac 0612&#xa; cpfDescription/description/places/place[@localType='Sedi']/dateSet/@localType in SEDE CONSERVATORE ammette valori:&#xa;
 GiorniDiApertura."
          test="
-            every $v in .[@localType[normalize-space(lower-case(.))='sedi']]/dateSet/@localType
+            every $v in .[@localType[.='Sedi']]/dateSet/@localType
             satisfies (
-                 normalize-space(lower-case($v))='giornidiapertura'
+                 $v='GiorniDiApertura'
             )
          "/>
       <!--
@@ -4686,9 +4831,9 @@ GiorniDiApertura."
          xao:message="=&gt;&#xa;eac 0612&#xa; cpfDescription/description/places/place[@localType='Sedi']/date/@localType in SEDE CONSERVATORE ammette valori:&#xa;
 PeriodoDiChiusura."
          test="
-            every $v in .[@localType[normalize-space(lower-case(.))='sedi']]/date/@localType
+            every $v in .[@localType[.='Sedi']]/date/@localType
             satisfies (
-                 normalize-space(lower-case($v))='periododichiusura'
+                 $v='PeriodoDiChiusura'
             )
          "/>
       <!--
@@ -4707,16 +4852,16 @@ sabato,
 domenica,
 festivi."
          test="
-            every $v in .[@localType[normalize-space(lower-case(.))='sedi']]/dateSet[@localType]/dateRange/@localType
+            every $v in .[@localType[.='Sedi']]/dateSet[@localType]/dateRange/@localType
             satisfies (
-                 normalize-space(lower-case($v))='lunedì'
-              or normalize-space(lower-case($v))='martedì'
-              or normalize-space(lower-case($v))='mercoledì'
-              or normalize-space(lower-case($v))='giovedì'
-              or normalize-space(lower-case($v))='venerdì'
-              or normalize-space(lower-case($v))='sabato'
-              or normalize-space(lower-case($v))='domenica'
-              or normalize-space(lower-case($v))='festivi'
+                 $v='lunedì'
+              or $v='martedì'
+              or $v='mercoledì'
+              or $v='giovedì'
+              or $v='venerdì'
+              or $v='sabato'
+              or $v='domenica'
+              or $v='festivi'
             )
          "/>
       <!--
@@ -4729,9 +4874,9 @@ festivi."
          xao:message="=&gt;&#xa;eac 0612&#xa; cpfDescription/description/places/place[@localType='Sedi']/dateSet[@localType]/dateRange[@localType]/fromDate/@localType in SEDE CONSERVATORE ammette valori:&#xa;
 orarioInizio."
          test="
-            every $v in .[@localType[normalize-space(lower-case(.))='sedi']]/dateSet[@localType]/dateRange[@localType]/fromDate/@localType
+            every $v in .[@localType[.='Sedi']]/dateSet[@localType]/dateRange[@localType]/fromDate/@localType
             satisfies (
-                 normalize-space(lower-case($v))='orarioinizio'
+                 $v='OrarioInizio'
             )
          "/>
       <!--
@@ -4744,9 +4889,9 @@ orarioInizio."
          xao:message="=&gt;&#xa;eac 0612&#xa; cpfDescription/description/places/place[@localType='Sedi']/dateSet[@localType]/dateRange[@localType]/toDate/@localType in SEDE CONSERVATORE ammette valori:&#xa;
 OrarioFine."
          test="
-            every $v in .[@localType[normalize-space(lower-case(.))='sedi']]/dateSet[@localType]/dateRange[@localType]/toDate/@localType
+            every $v in .[@localType[.='Sedi']]/dateSet[@localType]/dateRange[@localType]/toDate/@localType
             satisfies (
-                 normalize-space(lower-case($v))='orariofine'
+                 $v='OrarioFine'
             )
          "/>
       
@@ -4757,7 +4902,7 @@ OrarioFine."
 Giurisdizione,
 Sede."
          test="
-            every $v in .[@localType[normalize-space(lower-case(.))='luogoente']]/placeRole
+            every $v in .[@localType[.='LuogoEnte']]/placeRole
             satisfies 
             (
                 $v='Giurisdizione'
@@ -4773,7 +4918,7 @@ Origine,
 Residenza,
 Sede di attività."
          test="
-            every $v in .[@localType[normalize-space(lower-case(.))='luogofamiglia']]/placeRole
+            every $v in .[@localType[.='LuogoFamiglia']]/placeRole
             satisfies 
             (
                 $v='Domicilio'
@@ -4791,7 +4936,7 @@ Nascita,
 Residenza,
 Sede di attività."
          test="
-            every $v in .[@localType[normalize-space(lower-case(.))='luogopersona']]/placeRole
+            every $v in .[@localType[.='LuogoPersona']]/placeRole
             satisfies 
             (
                 $v='Domicilio'
@@ -5157,7 +5302,7 @@ Sede di attività."
                    every $v in @coordinateSystem
                    satisfies 
                    (
-                       normalize-space(lower-case($v))='wgs84'
+                       $v='WGS84'
                    )
                "/>
             <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
@@ -5171,8 +5316,8 @@ Longitudine."
                    every $v in @eac-sia:tipoCoordinata
                    satisfies 
                    (
-                       normalize-space(lower-case($v))='latitudine'
-                    or normalize-space(lower-case($v))='longitudine'
+                       $v='Latitudine'
+                    or $v='Longitudine'
                    )
                   )
                "/>
