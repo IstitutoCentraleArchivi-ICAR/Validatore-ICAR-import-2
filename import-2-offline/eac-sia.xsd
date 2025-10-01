@@ -1155,7 +1155,7 @@ DescrizioneEvento"
             )
             or
             (
-             every $v in ddescription/biogHist/@localType satisfies
+             every $v in description/biogHist/@localType satisfies
              ($v='DescrizioneEvento')
             )
          "/>
@@ -1170,6 +1170,12 @@ DescrizioneEvento"
             (
              count(description/biogHist[@localType]) = 0
             )
+         "/>
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac&#xa; biogHist/p non ammette ripetizione"
+         test="
+             count(description/biogHist/p) &lt;= 1
          "/>
 
       <!-- eac 0124 ENTE eac/cpfDescription/identity/entityType[@value='corporateBody']
