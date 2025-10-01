@@ -1252,6 +1252,122 @@ Fine qualifica."
 
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0239 &#xa;cpfDescription/description/localDescriptions/localDescription[@localType='TitoloFamiglia']/term&#xa; 'Titolo' lista chiusa con valori:&#xa;
+Abate,
+Arcivescovo,
+Arciprete,
+Badessa,
+Barone,
+Baronessa,
+Canonico,
+Cappellano,
+Cardinale,
+Cardinale vicario,
+Cavaliere,
+Chierico,
+Conte,
+Contessa,
+Decano,
+Diacono,
+Duca,
+Duchessa,
+Frate,
+Granduca,
+Granduchessa,
+Imperatore,
+Imperatrice,
+Marchesa,
+Marchese,
+Metropolita,
+Monaca,
+Nobile,
+Nobile di città,
+Nunzio apostolico,
+Oblato,
+Papa,
+Parroco,
+Patrizio,
+Prelato,
+Presbitero,
+Priore,
+Prioressa,
+Principe,
+Principessa,
+Re,
+Regina,
+Rettore,
+Signore,
+Suora,
+Terziario,
+Vescovo,
+Vicaria,
+Vicario,
+Visconte,
+Viscontessa."
+         test="
+            if (identity/entityType/@value[.='person' or .='family'])
+            then
+            (
+             every $v in (description/localDescriptions/localDescription[@localType[.='TitoloPersona' or .='TitoloFamiglia']]/term)
+             satisfies
+             (
+                 $v='Abate'
+              or $v='Arcivescovo'
+              or $v='Arciprete'
+              or $v='Badessa'
+              or $v='Barone'
+              or $v='Baronessa'
+              or $v='Canonico'
+              or $v='Cappellano'
+              or $v='Cardinale'
+              or $v='Cardinale vicario'
+              or $v='Cavaliere'
+              or $v='Chierico'
+              or $v='Conte'
+              or $v='Contessa'
+              or $v='Decano'
+              or $v='Diacono'
+              or $v='Duca'
+              or $v='Duchessa'
+              or $v='Frate'
+              or $v='Granduca'
+              or $v='Granduchessa'
+              or $v='Imperatore'
+              or $v='Imperatrice'
+              or $v='Marchesa'
+              or $v='Marchese'
+              or $v='Metropolita'
+              or $v='Monaca'
+              or $v='Nobile'
+              or $v='Nobile di città'
+              or $v='Nunzio apostolico'
+              or $v='Oblato'
+              or $v='Papa'
+              or $v='Parroco'
+              or $v='Patrizio'
+              or $v='Prelato'
+              or $v='Presbitero'
+              or $v='Priore'
+              or $v='Prioressa'
+              or $v='Principe'
+              or $v='Principessa'
+              or $v='Re'
+              or $v='Regina'
+              or $v='Rettore'
+              or $v='Signore'
+              or $v='Suora'
+              or $v='Terziario'
+              or $v='Vescovo'
+              or $v='Vicaria'
+              or $v='Vicario'
+              or $v='Visconte'
+              or $v='Viscontessa'
+             )       
+            )
+            else true()
+         "/>
+<!--
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac 0239 &#xa;cpfDescription/description/localDescriptions/localDescription[@localType='TitoloFamiglia']/term&#xa; 'Titolo' lista chiusa con valori:&#xa;
 Barone,
 Cavaliere,
 Conte,
@@ -1331,7 +1447,7 @@ Visconte."
              )
             )
          "/>
-         
+-->
       <!--0612 CONSERVARTORE SEDE Tipologia Lista chiusa: Principale, Consultazione, Privato. -->
       <!--
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
@@ -3025,7 +3141,9 @@ Data non rilevabile - non rilevata."
              or $v='Data non rilevabile - non rilevata'
             )
            "/>
-
+<!--
+ TODO se tipologiaData data aperta verificare la presenza dell'elemento opportuno
+-->
    </xs:complexType>
    <xs:complexType name="entityType">
       <xs:attribute name="audience">
