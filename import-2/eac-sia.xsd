@@ -2934,16 +2934,10 @@ RiferimentoWeb"
       <xs:anyAttribute namespace="##other" processContents="lax"/>
 
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac &#xa; @standardDate|@notBefore|@notAfter formato atteso YYYY-MM-GG o YYYY-MM o YYYY"
+         xao:message="=&gt;&#xa;eac &#xa; @standardDate|@notBefore|@notAfter formato atteso AAAA-MM-GG o AAAA-MM o AAAA"
          test="
             every $v in (@standardDate|@notBefore|@notAfter)
-            satisfies (
-             (string-length(string($v)) = 4 and string-length(translate(string($v),'0123456789',''))=0)
-             or
-             (string-length(string($v)) = 7 and string-length(translate(string($v),'0123456789',''))=1 and string-length(translate(substring(string($v),1,4),'0123456789',''))=0)
-             or
-             (string-length(string($v)) = 10 and string-length(translate(string($v),'0123456789',''))=2 and string-length(translate(substring(string($v),1,4),'0123456789',''))=0 and string-length(translate(substring(string($v),6,2),'0123456789',''))=0)
-            )
+            satisfies matches(string($v),'^[0-9]{4}(-[0-9]{2}(-[0-9]{2})??)??$')
          "/>
       
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
@@ -2976,7 +2970,7 @@ RiferimentoWeb"
          "/>
          
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac &#xa; la codifica del secolo ammette solo valori controllatie (con mese e giorno estremi 01-01, 12-31)&#xa;
+         xao:message="=&gt;&#xa;eac &#xa; la codifica del secolo ammette solo valori controllati e (con mese e giorno estremi 01-01, 12-31)&#xa;
  ----------+-----------+--------------&#xa;
  notBefore | notAafter |&#xa;
  ----------+-----------+--------------&#xa;
@@ -2995,28 +2989,24 @@ RiferimentoWeb"
             if ((not(@localType) or (@localType='Secolo')) and @notBefore and @notAfter)
             then
             (
-             (
-                 (string-length(string(@notBefore)) =  4)
-              or (string-length(string(@notBefore)) =  7 and starts-with(substring(string(@notBefore),6,2),'01'))
-              or (string-length(string(@notBefore)) = 10 and starts-with(substring(string(@notBefore),6,5),'01-01'))
-             )
+             (string-length(string(@notBefore)) &lt; 6 or month-from-date(@notBefore)=1)
+              and
+             (string-length(string(@notBefore)) &lt; 9 or day-from-date(@notBefore)=1)
+              and
+             (string-length(string(@notAfter )) &lt; 6 or month-from-date(@notAfter)=12)
+              and
+             (string-length(string(@notAfter )) &lt; 9 or day-from-date(@notAfter)=31)
               and
              (
-                 (string-length(string(@notAfter)) =  4)
-              or (string-length(string(@notAfter)) =  7 and starts-with(substring(string(@notAfter),6,2),'12'))
-              or (string-length(string(@notAfter)) = 10 and starts-with(substring(string(@notAfter),6,5),'12-31'))
-             )
-              and
-             (
-                 (    ( 1 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) =  9 + number(substring(string(@notBefore),1,4))))
-              or (    (46 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) =  9 + number(substring(string(@notBefore),1,4))))
-              or (    (91 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) =  9 + number(substring(string(@notBefore),1,4))))
-              or (    ( 1 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 24 + number(substring(string(@notBefore),1,4))))
-              or (    (26 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 24 + number(substring(string(@notBefore),1,4))))
-              or (    (51 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 24 + number(substring(string(@notBefore),1,4))))
-              or (    (76 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 24 + number(substring(string(@notBefore),1,4))))
-              or (    ( 1 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 49 + number(substring(string(@notBefore),1,4))))
-              or (    (51 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 49 + number(substring(string(@notBefore),1,4))))
+                 ( ( 1 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) =  9 + year-from-date(@notBefore)) )
+              or ( (46 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) =  9 + year-from-date(@notBefore)) )
+              or ( (91 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) =  9 + year-from-date(@notBefore)) )
+              or ( ( 1 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 24 + year-from-date(@notBefore)) )
+              or ( (26 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 24 + year-from-date(@notBefore)) )
+              or ( (51 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 24 + year-from-date(@notBefore)) )
+              or ( (76 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 24 + year-from-date(@notBefore)) )
+              or ( ( 1 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 49 + year-from-date(@notBefore)) )
+              or ( (51 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 49 + year-from-date(@notBefore)) )
              )
             )
             else true()
@@ -4280,16 +4270,10 @@ Supervisione."
       <xs:anyAttribute namespace="##other" processContents="lax"/>
       
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac &#xa; @standardDate|@notBefore|@notAfter formato atteso YYYY-MM-GG o YYYY-MM o YYYY"
+         xao:message="=&gt;&#xa;eac &#xa; @standardDate|@notBefore|@notAfter formato atteso AAAA-MM-GG o AAAA-MM o AAAA"
          test="
             every $v in (@standardDate|@notBefore|@notAfter)
-            satisfies (
-             (string-length(string($v)) = 4 and string-length(translate(string($v),'0123456789',''))=0)
-             or
-             (string-length(string($v)) = 7 and string-length(translate(string($v),'0123456789',''))=1 and string-length(translate(substring(string($v),1,4),'0123456789',''))=0)
-             or
-             (string-length(string($v)) = 10 and string-length(translate(string($v),'0123456789',''))=2 and string-length(translate(substring(string($v),1,4),'0123456789',''))=0 and string-length(translate(substring(string($v),6,2),'0123456789',''))=0)
-            )
+            satisfies matches(string($v),'^[0-9]{4}(-[0-9]{2}(-[0-9]{2})??)??$')
          "/>
       
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
@@ -4329,7 +4313,7 @@ Supervisione."
          "/>
          
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac &#xa; la codifica del secolo ammette solo valori controllatie (con mese e giorno estremi 01-01, 12-31)&#xa;
+         xao:message="=&gt;&#xa;eac &#xa; la codifica del secolo ammette solo valori controllati e (con mese e giorno estremi 01-01, 12-31)&#xa;
  ----------+-----------+--------------&#xa;
  notBefore | notAafter |&#xa;
  ----------+-----------+--------------&#xa;
@@ -4348,28 +4332,24 @@ Supervisione."
             if ((not(@localType) or (@localType='Secolo')) and @notBefore and @notAfter)
             then
             (
-             (
-                 (string-length(string(@notBefore)) =  4)
-              or (string-length(string(@notBefore)) =  7 and starts-with(substring(string(@notBefore),6,2),'01'))
-              or (string-length(string(@notBefore)) = 10 and starts-with(substring(string(@notBefore),6,5),'01-01'))
-             )
+             (string-length(string(@notBefore)) &lt; 6 or month-from-date(@notBefore)=1)
+              and
+             (string-length(string(@notBefore)) &lt; 9 or day-from-date(@notBefore)=1)
+              and
+             (string-length(string(@notAfter )) &lt; 6 or month-from-date(@notAfter)=12)
+              and
+             (string-length(string(@notAfter )) &lt; 9 or day-from-date(@notAfter)=31)
               and
              (
-                 (string-length(string(@notAfter)) =  4)
-              or (string-length(string(@notAfter)) =  7 and starts-with(substring(string(@notAfter),6,2),'12'))
-              or (string-length(string(@notAfter)) = 10 and starts-with(substring(string(@notAfter),6,5),'12-31'))
-             )
-              and
-             (
-                 (    ( 1 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) =  9 + number(substring(string(@notBefore),1,4))))
-              or (    (46 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) =  9 + number(substring(string(@notBefore),1,4))))
-              or (    (91 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) =  9 + number(substring(string(@notBefore),1,4))))
-              or (    ( 1 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 24 + number(substring(string(@notBefore),1,4))))
-              or (    (26 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 24 + number(substring(string(@notBefore),1,4))))
-              or (    (51 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 24 + number(substring(string(@notBefore),1,4))))
-              or (    (76 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 24 + number(substring(string(@notBefore),1,4))))
-              or (    ( 1 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 49 + number(substring(string(@notBefore),1,4))))
-              or (    (51 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 49 + number(substring(string(@notBefore),1,4))))
+                 ( ( 1 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) =  9 + year-from-date(@notBefore)) )
+              or ( (46 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) =  9 + year-from-date(@notBefore)) )
+              or ( (91 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) =  9 + year-from-date(@notBefore)) )
+              or ( ( 1 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 24 + year-from-date(@notBefore)) )
+              or ( (26 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 24 + year-from-date(@notBefore)) )
+              or ( (51 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 24 + year-from-date(@notBefore)) )
+              or ( (76 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 24 + year-from-date(@notBefore)) )
+              or ( ( 1 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 49 + year-from-date(@notBefore)) )
+              or ( (51 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 49 + year-from-date(@notBefore)) )
              )
             )
             else true()
@@ -4417,16 +4397,10 @@ Supervisione."
       <xs:anyAttribute namespace="##other" processContents="lax"/>
 
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac &#xa; @standardDate|@notBefore|@notAfter formato atteso YYYY-MM-GG o YYYY-MM o YYYY"
+         xao:message="=&gt;&#xa;eac &#xa; @standardDate|@notBefore|@notAfter formato atteso AAAA-MM-GG o AAAA-MM o AAAA"
          test="
             every $v in (@standardDate|@notBefore|@notAfter)
-            satisfies (
-             (string-length(string($v)) = 4 and string-length(translate(string($v),'0123456789',''))=0)
-             or
-             (string-length(string($v)) = 7 and string-length(translate(string($v),'0123456789',''))=1 and string-length(translate(substring(string($v),1,4),'0123456789',''))=0)
-             or
-             (string-length(string($v)) = 10 and string-length(translate(string($v),'0123456789',''))=2 and string-length(translate(substring(string($v),1,4),'0123456789',''))=0 and string-length(translate(substring(string($v),6,2),'0123456789',''))=0)
-            )
+            satisfies matches(string($v),'^[0-9]{4}(-[0-9]{2}(-[0-9]{2})??)??$')
          "/>
 
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
@@ -4458,7 +4432,7 @@ Supervisione."
          "/>
          
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac &#xa; la codifica del secolo ammette solo valori controllatie (con mese e giorno estremi 01-01, 12-31)&#xa;
+         xao:message="=&gt;&#xa;eac &#xa; la codifica del secolo ammette solo valori controllati e (con mese e giorno estremi 01-01, 12-31)&#xa;
  ----------+-----------+--------------&#xa;
  notBefore | notAafter |&#xa;
  ----------+-----------+--------------&#xa;
@@ -4477,28 +4451,24 @@ Supervisione."
             if ((not(@localType) or (@localType='Secolo')) and @notBefore and @notAfter)
             then
             (
-             (
-                 (string-length(string(@notBefore)) =  4)
-              or (string-length(string(@notBefore)) =  7 and starts-with(substring(string(@notBefore),6,2),'01'))
-              or (string-length(string(@notBefore)) = 10 and starts-with(substring(string(@notBefore),6,5),'01-01'))
-             )
+             (string-length(string(@notBefore)) &lt; 6 or month-from-date(@notBefore)=1)
+              and
+             (string-length(string(@notBefore)) &lt; 9 or day-from-date(@notBefore)=1)
+              and
+             (string-length(string(@notAfter )) &lt; 6 or month-from-date(@notAfter)=12)
+              and
+             (string-length(string(@notAfter )) &lt; 9 or day-from-date(@notAfter)=31)
               and
              (
-                 (string-length(string(@notAfter)) =  4)
-              or (string-length(string(@notAfter)) =  7 and starts-with(substring(string(@notAfter),6,2),'12'))
-              or (string-length(string(@notAfter)) = 10 and starts-with(substring(string(@notAfter),6,5),'12-31'))
-             )
-              and
-             (
-                 (    ( 1 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) =  9 + number(substring(string(@notBefore),1,4))))
-              or (    (46 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) =  9 + number(substring(string(@notBefore),1,4))))
-              or (    (91 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) =  9 + number(substring(string(@notBefore),1,4))))
-              or (    ( 1 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 24 + number(substring(string(@notBefore),1,4))))
-              or (    (26 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 24 + number(substring(string(@notBefore),1,4))))
-              or (    (51 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 24 + number(substring(string(@notBefore),1,4))))
-              or (    (76 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 24 + number(substring(string(@notBefore),1,4))))
-              or (    ( 1 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 49 + number(substring(string(@notBefore),1,4))))
-              or (    (51 = (number(substring(string(@notBefore),1,4)) mod 100)) and (number(substring(string(@notAfter),1,4)) = 49 + number(substring(string(@notBefore),1,4))))
+                 ( ( 1 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) =  9 + year-from-date(@notBefore)) )
+              or ( (46 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) =  9 + year-from-date(@notBefore)) )
+              or ( (91 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) =  9 + year-from-date(@notBefore)) )
+              or ( ( 1 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 24 + year-from-date(@notBefore)) )
+              or ( (26 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 24 + year-from-date(@notBefore)) )
+              or ( (51 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 24 + year-from-date(@notBefore)) )
+              or ( (76 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 24 + year-from-date(@notBefore)) )
+              or ( ( 1 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 49 + year-from-date(@notBefore)) )
+              or ( (51 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 49 + year-from-date(@notBefore)) )
              )
             )
             else true()
