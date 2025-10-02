@@ -3837,7 +3837,7 @@ Responsabile,
 Rilevatore,
 Supervisore,
 Testimone."
-           test="not(./targetRole[.='Unita Archivistica' or .='Unita Documentaria']/relationType[
+           test="not(.[targetRole[.='Unita Archivistica' or .='Unita Documentaria']][relationType[
                      .!='Agrimensore'
                  and .!='Autore'
                  and .!='Committente'
@@ -3868,7 +3868,7 @@ Testimone."
                  and .!='Rilevatore'
                  and .!='Supervisore'
                  and .!='Testimone'
-                ])"/>
+                ]])"/>
        <!-- 0452 eac/cpfDescription/relations/relation[targetRole="unita archivistica"]/descriptiveNote/p/
             0475 eac/cpfDescription/relations/relation[targetRole="unita documentaria"]/descriptiveNote/p/
                Lista chiusa: Analisi diagnostiche, Analisi iconografica, Analisi stilistica, Attributo figurato, Bibliografia, Bollo, Cartiglio, Contesto, Documentazione, Firma, Fonte archivistica, Inventario museale, Iscrizione, Marchio, Monogramma, Nota manoscritta, Pubblicazione, Punzone, Sigla, Simbolo, Timbro, Tradizione orale
