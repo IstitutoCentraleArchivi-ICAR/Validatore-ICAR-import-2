@@ -3806,7 +3806,7 @@ Data di ingresso presso il conservatore."
                Agrimensore, Autore, Committente, Copista, Corrispondente, Curatore, Destinatario, Detentore dei diritti, Disegnatore, Editore, Esecutore, Finanziatore, Fotografo inventore, Fotografo principale, Giudice, Ideatore, Incisore, Litografo, Miniaturista, Mittente, Notaio, Partecipante, Possessore, Progettista, Proprietario, Regista, Responsabile, Rilevatore, Supervisore, Testimone
        -->
        <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-          xao:message="=&gt;&#xa;eac 0451 0474&#xa; cpfDescription/relations/relation/targetRole[.='Unita Archivistica' or .='Unita Documentaria']/@localType&#xa; 'Ruolo/qualifica' lista chiusa con valori:&#xa;
+          xao:message="=&gt;&#xa;eac 0451 0474&#xa; cpfDescription/relations/relation/targetRole[.='Unita Archivistica' or .='Unita Documentaria']/relationType&#xa; 'Ruolo/qualifica' lista chiusa con valori:&#xa;
 Agrimensore,
 Autore,
 Committente,
@@ -3837,7 +3837,7 @@ Responsabile,
 Rilevatore,
 Supervisore,
 Testimone."
-           test="not(./targetRole[.='Unita Archivistica' or .='Unita Documentaria']/@localType[
+           test="not(./targetRole[.='Unita Archivistica' or .='Unita Documentaria']/relationType[
                      .!='Agrimensore'
                  and .!='Autore'
                  and .!='Committente'
