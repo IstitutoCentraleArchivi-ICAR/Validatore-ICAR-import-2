@@ -393,6 +393,36 @@ Ente pubblico."
              or $v='Ente pubblico'
             )
          "/>
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac 0429&#xa; cpfDescription/relations/relation[targetRole='Complesso Archivistico'][relationType='Soggetto conservatore']/descriptiveNote/p/&#xa; 'MODALITA DI ACQUISIZIONE' lista chiusa con valori:&#xa;
+Modalità di acquisizione: Acquisto,
+Modalità di acquisizione: Comodato,
+Modalità di acquisizione: Deposito,
+Modalità di acquisizione: Donazione,
+Modalità di acquisizione: Lascito testamentario,
+Modalità di acquisizione: Versamento."
+         test="
+          not
+          (
+           not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
+            and
+           not(identity/entityType[@eac-sia:tipoLocale='Evento'])
+          )
+          or
+          (
+            every $v in relations/relation[targetRole[.='Complesso archivistico']][relationType[.='Soggetto conservatore']]/descriptiveNote/p
+            satisfies 
+            (
+                $v='Modalità di acquisizione: Acquisto'
+             or $v='Modalità di acquisizione: Comodato'
+             or $v='Modalità di acquisizione: Deposito'
+             or $v='Modalità di acquisizione: Donazione'
+             or $v='Modalità di acquisizione: Lascito testamentario'
+             or $v='Modalità di acquisizione: Versamento'
+            )
+           )
+         "/>
          
       <!-- 
       entità                                           relations/relation[targetRole[.='Complesso archivistico']]/relationType         
