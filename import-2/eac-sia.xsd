@@ -786,7 +786,7 @@ agent                    | sameAs&#xa;
            not(identity/entityType[@eac-sia:tipoLocale='Evento'])
           )
           or (
-           every $v in relations/relation[relationType[.='sameAs']]/targetEntity/@targetype satisfies ($v = 'agent')
+           every $v in relations/relation[relationType[.='sameAs']]/targetEntity/@targetType satisfies ($v = 'agent')
           ) 
          "/>
          
@@ -845,7 +845,7 @@ corporateBody            | sameAs&#xa;
            identity[@localType='ContestoStoricoIstituzionale']
           )
           or (
-           every $v in relations/relation[relationType[.='sameAs']]/targetEntity/@targetype satisfies ($v = 'corporateBody')
+           every $v in relations/relation[relationType[.='sameAs']]/targetEntity/@targetType satisfies ($v = 'corporateBody')
           ) 
          "/>
 
@@ -904,7 +904,7 @@ corporateBody            | sameAs&#xa;
            identity[@localType='ProfiloIstituzionale']
           )
           or (
-           every $v in relations/relation[relationType[.='sameAs']]/targetEntity/@targetype satisfies ($v = 'corporateBody')
+           every $v in relations/relation[relationType[.='sameAs']]/targetEntity/@targetType satisfies ($v = 'corporateBody')
           ) 
          "/>
          
