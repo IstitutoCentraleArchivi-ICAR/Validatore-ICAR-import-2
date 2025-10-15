@@ -786,12 +786,12 @@ M030: In &lt;archdesc> è ammesso, al più, un unico figlio &lt;odd> con @localt
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(odd[@localtype = 'AltreInfo'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M160: In &lt;archdesc> gli eventuali figli &lt;odd> devono avere @localtype che vale&#x0a;
-      &quot;AltreInfo&quot; od &quot;Osservazioni&quot;
+M160: In &lt;archdesc> gli eventuali figli &lt;odd> devono avere privi&#x0a;
+      di @localtype o avere un @localtype che vale &quot;Osservazioni&quot;
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="every $odd in odd
-                satisfies $odd/@localtype = ('AltreInfo', 'Osservazioni')"/>
+                satisfies $odd[not(@localtype) or (@localtype = 'Osservazioni')]"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M033: In &lt;archdesc> non è ammesso un figlio &lt;accessrestrict> diretto con&#x0a;
       @localtype pari a &quot;NoteCondizioniAccesso&quot;
@@ -1504,11 +1504,12 @@ M030: In &lt;c>, quando rappresenta un complesso archivistico, è ammesso, al pi
           test="1 >= count(odd[@localtype = 'AltreInfo'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M160: In &lt;c>, quando rappresenta un complesso archivistico, gli eventuali figli&#x0a;
-      &lt;odd> devono avere @localtype che vale &quot;AltreInfo&quot; od &quot;Osservazioni&quot;
+      &lt;odd> devono avere privi di @localtype o avere un @localtype che vale&#x0a;
+      &quot;Osservazioni&quot;
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="every $odd in odd
-                satisfies $odd/@localtype = ('AltreInfo', 'Osservazioni')"/>
+                satisfies $odd[not(@localtype) or (@localtype = 'Osservazioni')]"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M040: In &lt;c>, quando rappresenta un complesso archivistico, deve essere&#x0a;
       presente, al più, un unico&#x0a;
@@ -1755,7 +1756,7 @@ M309: In &lt;c>, quando rappresenta un'unità archivistica, l'eventuale figlio&#
       non nullo
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="if (fileplan) then 1 >= count(fileplan/p[normalize-space()]) else true()"/>
+          test="if (fileplan) then 1 >= count(fileplan/p[text()[normalize-space()]]) else true()"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M310: In &lt;c>, quando rappresenta un'unità archivistica, l'eventuale figlio&#x0a;
       &lt;fileplan> non deve avere più di un figlio &lt;p> che contiene, a sua&#x0a;
@@ -1769,7 +1770,7 @@ M311: In &lt;c>, quando rappresenta un'unità archivistica, l'eventuale figlio&#
       non nullo e, contemporaneamente, un figlio &lt;subject>
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="if (fileplan) then not(fileplan/p[subject and normalize-space()]) else true()"/>
+          test="if (fileplan) then not(fileplan/p[subject and text()[normalize-space()]]) else true()"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M352: In &lt;c>, quando rappresenta un'unità archivistica, deve essere&#x0a;
       presente, al più, un unico&#x0a;
@@ -4053,25 +4054,23 @@ M347: Quando &lt;ead> contiene uno Strumento di Ricerca, non deve essere nullo i
                    satisfies $trm/text() != ''
               else true()"/>
       <xs:assert xa:message="[&#x0a;&#x0a;
-M348: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere un&#x0a;
-      (ma solo un)&#x0a;
-      control/localcontrol[@localtype = &quot;IdentificativoDiSistema&quot;]/term
+M348: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere anche&#x0a;
+      control/@id
       &#x0a;&#x0a;]"
         xpathDefaultNamespace="##targetNamespace" 
         test="if (    (archdesc/@level = 'otherlevel')
                   and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
-              then 1 = count(control/localcontrol[@localtype = 'IdentificativoDiSistema']/term)
+              then control/@id
               else true()"/>
       <xs:assert xa:message="[&#x0a;&#x0a;
 M349: Quando &lt;ead> contiene uno Strumento di Ricerca, non deve essere nullo il&#x0a;
-      contenuto di&#x0a;
-      control/localcontrol[@localtype = &quot;IdentificativoDiSistema&quot;]/term
+      contenuto di control/@id
       &#x0a;&#x0a;]"
         xpathDefaultNamespace="##targetNamespace" 
         test="if (    (archdesc/@level = 'otherlevel')
                   and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
-              then every $trm in control/localcontrol[@localtype = 'IdentificativoDiSistema']/term
-                   satisfies $trm/text() != ''
+              then every $id in control/@id
+                   satisfies $id != ''
               else true()"/>
       <xs:assert xa:message="[&#x0a;&#x0a;
 M350: Quando &lt;ead> contiene uno Strumento di Ricerca, deve&#x0a;
@@ -4085,13 +4084,13 @@ M350: Quando &lt;ead> contiene uno Strumento di Ricerca, deve&#x0a;
       <xs:assert xa:message="[&#x0a;&#x0a;
 M351: Quando &lt;ead> contiene uno Strumento di Ricerca, il valore di&#x0a;
       control/publicationstatus/@value deve essere pari a &quot;published&quot; oppure&#x0a;
-      a &quot;inprocess&quot;
+      a &quot;inprocess&quot; oppure ad &quot;approved&quot;
       &#x0a;&#x0a;]"
       xpathDefaultNamespace="##targetNamespace" 
         test="if (    (archdesc/@level = 'otherlevel')
                   and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
               then every $pub in control/publicationstatus
-                   satisfies $pub/@value = ('published', 'inprocess')
+                   satisfies $pub/@value = ('published', 'inprocess', 'approved')
               else true()"/>
     </xs:complexType>
   </xs:element>
@@ -5205,11 +5204,11 @@ M306: Qualora in un &lt;arrangement>, con @localtype pari a &quot;Numerazione&qu
     <xs:attribute name="localtype" type="xs:token"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
-M257: In &lt;odd>, quando @localtype non è pari a &quot;Osservazioni&quot;, deve essere&#x0a;
-      presente almeno un figlio &lt;p>
+M257: In &lt;odd>, quando @localtype è presente e non è pari a &quot;Osservazioni&quot;,&#x0a;
+      deve essere presente almeno un figlio &lt;p>
       &#x0a;&#x0a;]"
       xpathDefaultNamespace="##targetNamespace" 
-      test="if (not(@localtype) or (@localtype != 'Osservazioni'))
+      test="if (@localtype != 'Osservazioni')
             then p
             else true()"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
