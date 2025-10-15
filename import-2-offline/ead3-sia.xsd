@@ -4114,8 +4114,9 @@ M351: Quando &lt;ead> contiene uno Strumento di Ricerca, il valore di&#x0a;
       <xs:element name="maintenancehistory" type="maintenancehistory"/>
       <xs:element name="sources" type="sources" minOccurs="0"/>
     </xs:sequence>
-    <!-- M423: rimosso il gruppo "am.common" e gli attributi
-               @relatedencoding e @base, non utilizzati -->
+    <!-- M423: rimosso il gruppo "am.common" (non utilizzato con l'eccezione di @id)
+               e gli attributi @relatedencoding e @base, non utilizzati; recuperato @id -->
+    <xs:attribute name="id" type="xs:ID"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
     <xs:attribute name="langencoding">
       <xs:simpleType>
