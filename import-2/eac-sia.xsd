@@ -370,7 +370,7 @@ Osservazioni."
              satisfies (
               $v/@localType
                and
-              $v/@localType='DescrizioneCSI'
+              $v/@localType='DescrizioneContesto'
              )
             )
            "/>
@@ -1122,6 +1122,34 @@ DateEsistenzaEnte"
             )
          "/>
          
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac 0887&#xa; cpfDescription/description/existDates/@localType ammette valore&#xa;
+DateEsistenzaProfilo"
+         test="
+            not(
+             identity/@localType[.='ProfiloIstituzionale']
+            )
+            or
+            (
+             every $v in description/existDates/@localType satisfies
+             ($v='DateEsistenzaProfilo')
+            )
+         "/>
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac 0737&#xa; cpfDescription/description/existDates/@localType ammette valore&#xa;
+DateEsistenzaContesto"
+         test="
+            not(
+             identity/@localType[.='ContestoStoricoIstituzionale']
+            )
+            or
+            (
+             every $v in description/existDates/@localType satisfies
+             ($v='DateEsistenzaContesto')
+            )
+         "/>
+
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0215&#xa; cpfDescription/description/existDates/@localType ammette valore&#xa;
 DateEsistenzaFamiglia"
@@ -2104,27 +2132,27 @@ Qualifica."
 
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0734 &#xa; contesto storico istituzionale ammette in identity/nameEntry/@localType il valore&#xa;
-DenominazioneCSI."
+DenominazioneContesto."
          test="not(@localType='ContestoStoricoIstituzionale')
                 or 
                (
                 every $v in nameEntry/@localType
                 satisfies
                 (
-                 $v='DenominazioneCSI'
+                 $v='DenominazioneContesto'
                 )
                )"/>
 
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac 0734 &#xa; contesto storico istituzionale ammette in identity/nameEntry[@localType='DenominazioneCSI']/part/@localType il valore&#xa;
-IntestazioneCSI."
+         xao:message="=&gt;&#xa;eac 0734 &#xa; contesto storico istituzionale ammette in identity/nameEntry[@localType='DenominazioneContesto']/part/@localType il valore&#xa;
+IntestazioneContesto."
          test="not(@localType='ContestoStoricoIstituzionale')
                 or 
                (
-                every $v in nameEntry[@localType='DenominazioneCSI']/part/@localType
+                every $v in nameEntry[@localType='DenominazioneContesto']/part/@localType
                 satisfies
                 (
-                 $v='IntestazioneCSI'
+                 $v='IntestazioneContesto'
                 )
                )"/>
 
@@ -2488,16 +2516,16 @@ Maschile."
             )
          "/> -->
 
-      <!-- eac 0737 cpfDescription/identity//nameEntry[@localType="DenominazioneCSI"]/part[@localType="IntestazioneCSI"]/ -->
+      <!-- eac 0737 cpfDescription/identity//nameEntry[@localType="DenominazioneContesto"]/part[@localType="IntestazioneContesto"]/ -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac 0734&#xa; cpfDescription/identity/(.|nameEntrySet)/nameEntry[@localType='DenominazioneCSI']/part[@localType='IntestazioneCSI']/&#xa; 'Intestazione' è richiesto"
+         xao:message="=&gt;&#xa;eac 0734&#xa; cpfDescription/identity/(.|nameEntrySet)/nameEntry[@localType='DenominazioneContesto']/part[@localType='IntestazioneContesto']/&#xa; 'Intestazione' è richiesto"
          test="
             not(.[@localType='ContestoStoricoIstituzionale'])
             or
             (
              count(
                    .[@localType='ContestoStoricoIstituzionale']/
-                   (.|nameEntrySet)/nameEntry[@localType='DenominazioneCSI']/part[@localType='IntestazioneCSI'][string-length(normalize-space(.)) &gt; 0]
+                   (.|nameEntrySet)/nameEntry[@localType='DenominazioneContesto']/part[@localType='IntestazioneContesto'][string-length(normalize-space(.)) &gt; 0]
                   ) = 1
             )
          "/>
