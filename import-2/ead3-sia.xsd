@@ -3305,6 +3305,9 @@ M083: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, s
                      or (    (51 = (number(substring(@notbefore, 1, 4)) mod 100))
                          and (  number(substring(@notafter, 1, 4))
                               = 49 + number(substring(@notbefore, 1, 4))))
+                     or (    ( 1 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              = 99 + number(substring(@notbefore, 1, 4))))
                 else true()"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M174: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, il valore&#x0a;
