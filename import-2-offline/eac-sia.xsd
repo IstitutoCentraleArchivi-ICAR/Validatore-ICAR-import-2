@@ -3041,6 +3041,7 @@ RiferimentoWeb"
    nn76    | (nn+1)00  | Ultimo quarto&#xa;
    nn01    |     nn50  | Prima metà&#xa;
    nn51    | (nn+1)00  | Seconda metà&#xa;
+   nn01    | (nn+1)00  | Completo&#xa;
  ----------+-----------+--------------&#xa;
 "
          test="
@@ -3065,6 +3066,7 @@ RiferimentoWeb"
               or ( (76 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 24 + year-from-date(@notBefore)) )
               or ( ( 1 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 49 + year-from-date(@notBefore)) )
               or ( (51 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 49 + year-from-date(@notBefore)) )
+              or ( ( 1 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 99 + year-from-date(@notBefore)) )
              )
             )
             else true()
@@ -4384,6 +4386,7 @@ Supervisione."
    nn76    | (nn+1)00  | Ultimo quarto&#xa;
    nn01    |     nn50  | Prima metà&#xa;
    nn51    | (nn+1)00  | Seconda metà&#xa;
+   nn01    | (nn+1)00  | Completo&#xa;
  ----------+-----------+--------------&#xa;
 "
          test="
@@ -4408,6 +4411,7 @@ Supervisione."
               or ( (76 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 24 + year-from-date(@notBefore)) )
               or ( ( 1 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 49 + year-from-date(@notBefore)) )
               or ( (51 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 49 + year-from-date(@notBefore)) )
+              or ( ( 1 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 99 + year-from-date(@notBefore)) )
              )
             )
             else true()
@@ -4503,6 +4507,7 @@ Supervisione."
    nn76    | (nn+1)00  | Ultimo quarto&#xa;
    nn01    |     nn50  | Prima metà&#xa;
    nn51    | (nn+1)00  | Seconda metà&#xa;
+   nn01    | (nn+1)00  | Completo&#xa;
  ----------+-----------+--------------&#xa;
 "
          test="
@@ -4527,6 +4532,7 @@ Supervisione."
               or ( (76 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 24 + year-from-date(@notBefore)) )
               or ( ( 1 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 49 + year-from-date(@notBefore)) )
               or ( (51 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 49 + year-from-date(@notBefore)) )
+              or ( ( 1 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 99 + year-from-date(@notBefore)) )
              )
             )
             else true()
