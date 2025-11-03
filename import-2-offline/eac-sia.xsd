@@ -3004,6 +3004,7 @@ RiferimentoWeb"
             every $v in @localType
             satisfies (
                 $v='EstremoCronologicoTestuale'
+             or $v='DataSingola'
              or $v='PeriodoDiChiusura'
              or $v='NoteAllaDatazione'
              or $v='Secolo'
