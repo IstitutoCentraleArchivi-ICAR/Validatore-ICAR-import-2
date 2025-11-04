@@ -1003,10 +1003,7 @@ M572: In &lt;archdesc>, quando rappresenta un complesso archivistico,&#x0a;
           xpathDefaultNamespace="##targetNamespace" 
           test="every $p in processinfo[@localtype = 'StatusScheda']/p
                 satisfies $p/text() = ('Bozza', 'In validazione di primo livello',
-                                       'Validata (primo livello)',
-                                       'In validazione di secondo livello',
-                                       'Validata (secondo livello)', 'Pubblicata',
-                                       'Copia parallela')"/>
+                                       'Validata (primo livello)', 'Pubblicata')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M576: In &lt;archdesc>, quando rappresenta un complesso archivistico, non può&#x0a;
       essere presente nessun relations/relation/dateset/datesingle con&#x0a;
@@ -1400,10 +1397,7 @@ M572: In &lt;c> è obbligatorio che il contenuto di&#x0a;
       xpathDefaultNamespace="##targetNamespace" 
       test="every $p in processinfo[@localtype = 'StatusScheda']/p
             satisfies $p/text() = ('Bozza', 'In validazione di primo livello',
-                                   'Validata (primo livello)',
-                                   'In validazione di secondo livello',
-                                   'Validata (secondo livello)', 'Pubblicata',
-                                   'Copia parallela')"/>
+                                   'Validata (primo livello)', 'Pubblicata')"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M576: In &lt;c> non può essere presente nessun&#x0a;
       relations/relation/dateset/datesingle con il @relationtype&#x0a;
@@ -1526,13 +1520,13 @@ M041: In &lt;c>, quando rappresenta un complesso archivistico, deve essere&#x0a;
           test="1 >= count(did/physdesc[@localtype = 'ConsistenzaTotale'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M046: In &lt;c>, quando rappresenta un complesso archivistico, deve&#x0a;
-      obbligatoriamente essere presente un unico (non ripetibile)&#x0a;
+      essere presente al più un (non ripetibile)&#x0a;
       relations/relation[@relationtype = &quot;resourcerelation&quot;]/relationentry&#x0a;
       dove il @localtype del &lt;relationentry> vale &quot;ComplArchSovraordinato&quot;
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="1 = count( relations/relation[@relationtype = 'resourcerelation']
-                          /relationentry[@localtype = 'ComplArchSovraordinato'])"/>
+          test="1 >= count( relations/relation[@relationtype = 'resourcerelation']
+                           /relationentry[@localtype = 'ComplArchSovraordinato'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M178: In &lt;c>, quando rappresenta un complesso archivistico, è ammesso, al più,&#x0a;
       un unico figlio &lt;scopecontent> con @localtype pari a&#x0a;
@@ -1604,11 +1598,11 @@ M021: In &lt;c>, quando rappresenta un'unità archivistica, l'eventuale figlio&#
                 satisfies $s/p"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M050: In &lt;c>, quando rappresenta un'unità archivistica, deve essere&#x0a;
-      obbligatioriamente presente uno e un solo (non ripetibile)&#x0a;
+      presente, al più, un unico&#x0a;
       did/unitid[@localtype = &quot;NumeroSequenza&quot;]
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="1 = count(did/unitid[@localtype = 'NumeroSequenza'])"/>
+          test="1 >= count(did/unitid[@localtype = 'NumeroSequenza'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M051: In &lt;c>, quando rappresenta un'unità archivistica, deve essere&#x0a;
       presente, al più, un unico&#x0a;
@@ -1809,11 +1803,11 @@ M021: In &lt;c>, quando rappresenta un'unità documentaria, l'eventuale figlio&#
                 satisfies $s/p"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M050: In &lt;c>, quando rappresenta un'unità documentaria, deve essere&#x0a;
-      obbligatioriamente presente uno e un solo (non ripetibile)&#x0a;
+      presente, al più, un unico&#x0a;
       did/unitid[@localtype = &quot;NumeroSequenza&quot;]
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="1 = count(did/unitid[@localtype = 'NumeroSequenza'])"/>
+          test="1 >= count(did/unitid[@localtype = 'NumeroSequenza'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M051: In &lt;c>, quando rappresenta un'unità documentaria, deve essere&#x0a;
       presente, al più, un unico&#x0a;
@@ -3212,7 +3206,7 @@ M166: In &lt;datesingle>, quando @localtype è pari a &quot;DataTestuale&quot;, 
           xpathDefaultNamespace="##targetNamespace" 
           test="   not(@altrender)
                 or (@altrender != ('Intervallo di date', 'Data singola', 'Data aperta (a partire da)',
-                                   'Data aperta (fino a)', 'Data non rilevata/non rilevabile'))"/>
+                                   'Data aperta (fino a)', 'Data non rilevabile - non rilevata'))"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M543: In &lt;datesingle>, quando @localtype è pari a &quot;DataTestuale&quot;,&#x0a;
       @standarddate non deve essere presente
@@ -3427,6 +3421,15 @@ M542: In &lt;datesingle>, quando @localtype è pari a &quot;QualificaData&quot;,
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="not(@notafter)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M582: In &lt;datesingle>, quando @localtype è pari a &quot;QualificaData&quot;,&#x0a;
+      il valore testuale dell'elemento deve soddisfare una ben precisa lista&#x0a;
+      chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="text() = ('Con documentazione dal', 'Con documentazione fino al',
+                          'Con documentazione in copia dal', 'Con documentazione in copia fino al',
+                          'Con lacuna', 'Data della documentazione compresa', 'Principale')"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -3464,7 +3467,7 @@ M560: In &lt;date>, quando @localtype è pari a &quot;DataTestuale&quot;, se è&
           xpathDefaultNamespace="##targetNamespace" 
           test="   not(@altrender)
                 or (@altrender != ('Intervallo di date', 'Data singola', 'Data aperta (a partire da)',
-                                   'Data aperta (fino a)', 'Data non rilevata/non rilevabile'))"/>
+                                   'Data aperta (fino a)', 'Data non rilevabile - non rilevata'))"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M563: In &lt;date>, quando @localtype è pari a &quot;DataTestuale&quot;,&#x0a;
       @normal non deve essere presente
@@ -3497,6 +3500,15 @@ M563: In &lt;date>, quando @localtype è pari a &quot;QualificaData&quot;,&#x0a;
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="not(@normal)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M582: In &lt;date>, quando @localtype è pari a &quot;QualificaData&quot;,&#x0a;
+      il valore testuale dell'elemento deve soddisfare una ben precisa lista&#x0a;
+      chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="text() = ('Con documentazione dal', 'Con documentazione fino al',
+                          'Con documentazione in copia dal', 'Con documentazione in copia fino al',
+                          'Con lacuna', 'Data della documentazione compresa', 'Principale')"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -4886,6 +4898,51 @@ M281: In &lt;controlnote>, quando il @localtype vale &quot;FinalitaProgetto&quot
         <!-- M436: rimossi il gruppo "am.common" e l'attributo @label, non utilizzati -->
         <xs:attribute name="localtype" type="xs:token"/>
         <xs:attribute name="encodinganalog" type="xs:token"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M281: In &lt;didnote>, quando il @localtype vale &quot;PeriodizzazioneOTipologia&quot;,&#x0a;
+      il contenuto testiale dell'elemento deve soddisfare una precisa lista&#x0a;
+      chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (@localtype = 'PeriodizzazioneOTipologia')
+                then   text()
+                     = ('Antico regime', 'Periodo comunale o signorile',
+                        'Periodo del governo misto (legato e senato)', 'Repubblica', 'Periodo mediceo',
+                        'Periodo lorenese', 'Comune poi Repubblica (sec. XI-1528)',
+                        'Repubblica aristocratica (1528-1798)', 'Periodo Gonzaga', 'Periodo asburgico',
+                        'Periodo angioino (1265-1442) periodo aragonese (1442-1505) viceregno (1505-1734)',
+                        'Periodo farnesiano (1545-1731)', 'Periodo borbonico (1734-1806)',
+                        'Principato vescovile di Trento', 'Principato vescovile di Bressanone',
+                        'Contea del Tirolo',
+                        'Repubblica pisana (sec. IX-1406) prima dominazione fiorentina (1406-1494) e repubblica Pisana (1494-1509)',
+                        'Dominazione fiorentina (1509-1808)', 'Repubblica di Siena',
+                        'Periodo mediceo-lorenese', 'Periodo napoleonico', 'Repubblica Romana',
+                        'Prima Restaurazione', &quot;Regno d'Italia&quot;, 'Repubblica Ligure',
+                        'Impero Francese', 'Repubblica lucchese-primo governo democratico',
+                        'Prima restaurazione austriaca', 'Governi provvisori', 'Repubblica lucchese',
+                        'Principato Baiocchi',
+                        'Periodo precedente la repubblica cisalpina (9 maggio 1796-9 luglio 1797)',
+                        'Prima e seconda repubblica cisalpina (9 luglio 1797-29 aprile 1799; 4 giugno 1800-26 gennaio 1802)',
+                        'Occupazione austro - russa (29 aprile 1799-4 giugno 1800)',
+                        'Repubblica italiana (26 gennaio 1802-19 marzo 1805)', 'Repubblica napoletana (1799)',
+                        'Decennio Francese (1806-1815)', 'Restaurazione', 'Governi provvisori',
+                        'Periodo borbonico', 'Governo granducale toscano', 'Periodo toscano',
+                        'Seconda dominazione austriaca (1814-1848)',
+                        'Governo provvisorio (22 mar. 1848 - 24 ag. 1849)',
+                        'Terza dominazione austriaca (1849-1866)', 'Restaurazione (1814-1915)',
+                        &quot;Regno d'Italia e Repubblica Italiana&quot;,
+                        'Fondi non statali o non periodizzabili', 'Comuni', 'Enti territoriali',
+                        'Stato civile', 'Diplomatici e notarili', 'Estimi e catasti',
+                        'Arti, corporazioni di mestiere, ordini professionali',
+                        'Corporazioni religiose ed altri enti religiosi', 'Imprese e istituti di credito',
+                        'Assistenza, beneficenza e previdenza, ospedali ed enti sanitari',
+                        'Partiti politici, movimenti e organizzazioni sindacali',
+                        'Accademie ed enti di cultura', 'Enti di istruzione e ricerca e università',
+                        'Famiglie', 'Persone',
+                        'Organizzazioni internazionali, rappresentanze diplomatiche, organismi stranieri',
+                        'Enti vari e associazioni', 'Cartografici', 'Fotografici e audiovisivi',
+                        'Collezioni e raccolte')
+                else true()"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -4934,6 +4991,14 @@ M281: In &lt;controlnote>, quando il @localtype vale &quot;FinalitaProgetto&quot
                    @label e @parent, non utilizzati -->
         <xs:attribute name="localtype" type="xs:token"/>
         <xs:attribute name="encodinganalog" type="xs:token"/>
+        <!--
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M037: In &lt;physloc> deve essere presente almeno un figlio &lt;ptr> con gli&#x0a;
+      attributi @id e @linkrole, il secondo dei quali deve valere &quot;Internal&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="ptr[@linkrole = 'Internal']/@id"/>
+          -->
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -5111,7 +5176,8 @@ M306: Qualora in un &lt;arrangement>, con @localtype pari a &quot;Numerazione&qu
       xpathDefaultNamespace="##targetNamespace" 
       test="if (@localtype = 'Numerazione')
             then every $type in p/num/@localtype
-                 satisfies $type = ('Alfabetico', 'Numeri arabi', 'numeri romani')
+                 satisfies $type = ('Alfabetico', 'Numeri arabi', 'Numeri romani',
+                                    'Misto numerico/alfabetico')
             else true()"/>
   </xs:complexType>
 
@@ -5981,13 +6047,13 @@ M172: In &lt;dateset>, quando contiene un &lt;datesingle> con @localtype pari a&
             else true()"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M173: In &lt;dateset>, quando contiene un &lt;datesingle> con @localtype pari a&#x0a;
-      &quot;DataTestuale&quot; e @altrender pari a &quot;Data non rilevata/non rilevabile&quot;,&#x0a;
+      &quot;DataTestuale&quot; e @altrender pari a &quot;Data non rilevabile - non rilevata&quot;,&#x0a;
       non deve contenere né &lt;daterange> né un &lt;datesingle> con @localtype pari&#x0a;
       a &quot;DataSingola&quot;
       &#x0a;&#x0a;]"
       xpathDefaultNamespace="##targetNamespace" 
       test="if (datesingle[    (@localtype = 'DataTestuale')
-                           and (@altrender = 'Data non rilevata/non rilevabile')])
+                           and (@altrender = 'Data non rilevabile - non rilevata')])
             then     not(datesingle[@localtype = 'DataSingola'])
                  and not(daterange)
             else true()"/>
