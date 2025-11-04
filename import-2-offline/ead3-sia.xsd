@@ -253,22 +253,22 @@ M238: È obbligatoria in &lt;archref>, quando contenuto in &lt;bibliography>, ch
       <xs:extension base="processinfo">
         <xs:assert xa:message="[&#x0a;&#x0a;
 M220: In &lt;processifo>, quando relativo a una compilazione, deve essere,&#x0a;
-      presente dentro un chronlist/chronitem/event, al più uno dei seguenti&#x0a;
-      elementi contenti un &lt;part> con @localtype pari a &quot;Denominazione&quot;:&#x0a;
-      (1) un &lt;persname> con @relator pari a &quot;Compilatore&quot;,&#x0a;
+      presente dentro un chronlist/chronitem/event, uno (e un solo) dei&#x0a;
+      seguenti elementi contenti un &lt;part> con @localtype pari a&#x0a;
+      &quot;Denominazione&quot;: (1) un &lt;persname> con @relator pari a &quot;Compilatore&quot;,&#x0a;
       oppure (2) un &lt;corpname> con @relator pari a &quot;Compilatore&quot;,&#x0a;
       oppure (3) un &lt;name> con @localtype pari a &quot;Software&quot;
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="1 >= (  count( chronlist/chronitem/event
-                              /persname[@relator = 'Compilatore']
-                              /part[@localtype = 'Denominazione'])
-                      + count( chronlist/chronitem/event
-                              /corpname[@relator = 'Compilatore']
-                              /part[@localtype = 'Denominazione'])
-                      + count( chronlist/chronitem/event
-                              /name[@localtype = 'Software']
-                              /part[@localtype = 'Denominazione']))"/>
+          test="1 = (  count( chronlist/chronitem/event
+                             /persname[@relator = 'Compilatore']
+                             /part[@localtype = 'Denominazione'])
+                     + count( chronlist/chronitem/event
+                             /corpname[@relator = 'Compilatore']
+                             /part[@localtype = 'Denominazione'])
+                     + count( chronlist/chronitem/event
+                             /name[@localtype = 'Software']
+                             /part[@localtype = 'Denominazione']))"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M221: In &lt;processifo>, quando relativo a una compilazione, deve essere&#x0a;
       presente, al più, un unico chronlist/chronitem/event/name/part dove&#x0a;
@@ -939,8 +939,8 @@ M297: In &lt;archdesc>, quando relativo a un complesso archivistico, il valore d
                 satisfies $p/text() = ('Completa', 'Non visibile',
                                        'Descrizione Libera e Risorsa Protetta (login)',
                                        'Descrizione Protetta e Risorsa Protetta (login)',
-                                       'Descrizione Libera e Risorse Riservata (autorizzazione)',
-                                       'Descrizione Riservata e Risorse Riservata (autorizzazione)')"/>
+                                       'Descrizione Libera e Risorsa Riservata (autorizzazione)',
+                                       'Descrizione Riservata e Risorsa Riservata (autorizzazione)')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M304: In &lt;archdesc>, quando rappresenta un complesso archivistico, gli&#x0a;
       eventuali valori di&#x0a;
@@ -1065,8 +1065,8 @@ M297: In &lt;archdesc>, quando relativo a un progetto, il valore di&#x0a;
                 satisfies $p/text() = ('Completa', 'Non visibile',
                                        'Descrizione Libera e Risorsa Protetta (login)',
                                        'Descrizione Protetta e Risorsa Protetta (login)',
-                                       'Descrizione Libera e Risorse Riservata (autorizzazione)',
-                                       'Descrizione Riservata e Risorse Riservata (autorizzazione)')"/>
+                                       'Descrizione Libera e Risorsa Riservata (autorizzazione)',
+                                       'Descrizione Riservata e Risorsa Riservata (autorizzazione)')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M577: In &lt;archdesc>, quando relativo a un progetto, non può essere presente&#x0a;
       nessun
@@ -1238,6 +1238,12 @@ M036: &lt;c> non ammette più di discendente (e comunque non figlio diretto)&#x0
       xpathDefaultNamespace="##targetNamespace" 
       test="1 >= count(userestrict//userestrict[@localtype = 'NoteCondizioniUtilizzo'])"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
+M041: In &lt;c> deve essere presente, al più, un unico&#x0a;
+      did/physdesc[@localtype = &quot;ConsistenzaTotale&quot;]
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(did/physdesc[@localtype = 'ConsistenzaTotale'])"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
 M042: In &lt;c> non deve essere presente più di un&#x0a;
       did/physdescstructured/descriptivenote
       &#x0a;&#x0a;]"
@@ -1337,8 +1343,8 @@ M297: In &lt;c> il valore di&#x0a;
             satisfies $p/text() = ('Completa', 'Non visibile',
                                    'Descrizione Libera e Risorsa Protetta (login)',
                                    'Descrizione Protetta e Risorsa Protetta (login)',
-                                   'Descrizione Libera e Risorse Riservata (autorizzazione)',
-                                   'Descrizione Riservata e Risorse Riservata (autorizzazione)')"/>
+                                   'Descrizione Libera e Risorsa Riservata (autorizzazione)',
+                                   'Descrizione Riservata e Risorsa Riservata (autorizzazione)')"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M302: In &lt;c> può essere presente, al più, un unico&#x0a;
       bibliography/bibliography[@localtype = &quot;LinkFonteNormativa&quot;]
@@ -1511,13 +1517,6 @@ M040: In &lt;c>, quando rappresenta un complesso archivistico, deve essere&#x0a;
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(did/physdescstructured/dimensions[@unit = 'MetriLineari'])"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M041: In &lt;c>, quando rappresenta un complesso archivistico, deve essere&#x0a;
-      presente, al più, un unico&#x0a;
-      did/physdesc[@localtype = &quot;ConsistenzaTotale&quot;]
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="1 >= count(did/physdesc[@localtype = 'ConsistenzaTotale'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M046: In &lt;c>, quando rappresenta un complesso archivistico, deve&#x0a;
       essere presente al più un (non ripetibile)&#x0a;
@@ -2277,7 +2276,7 @@ M115: In &lt;c>, quando rappresenta un'unità documentaria, se è presente un&#x
           xpathDefaultNamespace="##targetNamespace" 
           test="every $phys in  did/physdescstructured[@physdescstructuredtype = 'materialtype']
                                /physfacet[@localtype = 'AStampa']
-                satisfies $phys/text() = ('SI', 'NO')"/>
+                satisfies $phys/text() = ('Sì', 'Si', 'No')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M116: In &lt;c>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
       did/physdescstructured/physfacet, dove il @physdescstructuredtype del&#x0a;
@@ -2948,6 +2947,20 @@ M579: In &lt;c>, quando rappresenta un'unità documentaria, se è presente un&#x
                      /physfacet[@localtype = 'TipologiaDocumentaria']
                      /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Audiovisivo'
                 else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M591: In &lt;c>, quando rappresenta una &quot;Cartografia&quot;, deve essere presente un, e&#x0a;
+      un solo, did/physdescstructured/descriptivenote/p/geogname/part dove il&#x0a;
+      &lt;physdescstructured> ha l'attributo @physdescstructuredtype pari&#x0a;
+      a &quot;materialtype&quot; e dove &lt;geogname> ha l'attributo @localtype pari&#x0a;
+      a &quot;LuogoRappresentato&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if ( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                    /physfacet[@localtype = 'TipologiaDocumentaria']
+                    /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Cartografia')
+                then 1 = count( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                               /descriptivenote/p/geogname[@localtype = 'LuogoRappresentato']/part)
+                else true()"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -3074,8 +3087,8 @@ M531: in &lt;geogname>, quando rappresenta un toponimo, deve essere presente&#x0
           test="@altrender = ('Completa', 'Non visibile',
                               'Descrizione Libera e Risorsa Protetta (login)',
                               'Descrizione Protetta e Risorsa Protetta (login)',
-                              'Descrizione Libera e Risorse Riservata (autorizzazione)',
-                              'Descrizione Riservata e Risorse Riservata (autorizzazione)')"/>
+                              'Descrizione Libera e Risorsa Riservata (autorizzazione)',
+                              'Descrizione Riservata e Risorsa Riservata (autorizzazione)')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M573: In &lt;geogname>, quando rappresenta un toponimo, è obbligatorio che&#x0a;
       il contenuto di part[@localtype = &quot;StatusScheda&quot;] soddisfi una ben&#x0a;
@@ -3172,8 +3185,8 @@ M532: in &lt;subject>, quando rappresenta un soggetto, deve essere presente&#x0a
           test="@altrender = ('Completa', 'Non visibile',
                               'Descrizione Libera e Risorsa Protetta (login)',
                               'Descrizione Protetta e Risorsa Protetta (login)',
-                              'Descrizione Libera e Risorse Riservata (autorizzazione)',
-                              'Descrizione Riservata e Risorse Riservata (autorizzazione)')"/>
+                              'Descrizione Libera e Risorsa Riservata (autorizzazione)',
+                              'Descrizione Riservata e Risorsa Riservata (autorizzazione)')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M573: In &lt;subject>, quando rappresenta un soggetto, è obbligatorio che&#x0a;
       il contenuto di part[@localtype = &quot;StatusScheda&quot;] soddisfi una ben&#x0a;
@@ -3421,15 +3434,6 @@ M542: In &lt;datesingle>, quando @localtype è pari a &quot;QualificaData&quot;,
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="not(@notafter)"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M582: In &lt;datesingle>, quando @localtype è pari a &quot;QualificaData&quot;,&#x0a;
-      il valore testuale dell'elemento deve soddisfare una ben precisa lista&#x0a;
-      chiusa di valori ammissibili
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="text() = ('Con documentazione dal', 'Con documentazione fino al',
-                          'Con documentazione in copia dal', 'Con documentazione in copia fino al',
-                          'Con lacuna', 'Data della documentazione compresa', 'Principale')"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -3500,15 +3504,6 @@ M563: In &lt;date>, quando @localtype è pari a &quot;QualificaData&quot;,&#x0a;
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="not(@normal)"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M582: In &lt;date>, quando @localtype è pari a &quot;QualificaData&quot;,&#x0a;
-      il valore testuale dell'elemento deve soddisfare una ben precisa lista&#x0a;
-      chiusa di valori ammissibili
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="text() = ('Con documentazione dal', 'Con documentazione fino al',
-                          'Con documentazione in copia dal', 'Con documentazione in copia fino al',
-                          'Con lacuna', 'Data della documentazione compresa', 'Principale')"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -5208,6 +5203,26 @@ M306: Qualora in un &lt;arrangement>, con @localtype pari a &quot;Numerazione&qu
     <!-- M417: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="localtype" type="xs:token"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M586: È obbligatoria in &lt;bibliography>, quando @localtype vale&#x0a;
+      &quot;LinkRiferimentoBibliografico&quot;, la presenza di un, e solo un, figlio&#x0a;
+      &lt;ref> all'interno degli eventuali figli &lt;bibref> del &lt;bibliography>
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (@localtype = 'LinkRiferimentoBibliografico')
+                then every $bib in bibref
+                     satisfies 1 = count($bib/ref)
+                else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M587: In &lt;bibliography>, quando @localtype vale &quot;LinkRiferimentoBibliografico&quot;,&#x0a;
+      deve essere presente al più un solo footnote/p all'interno degli&#x0a;
+      eventuali figli &lt;bibref> del &lt;bibliography>
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (@localtype = 'LinkRiferimentoBibliografico')
+                then every $bib in bibref
+                     satisfies 1 >= count($bib/footnote/p)
+                else true()"/>
   </xs:complexType>
 
   <!-- M358: rimosso il tipo "bioghist" in quanto non utilizzato -->
@@ -5533,6 +5548,19 @@ M258: In &lt;odd>, quando @localtype è pari a &quot;Osservazioni&quot;, non dev
         <!-- M469: rimosso il gruppo "am.common", non utilizzato,
                    ma recuperato @altrender -->
         <xs:attribute name="altrender" type="xs:token"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M590: In &lt;p>, quando @altrender vale &quot;MotivoAttribuzione&quot;, il contenuto deve&#x0a;
+      soddisfare una lista chiusa di valori ammessi
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (@altrender = 'MotivoAttribuzione')
+                then text() = ('Analisi diagnostiche', 'Analisi iconografica',
+                               'Analisi stilistica', 'Attributo figurato', 'Bibliografia',
+                               'Bollo', 'Cartiglio', 'Contesto', 'Documentazione', 'Firma',
+                               'Fonte archivistica', 'Inventario museale', 'Iscrizione',
+                               'Marchio', 'Monogramma', 'Nota manoscritta', 'Pubblicazione',
+                               'Punzone', 'Sigla', 'Simbolo', 'Timbro', 'Tradizione orale')
+                else true()"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -5663,6 +5691,14 @@ M295: È obbligatorio in &lt;language> che, se presente l'attributo @lang, il su
                    non utilizzati -->
         <xs:attribute name="encodinganalog" type="xs:token"/>
         <xs:attribute name="localtype" type="xs:token"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M588: In &lt;physfacet>, quando @localtype vale &quot;Supporto&quot;, il contenuto deve&#x0a;
+      soddisfare una lista chiusa di valori ammessi
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (@localtype = 'Supporto')
+                then text() = ('Carta', 'Nastro magnetico', 'Papiro', 'Pellicola', 'Pergamena')
+                else true()"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -6204,6 +6240,34 @@ M173: In &lt;dateset>, quando contiene un &lt;datesingle> con @localtype pari a&
       </xs:simpleType>
     </xs:attribute>
     <xs:attribute name="otherrelationtype" type="xs:token"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M584: È obbligatoria in &lt;relation>, quando @relationtype vale&#x0a;
+      &quot;otherrelationtype&quot; e @otherelationtype vale &quot;StrumentoCollegato&quot;,&#x0a;
+      la presenza di un, e solo un, figlio &lt;relationentry>
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (    (@relationtype = 'otherrelationtype')
+                    and (@otherrelationtype = 'StrumentoCollegato'))
+                then 1 = count(relationentry)
+                else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M585: In &lt;relation>, quando @relationtype vale &quot;otherrelationtype&quot;&#x0a;
+      e @otherelationtype vale &quot;StrumentoCollegato&quot;, non deve essere presente&#x0a;
+      più di un descriptivenote/p
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (    (@relationtype = 'otherrelationtype')
+                    and (@otherrelationtype = 'StrumentoCollegato'))
+                then 1 >= count(descriptivenote/p)
+                else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M589: È obbligatoria in &lt;relation>, quando @relationtype vale&#x0a;
+      &quot;cpfrelation&quot;, la presenza di un, e solo un, figlio &lt;relationentry>
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (@relationtype = 'cpfrelation')
+                then 1 = count(relationentry)
+                else true()"/>
   </xs:complexType>
 
   <xs:complexType name="relationentry" mixed="true">
