@@ -6,7 +6,6 @@
 	xmlns:dc="http://purl.org/dc/elements/1.1/" 
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:ead="http://ead3.archivists.org/schema/"
-	xmlns:scons="http://www.san.beniculturali.it/scons2" 
 	xmlns:eac="https://archivists.org/ns/eac/v2"
 	xmlns:mix="http://www.loc.gov/mix/v20">
 
