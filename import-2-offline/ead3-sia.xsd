@@ -2404,18 +2404,18 @@ M124: In &lt;c>, quando rappresenta un'unità documentaria, se è presente un&#x
                 then every $phys in  did/physdescstructured[@physdescstructuredtype = 'materialtype']
                                     /physfacet[@localtype = 'Tecnica']
                      satisfies   $phys/text()
-                               = ('Albumina', 'Aristotipo', 'Autocromia / vetro',
+                               = ('Albumina', 'Aristotipo', 'Autocromia/vetro',
                                   'Bromolio', 'Calotipo', 'Carbone', 'Carta celloidina',
                                   'Carta salata', 'Cianotipo', 'Collodio', 'Collodio matt',
                                   'Collotipia', 'Dagherrotipo', 'Disegno', 'Documento',
                                   'Fotocromolitografia', 'Fotografia digitale', 'Fotoincisione',
                                   &quot;Gelatina ai sali d'argento&quot;,
-                                  &quot;Gelatina ai sali d'argento / carta&quot;,
-                                  &quot;Gelatina ai sali d'argento / pellicola&quot;,
-                                  &quot;Gelatina ai sali d'argento / pellicola (acetati)&quot;,
-                                  &quot;Gelatina ai sali d'argento / pellicola (nitrato)&quot;,
-                                  &quot;Gelatina ai sali d'argento / pellicola (poliestere)&quot;,
-                                  &quot;Gelatina ai sali d'argento / vetro&quot;, 'Kallytipo',
+                                  &quot;Gelatina ai sali d'argento/carta&quot;,
+                                  &quot;Gelatina ai sali d'argento/pellicola&quot;,
+                                  &quot;Gelatina ai sali d'argento/pellicola (acetati)&quot;,
+                                  &quot;Gelatina ai sali d'argento/pellicola (nitrato)&quot;,
+                                  &quot;Gelatina ai sali d'argento/pellicola (poliestere)&quot;,
+                                  &quot;Gelatina ai sali d'argento/vetro&quot;, 'Kallytipo',
                                   'Platinotipo', 'Processi a sviluppo cromogeno',
                                   'Stampa ai pigmenti', 'Stampa digitale', 'Stampa fotomeccanica',
                                   &quot;Stampa a getto d'inchiostro&quot;, 'Stampa tipografica',
@@ -2693,7 +2693,7 @@ M145: In &lt;c>, quando rappresenta un'unità documentaria, se è presente un&#x
           test="every $phys in  did/physdescstructured[@physdescstructuredtype = 'materialtype']
                                /physfacet[@localtype = 'Esecuzione']
                 satisfies $phys/text() = ('Mano libera', 'Tecnigrafo',
-                                          'Elaborazione elettronica/digitale')"/>
+                                          'Elaborazione elettronica o digitale')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M146: In &lt;c>, quando rappresenta un'unità documentaria, deve essere presente,&#x0a;
       al più, un unico (non ripetibile)&#x0a;
@@ -4102,6 +4102,40 @@ M351: Quando &lt;ead> contiene uno Strumento di Ricerca, il valore di&#x0a;
               then every $pub in control/publicationstatus
                    satisfies $pub/@value = ('published', 'inprocess', 'approved')
               else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
+M594: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere, al più,&#x0a;
+      un unico control/filedesc/editionstmt/edition[@localtype = &quot;Pubblicato&quot;]
+      &#x0a;&#x0a;]"
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+              then 1 >= count(control/filedesc/editionstmt/edition[@localtype = 'Pubblicato'])
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
+M595: Quando &lt;ead> contiene uno Strumento di Ricerca, il contenuto testuale&#x0a;
+      normalizzato dell'eventuale&#x0a;
+      control/filedesc/editionstmt/edition[@localtype = &quot;Pubblicato&quot;] deve&#x0a;
+      soddisfare il contenuto di una precisa lista chiusa di valori&#x0a;
+      ammissibili
+      &#x0a;&#x0a;]"
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+              then every $ed in control/filedesc/editionstmt/edition[@localtype = 'Pubblicato']
+                   satisfies $ed/text()[normalize-space()] = ('Sì', 'Si', 'No')
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
+M596: Quando &lt;ead> contiene uno Strumento di Ricerca, se&#x0a;
+      control/filedesc/editionstmt/edition[@localtype = &quot;Pubblicato&quot;]&#x0a;
+      contiene uno o più figli &lt;ref>, allore il suo valore testuale&#x0a;
+      normalizzato deve essere pari a &quot;Si&quot;
+      &#x0a;&#x0a;]"
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+              then every $ed in control/filedesc/editionstmt/edition[@localtype = 'Pubblicato']
+                   satisfies not($ed/ref) or $ed/text()[normalize-space()] = ('Sì', 'Si')
+              else true()"/>
     </xs:complexType>
   </xs:element>
 
@@ -5304,6 +5338,14 @@ M258: In &lt;odd>, quando @localtype è pari a &quot;Osservazioni&quot;, non dev
       test="if (@localtype = 'Osservazioni')
             then not(p)
             else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M593: In &lt;odd>, quando @localtype è pari a &quot;Osservazioni&quot;, non deve essere&#x0a;
+      presente più di un odd[@localtype = 'UnitaDocumentaria']/p
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@localtype = 'Osservazioni')
+            then 1 >= count(odd[@localtype = 'UnitaDocumentaria']/p)
+            else true()"/>
   </xs:complexType>
 
   <xs:complexType name="originalsloc">
@@ -5449,6 +5491,16 @@ M258: In &lt;odd>, quando @localtype è pari a &quot;Osservazioni&quot;, non dev
                non utilizzati -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
     <xs:attribute name="localtype" type="xs:token"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M592: In &lt;genreform>, quando @localtype vale &quot;PresenzaSigillo&quot;, il contenuto&#x0a;
+      testuale degli eventuali figli &lt;part> deve soddisfare una lista chiusa&#x0a;
+      di valori ammessi
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@localtype = 'PresenzaSigillo')
+            then every $part in part
+                 satisfies $part/text() = ('Sì', 'Si', 'No')
+            else true()"/>
   </xs:complexType>
 
   <xs:complexType name="geogname">
