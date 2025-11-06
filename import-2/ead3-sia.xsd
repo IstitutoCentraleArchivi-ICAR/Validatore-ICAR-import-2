@@ -3582,9 +3582,11 @@ M566: In &lt;date>, quando @localtype è pari a &quot;DataSingolaSecolo&quot;, i
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="if (@normal)
-                then matches(@normal, '^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[0-1])
-                                       /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[0-1])$',
-                             'x')
+                then    matches(@normal, '^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[0-1])
+                                          /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[0-1])$',
+                                'x')
+                     or matches(@normal, '^[0-9]{4}-(0[1-9]|1[0-2])/[0-9]{4}-(0[1-9]|1[0-2])$')
+                     or matches(@normal, '^[0-9]{4}/[0-9]{4}$')
                 else true()"/>
       </xs:extension>
     </xs:complexContent>
@@ -3664,9 +3666,11 @@ M566: In &lt;date>, quando @localtype è pari a &quot;EstremoRemotoSecolo&quot;,
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="if (@normal)
-                then matches(@normal, '^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[0-1])
-                                       /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[0-1])$',
-                             'x')
+                then    matches(@normal, '^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[0-1])
+                                          /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[0-1])$',
+                                'x')
+                     or matches(@normal, '^[0-9]{4}-(0[1-9]|1[0-2])/[0-9]{4}-(0[1-9]|1[0-2])$')
+                     or matches(@normal, '^[0-9]{4}/[0-9]{4}$')
                 else true()"/>
       </xs:extension>
     </xs:complexContent>
@@ -3746,9 +3750,11 @@ M566: In &lt;date>, quando @localtype è pari a &quot;EstremoRecenteSecolo&quot;
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="if (@normal)
-                then matches(@normal, '^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[0-1])
-                                       /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[0-1])$',
-                             'x')
+                then    matches(@normal, '^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[0-1])
+                                          /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[0-1])$',
+                                'x')
+                     or matches(@normal, '^[0-9]{4}-(0[1-9]|1[0-2])/[0-9]{4}-(0[1-9]|1[0-2])$')
+                     or matches(@normal, '^[0-9]{4}/[0-9]{4}$')
                 else true()"/>
       </xs:extension>
     </xs:complexContent>
@@ -4003,29 +4009,6 @@ M333: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere, al più
               then 1 >= count(control/filedesc/editionstmt/edition[@localtype = 'Online'])
               else true()"/>
       <xs:assert xa:message="[&#x0a;&#x0a;
-M334: Quando &lt;ead> contiene uno Strumento di Ricerca, gli eventuali&#x0a;
-      control/representation contenuti devono necessariamente avere&#x0a;
-      l'attributo @arcrole
-      &#x0a;&#x0a;]"
-        xpathDefaultNamespace="##targetNamespace" 
-        test="if (    (archdesc/@level = 'otherlevel')
-                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
-              then every $rep in control/representation
-                   satisfies $rep/@arcrole
-              else true()"/>
-      <xs:assert xa:message="[&#x0a;&#x0a;
-M335: Quando &lt;ead> contiene uno Strumento di Ricerca, gli @arcrole degli&#x0a;
-      eventuali control/representation constenuti devono necessariamente&#x0a;
-      soddisfare una precisa lista chiusa di valori ammissibili
-      &#x0a;&#x0a;]"
-        xpathDefaultNamespace="##targetNamespace" 
-        test="if (    (archdesc/@level = 'otherlevel')
-                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
-              then every $rep in control/representation
-                   satisfies $rep/@arcrole = ('Nativo digitale', 'è rappresentazione di',
-                                              'è documentazione di')
-              else true()"/>
-      <xs:assert xa:message="[&#x0a;&#x0a;
 M337: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere, al più,&#x0a;
       un unico&#x0a;
       control/filedesc/notestmt/controlnote[@localtype = &quot;Osservazioni&quot;]
@@ -4135,6 +4118,19 @@ M596: Quando &lt;ead> contiene uno Strumento di Ricerca, se&#x0a;
                   and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
               then every $ed in control/filedesc/editionstmt/edition[@localtype = 'Pubblicato']
                    satisfies not($ed/ref) or $ed/text()[normalize-space()] = ('Sì', 'Si')
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
+M597: Quando &lt;ead> contiene uno Strumento di Ricerca, il contenuto testuale&#x0a;
+      normalizzato dell'eventuale&#x0a;
+      control/filedesc/editionstmt/edition[@localtype = &quot;Online&quot;] deve&#x0a;
+      soddisfare il contenuto di una precisa lista chiusa di valori&#x0a;
+      ammissibili
+      &#x0a;&#x0a;]"
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+              then every $ed in control/filedesc/editionstmt/edition[@localtype = 'Online']
+                   satisfies $ed/text()[normalize-space()] = ('Sì', 'Si', 'No')
               else true()"/>
     </xs:complexType>
   </xs:element>
@@ -4615,6 +4611,99 @@ M301: In &lt;control>, qualora sia presente un&#x0a;
     <!-- M457: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
     <xs:attribute name="localtype" type="xs:token"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M598: È obbligatorio in &lt;localcontrol>, quando l'attributo @localtype vale&#x0a;
+      &quot;ComplessoArchivisticoCollegato&quot;, che gli eventuali figli &lt;term> abbiano,&#x0a;
+      abbiano, con valore non nullo, l'attibuto @identifier
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@localtype = 'ComplessoArchivisticoCollegato')
+            then every $term in term
+                 satisfies $term/@identifier != ''
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M599: È obbligatorio in &lt;localcontrol>, quando l'attributo @localtype vale&#x0a;
+      &quot;UnitaArchivisticaCollegata&quot;, che gli eventuali figli &lt;term> abbiano,&#x0a;
+      con valore non nullo, l'attibuto @identifier
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@localtype = 'UnitaArchivisticaCollegata')
+            then every $term in term
+                 satisfies $term/@identifier != ''
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M600: È obbligatorio in &lt;localcontrol>, quando l'attributo @localtype vale&#x0a;
+      &quot;UnitaDocumentariaCollegata&quot;, che gli eventuali figli &lt;term> abbiano,&#x0a;
+      con valore non nullo, l'attibuto @identifier
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@localtype = 'UnitaDocumentariaCollegata')
+            then every $term in term
+                 satisfies $term/@identifier != ''
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M601: È obbligatorio in &lt;localcontrol>, quando l'attributo @localtype vale&#x0a;
+      &quot;ProgettoCollegato&quot;, che gli eventuali figli &lt;term> abbiano, con valore&#x0a;
+      non nullo, l'attibuto @identifier
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@localtype = 'ProgettoCollegato')
+            then every $term in term
+                 satisfies $term/@identifier != ''
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M602: È obbligatorio in &lt;localcontrol>, quando l'attributo @localtype vale&#x0a;
+      &quot;TematismoCollegato&quot;, che gli eventuali figli &lt;term> abbiano, con valore&#x0a;
+      non nullo, l'attibuto @identifier
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@localtype = 'TematismoCollegato')
+            then every $term in term
+                 satisfies $term/@identifier != ''
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M603: È obbligatorio in &lt;localcontrol>, quando l'attributo @localtype vale&#x0a;
+      &quot;ComplessoArchivisticoCollegato&quot;, che sia presente uno, e un solo,&#x0a;
+      figlo &lt;term>
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@localtype = 'ComplessoArchivisticoCollegato')
+            then 1 = count(term)
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M604: È obbligatorio in &lt;localcontrol>, quando l'attributo @localtype vale&#x0a;
+      &quot;UnitaArchivisticaCollegata&quot;, che sia presente uno, e un solo,&#x0a;
+      figlo &lt;term>
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@localtype = 'UnitaArchivisticaCollegata')
+            then 1 = count(term)
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M605: È obbligatorio in &lt;localcontrol>, quando l'attributo @localtype vale&#x0a;
+      &quot;UnitaDocumentariaCollegata&quot;, che sia presente uno, e un solo,&#x0a;
+      figlo &lt;term>
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@localtype = 'UnitaDocumentariaCollegata')
+            then 1 = count(term)
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M606: È obbligatorio in &lt;localcontrol>, quando l'attributo @localtype vale&#x0a;
+      &quot;ProgettoCollegato&quot;, che sia presente uno, e un solo, figlo &lt;term>
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@localtype = 'ProgettoCollegato')
+            then 1 = count(term)
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M607: È obbligatorio in &lt;localcontrol>, quando l'attributo @localtype vale&#x0a;
+      &quot;TematismoCollegato&quot;, che sia presente uno, e un solo, figlo &lt;term>
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@localtype = 'TematismoCollegato')
+            then 1 = count(term)
+            else true()"/>
   </xs:complexType>
 
   <xs:complexType name="term" mixed="true">
@@ -4717,12 +4806,145 @@ M301: In &lt;control>, qualora sia presente un&#x0a;
                recuperato @linkrole -->
     <xs:attribute name="linkrole" type="xs:anyURI"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M608: È obbligatorio in &lt;source>, quando l'attributo @linkrole vale&#x0a;
+      &quot;RiferimentoBibliografico&quot;, che sia presente uno, e un solo,&#x0a;
+      figlo &lt;sourceentry> privo di @altrender
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@linkrole = 'RiferimentoBibliografico')
+            then 1 = count(sourceentry[not(@altrender)])
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M609: È obbligatorio in &lt;source>, quando l'attributo @linkrole vale&#x0a;
+      &quot;RiferimentoBibliografico&quot;, che sia presente, al più,&#x0a;
+      un figlo &lt;sourceentry> con @altrender pari a &quot;IndicazioniSpecifiche&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@linkrole = 'RiferimentoBibliografico')
+            then 1 >= count(sourceentry[@altrender = 'IndicazioniSpecifiche'])
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M610: È obbligatorio in &lt;source>, quando l'attributo @linkrole vale&#x0a;
+      &quot;RiferimentoBibliografico&quot;, che siano presenti, al più,&#x0a;
+      due figli &lt;sourceentry>
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@linkrole = 'RiferimentoBibliografico')
+            then 2 >= count(sourceentry)
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M611: È obbligatorio in &lt;source>, quando l'attributo @linkrole vale&#x0a;
+      &quot;RiferimentoBibliografico&quot;, che gli eventuali figli &lt;sourceentry>&#x0a;
+      abbiano @altrender pari a &quot;IndicazioniSpecifiche&quot; o non abbiano&#x0a;
+      @altrender
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@linkrole = 'RiferimentoBibliografico')
+            then every $s in sourceentry
+                 satisfies not($s/@altrender) or ($s/@altrender = 'IndicazioniSpecifiche')
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M612: È obbligatorio in &lt;source>, quando l'attributo @linkrole vale&#x0a;
+      &quot;RiferimentoBibliografico&quot;, non devono essere presenti&#x0a;
+      figli &lt;descriptivenote>&#x0a;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@linkrole = 'RiferimentoBibliografico')
+            then not(descriptivenote)
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M613: È obbligatorio in &lt;source>, quando l'attributo @linkrole vale&#x0a;
+      &quot;RiferimentoBibliografico&quot;, che gli eventuali figli &lt;sourceentry>&#x0a;
+      abbiano contenuto testuale non nullo
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@linkrole = 'RiferimentoBibliografico')
+            then every $s in sourceentry
+                 satisfies $s/text() != ''
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M614: È obbligatorio in &lt;source>, quando l'attributo @linkrole vale&#x0a;
+      &quot;FonteArchivistica&quot;, che sia presente uno, e un solo, &#x0a;
+      figlo &lt;sourceentry>
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@linkrole = 'FonteArchivistica')
+            then 1 = count(sourceentry)
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M615: È obbligatorio in &lt;source>, quando l'attributo @linkrole vale&#x0a;
+      &quot;FonteArchivistica&quot;, che gli eventuali figli &lt;sourceentry> siano privi&#x0a;
+      di @altrender
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@linkrole = 'FonteArchivistica')
+            then every $s in sourceentry
+                 satisfies not($s/@altrender)
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M616: È obbligatorio in &lt;source>, quando l'attributo @linkrole vale&#x0a;
+      &quot;FonteArchivistica&quot;, non devono essere presenti figli &lt;descriptivenote>&#x0a;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@linkrole = 'FonteArchivistica')
+            then not(descriptivenote)
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M617: È obbligatorio in &lt;source>, quando l'attributo @linkrole vale&#x0a;
+      &quot;FonteArchivistica&quot;, che gli eventuali figli &lt;sourceentry> abbiano&#x0a;
+      contenuto testuale non nullo
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@linkrole = 'FonteArchivistica')
+            then every $s in sourceentry
+                 satisfies $s/text() != ''
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M618: È obbligatorio in &lt;source>, quando l'attributo @linkrole vale&#x0a;
+      &quot;RiferimentoWeb&quot;, che sia presente uno, e un solo, &#x0a;
+      figlo &lt;sourceentry>
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@linkrole = 'RiferimentoWeb')
+            then 1 = count(sourceentry)
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M619: È obbligatorio in &lt;source>, quando l'attributo @linkrole vale&#x0a;
+      &quot;RiferimentoWeb&quot;, che gli eventuali figli &lt;sourceentry> siano privi&#x0a;
+      di @altrender
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@linkrole = 'RiferimentoWeb')
+            then every $s in sourceentry
+                 satisfies not($s/@altrender)
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M620: È obbligatorio in &lt;source>, quando l'attributo @linkrole vale&#x0a;
+      &quot;RiferimentoWeb&quot;, non devono essere presenti figli &lt;descriptivenote>&#x0a;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@linkrole = 'RiferimentoWeb')
+            then not(descriptivenote)
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M621: È obbligatorio in &lt;source>, quando l'attributo @linkrole vale&#x0a;
+      &quot;RiferimentoWeb&quot;, che gli eventuali figli &lt;sourceentry> abbiano&#x0a;
+      contenuto testuale non nullo
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@linkrole = 'RiferimentoWeb')
+            then every $s in sourceentry
+                 satisfies $s/text() != ''
+            else true()"/>
   </xs:complexType>
 
   <xs:complexType name="sourceentry" mixed="true">
-    <!-- M493: rimosso il gruppo "am.common" e l'attributo @transliteration,
-               non utilizzati -->
+    <!-- M493: rimosso il gruppo "am.common", non utilizzato tranne @altrender
+               (da "am.common.empty"), e l'attributo @transliteration,
+               non utilizzato; recuperato @altrender -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
+    <xs:attribute name="altrender" type="xs:token"/>
   </xs:complexType>
 
   <xs:complexType name="titleproper">
