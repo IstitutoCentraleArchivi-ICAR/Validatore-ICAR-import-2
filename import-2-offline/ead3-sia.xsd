@@ -132,7 +132,7 @@ M243: In &lt;subject>, quando rappresenta un tematismo, può essere presente&#x0
         <xs:assert xa:message="[&#x0a;&#x0a;
 M244: È obbligatoria in &lt;subject>, quando rappresenta un tematismo, che&#x0a;
       il contenuto dell'eventuale attributo @lang soddisfi lo standard&#x0a;
-      ISO 693-3 e quindi, in particolare, corrisponda a esattamente&#x0a;
+      ISO 639-3 e quindi, in particolare, corrisponda a esattamente&#x0a;
       tre lettere minuscole
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
@@ -330,7 +330,7 @@ M190: È obbligatoria in &lt;bibliography>, quando relativo a un tracciato, che&
         <xs:assert xa:message="[&#x0a;&#x0a;
 M225: È obbligatorio in &lt;bibliography>, quando relativo a un tracciato, che&#x0a;
       il contenuto degli eventuali bibref/@lang soddisfi lo standard&#x0a;
-      ISO 693-3 e quindi, in particolare, corrisponda a esattamente tre&#x0a;
+      ISO 639-3 e quindi, in particolare, corrisponda a esattamente tre&#x0a;
       lettere minuscole
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
@@ -3332,12 +3332,9 @@ M175: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, i
           test="not(@notafter) or (substring(@notafter, 1, 4) != '0000')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M307: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, deve essere&#x0a;
-      non vuoto il contenuto dell'elemento oppure, in alternativa, presenti e&#x0a;
-      con contenuto non nullo entrambi gli attributi @notafter e @notbefore;&#x0a;
-      non è consentito che siano vere entrambe le cose
+      non vuoto il contenuto dell'elemento
       &#x0a;&#x0a;]"
-          test="   ((text() != '') and not(@notbefore) and not(@notafter))
-                or (not(text()) and (@notbefore != '') and (@notafter != ''))"/>
+          test="text() != ''"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M308: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, deve essere&#x0a;
       presente, con valore non nullo, l'attributo @standarddate, ma assenti&#x0a;
@@ -4009,6 +4006,15 @@ M333: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere, al più
               then 1 >= count(control/filedesc/editionstmt/edition[@localtype = 'Online'])
               else true()"/>
       <xs:assert xa:message="[&#x0a;&#x0a;
+M336: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere, al più,&#x0a;
+      un unico control/languagedeclaration/language/@lang
+      &#x0a;&#x0a;]"
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+              then 1 >= count(control/languagedeclaration/language/@lang)
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
 M337: Quando &lt;ead> contiene uno Strumento di Ricerca, deve contenere, al più,&#x0a;
       un unico&#x0a;
       control/filedesc/notestmt/controlnote[@localtype = &quot;Osservazioni&quot;]
@@ -4132,6 +4138,44 @@ M597: Quando &lt;ead> contiene uno Strumento di Ricerca, il contenuto testuale&#
               then every $ed in control/filedesc/editionstmt/edition[@localtype = 'Online']
                    satisfies $ed/text()[normalize-space()] = ('Sì', 'Si', 'No')
               else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
+M622: Quando &lt;ead> contiene uno Strumento di Ricerca, deve&#x0a;
+      obbligatoriamente contenere un, e un solo,&#x0a;
+      control/localcontrol[@localtype = &quot;VisibilitaFE&quot;]/term
+      &#x0a;&#x0a;]"
+        xpathDefaultNamespace="##targetNamespace" 
+        test="if (    (archdesc/@level = 'otherlevel')
+                  and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+              then 1 = count(control/localcontrol[@localtype = 'VisibilitaFE']/term)
+              else true()"/>
+      <xs:assert xa:message="[&#x0a;&#x0a;
+M623: Quando &lt;ead> contiene uno Strumento di Ricerca, il contenuto testuale&#x0a;
+      di control/localcontrol[@localtype = &quot;VisibilitaFE&quot;]/term&#x0a;
+      deve soddisfare il contenuto di una precisa lista chiusa di valori&#x0a;
+      ammissibili
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (    (archdesc/@level = 'otherlevel')
+                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+            then every $term in control/localcontrol[@localtype = 'VisibilitaFE']/term
+                 satisfies $term/text() = ('Completa', 'Non visibile',
+                                           'Descrizione Libera e Risorsa Protetta (login)',
+                                           'Descrizione Protetta e Risorsa Protetta (login)',
+                                           'Descrizione Libera e Risorsa Riservata (autorizzazione)',
+                                           'Descrizione Riservata e Risorsa Riservata (autorizzazione)')
+            else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M624: Quanto &lt;ead> contiene uno strumento di Ricerca, l'eventuale&#x0a;
+      control/languagedeclaration/language/@lang deve soddisfare standard ISO 639-3&#x0a;
+      e quindi, in particolare, deve corrispondere esattamente a tre lettere&#x0a;
+      minuscole
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (    (archdesc/@level = 'otherlevel')
+                and (archdesc/@otherlevel = 'StrumentoDiRicerca'))
+            then every $lang in control/languagedeclaration/language/@lang
+                 satisfies matches($lang, '^[a-z]{3}$')
+            else true()"/>
     </xs:complexType>
   </xs:element>
 
@@ -5280,6 +5324,25 @@ M037: In &lt;physloc> deve essere presente almeno un figlio &lt;ptr> con gli&#x0
       </xs:simpleType>
     </xs:attribute>
     <xs:attributeGroup ref="a.coverage"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M625: È obbligatorio in &lt;physdescstructured> che il contenuto testuale del&#x0a;
+      figlio &lt;unittype> o sia nullo o, se non nullo, soddisfi una ben precisa&#x0a;
+      lista chiusa di valori possibili ammessi
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $unit in unittype
+            satisfies $unit/text() = ('Album', 'Busta', 'Cartella', 'Faldone',
+                                      'Fascicolo', 'Filza', 'Foglio', 'Manifesto',
+                                      'Mappa', 'Mazzo', 'Opuscolo', 'Pacco', 'Plico',
+                                      'Quaderno', 'Raccoglitore', 'Registro',
+                                      'Rivista', 'Rotolo', 'Scatola', 'Scheda',
+                                      'Taccuino', 'Vacchetta', 'Volume')"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M626: In &lt;physdescstructured> può essere presente, al più, un unico&#x0a;
+      descriptivenote/p
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(descriptivenote/p)"/>
   </xs:complexType>
 
   <xs:complexType name="quantity" mixed="true">
@@ -6143,12 +6206,9 @@ M175: In &lt;fromdate> il valore dell'anno in @notafter, se presente, non può&#
           xpathDefaultNamespace="##targetNamespace" 
           test="not(@notafter) or (substring(@notafter, 1, 4) != '0000')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M307: In &lt;fromdate> deve essere non vuoto il contenuto dell'elemento oppure,&#x0a;
-      in alternativa, presenti e con contenuto non nullo entrambi gli attributi&#x0a;
-      @notafter e @notbefore; non è consentito che siano vere entrambe le cose
+M307: In &lt;fromdate> deve essere non vuoto il contenuto dell'elemento
       &#x0a;&#x0a;]"
-          test="   ((text() != '') and not(@notbefore) and not(@notafter))
-                or (not(text()) and (@notbefore != '') and (@notafter != ''))"/>
+          test="text() != ''"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M308: In &lt;fromdate> deve essere presente, con valore non nullo, l'attributo&#x0a;
       @standarddate, ma assenti @notbefore e @notafter, oppure,&#x0a;
@@ -6251,12 +6311,9 @@ M175: In &lt;tofate> il valore dell'anno in @notafter, se presente, non può&#x0
           xpathDefaultNamespace="##targetNamespace" 
           test="not(@notafter) or (substring(@notafter, 1, 4) != '0000')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M307: In &lt;todate> deve essere non vuoto il contenuto dell'elemento oppure,&#x0a;
-      in alternativa, presenti e con contenuto non nullo entrambi gli attributi&#x0a;
-      @notafter e @notbefore; non è consentito che siano vere entrambe le cose
+M307: In &lt;todate> deve essere non vuoto il contenuto dell'elemento
       &#x0a;&#x0a;]"
-          test="   ((text() != '') and not(@notbefore) and not(@notafter))
-                or (not(text()) and (@notbefore != '') and (@notafter != ''))"/>
+          test="text() != ''"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M308: In &lt;todate> deve essere presente, con valore non nullo, l'attributo&#x0a;
       @standarddate, ma assenti @notbefore e @notafter, oppure,&#x0a;
