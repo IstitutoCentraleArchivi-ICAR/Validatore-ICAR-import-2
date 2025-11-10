@@ -1037,6 +1037,29 @@ M581: In &lt;archdesc>, quando rappresenta un complesso archivistico,&#x0a;
       xpathDefaultNamespace="##targetNamespace" 
       test="every $user in userestrict/userestrict
             satisfies $user/@localtype = 'NoteCondizioniUtilizzo'"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M628: In &lt;archdesc>, quando rappresenta un complesso archivistico,&#x0a;
+      i &lt;relationentry> degli eventuali relations/relation/relationentry,&#x0a;
+      quando il @relationtype del &lt;relation> vale &quot;cpfrelation&quot;, devono&#x0a;
+      presentare l'attributo @localtype
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $rel in (relations/relation[@relationtype = 'cpfrelation']/relationentry)
+            satisfies $rel/@localtype"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M632: In &lt;archdesc>, quando rappresenta un complesso archivistico,&#x0a;
+      il contenuto testuale degli eventuali did/physdescstructured/unittype deve&#x0a;
+      essere vuoto oppure deve soddisfare una precisa lista chiusa di valori&#x0a;
+      ammissibili 
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $type in did/physdescstructured/unittype
+            satisfies    $type/text() = ''
+                      or $type/text() = ('Album', 'Busta', 'Cartella', 'Faldone', 'Fascicolo',
+                                         'Filza', 'Foglio', 'Manifesto', 'Mappa', 'Mazzo',
+                                         'Opuscolo', 'Pacco', 'Plico', 'Quaderno', 'Raccoglitore',
+                                         'Registro', 'Rivista', 'Rotolo', 'Scatola', 'Scheda',
+                                         'Taccuino', 'Vacchetta', 'Volume')"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1573,6 +1596,29 @@ M577: In &lt;c>, quando rappresenta un complesso archivistico, non può essere&#
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="not(did/unitdatestructured/dateset/datesingle[@localtype = 'DataTopica'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M628: In &lt;c>, quando rappresenta un complesso archivistico, i &lt;relationentry>&#x0a;
+      degli eventuali relations/relation/relationentry, quando&#x0a;
+      il @relationtype del &lt;relation> vale &quot;cpfrelation&quot;, devono presentare&#x0a;
+      l'attributo @localtype
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $rel in (relations/relation[@relationtype = 'cpfrelation']/relationentry)
+                satisfies $rel/@localtype"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M632: In &lt;c>, quando rappresenta un complesso archivistico, il contenuto&#x0a;
+      testuale degli eventuali did/physdescstructured/unittype deve essere&#x0a;
+      vuoto oppure deve soddisfare una precisa lista chiusa di valori&#x0a;
+      ammissibili 
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $type in did/physdescstructured/unittype
+            satisfies    $type/text() = ''
+                      or $type/text() = ('Album', 'Busta', 'Cartella', 'Faldone', 'Fascicolo',
+                                         'Filza', 'Foglio', 'Manifesto', 'Mappa', 'Mazzo',
+                                         'Opuscolo', 'Pacco', 'Plico', 'Quaderno', 'Raccoglitore',
+                                         'Registro', 'Rivista', 'Rotolo', 'Scatola', 'Scheda',
+                                         'Taccuino', 'Vacchetta', 'Volume')"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1778,6 +1824,76 @@ M577: In &lt;c>, quando rappresenta un'unità archivistica, non può essere&#x0a
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="not(did/unitdatestructured/dateset/datesingle[@localtype = 'DataTopica'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M629: In &lt;c>, quando rappresenta un'unità archivistica, se sono presenti dei&#x0a;
+      relations/relation[@relationtype = &quot;cpfrelation&quot;], allora in &lt;relation>&#x0a;
+      deve essere presente l'attributo @arcrole
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $relation in relations/relation[@relationtype = 'cpfrelation']
+                satisfies $relation/@arcrole"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M630: In &lt;c>, quando rappresenta un'unità archivistica, il contenuto testuale&#x0a;
+      dell'eventuale&#x0a;
+      did/physdescstructured/physfacet[@localtype = &quot;Tipologia&quot;] deve&#x0a;
+      soddisfare una precisa lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $phys in did/physdescstructured/physfacet[@localtype = 'Tipologia']
+                satisfies $phys/text() = ('Album', 'Busta', 'Buste', 'Cartella', 'Cartelle',
+                                          'Faldone', 'Faldoni', 'Fascicolo', 'Fascicoli',
+                                          'Filza', 'Filze', 'Foglio', 'Fogli', 'Manifesto',
+                                          'Manifesti', 'Mappa', 'Mappe', 'Mazzo', 'Mazzi',
+                                          'Opuscolo', 'Opuscoli', 'Pacco', 'Pacchi', 'Plico',
+                                          'Plichi', 'Quaderno', 'Quaderni', 'Raccoglitore',
+                                          'Raccoglitori', 'Registro', 'Registri', 'Rivista',
+                                          'Riviste', 'Rotolo', 'Rotoli', 'Scatola', 'Scatole',
+                                          'Scheda', 'Schede', 'Taccuino', 'Taccuini', 'Vacchetta',
+                                          'Vacchette', 'Volume', 'Volumi')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M632: In &lt;c>, quando rappresenta un'unita' archivistica, il contenuto testuale&#x0a;
+      degli eventuali did/physdescstructured/unittype deve essere vuoto oppure&#x0a;
+      deve soddisfare una precisa lista chiusa di valori ammissibili 
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $type in did/physdescstructured/unittype
+                satisfies    $type/text() = ''
+                          or $type/text() = ('Album', 'Busta', 'Cartella', 'Faldone', 'Fascicolo',
+                                             'Filza', 'Foglio', 'Manifesto', 'Mappa', 'Mazzo',
+                                             'Opuscolo', 'Pacco', 'Plico', 'Quaderno', 'Raccoglitore',
+                                             'Registro', 'Rivista', 'Rotolo', 'Scatola', 'Scheda',
+                                             'Taccuino', 'Vacchetta', 'Volume')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M634: In &lt;c>, quando rappresenta un'unità archivistica, se sono presenti dei&#x0a;
+      did/container, allora nei &lt;container> deve essere presente&#x0a;
+      l'attributo @localtype
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $cont in did/container
+                satisfies $cont/@localtype"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M635: In &lt;c>, quando rappresenta un'unità archivistica, il valore degli&#x0a;
+      eventuali did/container/@localtype deve soddisfare una precisa&#x0a;
+      lista chiusa di valori ammissibili 
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $type in did/container/@localtype
+                satisfies $type = ('Busta', 'Camicia', 'Cartella', 'Faldone', 'Fascio', 'Filza',
+                                   'Mazzo', 'Pacco', 'Plico', 'Raccoglitore', 'Scatola')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M637: In &lt;c>, quando rappresenta un'unità archivistica, gli eventuali&#x0a;
+      did/container non possono contenere più di un ref/num
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $cont in did/container
+                satisfies 1 >= count($cont/ref/num)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M638: In &lt;c>, quando rappresenta un'unità archivistica, gli eventuali&#x0a;
+      did/container non possono contenere più di un ref/title/part
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $cont in did/container
+                satisfies 1 >= count($cont/ref/title/part)"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -2961,6 +3077,56 @@ M591: In &lt;c>, quando rappresenta una &quot;Cartografia&quot;, deve essere pre
                 then 1 = count( did/physdescstructured[@physdescstructuredtype = 'materialtype']
                                /descriptivenote/p/geogname[@localtype = 'LuogoRappresentato']/part)
                 else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M631: In &lt;c>, quando rappresenta un'unità documentaria, il contenuto testuale&#x0a;
+      dell'eventuale&#x0a;
+      did/physdescstructured/physfacet[@localtype = &quot;Tipologia&quot;] deve&#x0a;
+      soddisfare una precisa lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $phys in did/physdescstructured/physfacet[@localtype = 'Tipologia']
+                satisfies $phys/text() = ('Album', 'Manifesto', 'Mappa', 'Opuscolo', 'Plico',
+                                          'Quaderno', 'Registro', 'Rubrica', 'Vacchetta',
+                                          'Volume')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M633: In &lt;c>, quando rappresenta un'unità documentaria, il contenuto testuale&#x0a;
+      degli eventuali did/physdescstructured/unittype deve essere vuoto oppure&#x0a;
+      deve soddisfare una precisa lista chiusa di valori ammissibili 
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $type in did/physdescstructured/unittype
+                satisfies    $type/text() = ''
+                          or $type/text() = ('Carta', 'Carte', 'Fogli', 'Foglio', 'Pagine', 'Pagina')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M634: In &lt;c>, quando rappresenta un'unità documentaria, se sono presenti dei&#x0a;
+      did/container, allora nei &lt;container> deve essere presente&#x0a;
+      l'attributo @localtype
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $cont in did/container
+                satisfies $cont/@localtype"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M636: In &lt;c>, quando rappresenta un'unità documentaria, il valore degli&#x0a;
+      eventuali did/container/@localtype deve soddisfare una precisa&#x0a;
+      lista chiusa di valori ammissibili 
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $type in did/container/@localtype
+                satisfies $type = ('Camicia', 'Cartella', 'Plico', 'Scatola')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M637: In &lt;c>, quando rappresenta un'unità documentaria, gli eventuali&#x0a;
+      did/container non possono contenere più di un ref/num
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $cont in did/container
+                satisfies 1 >= count($cont/ref/num)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M638: In &lt;c>, quando rappresenta un'unità documentaria, gli eventuali&#x0a;
+      did/container non possono contenere più di un ref/title/part
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $cont in did/container
+                satisfies 1 >= count($cont/ref/title/part)"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -5325,19 +5491,6 @@ M037: In &lt;physloc> deve essere presente almeno un figlio &lt;ptr> con gli&#x0
     </xs:attribute>
     <xs:attributeGroup ref="a.coverage"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
-M625: È obbligatorio in &lt;physdescstructured> che il contenuto testuale del&#x0a;
-      figlio &lt;unittype> o sia nullo o, se non nullo, soddisfi una ben precisa&#x0a;
-      lista chiusa di valori possibili ammessi
-      &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="every $unit in unittype
-            satisfies $unit/text() = ('Album', 'Busta', 'Cartella', 'Faldone',
-                                      'Fascicolo', 'Filza', 'Foglio', 'Manifesto',
-                                      'Mappa', 'Mazzo', 'Opuscolo', 'Pacco', 'Plico',
-                                      'Quaderno', 'Raccoglitore', 'Registro',
-                                      'Rivista', 'Rotolo', 'Scatola', 'Scheda',
-                                      'Taccuino', 'Vacchetta', 'Volume')"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
 M626: In &lt;physdescstructured> può essere presente, al più, un unico&#x0a;
       descriptivenote/p
       &#x0a;&#x0a;]"
@@ -6598,6 +6751,16 @@ M589: È obbligatoria in &lt;relation>, quando @relationtype vale&#x0a;
           xpathDefaultNamespace="##targetNamespace" 
           test="if (@relationtype = 'cpfrelation')
                 then 1 = count(relationentry)
+                else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M627: È obbligatoria in &lt;relation>, quando @relationtype vale&#x0a;
+      &quot;cpfrelation&quot;, il figlio &lt;relationentry> deve avere contenuto testuale&#x0a;
+      non nullo
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (@relationtype = 'cpfrelation')
+                then every $rel in relationentry
+                     satisfies $rel/text() != ''
                 else true()"/>
   </xs:complexType>
 
