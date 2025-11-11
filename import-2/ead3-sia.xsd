@@ -4944,6 +4944,42 @@ M607: È obbligatorio in &lt;localcontrol>, quando l'attributo @localtype vale&#
     </xs:sequence>
     <!-- M459: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M639: È obbligatoria in &lt;maintenanceevent> che il figlio &lt;agent> abbia&#x0a;
+      un contenuto testuale non nullo
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="agent/text() != ''"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M640: È obbligatoria in &lt;maintenanceevent> che il figlio &lt;eventdatetime> abbia&#x0a;
+      un contenuto testuale nullo oppure, in alternativa, rappresenti una data&#x0a;
+      e sia nel formato AAAA-MM-GG
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="   (eventdatetime/text() = '')
+            or matches(eventdatetime/text(), '^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[0-1])$')"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M641: In &lt;maintenanceevent> può essere presente, al più, un unico figlio&#x0a;
+      &lt;eventdescription> con @localtype pari a &quot;TipoIntervento&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(eventdescription[@localtype = 'TipoIntervento'])"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M642: In &lt;maintenanceevent> il contenuto testuale dell'eventuale figlio&#x0a;
+      &lt;eventdescription> con @localtype pari a &quot;TipoIntervento&quot;&#x0a;
+      deve soddisfare una lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $descr in eventdescription[@localtype = 'TipoIntervento']
+            satisfies $descr/text() = ('Importazione', 'Integrazione successiva',
+                                       'Prima redazione', 'Raccolta delle informazioni',
+                                       'Revisione', 'Rielaborazione', 'Supervisione')"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M643: In &lt;maintenanceevent> può essere presente, al più, un unico figlio&#x0a;
+      &lt;eventdescription> con @localtype pari a &quot;NoteRedazionali&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(eventdescription[@localtype = 'NoteRedazionali'])"/>
   </xs:complexType>
 
   <xs:complexType name="eventtype" mixed="true">
