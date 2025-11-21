@@ -1284,6 +1284,8 @@ DescrizioneEvento"
              not(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
             )
             or
+            not(description/existDates[@localType[.='DateEsistenzaEnte']])
+            or
             (
              count(description/existDates[@localType[.='DateEsistenzaEnte']]/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData'][string-length(normalize-space(.)) &gt; 0]) &gt; 0
             )
@@ -1297,6 +1299,8 @@ DescrizioneEvento"
          test="
             not(identity/entityType/@value[.='family'])
             or
+            not(description/existDates[@localType[.='DateEsistenzaFamiglia']])
+            or
             (
              count(description/existDates[@localType='DateEsistenzaFamiglia']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData'][string-length(normalize-space(.)) &gt; 0]) &gt; 0
             )
@@ -1305,6 +1309,8 @@ DescrizioneEvento"
          xao:message="=&gt;&#xa;eac 0335&#xa; cpfDescription/description/existDates[@localType='DateEsistenzaPersona']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData&#xa; 'Qualifica della data' è richiesto"
          test="
             not(identity/entityType/@value[.='person'])
+            or
+            not(description/existDates[@localType[.='DateEsistenzaPersona']])
             or
             (
              count(description/existDates[@localType='DateEsistenzaPersona']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData'][string-length(normalize-space(.)) &gt; 0]) &gt; 0
