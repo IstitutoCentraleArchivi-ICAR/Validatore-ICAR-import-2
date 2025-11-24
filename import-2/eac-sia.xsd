@@ -217,6 +217,28 @@ Validata (secondo livello),
 Pubblicata,
 Copia parallela."
          test="
+                  (.[@*[name()='eac-sia:status']])
+                  and
+                  (
+                   every $v in @*[name()='eac-sia:status'] satisfies 
+                   (
+                       $v='Bozza'
+                    or $v='In validazione di primo livello'
+                    or $v='Validata (primo livello)'
+                    or $v='In validazione di secondo livello'
+                    or $v='Validata (secondo livello)'
+                    or $v='Pubblicata'
+                    or $v='Copia parallela'
+                   )
+                  )
+         "/>
+         <!--
+         
+                  (.[@eac-sia:status])
+                  and
+                  (
+                   every $v in @eac-sia:status satisfies 
+         
             @eac-sia:status='Bozza'
          or @eac-sia:status='In validazione di primo livello'
          or @eac-sia:status='Validata (primo livello)'
@@ -224,7 +246,7 @@ Copia parallela."
          or @eac-sia:status='Validata (secondo livello)'
          or @eac-sia:status='Pubblicata'
          or @eac-sia:status='Copia parallela'
-         "/>
+         -->
       <!--
       in alternativa localControl[@localType='status']/term per evitare ricorso a namespace locale -->
       <!--
@@ -407,7 +429,7 @@ Modalità di acquisizione: Versamento."
           (
            not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
             and
-           not(identity/entityType[@eac-sia:tipoLocale='Evento'])
+           not(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
           )
           or
           (
@@ -423,7 +445,10 @@ Modalità di acquisizione: Versamento."
             )
            )
          "/>
-         
+         <!-- 
+           not(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
+           not(identity/entityType[@eac-sia:tipoLocale='Evento'])
+         -->
       <!-- 
       entità                                           relations/relation[targetRole[.='Complesso archivistico']]/relationType         
       |                                                |                       identity/entityType/@eac-sia:tipoLocale                 
@@ -483,7 +508,7 @@ resource                    | Tematismo&#xa;
          (
           not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
            and
-          not(identity/entityType[@eac-sia:tipoLocale='Evento'])
+          not(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
            and
           relations/relation[targetRole[.='Complesso archivistico']][relationType[.='Soggetto produttore']]
            and
@@ -522,6 +547,10 @@ resource                    | Tematismo&#xa;
           and (every $v in relations/relation[targetRole[.='Tematismo'                                                    ]]/targetEntity/@targetType satisfies ($v = 'resource'))
          ) 
          "/>
+         <!-- 
+           not(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
+           not(identity/entityType[@eac-sia:tipoLocale='Evento'])
+         -->
       <!--
       produttore(ente/famiglia/persona)
          not(identity/@localType)
@@ -569,7 +598,7 @@ resource                    | Tematismo&#xa;
          (
           not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
            and
-          not(identity/entityType[@eac-sia:tipoLocale='Evento'])
+          not(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
            and
           relations/relation[targetRole[.='Complesso archivistico']][relationType[.='Soggetto produttore']]
            and
@@ -656,7 +685,7 @@ resource                    | Tematismo&#xa;
          (
           not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
            and
-          not(identity/entityType[@eac-sia:tipoLocale='Evento'])
+          not(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
            and
           relations/relation[targetRole[.='Complesso archivistico']][relationType[.='Soggetto conservatore']]
            and
@@ -730,7 +759,7 @@ resource                 | Tematismo&#xa;
          (
           not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
            and
-          not(identity/entityType[@eac-sia:tipoLocale='Evento'])
+          not(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
            and
           not
           (
@@ -783,7 +812,7 @@ agent                    | sameAs&#xa;
           not (
            not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
             and
-           not(identity/entityType[@eac-sia:tipoLocale='Evento'])
+           not(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
           )
           or (
            every $v in relations/relation[relationType[.='sameAs']]/targetEntity/@targetType satisfies ($v = 'agent')
@@ -941,7 +970,7 @@ resource                    | Tematismo
           identity/entityType[@value='corporateBody']
           and
           (
-           identity/entityType[@eac-sia:tipoLocale='Evento']
+           identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']]
             or
            identity[@localType='Evento']
           )
@@ -965,7 +994,10 @@ resource                    | Tematismo
           and (every $v in relations/relation[targetRole[.='Tematismo'             ]]/targetEntity/@targetType satisfies ($v = 'resource'))
          ) 
          "/>
-      
+         <!--
+          identity/entityType[@eac-sia:tipoLocale='Evento']
+          identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']]
+         -->
       <!-- /RELAZIONI -->
       
       <!-- LUOGHI
@@ -993,7 +1025,7 @@ LuogoEvento."
               and ( 
               identity[@localType='Evento']
                or
-              identity/entityType[@eac-sia:tipoLocale='Evento']
+              identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']]
              )
             )
             or
@@ -1009,7 +1041,7 @@ LuogoEnte."
               and
              not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
               and
-             not(identity/entityType[@eac-sia:tipoLocale='Evento'])
+             not(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
               and
              not(relations/relation[targetRole[.='Complesso archivistico']][relationType[.='Soggetto conservatore']])
             )
@@ -1028,7 +1060,7 @@ Sedi."
               and
              not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
               and
-             not(identity/entityType[@eac-sia:tipoLocale='Evento'])
+             not(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
               and
              relations/relation[targetRole[.='Complesso archivistico']][relationType[.='Soggetto conservatore']]
             )
@@ -1113,7 +1145,7 @@ DateEsistenzaEnte"
               and
              not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
               and
-             not(identity/entityType[@eac-sia:tipoLocale='Evento'])
+             not(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
             )
             or
             (
@@ -1209,7 +1241,7 @@ Qualifica"
 DescrizioneEvento"
          test="
             not(
-             identity/entityType[@eac-sia:tipoLocale='Evento']
+             identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']]
             )
             or
             (
@@ -1222,7 +1254,7 @@ DescrizioneEvento"
          xao:message="=&gt;&#xa;eac&#xa; valore non atteso in cpfDescription/description/biogHist/@localType"
          test="
             not(
-             not(identity/entityType[@eac-sia:tipoLocale='Evento'])
+             not(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
             )
             or
             (
@@ -1249,20 +1281,28 @@ DescrizioneEvento"
               and
              not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
               and
-             not(identity/entityType[@eac-sia:tipoLocale='Evento'])
+             not(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
             )
             or
+            not(description/existDates[@localType[.='DateEsistenzaEnte']])
+            or
             (
-             count(description/existDates[@localType[.='DateEsistenzaEnte']]/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData[string-length(normalize-space(.)) &gt; 0]) &gt; 0
+             count(description/existDates[@localType[.='DateEsistenzaEnte']]/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData'][string-length(normalize-space(.)) &gt; 0]) &gt; 0
             )
          "/>
+         <!--
+         @eac-sia:qualificaData
+         @*[name()='eac-sia:qualificaData']
+         -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0215&#xa; cpfDescription/description/existDates[@localType='DateEsistenzaFamiglia']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData&#xa; 'Qualifica della data' è richiesto"
          test="
             not(identity/entityType/@value[.='family'])
             or
+            not(description/existDates[@localType[.='DateEsistenzaFamiglia']])
+            or
             (
-             count(description/existDates[@localType='DateEsistenzaFamiglia']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData[string-length(normalize-space(.)) &gt; 0]) &gt; 0
+             count(description/existDates[@localType='DateEsistenzaFamiglia']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData'][string-length(normalize-space(.)) &gt; 0]) &gt; 0
             )
          "/>
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
@@ -1270,8 +1310,10 @@ DescrizioneEvento"
          test="
             not(identity/entityType/@value[.='person'])
             or
+            not(description/existDates[@localType[.='DateEsistenzaPersona']])
+            or
             (
-             count(description/existDates[@localType='DateEsistenzaPersona']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData[string-length(normalize-space(.)) &gt; 0]) &gt; 0
+             count(description/existDates[@localType='DateEsistenzaPersona']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData'][string-length(normalize-space(.)) &gt; 0]) &gt; 0
             )
          "/>
          
@@ -1283,7 +1325,7 @@ Fine attività – professione."
             not(identity/entityType/@value[.='person'])
             or 
             (
-             every $v in (description/occupations/occupation/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData)
+             every $v in (description/occupations/occupation/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData'])
              satisfies
              (
                  $v='Inizio attività - professione'
@@ -1299,7 +1341,7 @@ Fine qualifica."
             not(identity/entityType/@value[.='person'])
             or 
             (
-             every $v in (description/functions/function/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData)
+             every $v in (description/functions/function/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData'])
              satisfies
              (
                  $v='Inizio qualifica'
@@ -1974,7 +2016,7 @@ AcronimoEnte."
                  and
                 not(@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
                  and
-                not(entityType[@eac-sia:tipoLocale='Evento'])
+                not(entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
                )
                 or 
                (
@@ -1985,7 +2027,10 @@ AcronimoEnte."
                  or $v='AcronimoEnte'
                 )
                )"/>
-               
+               <!--
+               @eac-sia:tipoLocale='Evento'
+               @*[name()='eac-sia:tipoLocale'][.='Evento']
+               -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0062 0063 0064 0085 0086 0087 0089 &#xa; agente ente ammette in identity/nameEntry/@localType i valori&#xa;
 DenominazioneEnte,
@@ -1995,7 +2040,7 @@ AltraDenominazioneEnte."
                  and
                 not(@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
                  and
-                not(entityType[@eac-sia:tipoLocale='Evento'])
+                not(entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
                )
                 or 
                (
@@ -2017,7 +2062,7 @@ Qualifica."
                  and
                 not(@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
                  and
-                not(entityType[@eac-sia:tipoLocale='Evento'])
+                not(entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
                )
                 or 
                (
@@ -2259,7 +2304,7 @@ Organo o ufficio statale del periodo postunitario."
             and
            not(@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
             and
-           not(entityType[@eac-sia:tipoLocale='Evento'])
+           not(entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
           )
            or
           (
@@ -2329,7 +2374,7 @@ Organo o ufficio statale del periodo postunitario."
             and
            not(@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
             and
-           not(entityType[@eac-sia:tipoLocale='Evento'])
+           not(entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
           )
           or
           (
@@ -2347,7 +2392,7 @@ Organo o ufficio statale del periodo postunitario."
             and
            not(@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
             and
-           not(entityType[@eac-sia:tipoLocale='Evento'])
+           not(entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
           )
            or
           (
@@ -2369,7 +2414,7 @@ Denominazione parallela - Intestazione parallela."
             and
            not(@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
             and
-           not(entityType[@eac-sia:tipoLocale='Evento'])
+           not(entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
           )
            or
           (
@@ -2582,7 +2627,7 @@ Ricorrenza biennale."
             not (
              @localType='Evento'
               or 
-             entityType[@eac-sia:tipoLocale='Evento']
+             entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']]
             )
             or
             (
@@ -2612,7 +2657,7 @@ Ricorrenza biennale."
             not (
              @localType='Evento'
               or 
-             entityType[@eac-sia:tipoLocale='Evento']
+             entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']]
             )
             or
             (
@@ -3109,7 +3154,7 @@ Data singola,
 Data aperta (a partire da),
 Data aperta (fino a),
 Data non rilevabile - non rilevata."
-      test="every $v in (@eac-sia:tipologiaData)
+      test="every $v in (@*[name()='eac-sia:tipologiaData'])
             satisfies 
             (
                 $v='Intervallo di date'
@@ -3183,7 +3228,7 @@ Data singola,
 Data aperta (a partire da),
 Data aperta (fino a),
 Data non rilevabile - non rilevata."
-      test="every $v in (@eac-sia:tipologiaData)
+      test="every $v in (@*[name()='eac-sia:tipologiaData'])
             satisfies 
             (
                 $v='Intervallo di date'
@@ -3196,10 +3241,10 @@ Data non rilevabile - non rilevata."
            
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac&#xa;dateRange con data aperta ammette solo l'estremo corrispondente fromDate o toDate."
-      test="if (@eac-sia:tipologiaData = 'Data aperta (a partire da)')
+      test="if (@*[name()='eac-sia:tipologiaData'][. = 'Data aperta (a partire da)'])
             then (count(toDate) = 0)
             else
-            if (@eac-sia:tipologiaData = 'Data aperta (fino a)')
+            if (@*[name()='eac-sia:tipologiaData'][. = 'Data aperta (fino a)'])
             then (count(fromDate) = 0)
             else true()
            "/>
@@ -3604,10 +3649,10 @@ Date di esistenza."
       test="not(@localType[.='DateEsistenzaEnte'])
             or
             (
-             (count((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData) &gt; 0)
+             (count((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData']) &gt; 0)
              and
              (
-              every $v in ((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData)
+              every $v in ((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData'])
               satisfies 
               (
                   $v='Data di istituzione'
@@ -3625,10 +3670,10 @@ Data di origine."
       test="not(@localType='DateEsistenzaFamiglia')
             or
             (
-             (count((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData) &gt; 0)
+             (count((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData']) &gt; 0)
              and
              (
-              every $v in ((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData)
+              every $v in ((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData'])
               satisfies 
               (
                   $v='Data di esistenza'
@@ -3646,10 +3691,10 @@ Date di esistenza."
       test="not(@localType='DateEsistenzaPersona')
             or
             (
-             (count((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData) &gt; 0)
+             (count((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData']) &gt; 0)
              and
              (
-              every $v in ((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData)
+              every $v in ((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData'])
               satisfies 
               (
                   $v='Data di nascita'
@@ -3852,7 +3897,7 @@ Data di ingresso presso il conservatore."
             not(.[relationType[.='Soggetto produttore' or .='Soggetto conservatore']])
             or 
             (
-             every $v in ((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData)
+             every $v in ((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData'])
              satisfies 
              (
                  $v='Data inizio produzione'
