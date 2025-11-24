@@ -3069,7 +3069,7 @@ RiferimentoWeb"
          test="
             if(@localType='Secolo')
             then
-            (@notBefore and @notafter)
+            (@notBefore and @notAfter)
             else true()
          "/>
          
@@ -3079,7 +3079,7 @@ RiferimentoWeb"
  notBefore | notAafter |&#xa;
  ----------+-----------+--------------&#xa;
    nn01    |     nn10  | Inizio&#xa;
-   nn46    |     nn55  | Metà&#xa;
+   nn41    |     nn60  | Metà&#xa;
    nn91    | (nn+1)00  | Fine&#xa;
    nn01    |     nn25  | Primo quarto&#xa;
    nn26    |     nn50  | Secondo quarto&#xa;
@@ -3104,7 +3104,7 @@ RiferimentoWeb"
               and
              (
                  ( ( 1 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) =  9 + year-from-date(@notBefore)) )
-              or ( (46 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) =  9 + year-from-date(@notBefore)) )
+              or ( (41 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 19 + year-from-date(@notBefore)) )
               or ( (91 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) =  9 + year-from-date(@notBefore)) )
               or ( ( 1 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 24 + year-from-date(@notBefore)) )
               or ( (26 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 24 + year-from-date(@notBefore)) )
@@ -4414,7 +4414,7 @@ Supervisione."
          test="
             if(@localType='Secolo')
             then
-            (@notBefore and @notafter)
+            (@notBefore and @notAfter)
             else true()
          "/>
          
@@ -4424,7 +4424,7 @@ Supervisione."
  notBefore | notAafter |&#xa;
  ----------+-----------+--------------&#xa;
    nn01    |     nn10  | Inizio&#xa;
-   nn46    |     nn55  | Metà&#xa;
+   nn41    |     nn60  | Metà&#xa;
    nn91    | (nn+1)00  | Fine&#xa;
    nn01    |     nn25  | Primo quarto&#xa;
    nn26    |     nn50  | Secondo quarto&#xa;
@@ -4449,7 +4449,7 @@ Supervisione."
               and
              (
                  ( ( 1 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) =  9 + year-from-date(@notBefore)) )
-              or ( (46 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) =  9 + year-from-date(@notBefore)) )
+              or ( (41 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 19 + year-from-date(@notBefore)) )
               or ( (91 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) =  9 + year-from-date(@notBefore)) )
               or ( ( 1 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 24 + year-from-date(@notBefore)) )
               or ( (26 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 24 + year-from-date(@notBefore)) )
@@ -4535,7 +4535,7 @@ Supervisione."
          test="
             if(@localType='Secolo')
             then
-            (@notBefore and @notafter)
+            (@notBefore and @notAfter)
             else true()
          "/>
          
@@ -4545,7 +4545,7 @@ Supervisione."
  notBefore | notAafter |&#xa;
  ----------+-----------+--------------&#xa;
    nn01    |     nn10  | Inizio&#xa;
-   nn46    |     nn55  | Metà&#xa;
+   nn41    |     nn60  | Metà&#xa;
    nn91    | (nn+1)00  | Fine&#xa;
    nn01    |     nn25  | Primo quarto&#xa;
    nn26    |     nn50  | Secondo quarto&#xa;
@@ -4570,7 +4570,7 @@ Supervisione."
               and
              (
                  ( ( 1 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) =  9 + year-from-date(@notBefore)) )
-              or ( (46 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) =  9 + year-from-date(@notBefore)) )
+              or ( (41 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 19 + year-from-date(@notBefore)) )
               or ( (91 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) =  9 + year-from-date(@notBefore)) )
               or ( ( 1 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 24 + year-from-date(@notBefore)) )
               or ( (26 = (year-from-date(@notBefore) mod 100)) and (year-from-date(@notAfter) = 24 + year-from-date(@notBefore)) )
