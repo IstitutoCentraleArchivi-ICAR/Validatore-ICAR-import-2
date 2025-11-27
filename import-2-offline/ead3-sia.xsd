@@ -5484,18 +5484,48 @@ M281: In &lt;didnote>, quando il @localtype vale &quot;PeriodizzazioneOTipologia
   <xs:complexType name="physloc">
     <xs:complexContent>
       <xs:extension base="m.mixed.basic">
-        <!-- M475: rimossi il gruppo "am.common" e gli attributi
-                   @label e @parent, non utilizzati -->
+        <!-- M475: rimossi il gruppo "am.common" e l'attributo
+                   @parent, non utilizzati -->
         <xs:attribute name="localtype" type="xs:token"/>
+        <xs:attribute name="label" type="xs:string"/>
         <xs:attribute name="encodinganalog" type="xs:token"/>
-        <!--
         <xs:assert xa:message="[&#x0a;&#x0a;
-M037: In &lt;physloc> deve essere presente almeno un figlio &lt;ptr> con gli&#x0a;
-      attributi @id e @linkrole, il secondo dei quali deve valere &quot;Internal&quot;
+M644: In &lt;physloc>, quando l'attributo @label è pari a &quot;Collocazione&quot;,&#x0a;
+      il contenuto testuale dell'elemento (escludendo il contenuto testuale&#x0a;
+      degli elementi discendenti) sia non nullo
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="ptr[@linkrole = 'Internal']/@id"/>
-          -->
+          test="if (@label = 'Collocazione')
+                then text()[normalize-space()]
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M645: In &lt;physloc>, quando l'attributo @label è pari a &quot;Collocazione&quot;,&#x0a;
+      gli eventuali figli &lt;ref> devono avere l'attributo @arcrole pari&#x0a;
+      a &quot;DaPezzo&quot; o, in alternativa, ad &quot;APezzo&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (@label = 'Collocazione')
+                then every $ref in ref
+                     satisfies $ref/@arcrole = ('DaPezzo', 'APezzo')
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M646: In &lt;physloc>, quando l'attributo @label è pari a &quot;Collocazione&quot;,&#x0a;
+      non deve essere presente più di figlio &lt;ref> con attributo @arcrole pari&#x0a;
+      a &quot;DaPezzo&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (@label = 'Collocazione')
+                then 1 >= count(ref[@arcrole = 'DaPezzo'])
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M647: In &lt;physloc>, quando l'attributo @label è pari a &quot;Collocazione&quot;,&#x0a;
+      non deve essere presente più di figlio &lt;ref> con attributo @arcrole pari&#x0a;
+      ad &quot;APezzo&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (@label = 'Collocazione')
+                then 1 >= count(ref[@arcrole = 'APezzo'])
+                else true()"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -5584,11 +5614,6 @@ M626: In &lt;physdescstructured> può essere presente, al più, un unico&#x0a;
         <xs:attribute name="label" type="xs:string"/>
         <xs:attribute name="encodinganalog" type="xs:token"/>
         <xs:attribute name="identifier"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M005: se &lt;unitid> ha @localtype pari a &quot;AltroId&quot;, allora deve anche avere&#x0a;
-      @label
-      &#x0a;&#x0a;]"
-        test="if (@localtype = 'AltroId') then @label else true()"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
