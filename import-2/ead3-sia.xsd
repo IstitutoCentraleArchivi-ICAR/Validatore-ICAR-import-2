@@ -146,12 +146,6 @@ M245: In &lt;subject>, quando rappresenta un tematismo, può essere presente&#x0
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(part[@localtype = ('PercorsoRicercaSi', 'PercorsoRicercaNo')])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M259: È obbligatoria in &lt;subject>, quando rappresenta un tematismo, che sia&#x0a;
-      presente, e con valore non nullo, l'attributo @id
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="@id != ''"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
 M305: È obbligatorio in &lt;subject>, quando rappresenta un tematismo, che&#x0a;
       il contenuto di un eventiale figlio &lt;part>, con @localtype pari&#x0a;
       a &quot;Denominazione&quot;, soddisfi una ben precisa lista chiusa&#x0a;
@@ -184,6 +178,36 @@ M305: È obbligatorio in &lt;subject>, quando rappresenta un tematismo, che&#x0a
                                           'Umbria - Archivi femminili', 'Umbria - Istruzione',
                                           'Umbria - Le carte in dimora', 'Umbria - Politica e sindacati',
                                           'Verdi')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M656: È obbligatorio in &lt;subject>, quando rappresenta un tematismo, che sia&#x0a;
+      presente un, e un solo, figlio &lt;part> con attributo @localtype pari&#x0a;
+      a &quot;Identificativo&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 = count(part[@localtype = 'Identificativo'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M657: È obbligatorio in &lt;subject>, quando rappresenta un tematismo, che non&#x0a;
+      sia nullo il contenuto testuale del figlio &lt;part> con attributo&#x0a;
+      @localtype pari a &quot;Identificativo&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $part in part[@localtype = 'Identificativo']
+                satisfies $part/text() != ''"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M658: È obbligatorio in &lt;subject>, quando rappresenta un tematismo, che sia&#x0a;
+      presente un, e un solo, figlio &lt;part> con attributo @localtype pari&#x0a;
+      a &quot;IdentificativoDiSistema&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 = count(part[@localtype = 'IdentificativoDiSistema'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M659: È obbligatorio in &lt;subject>, quando rappresenta un tematismo, che non&#x0a;
+      sia nullo il contenuto testuale del figlio &lt;part> con attributo&#x0a;
+      @localtype pari a &quot;IdentificativoDiSistema&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $part in part[@localtype = 'IdentificativoDiSistema']
+                satisfies $part/text() != ''"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -194,12 +218,6 @@ M305: È obbligatorio in &lt;subject>, quando rappresenta un tematismo, che&#x0a
   <xs:complexType name="archref.bibl">
     <xs:complexContent>
       <xs:extension base="archref">
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M232: È obbligatoria in &lt;archref>, quando contenuto in &lt;bibliography>, che&#x0a;
-      sia presente l'attributo @id
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="@id"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M233: È obbligatoria in &lt;archref>, quando contenuto in &lt;bibliography>, la&#x0a;
       presenza di un (e un solo) title/part[@localtype = &quot;StatusScheda&quot;] 
@@ -237,12 +255,42 @@ M237: In &lt;archref>, quando contenuto in &lt;bibliography>, può essere presen
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(title/part[@localtype = 'Descrizione'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M238: È obbligatoria in &lt;archref>, quando contenuto in &lt;bibliography>, che il&#x0a;
+M238: È obbligatorio in &lt;archref>, quando contenuto in &lt;bibliography>, che il&#x0a;
       contenuto dell'eventuale attributo @lang soddisfi lo standard ISO 693-3&#x0a;
       e quindi, in particolare, corrisponda a esattamente tre lettere minuscole
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="not(@lang) or matches(@lang, '^[a-z]{3}$')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M648: È obbligatorio in &lt;archref>, quando contenuto in &lt;bibliography>, che&#x0a;
+      sia presente un, e un solo, figlio &lt;ref> con attributo @altrender pari&#x0a;
+      a &quot;Identificativo&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 = count(ref[@altrender = 'Identificativo'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M649: È obbligatorio in &lt;archref>, quando contenuto in &lt;bibliography>, che&#x0a;
+      non sia nullo il contenuto testuale del figlio &lt;ref> con attributo&#x0a;
+      @altrender pari a &quot;Identificativo&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $ref in ref[@altrender = 'Identificativo']
+                satisfies $ref/text() != ''"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M650: È obbligatorio in &lt;archref>, quando contenuto in &lt;bibliography>, che&#x0a;
+      sia presente un, e un solo, figlio &lt;ref> con attributo @altrender pari&#x0a;
+      a &quot;IdentificativoDiSistema&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 = count(ref[@altrender = 'IdentificativoDiSistema'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M651: È obbligatorio in &lt;archref>, quando contenuto in &lt;bibliography>, che&#x0a;
+      non sia nullo il contenuto testuale del figlio &lt;ref> con attributo&#x0a;
+      @altrender pari a &quot;IdentificativoDiSistema&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $ref in ref[@altrender = 'IdentificativoDiSistema']
+                satisfies $ref/text() != ''"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -302,13 +350,6 @@ M223: In &lt;processifo>, quando relativo a un tracciato, deve essere presente,&
     <xs:complexContent>
       <xs:extension base="bibliography">
         <xs:assert xa:message="[&#x0a;&#x0a;
-M187: È obbligatoria in &lt;bibliography>, quando relativo a un tracciato, che sia&#x0a;
-      presente un (e un solo) figlio &lt;bibref> con attributo @id e che il&#x0a;
-      valore di tale attributo non sia nullo
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="(1 = count(bibref/@id)) and not(bibref/@id = '')"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
 M189: È obbligatoria in &lt;bibliography>, quando relativo a un tracciato,&#x0a;
       la presenza di un (e un solo)&#x0a;
       bibref/title/part[@localtype = &quot;StatusScheda&quot;] 
@@ -336,6 +377,35 @@ M225: È obbligatorio in &lt;bibliography>, quando relativo a un tracciato, che&
           xpathDefaultNamespace="##targetNamespace" 
           test="every $lang in bibref/@lang
                 satisfies matches($lang, '^[a-z]{3}$')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M652: È obbligatori0 in &lt;bibliography>, quando relativo a un tracciato, che sia&#x0a;
+      presente un (e un solo) bibref/ref[@altrender = &quot;Identificativo&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 = count(bibref/ref[@altrender = 'Identificativo'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M653: È obbligatorio in &lt;bibliography>, quando relativo a un tracciato, che&#x0a;
+      non sia nullo il contenuto testuale di&#x0a;
+      bibref/ref[@altrender = &quot;Identificativo&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $ref in bibref/ref[@altrender = 'Identificativo']
+                satisfies $ref/text() != ''"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M654: È obbligatori0 in &lt;bibliography>, quando relativo a un tracciato, che sia&#x0a;
+      presente un (e un solo)&#x0a;
+      bibref/ref[@altrender = &quot;IdentificativoDiSistema&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 = count(bibref/ref[@altrender = 'IdentificativoDiSistema'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M655: È obbligatorio in &lt;bibliography>, quando relativo a un tracciato, che&#x0a;
+      non sia nullo il contenuto testuale di&#x0a;
+      bibref/ref[@altrender = &quot;IdentificativoDiSistema&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $ref in bibref/ref[@altrender = 'IdentificativoDiSistema']
+                satisfies $ref/text() != ''"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
