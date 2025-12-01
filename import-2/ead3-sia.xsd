@@ -4522,11 +4522,11 @@ M264: In &lt;control>, qualora sia presente un&#x0a;
 M265: In &lt;control>, qualora sia presente un&#x0a;
       filedesc/titlestmt/titleproper[@localtype = &quot;DenominazioneProgetto&quot;]&#x0a;
       deve essere presente anche un&#x0a;
-      maintenanceagency/agencyname[@localtype = &quot;AgentePrincipale&quot;]/@id
+      maintenanceagency/agencyname[@localtype = &quot;AgentePrincipale&quot;]
       &#x0a;&#x0a;]"
       xpathDefaultNamespace="##targetNamespace" 
       test="if (filedesc/titlestmt/titleproper[@localtype = 'DenominazioneProgetto'])
-            then maintenanceagency/agencyname[@localtype = 'AgentePrincipale']/@id
+            then maintenanceagency/agencyname[@localtype = 'AgentePrincipale']
             else true()"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M266: Non è ripetibile, in &lt;control>, maintenanceagency/descriptivenote/p
@@ -4723,6 +4723,17 @@ M301: In &lt;control>, qualora sia presente un&#x0a;
                                            'In validazione di secondo livello',
                                            'Validata (secondo livello)', 'Pubblicata',
                                            'Copia parallela')
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M660: In &lt;control>, qualora sia presente un&#x0a;
+      filedesc/titlestmt/titleproper[@localtype = &quot;DenominazioneProgetto&quot;],&#x0a;
+      non può essere nullo il contenuto testuale di&#x0a;
+      maintenanceagency/agencyname[@localtype = &quot;AgentePrincipale&quot;]
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (filedesc/titlestmt/titleproper[@localtype = 'DenominazioneProgetto'])
+            then every $agency in maintenanceagency/agencyname[@localtype = 'AgentePrincipale']
+                 satisfies $agency/text() != ''
             else true()"/>
   </xs:complexType>
 
@@ -5292,27 +5303,42 @@ M621: È obbligatorio in &lt;source>, quando l'attributo @linkrole vale&#x0a;
         <xs:attribute name="encodinganalog" type="xs:token"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M271: In &lt;author>, quando @localtype vale &quot;AgentePartecipante&quot;, non deve essere&#x0a;
-      presente più di un ref/@id
+      presente più di un ref/name/part
       &#x0a;&#x0a;]"
               xpathDefaultNamespace="##targetNamespace" 
-              test="1 >= count(ref/@id)"/>
+              test="if (@locatype = 'AgentePartecipante')
+                    then 1 >= count(ref/name/part)
+                    else true()"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M272: In &lt;author>, quando @localtype vale &quot;AgentePartecipante&quot;, non deve essere&#x0a;
       presente più di un ref/function[@localtype = &quot;Qualifica&quot;]/part
       &#x0a;&#x0a;]"
               xpathDefaultNamespace="##targetNamespace" 
-              test="1 >= count(ref/function[@localtype = 'Qualifica']/part)"/>
+              test="if (@locatype = 'AgentePartecipante')
+                    then 1 >= count(ref/function[@localtype = 'Qualifica']/part)
+                    else true()"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M273: In &lt;author>, quando @localtype vale &quot;AgentePartecipante&quot;, il contenuto&#x0a;
       di eventuali ref/function[@localtype = &quot;Qualifica&quot;]/part deve soddisfare&#x0a;
       una precisa lista chiusa di valori ammissibili
       &#x0a;&#x0a;]"
               xpathDefaultNamespace="##targetNamespace" 
-              test="every $part in ref/function[@localtype = 'Qualifica']/part
-                    satisfies $part/text() = ('Responsabile', 'Finanziatore', 'Partecipante',
-                                              'Supporto', 'Responsabile scientifico',
-                                              'Responsabile operativo', 'Coordinatore',
-                                              'Operatore', 'Promotore', 'Realizzatore')"/>
+              test="if (@locatype = 'AgentePartecipante')
+                    then every $part in ref/function[@localtype = 'Qualifica']/part
+                         satisfies $part/text() = ('Responsabile', 'Finanziatore', 'Partecipante',
+                                                   'Supporto', 'Responsabile scientifico',
+                                                   'Responsabile operativo', 'Coordinatore',
+                                                   'Operatore', 'Promotore', 'Realizzatore')
+                    else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M661: In &lt;author>, quando @localtype vale &quot;AgentePartecipante&quot;, non deve essere&#x0a;
+      nullo il contenuto testuale dell'eventuale ref/name/part
+      &#x0a;&#x0a;]"
+              xpathDefaultNamespace="##targetNamespace" 
+              test="if (@locatype = 'AgentePartecipante')
+                    then every $part in ref/name/part
+                         satisfies $part/text() != ''
+                    else true()"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
