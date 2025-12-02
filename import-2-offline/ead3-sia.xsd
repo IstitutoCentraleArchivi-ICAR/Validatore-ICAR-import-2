@@ -3298,12 +3298,6 @@ M519: in &lt;geogname>, quando rappresenta un toponimo, non può essere presente
           xpathDefaultNamespace="##targetNamespace" 
           test="2 > count(part[@localtype = 'Annotazioni'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M520: in &lt;geogname>, quando rappresenta un toponimo, deve essere presente,&#x0a;
-      con valore non nullo, l'attributo @id
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="@id != ''"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
 M521: in &lt;geogname>, quando rappresenta un toponimo, il contenuto degli&#x0a;
       eventuali&#x0a;
       part/ref[@arcrole = &quot;Compilatore&quot;]/name[@localtype = &quot;Azione&quot;]/part&#x0a;
@@ -3387,12 +3381,6 @@ M526: in &lt;subject>, quando rappresenta un soggetto, deve essere presente,&#x0
       &#x0a;&#x0a;]"
       xpathDefaultNamespace="##targetNamespace" 
       test="@source != ''"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
-M527: in &lt;subject>, quando rappresenta un soggetto, deve essere presente,&#x0a;
-      con valore non nullo, l'attributo @id
-      &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="@id != ''"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M529: in &lt;subject>, quando rappresenta un soggetto, i valori degli eventuali&#x0a;
       part/ref[@arcrole = &quot;SoggettoCorrelato&quot;]/@linkrole devono soddisfare&#x0a;
@@ -6810,11 +6798,13 @@ M173: In &lt;dateset>, quando contiene un &lt;datesingle> con @localtype pari a&
       <xs:element name="date" type="date"/>
       <xs:group ref="m.access"/>
     </xs:choice>
-    <!-- M484: rimossi il gruppo "am.common", non utilizzato con l'eccezione di @id,
-               il gruppo "am.internal.ptr", non utilizzato con l'eccezione di @arcrole,
-               @href, @linktitle, e @linkrole, e l'attributo @entityref, non utilizzato;
-               recuperati @id, @arcrole, @href, @linktitle, e @linkrole -->
+    <!-- M484: rimossi il gruppo "am.common", non utilizzato con l'eccezione di @id
+               e di @altrender il gruppo "am.internal.ptr", non utilizzato con
+               l'eccezione di @arcrole, @href, @linktitle, e @linkrole, e
+               l'attributo @entityref, non utilizzato; recuperati @id, @altrender,
+               @arcrole, @href, @linktitle, e @linkrole -->
     <xs:attribute name="id" type="xs:ID"/>
+    <xs:attribute name="altrender" type="xs:token"/>
     <xs:attribute name="arcrole" type="xs:anyURI"/>
     <xs:attribute name="href" type="xs:token"/>
     <xs:attribute name="linktitle" type="xs:token"/>
