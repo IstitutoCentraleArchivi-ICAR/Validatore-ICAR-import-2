@@ -3321,16 +3321,12 @@ M531: in &lt;geogname>, quando rappresenta un toponimo, deve essere presente&#x0
                               'Descrizione Riservata e Risorsa Riservata (autorizzazione)')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M573: In &lt;geogname>, quando rappresenta un toponimo, è obbligatorio che&#x0a;
-      il contenuto di part[@localtype = &quot;StatusScheda&quot;] soddisfi una ben&#x0a;
+      il contenuto di part[@altrender = &quot;StatusScheda&quot;] soddisfi una ben&#x0a;
       precisa lista chiusa di valori possibili ammessi
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="every $part in part[@localtype = 'StatusScheda']
-                satisfies $part/text() = ('Bozza', 'In validazione di primo livello',
-                                          'Validata (primo livello)',
-                                          'In validazione di secondo livello',
-                                          'Validata (secondo livello)', 'Pubblicata',
-                                          'Copia parallela')"/>
+          test="every $part in part[@altrender = 'StatusScheda']
+                satisfies $part/text() = ('Bozza', 'In validazione', 'Validata', 'Pubblicata')"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -3413,16 +3409,12 @@ M532: in &lt;subject>, quando rappresenta un soggetto, deve essere presente&#x0a
                               'Descrizione Riservata e Risorsa Riservata (autorizzazione)')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M573: In &lt;subject>, quando rappresenta un soggetto, è obbligatorio che&#x0a;
-      il contenuto di part[@localtype = &quot;StatusScheda&quot;] soddisfi una ben&#x0a;
+      il contenuto di part[@altrender = &quot;StatusScheda&quot;] soddisfi una ben&#x0a;
       precisa lista chiusa di valori possibili ammessi
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
-          test="every $part in part[@localtype = 'StatusScheda']
-                satisfies $part/text() = ('Bozza', 'In validazione di primo livello',
-                                          'Validata (primo livello)',
-                                          'In validazione di secondo livello',
-                                          'Validata (secondo livello)', 'Pubblicata',
-                                          'Copia parallela')"/>
+          test="every $part in part[@altrender = 'StatusScheda']
+                satisfies $part/text() = ('Bozza', 'In validazione', 'Validata', 'Pubblicata')"/>
   </xs:complexType>
 
   <!-- M162: creata specializzazione, di "datesingle" da utilizzare in
@@ -7014,9 +7006,9 @@ M627: È obbligatoria in &lt;relation>, quando @relationtype vale&#x0a;
       <!-- M358: rimosso "bioghist" in quanto non utilizzato -->
       <!-- M506: introdotto l'uso del tipo "controlaccess.auth" nel caso
                  il @localtype dell'elemento "controlaccess" sia pari
-                 ad "Authority" -->
+                 ad "VoceIndice" -->
       <xs:element name="controlaccess">
-        <xs:alternative type="controlaccess.auth" test="@localtype = 'Authority'"/>
+        <xs:alternative type="controlaccess.auth" test="@localtype = 'VoceIndice'"/>
         <xs:alternative type="controlaccess"/>
       </xs:element>
       <xs:element name="custodhist" type="custodhist"/>
