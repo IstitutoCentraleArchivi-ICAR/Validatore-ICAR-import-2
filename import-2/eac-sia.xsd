@@ -1263,9 +1263,9 @@ DescrizioneEvento"
          "/>
 
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac&#xa; biogHist/p non ammette ripetizione"
+         xao:message="=&gt;&#xa;eac&#xa; biogHist non ammette ripetizione"
          test="
-             count(description/biogHist/p) &lt;= 1
+             count(description/biogHist) &lt;= 1
          "/>
 
       <!-- eac 0124 ENTE eac/cpfDescription/identity/entityType[@value='corporateBody']
