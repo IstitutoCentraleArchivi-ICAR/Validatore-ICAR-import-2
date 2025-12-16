@@ -1135,6 +1135,19 @@ Sedi."
              or $v='Sedi'
             ))
          "/>
+         
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac&#xa; cpfDescription/description/existDates richiede @localType"
+         test="
+            not(
+             description/existDates
+            )
+            or
+            (
+             every $v in description/existDates satisfies
+             ($v/@localType)
+            )
+         "/>
 
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0124&#xa; cpfDescription/description/existDates/@localType ammette valore&#xa;
@@ -1233,6 +1246,20 @@ Qualifica"
             or
             (
              count(description/functions/function[@localType]) = 0
+            )
+         "/>
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac 1031&#xa; cpfDescription/description/existDates/@localType ammette valore&#xa;
+DateEvento"
+         test="
+            not(
+             identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']]
+            )
+            or
+            (
+             every $v in description/existDates/@localType satisfies
+             ($v='DateEvento')
             )
          "/>
 
