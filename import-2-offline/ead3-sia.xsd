@@ -1129,7 +1129,8 @@ M632: In &lt;archdesc>, quando rappresenta un complesso archivistico,&#x0a;
                                          'Filza', 'Foglio', 'Manifesto', 'Mappa', 'Mazzo',
                                          'Opuscolo', 'Pacco', 'Plico', 'Quaderno', 'Raccoglitore',
                                          'Registro', 'Rivista', 'Rotolo', 'Scatola', 'Scheda',
-                                         'Taccuino', 'Vacchetta', 'Volume')"/>
+                                         'Taccuino', 'Vacchetta', 'Volume', 'Pergamena', 'Pezzo',
+                                         'Disegno', 'Rubrica')"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1688,7 +1689,8 @@ M632: In &lt;c>, quando rappresenta un complesso archivistico, il contenuto&#x0a
                                          'Filza', 'Foglio', 'Manifesto', 'Mappa', 'Mazzo',
                                          'Opuscolo', 'Pacco', 'Plico', 'Quaderno', 'Raccoglitore',
                                          'Registro', 'Rivista', 'Rotolo', 'Scatola', 'Scheda',
-                                         'Taccuino', 'Vacchetta', 'Volume')"/>
+                                         'Taccuino', 'Vacchetta', 'Volume', 'Pergamena', 'Pezzo',
+                                         'Disegno', 'Rubrica')"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1932,7 +1934,8 @@ M632: In &lt;c>, quando rappresenta un'unita' archivistica, il contenuto testual
                                              'Filza', 'Foglio', 'Manifesto', 'Mappa', 'Mazzo',
                                              'Opuscolo', 'Pacco', 'Plico', 'Quaderno', 'Raccoglitore',
                                              'Registro', 'Rivista', 'Rotolo', 'Scatola', 'Scheda',
-                                             'Taccuino', 'Vacchetta', 'Volume')"/>
+                                             'Taccuino', 'Vacchetta', 'Volume', 'Pergamena', 'Pezzo',
+                                             'Disegno', 'Rubrica')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M634: In &lt;c>, quando rappresenta un'unità archivistica, se sono presenti dei&#x0a;
       did/container, allora nei &lt;container> deve essere presente&#x0a;
@@ -6570,6 +6573,9 @@ M083: In &lt;fromdate>, se @notbefore e @notafter sono entrambi presenti, i loro
                      or (    (51 = (number(substring(@notbefore, 1, 4)) mod 100))
                          and (  number(substring(@notafter, 1, 4))
                               = 49 + number(substring(@notbefore, 1, 4))))
+                     or (    ( 1 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              = 99 + number(substring(@notbefore, 1, 4))))
                 else true()"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M174: In &lt;fromdate> il valore dell'anno in @notbefore, se presente, non può&#x0a;
@@ -6675,6 +6681,9 @@ M083: In &lt;todate>, se @notbefore e @notafter sono entrambi presenti, i loro&#
                      or (    (51 = (number(substring(@notbefore, 1, 4)) mod 100))
                          and (  number(substring(@notafter, 1, 4))
                               = 49 + number(substring(@notbefore, 1, 4))))
+                     or (    ( 1 = (number(substring(@notbefore, 1, 4)) mod 100))
+                         and (  number(substring(@notafter, 1, 4))
+                              = 99 + number(substring(@notbefore, 1, 4))))
                 else true()"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M174: In &lt;todate> il valore dell'anno in @notbefore, se presente, non può&#x0a;
