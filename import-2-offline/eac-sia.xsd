@@ -1135,6 +1135,19 @@ Sedi."
              or $v='Sedi'
             ))
          "/>
+         
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac&#xa; cpfDescription/description/existDates richiede @localType"
+         test="
+            not(
+             description/existDates
+            )
+            or
+            (
+             every $v in description/existDates satisfies
+             ($v/@localType)
+            )
+         "/>
 
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0124&#xa; cpfDescription/description/existDates/@localType ammette valore&#xa;
@@ -1237,6 +1250,20 @@ Qualifica"
          "/>
 
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac 1031&#xa; cpfDescription/description/existDates/@localType ammette valore&#xa;
+DateEvento"
+         test="
+            not(
+             identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']]
+            )
+            or
+            (
+             every $v in description/existDates/@localType satisfies
+             ($v='DateEvento')
+            )
+         "/>
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 1050&#xa; cpfDescription/description/biogHist/@localType ammette valore&#xa;
 DescrizioneEvento"
          test="
@@ -1263,11 +1290,22 @@ DescrizioneEvento"
          "/>
 
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac&#xa; biogHist/p non ammette ripetizione"
+         xao:message="=&gt;&#xa;eac&#xa; biogHist non ammette ripetizione"
          test="
-             count(description/biogHist/p) &lt;= 1
+             count(description/biogHist) &lt;= 1
          "/>
 
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac&#xa; generalContext non ammette ripetizione"
+         test="
+             count(description/generalContext) &lt;= 1
+         "/>
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac&#xa; structureOrGenealogy non ammette ripetizione"
+         test="
+             count(description/structureOrGenealogy) &lt;= 1
+         "/>
       <!-- eac 0124 ENTE eac/cpfDescription/identity/entityType[@value='corporateBody']
            Qualifica della data eac/cpfDescription/description/existDates[@localType='DateEsistenzaEnte']/dateSet/date/@eac-sia:qualificaData
            OBBLIGATORIO
@@ -2381,6 +2419,8 @@ Organo o ufficio statale del periodo postunitario."
            count(nameEntry[@localType='DenominazioneEnte']/part[@localType='IntestazionePrincipaleEnte'][string-length(normalize-space(.))>0]) = 1
            and
            count(nameEntry[@localType='DenominazioneEnte']/part[@localType='DenominazionePrincipaleEnte'][string-length(normalize-space(.))>0]) = 1
+           and
+           count(nameEntry[@localType='DenominazioneEnte']/part[@localType='AcronimoEnte']) &lt;= 1
           )
          "/>
 
@@ -2539,6 +2579,17 @@ Maschile."
             )
          "/>
 
+      <!-- eac 0266 cpfDescription/identity/nameEntry/part[@localType='NomePersona'] -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac 0267 &#xa;cpfDescription/identity/nameEntry/part[@localType='NomePersona']&#xa; 'Nome' è atteso univoco"
+         test="
+            not(entityType/@value='person')
+            or 
+            (
+             count(nameEntry[@localType='DenominazionePersona']/part[@localType='NomePersona']) &lt;= 1
+            )
+         "/>
+
       <!-- eac 0265 cpfDescription/identity/nameEntry/part[@localType='IntestazionePersona'] -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0265&#xa; cpfDescription/identity/nameEntry/part[@localType='IntestazionePersona']&#xa; 'Intestazione principale' è richiesto e univoco"
@@ -2563,7 +2614,7 @@ Maschile."
 
       <!-- eac 0737 cpfDescription/identity//nameEntry[@localType="DenominazioneContesto"]/part[@localType="IntestazioneContesto"]/ -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac 0734&#xa; cpfDescription/identity/(.|nameEntrySet)/nameEntry[@localType='DenominazioneContesto']/part[@localType='IntestazioneContesto']/&#xa; 'Intestazione' è richiesto"
+         xao:message="=&gt;&#xa;eac 0734&#xa; cpfDescription/identity/(.|nameEntrySet)/nameEntry[@localType='DenominazioneContesto']/part[@localType='IntestazioneContesto']/&#xa; 'Intestazione' è richiesto e univoco"
          test="
             not(.[@localType='ContestoStoricoIstituzionale'])
             or
@@ -2586,9 +2637,9 @@ Maschile."
             )
          "/> -->
 
-      <!-- eac 0884 cpfDescription/identity//nameEntry[@localType="DenominazioneProfilo"]/part[@localType="Intestazione"]/ -->
+      <!-- eac 0884 cpfDescription/identity//nameEntry[@localType="DenominazioneProfilo"]/part[@localType="IntestazioneProfilo"]/ -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac 0884&#xa; cpfDescription/identity/(.|nameEntrySet)/nameEntry[@localType='DenominazioneProfilo']/part[@localType='IntestazioneProfilo']/&#xa; 'Intestazione' è richiesto"
+         xao:message="=&gt;&#xa;eac 0884&#xa; cpfDescription/identity/(.|nameEntrySet)/nameEntry[@localType='DenominazioneProfilo']/part[@localType='IntestazioneProfilo']/&#xa; 'Intestazione' è richiesto e univoco"
          test="
             not(.[@localType='ProfiloIstituzionale'])
             or
@@ -2597,6 +2648,20 @@ Maschile."
                    .[@localType='ProfiloIstituzionale']/
                    (.|nameEntrySet)/nameEntry[@localType='DenominazioneProfilo']/part[@localType='IntestazioneProfilo'][string-length(normalize-space(.)) &gt; 0]
                   ) = 1
+            )
+         "/>
+
+      <!-- eac 0885 cpfDescription/identity//nameEntry[@localType="DenominazioneProfilo"]/part[@localType="AcronimoProfilo"]/ -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac 0884&#xa; cpfDescription/identity/(.|nameEntrySet)/nameEntry[@localType='DenominazioneProfilo']/part[@localType='AcronimoProfilo']/&#xa; 'Acronimo' è atteso univoco"
+         test="
+            not(.[@localType='ProfiloIstituzionale'])
+            or
+            (
+             count(
+                   .[@localType='ProfiloIstituzionale']/
+                   (.|nameEntrySet)/nameEntry[@localType='DenominazioneProfilo']/part[@localType='AcronimoProfilo']
+                  ) &lt;= 1
             )
          "/>
          
