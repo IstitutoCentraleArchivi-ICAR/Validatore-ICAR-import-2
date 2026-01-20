@@ -2292,7 +2292,7 @@ Altra sede."
       <!-- 0022 solo per tipologia ENTE - per esprimere la specifica tipologia dell'ente bisogna prima inserire come sottoelemento di <identity>  <entityType> con @value='corporateBody' e poi sempre come sottoelemento di <identity> otherEntityTypes/otherEntityType[@localType="ente"]/term/, dove
                  va inserito il valore del campo controllato ??? -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac 0022&#xa; identity[entityType/@value='corporateBody']/otherEntityTypes/otherEntityType[@localType='Ente']/term&#xa; 'TIPOLOGIA ENTE' è richiesto con valori:&#xa;
+         xao:message="=&gt;&#xa;eac 0022&#xa; identity[entityType/@value='corporateBody']/otherEntityTypes/otherEntityType[@localType='Ente']/term&#xa; 'TIPOLOGIA ENTE' ammette valori:&#xa;
 Accademia/ente di cultura,
 Archivio di Stato,
 Archivio di Stato/Sezione,
@@ -2346,9 +2346,6 @@ Organo o ufficio statale del periodo postunitario."
           )
            or
           (
-           string-length(normalize-space(otherEntityTypes/otherEntityType[@localType='Ente']/term))&gt;0
-           and
-           (
             every $v in otherEntityTypes/otherEntityType[@localType='Ente']/term
             satisfies
             (
@@ -2396,7 +2393,6 @@ Organo o ufficio statale del periodo postunitario."
              or $v='Organo e ufficio statale periferico del periodo postunitario'
              or $v='Organo o ufficio statale del periodo postunitario'
             )
-           )
           )
          "/>
 
