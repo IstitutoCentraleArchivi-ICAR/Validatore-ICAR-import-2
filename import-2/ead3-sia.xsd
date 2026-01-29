@@ -212,22 +212,17 @@ M659: È obbligatorio in &lt;subject>, quando rappresenta un tematismo, che non&
     </xs:complexContent>
   </xs:complexType>
 
-  <!-- M231: creato il tipo "archref.bibl", specializzazione di "archref"
+  <!-- M231: creato il tipo "archref.trac", specializzazione di "archref"
              quando usato come figlio di "bibliography" (tranne quando
              @altrender e' pari a "LinkFonteArchivistica") -->
-  <xs:complexType name="archref.bibl">
+  <xs:complexType name="archref.trac">
     <xs:complexContent>
       <xs:extension base="archref">
         <xs:assert xa:message="[&#x0a;&#x0a;
-M233: È obbligatoria in &lt;archref>, quando contenuto in &lt;bibliography>, la&#x0a;
-      presenza di un (e un solo) title/part[@localtype = &quot;StatusScheda&quot;] 
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="1 = count(title/part[@localtype = 'StatusScheda'])"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M234: È obbligatorio in &lt;archref>, quando contenuto in &lt;bibliography>, che il&#x0a;
-      contenuto di title/part[@localtype = &quot;StatusScheda&quot;] soddisfi una ben&#x0a;
-      precisa lista chiusa di valori possibili ammessi
+M234: È obbligatorio in &lt;archref>, quando contenuto in un &lt;bibliography>&#x0a;
+      relativo a una Fonte archivistica, che il contenuto di&#x0a;
+      title/part[@localtype = &quot;StatusScheda&quot;] soddisfi una ben precisa lista&#x0a;
+      chiusa di valori possibili ammessi
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="every $part in title/part[@localtype = 'StatusScheda']
@@ -237,37 +232,12 @@ M234: È obbligatorio in &lt;archref>, quando contenuto in &lt;bibliography>, ch
                                           'Validata (secondo livello)', 'Pubblicata',
                                           'Copia parallela')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M235: In &lt;archref>, quando contenuto in &lt;bibliography>, può essere presente,&#x0a;
-      al più, un title/part[@localtype = &quot;TitoloBreve&quot;]
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="1 >= count(title/part[@localtype = 'TitoloBreve'])"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M236: È obbligatoria in &lt;archref>, quando contenuto in &lt;bibliography>, la&#x0a;
-      presenza di un (e un solo) title/part[@localtype = &quot;Titolo&quot;]
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="1 = count(title/part[@localtype = 'Titolo'])"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M237: In &lt;archref>, quando contenuto in &lt;bibliography>, può essere presente,&#x0a;
-      al più, un title/part[@localtype = &quot;Descrizione&quot;]
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="1 >= count(title/part[@localtype = 'Descrizione'])"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
 M238: È obbligatorio in &lt;archref>, quando contenuto in &lt;bibliography>, che il&#x0a;
       contenuto dell'eventuale attributo @lang soddisfi lo standard ISO 693-3&#x0a;
       e quindi, in particolare, corrisponda a esattamente tre lettere minuscole
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="not(@lang) or matches(@lang, '^[a-z]{3}$')"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M648: È obbligatorio in &lt;archref>, quando contenuto in &lt;bibliography>, che&#x0a;
-      sia presente un, e un solo, figlio &lt;ref> con attributo @altrender pari&#x0a;
-      a &quot;Identificativo&quot;
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="1 = count(ref[@altrender = 'Identificativo'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M649: È obbligatorio in &lt;archref>, quando contenuto in &lt;bibliography>, che&#x0a;
       non sia nullo il contenuto testuale del figlio &lt;ref> con attributo&#x0a;
@@ -277,16 +247,52 @@ M649: È obbligatorio in &lt;archref>, quando contenuto in &lt;bibliography>, ch
           test="every $ref in ref[@altrender = 'Identificativo']
                 satisfies $ref/text() != ''"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M650: È obbligatorio in &lt;archref>, quando contenuto in &lt;bibliography>, che&#x0a;
-      sia presente un, e un solo, figlio &lt;ref> con attributo @altrender pari&#x0a;
-      a &quot;IdentificativoDiSistema&quot;
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="1 = count(ref[@altrender = 'IdentificativoDiSistema'])"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
 M651: È obbligatorio in &lt;archref>, quando contenuto in &lt;bibliography>, che&#x0a;
       non sia nullo il contenuto testuale del figlio &lt;ref> con attributo&#x0a;
       @altrender pari a &quot;IdentificativoDiSistema&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $ref in ref[@altrender = 'IdentificativoDiSistema']
+                satisfies $ref/text() != ''"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- M686: creato il tipo "bibref.trac", specializzazione di "bibref"
+             quando usato come figlio di "bibliography" quando questo
+             rappresente un tracciato -->
+  <xs:complexType name="bibref.trac">
+    <xs:complexContent>
+      <xs:extension base="bibref">
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M190: È obbligatorio in &lt;bibref>, quando contenuto in &lt;bibliography> e relativo&#x0a;
+      a un tracciato, che il contenuto di&#x0a;
+      title/part[@localtype = &quot;StatusScheda&quot;] soddisfi una ben precisa lista&#x0a;
+      chiusa di valori possibili ammessi
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $part in title/part[@localtype = 'StatusScheda']
+                satisfies $part/text() = ('Bozza', 'In validazione di primo livello',
+                                          'Validata (primo livello)',
+                                          'In validazione di secondo livello',
+                                          'Validata (secondo livello)', 'Pubblicata',
+                                          'Copia parallela')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M225: È obbligatorio in &lt;bibref>, quando contenuto in &lt;bibliography> e relativo&#x0a;
+      a un tracciato, che il contenuto dell'eventuale attributo @lang soddisfi&#x0a;
+      lo standard ISO 693-3 e quindi, in particolare, corrisponda a&#x0a;
+      esattamente tre lettere minuscole
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="not(@lang) or matches(@lang, '^[a-z]{3}$')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M653: È obbligatorio in &lt;bibref>, quando contenuto in &lt;bibliography> e relativo a un tracciato, che non sia nullo il contenuto testuale degli eventuali ref[@altrender = &quot;Identificativo&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $ref in ref[@altrender = 'Identificativo']
+                satisfies $ref/text() != ''"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M655: È obbligatorio in &lt;bibref>, quando contenuto in &lt;bibliography> e relativo a un tracciato, che non sia nullo il contenuto testuale degli eventuali ref[@altrender = &quot;IdentificativoDiSistema&quot;]
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="every $ref in ref[@altrender = 'IdentificativoDiSistema']
@@ -345,10 +351,52 @@ M223: In &lt;processifo>, quando relativo a un tracciato, deve essere presente,&
     </xs:complexContent>
   </xs:complexType>
 
-  <!-- M186: creato il tipo "bibliography.trac", generico per i tracciati -->
+  <!-- M684: creato il gruppo "trac.group", generico per i tracciati -->
+  <xs:group name="trac.group">
+    <xs:choice>
+      <xs:group ref="m.blocks"/>
+      <xs:element name="bibliography"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- M684: creato l'elemento "bibliography.trac", generico per i tracciati -->
   <xs:complexType name="bibliography.trac">
+    <xs:attribute name="localtype" type="xs:token"/>
+    <xs:attribute name="encodinganalog" type="xs:token"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M687: In &lt;bibliography>, quando relativo a un tracciato, eventuali figli &lt;p>&#x0a;
+      devono avere l'attributo @altrender pari a &quot;Osservazioni&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $p in p
+            satisfies $p/@altrender = 'Osservazioni'"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M688: In &lt;bibliography>, quando relativo a un tracciato, eventuali figli&#x0a;
+      &lt;bibliography> devono avere l'attributo @altrender pari&#x0a;
+      a &quot;LinkRiferimentoWeb&quot; oppure a &quot;LinkRiferimentoBibliografico&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $bibl in bibliography
+            satisfies $bibl/@localtype = ('LinkRiferimentoWeb',
+                                          'LinkRiferimentoBibliografico')"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M694: In &lt;bibliography>, quando relativo a un tracciato, non puo' esserci piu'&#x0a;
+      di un figlio &lt;p>&#x0a;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(p)"/>
+  </xs:complexType>
+
+  <!-- M186: creato il tipo "bibliography.trcb", generico per i tracciati che
+       possono contenere un <bibref> (ovvero nei casi "Fonte normativa",
+       "Riferimento bibliografico", "Riferimento web") -->
+  <xs:complexType name="bibliography.trcb">
     <xs:complexContent>
-      <xs:extension base="bibliography">
+      <xs:extension base="bibliography.trac">
+        <xs:choice maxOccurs="unbounded">
+          <xs:group ref="trac.group"/>
+          <xs:element name="bibref" type="bibref.trac"/>
+        </xs:choice>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M189: È obbligatoria in &lt;bibliography>, quando relativo a un tracciato,&#x0a;
       la presenza di un (e un solo)&#x0a;
@@ -356,27 +404,6 @@ M189: È obbligatoria in &lt;bibliography>, quando relativo a un tracciato,&#x0a
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 = count(bibref/title/part[@localtype = 'StatusScheda'])"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M190: È obbligatoria in &lt;bibliography>, quando relativo a un tracciato, che&#x0a;
-      il contenuto di bibref/title/part[@localtype = &quot;StatusScheda&quot;] soddisfi&#x0a;
-      una ben precisa lista chiusa di valori possibili ammessi
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="every $part in bibref/title/part[@localtype = 'StatusScheda']
-                satisfies $part/text() = ('Bozza', 'In validazione di primo livello',
-                                          'Validata (primo livello)',
-                                          'In validazione di secondo livello',
-                                          'Validata (secondo livello)', 'Pubblicata',
-                                          'Copia parallela')"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M225: È obbligatorio in &lt;bibliography>, quando relativo a un tracciato, che&#x0a;
-      il contenuto degli eventuali bibref/@lang soddisfi lo standard&#x0a;
-      ISO 639-3 e quindi, in particolare, corrisponda a esattamente tre&#x0a;
-      lettere minuscole
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="every $lang in bibref/@lang
-                satisfies matches($lang, '^[a-z]{3}$')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M652: È obbligatori0 in &lt;bibliography>, quando relativo a un tracciato, che sia&#x0a;
       presente un (e un solo) bibref/ref[@altrender = &quot;Identificativo&quot;]
@@ -406,6 +433,18 @@ M655: È obbligatorio in &lt;bibliography>, quando relativo a un tracciato, che&
           xpathDefaultNamespace="##targetNamespace" 
           test="every $ref in bibref/ref[@altrender = 'IdentificativoDiSistema']
                 satisfies $ref/text() != ''"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M690: In in &lt;bibliography>, quando relativo a un tracciato, può essere&#x0a;
+      presente, al più, un bibref/@lang
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(bibref/@lang)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M692: In in &lt;bibliography>, quando relativo a un tracciato, può essere&#x0a;
+      presente, al più, un bibref/num[@altrender = &quot;AltroCodiceIdentificativo&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(bibref/num[@altrender = 'AltroCodiceIdentificativo'])"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -414,7 +453,7 @@ M655: È obbligatorio in &lt;bibliography>, quando relativo a un tracciato, che&
              di fonte normativa -->
   <xs:complexType name="bibliography.fntn">
     <xs:complexContent>
-      <xs:extension base="bibliography.trac">
+      <xs:extension base="bibliography.trcb">
         <xs:assert xa:message="[&#x0a;&#x0a;
 M188: In &lt;bibliography>, quando @localtype è pari a &quot;FonteNormativa&quot;,&#x0a;
       può essere presente al più un unico&#x0a;
@@ -468,7 +507,7 @@ M224: In &lt;bibliography>, quando @localtype è pari a &quot;FonteNormativa&quo
              di riferimento bibliografico -->
   <xs:complexType name="bibliography.rifb">
     <xs:complexContent>
-      <xs:extension base="bibliography.trac">
+      <xs:extension base="bibliography.trcb">
         <xs:assert xa:message="[&#x0a;&#x0a;
 M196: È obbligatoria, in &lt;bibliography> quando @localtype è pari&#x0a;
       a &quot;RiferimentoBibliografico&quot;, la presenza di un (e un solo)&#x0a;
@@ -649,7 +688,7 @@ M230: In &lt;bibliography>, quando @localtype è pari a &quot;RiferimentoBibliog
              di riferimento web -->
   <xs:complexType name="bibliography.rifw">
     <xs:complexContent>
-      <xs:extension base="bibliography.trac">
+      <xs:extension base="bibliography.trcb">
         <xs:assert xa:message="[&#x0a;&#x0a;
 M215: È obbligatoria, in &lt;bibliography> quando @localtype è pari&#x0a;
       a &quot;RiferimentoWeb&quot;, la presenza di un (e un solo)&#x0a;
@@ -675,6 +714,84 @@ M218: In &lt;bibliography>, quando @localtype è pari a &quot;RiferimentoWeb&quo
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(bibref/ref/@href)"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+
+  <!-- M685: creato il tipo "bibliography.fnta", specifico per i tracciati
+             di "Fonte archivistica" -->
+  <xs:complexType name="bibliography.fnta">
+    <xs:complexContent>
+      <xs:extension base="bibliography.trac">
+        <xs:choice maxOccurs="unbounded">
+          <xs:group ref="trac.group"/>
+          <!-- M231: utilizzata la specializzazione "archref.trac",
+                     di "archref", quando "archref" e' parte di un
+                     tracciato ovvero e' figlio di "bibliography.fnta" -->
+          <xs:element name="archref" type="archref.trac"/>
+        </xs:choice>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M233: È obbligatorio in &lt;bibliography>, quando relativo a una Fonte&#x0a;
+      archivistica, la presenza di un (e un solo)&#x0a;
+      archref/title/part[@localtype = &quot;StatusScheda&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 = count(archref/title/part[@localtype = 'StatusScheda'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M235: In &lt;bibliography>, quando relativo a una Fonte archivisica, può essere&#x0a;
+      presente, al più, un archref/title/part[@localtype = &quot;TitoloBreve&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(archref/title/part[@localtype = 'TitoloBreve'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M236: È obbligatoria in &lt;bibliography>, quando relativo a una Fonte&#x0a;
+      archivisica, la presenza di un (e un solo)&#x0a;
+      archref/title/part[@localtype = &quot;Titolo&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 = count(archref/title/part[@localtype = 'Titolo'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M237: In in &lt;bibliography>, quando relativo a una Fonte archivisica, può&#x0a;
+      essere presente, al più, un&#x0a;
+      archref/title/part[@localtype = &quot;Descrizione&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(archref/title/part[@localtype = 'Descrizione'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M648: È obbligatorio in &lt;bibliography>, quando relativo a una Fonte&#x0a;
+      archivistica, che sia presente un, e un solo,&#x0a;
+      archref/ref[@altrender = &quot;Identificativo&quot;];
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 = count(archref/ref[@altrender = 'Identificativo'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M650: È obbligatorio in &lt;bibliography>, quando relativo a una Fonte&#x0a;
+      archivistica, che sia presente un, e un solo,&#x0a;
+      archref/ref[@altrender = &quot;IdentificativoDiSistema&quot;];
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 = count(archref/ref[@altrender = 'IdentificativoDiSistema'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M689: In in &lt;bibliography>, quando relativo a una Fonte archivisica, può&#x0a;
+      essere presente, al più, un archref/@lang
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(archref/@lang)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M691: In &lt;bibliography>, quando relativo a una Fonte archivisica, può essere&#x0a;
+      presente, al più, un&#x0a;
+      archref/num[@altrender = &quot;AltroCodiceIdentificativo&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(archref/num[@altrender = 'AltroCodiceIdentificativo'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M693: In &lt;bibliography>, quando relativo a una Fonte archivisica, può essere&#x0a;
+      presente, al più, un archref/ref con l'elemento &lt;ref> privo&#x0a;
+      dell'attributo @altrender
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(archref/ref[not(@altrender)])"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -711,12 +828,6 @@ M302: In &lt;archdesc> può essere presente, al più, un unico&#x0a;
       &#x0a;&#x0a;]"
       xpathDefaultNamespace="##targetNamespace" 
       test="1 >= count(bibliography/bibliography[@localtype = 'LinkFonteNormativa'])"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
-M303: In &lt;archdesc> può essere presente, al più, un unico&#x0a;
-      bibliography/bibliography[@localtype = &quot;LinkRiferimentoWeb&quot;]
-      &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="1 >= count(bibliography/bibliography[@localtype = 'LinkRiferimentoWeb'])"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M314: In &lt;archdesc> può essere presente al più, un unico&#x0a;
       bibliography/bibliography[@localtype = &quot;LinkRiferimentoBibliografico&quot;]
@@ -1445,12 +1556,6 @@ M302: In &lt;c> può essere presente, al più, un unico&#x0a;
       &#x0a;&#x0a;]"
       xpathDefaultNamespace="##targetNamespace" 
       test="1 >= count(bibliography/bibliography[@localtype = 'LinkFonteNormativa'])"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
-M303: In &lt;c> può essere presente, al più, un unico&#x0a;
-      bibliography/bibliography[@localtype = &quot;LinkRiferimentoWeb&quot;]
-      &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="1 >= count(bibliography/bibliography[@localtype = 'LinkRiferimentoWeb'])"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M314: In &lt;c> può essere presente al più, un unico&#x0a;
       bibliography/bibliography[@localtype = &quot;LinkRiferimentoBibliografico&quot;]
@@ -5881,22 +5986,15 @@ M306: Qualora in un &lt;arrangement>, con @localtype pari a &quot;Numerazione&qu
       <xs:element name="head" type="head" minOccurs="0"/>
       <xs:choice maxOccurs="unbounded">
         <xs:group ref="m.blocks"/>
-        <!-- M186: specializzazione "bibliography" per gestione tracciati -->
+        <!-- M186 e M685: specializzazione "bibliography" per gestione tracciati -->
         <xs:element name="bibliography">
+          <xs:alternative type="bibliography.fnta" test="@localtype = 'FonteArchivistica'"/>
           <xs:alternative type="bibliography.fntn" test="@localtype = 'FonteNormativa'"/>
           <xs:alternative type="bibliography.rifb" test="@localtype = 'RiferimentoBibliografico'"/>
           <xs:alternative type="bibliography.rifw" test="@localtype = 'RiferimentoWeb'"/>
           <xs:alternative type="bibliography"/>
         </xs:element>
-        <!-- M231: utilizzata la specializzazione "archref.bibl",
-                   di "archref", quando "archref" e' figlio
-                   di "bibliography", ad eccezione di quando
-                   @altrender e' pari a "LinkFonteArchivistica",
-                   quando si usa la versione base -->
-        <xs:element name="archref">
-          <xs:alternative type="archref"      test="@altrender = 'LinkFonteArchivistica'"/>
-          <xs:alternative type="archref.bibl"/>
-        </xs:element>
+        <xs:element name="archref" type="archref"/>
         <xs:element name="bibref" type="bibref"/>
       </xs:choice>
     </xs:sequence>
@@ -6055,11 +6153,7 @@ M593: In &lt;odd>, quando @localtype è pari a &quot;Osservazioni&quot;, non dev
           <xs:alternative type="processinfo.comp" test="@localtype = 'ComplessoArchivistico'"/>
           <xs:alternative type="processinfo.comp" test="@localtype = 'UnitaArchivistica'"/>
           <xs:alternative type="processinfo.comp" test="@localtype = 'UnitaDocumentaria'"/>
-          <xs:alternative type="processinfo.comp" test="@localtype = 'FonteArchivistica'"/>
-          <xs:alternative type="processinfo.comp" test="@localtype = 'FonteNormativa'"/>
           <xs:alternative type="processinfo.comp" test="@localtype = 'Progetto'"/>
-          <xs:alternative type="processinfo.comp" test="@localtype = 'RiferimentoBibliografico'"/>
-          <xs:alternative type="processinfo.comp" test="@localtype = 'RiferimentoWeb'"/>
           <xs:alternative type="processinfo.comp" test="@localtype = 'Tematismo'"/>
           <xs:alternative type="processinfo"/>
         </xs:element>
@@ -6847,7 +6941,9 @@ M173: In &lt;dateset>, quando contiene un &lt;datesingle> con @localtype pari a&
   <xs:complexType name="num">
     <xs:complexContent>
       <xs:extension base="m.mixed.basic">
-        <!-- M465: rimosso il gruppo "am.common", non utilizzato -->
+        <!-- M465: rimosso il gruppo "am.common", non utilizzato a parte @altrender;
+                   recuperato @altrender -->
+        <xs:attribute name="altrender" type="xs:token"/>
         <xs:attribute name="localtype" type="xs:token"/>
         <xs:attribute name="encodinganalog" type="xs:token"/>
       </xs:extension>
