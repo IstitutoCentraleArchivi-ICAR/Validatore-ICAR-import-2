@@ -3596,13 +3596,13 @@ M673: in &lt;subject>, quando rappresenta un soggetto, nel figlio&#x0a;
           test="every $part in part[@localtype = 'IdentificativoSoggetto']
                 satisfies $part/@identifier != ''"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
-M674: in &lt;subject>, quando rappresenta un soggetto, i contenuti testuali degli&#x0a;
-      eventuali part/ref[@arcrole = &quot;SoggettoCorrelato&quot;] devono essere&#x0a;
-      non nulli
+M674: in &lt;subject>, quando rappresenta un soggetto, gli eventuali &#x0a;
+      part/ref[@arcrole = &quot;SoggettoCorrelato&quot;] devono contenere un subject/part&#x0a;
+      con contenuto testuale non nullo
       &#x0a;&#x0a;]"
       xpathDefaultNamespace="##targetNamespace" 
       test="every $ref in part/ref[@arcrole = 'SoggettoCorrelato']
-            satisfies $ret/text() != ''"/>
+            satisfies $ref/subject/part/text() != ''"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M682: È obbligatorio in &lt;subject>, quando rappresenta un soggetto, che&#x0a;
       il contenuto dell'eventuale attributo @lang soddisfi lo standard&#x0a;
@@ -3611,6 +3611,14 @@ M682: È obbligatorio in &lt;subject>, quando rappresenta un soggetto, che&#x0a;
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="not(@lang) or matches(@lang, '^[a-z]{3}$')"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M695: in &lt;subject>, quando rappresenta un soggetto, gli eventuali &#x0a;
+      part/ref[@arcrole = &quot;SoggettoCorrelato&quot;] devono contenere un, e un solo,&#x0a;
+      subject/part
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $ref in part/ref[@arcrole = 'SoggettoCorrelato']
+            satisfies 1 = count($ref/subject/part)"/>
   </xs:complexType>
 
   <!-- M162: creata specializzazione, di "datesingle" da utilizzare in
