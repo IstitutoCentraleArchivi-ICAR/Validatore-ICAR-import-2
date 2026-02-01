@@ -1235,7 +1235,7 @@ M632: In &lt;archdesc>, quando rappresenta un complesso archivistico,&#x0a;
       &#x0a;&#x0a;]"
       xpathDefaultNamespace="##targetNamespace" 
       test="every $type in did/physdescstructured/unittype
-            satisfies    $type/text() = ''
+            satisfies    not($type/text())
                       or $type/text() = ('Album', 'Busta', 'Cartella', 'Faldone', 'Fascicolo',
                                          'Filza', 'Foglio', 'Manifesto', 'Mappa', 'Mazzo',
                                          'Opuscolo', 'Pacco', 'Plico', 'Quaderno', 'Raccoglitore',
@@ -1789,7 +1789,7 @@ M632: In &lt;c>, quando rappresenta un complesso archivistico, il contenuto&#x0a
       &#x0a;&#x0a;]"
       xpathDefaultNamespace="##targetNamespace" 
       test="every $type in did/physdescstructured/unittype
-            satisfies    $type/text() = ''
+            satisfies    not($type/text())
                       or $type/text() = ('Album', 'Busta', 'Cartella', 'Faldone', 'Fascicolo',
                                          'Filza', 'Foglio', 'Manifesto', 'Mappa', 'Mazzo',
                                          'Opuscolo', 'Pacco', 'Plico', 'Quaderno', 'Raccoglitore',
@@ -3273,7 +3273,7 @@ M633: In &lt;c>, quando rappresenta un'unità documentaria, il contenuto testual
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="every $type in did/physdescstructured/unittype
-                satisfies    $type/text() = ''
+                satisfies    not($type/text())
                           or $type/text() = ('Carta', 'Carte', 'Fogli', 'Foglio', 'Pagine', 'Pagina')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M634: In &lt;c>, quando rappresenta un'unità documentaria, se sono presenti dei&#x0a;
