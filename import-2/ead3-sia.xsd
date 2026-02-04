@@ -2034,7 +2034,7 @@ M632: In &lt;c>, quando rappresenta un'unita' archivistica, il contenuto testual
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="every $type in did/physdescstructured/unittype
-                satisfies    not($type/text())'
+                satisfies    not($type/text())
                           or $type/text() = ('Album', 'Busta', 'Cartella', 'Faldone', 'Fascicolo',
                                              'Filza', 'Foglio', 'Manifesto', 'Mappa', 'Mazzo',
                                              'Opuscolo', 'Pacco', 'Plico', 'Quaderno', 'Raccoglitore',
