@@ -3929,7 +3929,8 @@ Soggetto produttore,
 Possessore,
 Proprietario,
 Detentore dei diritti,
-Produttore (OAIS)."
+Produttore (OAIS),
+Versante (OAIS)."
           test="not(.[targetRole[.='Complesso archivistico']])
                  or
                 (
@@ -3946,6 +3947,7 @@ Produttore (OAIS)."
                    or $v='Proprietario'
                    or $v='Detentore dei diritti'
                    or $v='Produttore (OAIS)'
+                   or $v='Versante (OAIS)'
                   )
                  )
                 )
@@ -4011,7 +4013,8 @@ Soggetto conservatore,
 Soggetto vigilante,
 Soggetto produttore,
 Supervisore,
-Testimone."
+Testimone,
+Versante (OAIS)."
            test="not(.[targetRole[.='Unità archivistica' or .='Unità documentaria']][relationType[
                      .!='Agrimensore'
                  and .!='Autore'
@@ -4047,6 +4050,7 @@ Testimone."
                  and .!='Soggetto produttore'
                  and .!='Supervisore'
                  and .!='Testimone'
+                 and .!='Versante (OAIS)'
                 ]])"/>
        <!-- 0452 eac/cpfDescription/relations/relation[targetRole="unita archivistica"]/descriptiveNote/p/
             0475 eac/cpfDescription/relations/relation[targetRole="unita documentaria"]/descriptiveNote/p/
