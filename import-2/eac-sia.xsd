@@ -2550,7 +2550,8 @@ Denominazione parallela - Intestazione parallela."
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0262&#xa; cpfDescription/identity/otherEntityTypes/otherEntityType[@localType='Genere']/term/&#xa; 'Genere' lista chiusa con valori:&#xa;
 Femminile,
-Maschile."
+Maschile,
+Non specificato."
          test="
             not(entityType/@value='person')
             or 
@@ -2560,6 +2561,7 @@ Maschile."
              (
                  $v='Femminile'
               or $v='Maschile'
+              or $v='Non specificato' 
              )
             )
          "/>
@@ -3926,7 +3928,8 @@ Soggetto vigilante,
 Soggetto produttore,
 Possessore,
 Proprietario,
-Detentore dei diritti."
+Detentore dei diritti,
+Produttore (OAIS)."
           test="not(.[targetRole[.='Complesso archivistico']])
                  or
                 (
@@ -3942,6 +3945,7 @@ Detentore dei diritti."
                    or $v='Possessore'
                    or $v='Proprietario'
                    or $v='Detentore dei diritti'
+                   or $v='Produttore (OAIS)'
                   )
                  )
                 )
@@ -3997,11 +4001,15 @@ Mittente,
 Notaio,
 Partecipante,
 Possessore,
+Produttore (OAIS)
 Progettista,
 Proprietario,
 Regista,
 Responsabile,
 Rilevatore,
+Soggetto conservatore,
+Soggetto vigilante,
+Soggetto produttore,
 Supervisore,
 Testimone."
            test="not(.[targetRole[.='Unità archivistica' or .='Unità documentaria']][relationType[
@@ -4028,11 +4036,15 @@ Testimone."
                  and .!='Notaio'
                  and .!='Partecipante'
                  and .!='Possessore'
+                 and .!='Produttore (OAIS)'
                  and .!='Progettista'
                  and .!='Proprietario'
                  and .!='Regista'
                  and .!='Responsabile'
                  and .!='Rilevatore'
+                 and .!='Soggetto conservatore'
+                 and .!='Soggetto vigilante'
+                 and .!='Soggetto produttore'
                  and .!='Supervisore'
                  and .!='Testimone'
                 ]])"/>
