@@ -2349,7 +2349,8 @@ Organo o ufficio statale del periodo postunitario."
             every $v in otherEntityTypes/otherEntityType[@localType='Ente']/term
             satisfies
             (
-                $v='Accademia/ente di cultura'
+                $v=''
+             or $v='Accademia/ente di cultura'
              or $v='Archivio di Stato'
              or $v='Archivio di Stato/Sezione'
              or $v='Arte/ordine/collegio/associazione di categoria'
