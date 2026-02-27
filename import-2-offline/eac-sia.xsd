@@ -57,8 +57,9 @@
                <xs:element type="eac:cpfDescription" name="cpfDescription"/>
                <xs:element type="eac:multipleIdentities" name="multipleIdentities"/>
             </xs:choice>
-         </xs:sequence>
-         <xs:attribute name="audience">
+         </xs:sequence><!--
+         <xs:attribute name="audience"> -->
+         <xs:attribute name="audience" use="required">
             <xs:simpleType>
                <xs:restriction base="xs:token">
                   <xs:enumeration value="external"/>
@@ -330,6 +331,16 @@ Descrizione riservata e risorsa riservata (autorizzazione)."
       <xs:attribute name="sourceReference" type="xs:IDREFS"/>
       <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
       <xs:anyAttribute namespace="##other" processContents="lax"/>
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac &#xa; cpfDescription/@audience in CONSERVATORE è richiesto."
+         test="
+            not(relations/relation[targetRole[.='Complesso archivistico']][relationType[.='Soggetto conservatore']])
+             or
+            ( 
+             @audience
+            ) 
+         "/>
 
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac &#xa; cpfDescription/description/localDescriptions/localDescription[not(@localType)]/term in CONSERVATORE ammette i valori&#xa;
