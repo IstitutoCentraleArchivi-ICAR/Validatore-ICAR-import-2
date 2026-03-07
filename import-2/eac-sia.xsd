@@ -488,6 +488,7 @@ Modalità di acquisizione: Versamento."
           corporateBody                                Profilo istituzionale collegato
           corporateBody/family/person                  Soggetto conservatore collegato
           resource                                     Risorsa digitale collegata
+          resource                                     Soggetto
           resource                                     Complesso archivistico
           resource                                     Unità archivistica
           resource                                     Unità documentaria
@@ -498,13 +499,14 @@ Modalità di acquisizione: Versamento."
           resource                                     Tematismo
       -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac 0533 0553 0573 0644 0666 0689 0426 0450 0473 0496 0500 0504 0507 0527 SOGGETTO PRODUTTORE E CONSERVATORE relations/relation&#xa;
+         xao:message="=&gt;&#xa;eac 0533 0553 0573 0644 0666 0689 0426 0450 0473 0496 0500 0504 0507 0527 0692 SOGGETTO PRODUTTORE E CONSERVATORE relations/relation&#xa;
 targetEntity/@targetType    | targetRole&#xa;
 ----------------------------|--------------------------------------------------------------&#xa;
 corporateBody/family/person | Soggetto produttore collegato&#xa;
 corporateBody               | Profilo istituzionale collegato&#xa;
 corporateBody/family/person | Soggetto conservatore collegato&#xa;
 resource                    | Risorsa digitale collegata&#xa;
+resource                    | Soggetto&#xa;
 resource                    | Complesso archivistico&#xa;
 resource                    | Unità archivistica&#xa;
 resource                    | Unità documentaria&#xa;
@@ -534,6 +536,7 @@ resource                    | Tematismo&#xa;
             or $v='Profilo istituzionale collegato'
             or $v='Soggetto conservatore collegato'
             or $v='Risorsa digitale collegata'
+            or $v='Soggetto'
             or $v='Complesso archivistico'
             or $v='Unità archivistica'
             or $v='Unità documentaria'
@@ -544,18 +547,19 @@ resource                    | Tematismo&#xa;
             or $v='Tematismo'
            )
           )
-          and (every $v in relations/relation[targetRole[.='Soggetto produttore collegato'                                ]]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
-          and (every $v in relations/relation[targetRole[.='Profilo istituzionale collegato'                              ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
-          and (every $v in relations/relation[targetRole[.='Soggetto conservatore collegato'                              ]]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
-          and (every $v in relations/relation[targetRole[.='Risorsa digitale collegata'                                   ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Complesso archivistico'                                       ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Unità archivistica'                                           ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Unità documentaria'                                           ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Strumento di ricerca'                                         ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Progetto'                                                     ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Evento'                                                       ]]/targetEntity/@targetType satisfies ($v = 'function'))
-          and (every $v in relations/relation[targetRole[.='Contesto storico istituzionale collegato'                     ]]/targetEntity/@targetType satisfies ($v = 'agent'))
-          and (every $v in relations/relation[targetRole[.='Tematismo'                                                    ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Soggetto produttore collegato'           ]]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
+          and (every $v in relations/relation[targetRole[.='Profilo istituzionale collegato'         ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
+          and (every $v in relations/relation[targetRole[.='Soggetto conservatore collegato'         ]]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
+          and (every $v in relations/relation[targetRole[.='Risorsa digitale collegata'              ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Soggetto'                                ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Complesso archivistico'                  ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Unità archivistica'                      ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Unità documentaria'                      ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Strumento di ricerca'                    ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Progetto'                                ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Evento'                                  ]]/targetEntity/@targetType satisfies ($v = 'function'))
+          and (every $v in relations/relation[targetRole[.='Contesto storico istituzionale collegato']]/targetEntity/@targetType satisfies ($v = 'agent'))
+          and (every $v in relations/relation[targetRole[.='Tematismo'                               ]]/targetEntity/@targetType satisfies ($v = 'resource'))
          ) 
          "/>
          <!-- 
@@ -579,6 +583,7 @@ resource                    | Tematismo&#xa;
           corporateBody/family/person                  Soggetto produttore collegato
           corporateBody                                Profilo istituzionale collegato
           resource                                     Risorsa digitale collegata
+          resource                                     Soggetto
           resource                                     Complesso archivistico
           resource                                     Unità archivistica
           resource                                     Unità documentaria
@@ -589,12 +594,13 @@ resource                    | Tematismo&#xa;
           resource                                     Tematismo
       -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac 0533 0553 0573 0689 0426 0450 0473 0496 0500 0504 0507 0527 SOGGETTO PRODUTTORE relations/relation&#xa;
+         xao:message="=&gt;&#xa;eac 0533 0553 0573 0689 0426 0450 0473 0496 0500 0504 0507 0527 0692 SOGGETTO PRODUTTORE relations/relation&#xa;
 targetEntity/@targetType    | targetRole&#xa;
 ----------------------------|------------------------------------------------------------&#xa;
 corporateBody/family/person | Soggetto produttore collegato&#xa;
 corporateBody               | Profilo istituzionale collegato&#xa;
 resource                    | Risorsa digitale collegata&#xa;
+resource                    | Soggetto&#xa;
 resource                    | Complesso archivistico&#xa;
 resource                    | Unità archivistica&#xa;
 resource                    | Unità documentaria&#xa;
@@ -625,8 +631,8 @@ resource                    | Tematismo&#xa;
            (
                $v='Soggetto produttore collegato'
             or $v='Profilo istituzionale collegato'
-            
             or $v='Risorsa digitale collegata'
+            or $v='Soggetto'
             or $v='Complesso archivistico'
             or $v='Unità archivistica'
             or $v='Unità documentaria'
@@ -639,8 +645,8 @@ resource                    | Tematismo&#xa;
           )
           and (every $v in relations/relation[targetRole[.='Soggetto produttore collegato'           ]]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
           and (every $v in relations/relation[targetRole[.='Profilo istituzionale collegato'         ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
-          
           and (every $v in relations/relation[targetRole[.='Risorsa digitale collegata'              ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Soggetto'                                ]]/targetEntity/@targetType satisfies ($v = 'resource'))
           and (every $v in relations/relation[targetRole[.='Complesso archivistico'                  ]]/targetEntity/@targetType satisfies ($v = 'resource'))
           and (every $v in relations/relation[targetRole[.='Unità archivistica'                      ]]/targetEntity/@targetType satisfies ($v = 'resource'))
           and (every $v in relations/relation[targetRole[.='Unità documentaria'                      ]]/targetEntity/@targetType satisfies ($v = 'resource'))
@@ -667,6 +673,7 @@ resource                    | Tematismo&#xa;
          relations/relation/targetEntity/@targetType  relations/relation/targetRole
           corporateBody/family/person                  Soggetto conservatore collegato
           resource                                     Risorsa digitale collegata
+          resource                                     Soggetto
           resource                                     Complesso archivistico
           resource                                     Unità archivistica
           resource                                     Unità documentaria
@@ -677,11 +684,12 @@ resource                    | Tematismo&#xa;
           resource                                     Tematismo
       -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac 0644 0666 0689 0426 0450 0473 0496 0500 0504 0507 0527 SOGGETTO CONSERVATORE relations/relation&#xa;
+         xao:message="=&gt;&#xa;eac 0644 0666 0689 0426 0450 0473 0496 0500 0504 0507 0527 0692 SOGGETTO CONSERVATORE relations/relation&#xa;
 targetEntity/@targetType    | targetRole&#xa;
 ----------------------------|--------------------------------------------------------------&#xa;
 corporateBody/family/person | Soggetto conservatore collegato&#xa;
 resource                    | Risorsa digitale collegata&#xa;
+resource                    | Soggetto&#xa;
 resource                    | Complesso archivistico&#xa;
 resource                    | Unità archivistica&#xa;
 resource                    | Unità documentaria&#xa;
@@ -712,6 +720,7 @@ resource                    | Tematismo&#xa;
            (
                $v='Soggetto conservatore collegato'
             or $v='Risorsa digitale collegata'
+            or $v='Soggetto'
             or $v='Complesso archivistico'
             or $v='Unità archivistica'
             or $v='Unità documentaria'
@@ -722,16 +731,17 @@ resource                    | Tematismo&#xa;
             or $v='Tematismo'
            )
           )
-          and (every $v in relations/relation[targetRole[.='Soggetto conservatore collegato'                              ]]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
-          and (every $v in relations/relation[targetRole[.='Risorsa digitale collegata'                                   ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Complesso archivistico'                                       ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Unità archivistica'                                           ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Unità documentaria'                                           ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Strumento di ricerca'                                         ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Progetto'                                                     ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Evento'                                                       ]]/targetEntity/@targetType satisfies ($v = 'function'))
-          and (every $v in relations/relation[targetRole[.='Contesto storico istituzionale collegato'                     ]]/targetEntity/@targetType satisfies ($v = 'agent'))
-          and (every $v in relations/relation[targetRole[.='Tematismo'                                                    ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Soggetto conservatore collegato'         ]]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
+          and (every $v in relations/relation[targetRole[.='Risorsa digitale collegata'              ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Soggetto'                                ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Complesso archivistico'                  ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Unità archivistica'                      ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Unità documentaria'                      ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Strumento di ricerca'                    ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Progetto'                                ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Evento'                                  ]]/targetEntity/@targetType satisfies ($v = 'function'))
+          and (every $v in relations/relation[targetRole[.='Contesto storico istituzionale collegato']]/targetEntity/@targetType satisfies ($v = 'agent'))
+          and (every $v in relations/relation[targetRole[.='Tematismo'                               ]]/targetEntity/@targetType satisfies ($v = 'resource'))
          ) 
          "/>
       <!--
@@ -742,6 +752,7 @@ resource                    | Tematismo&#xa;
          
          relations/relation/targetEntity/@targetType  relations/relation/targetRole
           resource                                     Risorsa digitale collegata
+          resource                                     Soggetto
           resource                                     Complesso archivistico
           resource                                     Unità archivistica
           resource                                     Unità documentaria
@@ -752,10 +763,11 @@ resource                    | Tematismo&#xa;
           resource                                     Tematismo
       -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac 0689 0426 0450 0473 0496 0500 0504 0507 0527 AGENTE né PRODUTTORE né CONSERVATORE relations/relation&#xa;
+         xao:message="=&gt;&#xa;eac 0689 0426 0450 0473 0496 0500 0504 0507 0527 0692 AGENTE né PRODUTTORE né CONSERVATORE relations/relation&#xa;
 targetEntity/@targetType | targetRole&#xa;
 -------------------------|-----------------------------&#xa;
 resource                 | Risorsa digitale collegata&#xa;
+resource                 | Soggetto&#xa;
 resource                 | Complesso archivistico&#xa;
 resource                 | Unità archivistica&#xa;
 resource                 | Unità documentaria&#xa;
@@ -791,6 +803,7 @@ resource                 | Tematismo&#xa;
            every $v in relations/relation/targetRole satisfies
            (
                $v='Risorsa digitale collegata'
+            or $v='Soggetto'
             or $v='Complesso archivistico'
             or $v='Unità archivistica'
             or $v='Unità documentaria'
@@ -802,6 +815,7 @@ resource                 | Tematismo&#xa;
            )
           )
           and (every $v in relations/relation[targetRole[.='Risorsa digitale collegata'              ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Soggetto'                                ]]/targetEntity/@targetType satisfies ($v = 'resource'))
           and (every $v in relations/relation[targetRole[.='Complesso archivistico'                  ]]/targetEntity/@targetType satisfies ($v = 'resource'))
           and (every $v in relations/relation[targetRole[.='Unità archivistica'                      ]]/targetEntity/@targetType satisfies ($v = 'resource'))
           and (every $v in relations/relation[targetRole[.='Unità documentaria'                      ]]/targetEntity/@targetType satisfies ($v = 'resource'))
