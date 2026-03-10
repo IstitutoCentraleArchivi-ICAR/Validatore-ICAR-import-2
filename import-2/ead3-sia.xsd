@@ -1042,13 +1042,6 @@ M067: In &lt;archdesc> non deve essere presente più di un &lt;accessrestrict>&#
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(accessrestrict[@localtype = 'CondizioniAccesso'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M068: In &lt;archdesc> l'eventuale figlio &lt;accessrestrict>, con @localtype pari&#x0a;
-      a &quot;CondizioniAccesso&quot; deve avere almeno un figlio &lt;p>
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="every $acc in accessrestrict[@localtype = 'CondizioniAccesso']
-                satisfies $acc/p"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
 M076: In &lt;archdesc>, se sono presenti degli&#x0a;
       accessrestrict[@localtype = &quot;CondizioniAccesso&quot;]/p, allora i contenuti dei&#x0a;
       &lt;p> devono soddisfare una precisa lista chiusa di valori ammissibili
@@ -1133,7 +1126,8 @@ M304: In &lt;archdesc>, quando rappresenta un complesso archivistico, gli&#x0a;
           test="every $type in ( relations/relation[@relationtype = 'cpfrelation']
                                 /relationentry/@localtype)
                 satisfies $type = ('Soggetto conservatore', 'Soggetto vigilante', 'Proprietario',
-                                   'Possessore', 'Detentore di diritti', 'Soggetto produttore')"/>
+                                   'Possessore', 'Detentore di diritti', 'Soggetto produttore',
+                                   'Agente collegato')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M536: In &lt;archdesc> non è ammesso più di un&#x0a;
       did/unittitle[@localtype = &quot;IntegrazioneDenominazione&quot;]
@@ -1485,13 +1479,6 @@ M067: In &lt;c> non deve essere presente più di un &lt;accessrestrict> con&#x0a
       xpathDefaultNamespace="##targetNamespace" 
       test="1 >= count(accessrestrict[@localtype = 'CondizioniAccesso'])"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
-M068: In &lt;c> l'eventuale figlio &lt;accessrestrict>, con @localtype pari&#x0a;
-      a &quot;CondizioniAccesso&quot; deve avere almeno un figlio &lt;p>
-      &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="every $acc in accessrestrict[@localtype = 'CondizioniAccesso']
-            satisfies $acc/p"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
 M076: In &lt;c>, se sono presenti degli&#x0a;
       accessrestrict[@localtype = &quot;CondizioniAccesso&quot;]/p, allora i contenuti dei&#x0a;
       &lt;p> devono soddisfare una precisa lista chiusa di valori ammissibili
@@ -1758,7 +1745,8 @@ M304: In &lt;c>, quando rappresenta un complesso archivistico, gli eventuali&#x0
           test="every $type in ( relations/relation[@relationtype = 'cpfrelation']
                                 /relationentry/@localtype)
                 satisfies $type = ('Soggetto conservatore', 'Soggetto vigilante', 'Proprietario',
-                                   'Possessore', 'Detentore di diritti', 'Soggetto produttore')"/>
+                                   'Possessore', 'Detentore di diritti', 'Soggetto produttore',
+                                   'Agente collegato')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M536: In &lt;c>, quando rappresenta un compesso archivistico, non è ammesso&#x0a;
       più di un did/unittitle[@localtype = &quot;IntegrazioneDenominazione&quot;]
@@ -1957,7 +1945,8 @@ M079: In &lt;c>, quando rappresenta un'unità archivistica, se sono presenti dei
                                                 'Litografo', 'Fotografo inventore', 'Fotografo principale',
                                                 'Ideatore', 'Regista', 'Committente', 'Corrispondente',
                                                 'Curatore', 'Responsabile', 'Partecipante', 'Finanziatore',
-                                                'Possessore', 'Proprietario', 'Detentore dei diritti')"/>
+                                                'Possessore', 'Proprietario', 'Detentore dei diritti',
+                                                'Agente collegato')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M181: In &lt;c>, quando rappresenta un'unità archivistica, gli eventuali&#x0a;
       figli &lt;scopecontent> devono avere @localtype pari a&#x0a;
@@ -2293,7 +2282,8 @@ M079: In &lt;c>, quando rappresenta un'unità documentaria, se sono presenti dei
                                                 'Litografo', 'Fotografo inventore', 'Fotografo principale',
                                                 'Ideatore', 'Regista', 'Committente', 'Corrispondente',
                                                 'Curatore', 'Responsabile', 'Partecipante', 'Finanziatore',
-                                                'Possessore', 'Proprietario', 'Detentore dei diritti')"/>
+                                                'Possessore', 'Proprietario', 'Detentore dei diritti',
+                                                'Agente collegato')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M084: In &lt;c>, quando rappresenta un'unità documentaria, deve essere presente,&#x0a;
       al più, un unico (non ripetibile) did/didnote[@localtype = &quot;NoteDorsali&quot;]
@@ -3756,13 +3746,17 @@ M307: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, d
       &#x0a;&#x0a;]"
           test="text() != ''"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M308: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, deve essere&#x0a;
-      presente, con valore non nullo, l'attributo @standarddate, ma assenti&#x0a;
-      @notbefore e @notafter, oppure, in alternativa, siano presenti, con&#x0a;
-      valore non nullo, @notbefore e @notafter ma sia assente @standarddate
+M308: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, può essere&#x0a;
+      presente, con valore non nullo, l'attributo @standarddate, ma in tal&#x0a;
+      caso devono essere assenti sia @notbefore che @notafter, oppure possono&#x0a;
+      essere presenti sia @notbefore che @notafter (non solo uno dei due), ma&#x0a;
+      in tal caso deve essere assente @standarddate, oppure possono essere&#x0a;
+      assenti tutti e tre gli attributi; le altre combinazioni non sono&#x0a;
+      accettate
       &#x0a;&#x0a;]"
           test="   ((@standarddate != '') and not(@notbefore) and not(@notafter))
-                or (not(@standarddate) and (@notbefore != '') and (@notafter != ''))"/>
+                or (not(@standarddate) and (@notbefore != '') and (@notafter != ''))
+                or (not(@standarddate) and not(@notbefore) and not(@notafter))"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M339: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, il valore&#x0a;
       di @standarddate deve essere in formato ISO 8601 esteso; sono ammesse&#x0a;
@@ -6014,21 +6008,21 @@ M586: È obbligatoria in &lt;bibliography>, quando @localtype vale&#x0a;
       &quot;LinkRiferimentoBibliografico&quot;, la presenza di un, e solo un, figlio&#x0a;
       &lt;ref> all'interno degli eventuali figli &lt;bibref> del &lt;bibliography>
       &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="if (@localtype = 'LinkRiferimentoBibliografico')
-                then every $bib in bibref
-                     satisfies 1 = count($bib/ref)
-                else true()"/>
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@localtype = 'LinkRiferimentoBibliografico')
+            then every $bib in bibref
+                 satisfies 1 = count($bib/ref)
+            else true()"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M587: In &lt;bibliography>, quando @localtype vale &quot;LinkRiferimentoBibliografico&quot;,&#x0a;
       deve essere presente al più un solo footnote/p all'interno degli&#x0a;
       eventuali figli &lt;bibref> del &lt;bibliography>
       &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="if (@localtype = 'LinkRiferimentoBibliografico')
-                then every $bib in bibref
-                     satisfies 1 >= count($bib/footnote/p)
-                else true()"/>
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (@localtype = 'LinkRiferimentoBibliografico')
+            then every $bib in bibref
+                 satisfies 1 >= count($bib/footnote/p)
+            else true()"/>
   </xs:complexType>
 
   <!-- M358: rimosso il tipo "bioghist" in quanto non utilizzato -->
@@ -6045,6 +6039,177 @@ M587: In &lt;bibliography>, quando @localtype vale &quot;LinkRiferimentoBibliogr
     <!-- M424: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="localtype" type="xs:token"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M697: In &lt;controlaccess>, gli eventuali figli &lt;persname> devono contenere solo&#x0a;
+      dei figli &lt;part> con @localtype pari ad &quot;Antroponimo&quot; oppure pari&#x0a;
+      a &quot;NoteRelazione&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $part in persname/part
+            satisfies $part/@localtype = ('Antroponimo', 'NoteRelazione')"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M698: In &lt;controlaccess>, gli eventuali figli &lt;persname> devono&#x0a;
+      obbligatoriamente contenere un, e solo un, figlio &lt;part> con @localtype&#x0a;
+      pari ad &quot;Antroponimo&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $pers in persname
+            satisfies 1 = count($pers/part[@localtype = 'Antroponimo'])"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M699: In &lt;controlaccess>, gli eventuali figli &lt;persname> devono contenere,&#x0a;
+      al più, un unico figlio &lt;part> con @localtype pari ad &quot;NoteRelazione&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $pers in persname
+            satisfies 1 >= count($pers/part[@localtype = 'NoteRelazione'])"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M700: In &lt;controlaccess>, gli eventuali figli &lt;persname> devono contenere un&#x0a;
+      figlio &lt;part> con @localtype pari ad &quot;Antroponimo&quot; con,&#x0a;
+      obbligatoriamente, anche l'attributo @identifier (con valore non nullo)&#x0a;
+      e contenuto testuale nullo oppure, in alternativa, contenuto testuale&#x0a;
+      non nullo e assenza di attributo @identifier
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $part in persname/part[@localtype = 'Antroponimo']
+            satisfies    (($part/@identifier != '') and not($part/text()))
+                      or (not($part/@identifier) and ($part/text() != ''))"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M701: In &lt;controlaccess>, gli eventuali figli &lt;corpname> devono contenere solo&#x0a;
+      dei figli &lt;part> con @localtype pari a &quot;NomeEnte&quot; oppure pari&#x0a;
+      a &quot;NoteRelazione&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $corp in corpname/part
+            satisfies $corp/@localtype = ('NomeEnte', 'NoteRelazione')"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M702: In &lt;controlaccess>, gli eventuali figli &lt;corpname> devono&#x0a;
+      obbligatoriamente contenere un, e solo un, figlio &lt;part> con @localtype&#x0a;
+      pari a &quot;NomeEnte&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $corp in corpname
+            satisfies 1 = count($corp/part[@localtype = 'NomeEnte'])"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M703: In &lt;controlaccess>, gli eventuali figli &lt;corpname> devono contenere,&#x0a;
+      al più, un unico figlio &lt;part> con @localtype pari ad &quot;NoteRelazione&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $corp in corpname
+            satisfies 1 >= count($corp/part[@localtype = 'NoteRelazione'])"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M704: In &lt;controlaccess>, gli eventuali figli &lt;corpname> devono contenere un&#x0a;
+      figlio &lt;part> con @localtype pari a &quot;NomeEnte&quot; con,&#x0a;
+      obbligatoriamente, anche l'attributo @identifier (con valore non nullo)&#x0a;
+      e contenuto testuale nullo oppure, in alternativa, contenuto testuale&#x0a;
+      non nullo e assenza di attributo @identifier
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $part in corpname/part[@localtype = 'NomeEnte']
+            satisfies    (($part/@identifier != '') and not($part/text()))
+                      or (not($part/@identifier) and ($part/text() != ''))"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M705: In &lt;controlaccess>, gli eventuali figli &lt;famname> devono contenere solo&#x0a;
+      dei figli &lt;part> con @localtype pari a &quot;NomeFamiglia&quot; oppure pari&#x0a;
+      a &quot;NoteRelazione&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $famn in famname/part
+            satisfies $famn/@localtype = ('NomeFamiglia', 'NoteRelazione')"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M706: In &lt;controlaccess>, gli eventuali figli &lt;famname> devono&#x0a;
+      obbligatoriamente contenere un, e solo un, figlio &lt;part> con @localtype&#x0a;
+      pari a &quot;NomeFamiglia&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $famn in famname
+            satisfies 1 = count($famn/part[@localtype = 'NomeFamiglia'])"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M707: In &lt;controlaccess>, gli eventuali figli &lt;famname> devono contenere,&#x0a;
+      al più, un unico figlio &lt;part> con @localtype pari ad &quot;NoteRelazione&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $famn in famname
+            satisfies 1 >= count($famn/part[@localtype = 'NoteRelazione'])"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M708: In &lt;controlaccess>, gli eventuali figli &lt;famname> devono contenere un&#x0a;
+      figlio &lt;part> con @localtype pari a &quot;NomeFamiglia&quot; con,&#x0a;
+      obbligatoriamente, anche l'attributo @identifier (con valore non nullo)&#x0a;
+      e contenuto testuale nullo oppure, in alternativa, contenuto testuale&#x0a;
+      non nullo e assenza di attributo @identifier
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $famn in famname/part[@localtype = 'NomeFamiglia']
+            satisfies    (($famn/@identifier != '') and not($famn/text()))
+                      or (not($famn/@identifier) and ($famn/text() != ''))"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M709: In &lt;controlaccess>, gli eventuali figli &lt;geogname> devono contenere solo&#x0a;
+      dei figli &lt;part> con @localtype pari a &quot;Toponimo&quot; oppure pari&#x0a;
+      a &quot;NoteRelazione&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $geog in geogname/part
+            satisfies $geog/@localtype = ('Toponimo', 'NoteRelazione')"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M710: In &lt;controlaccess>, gli eventuali figli &lt;geogname> devono&#x0a;
+      obbligatoriamente contenere un, e solo un, figlio &lt;part> con @localtype&#x0a;
+      pari a &quot;Toponimo&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $geog in geogname
+            satisfies 1 = count($geog/part[@localtype = 'Toponimo'])"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M711: In &lt;controlaccess>, gli eventuali figli &lt;geogname> devono contenere,&#x0a;
+      al più, un unico figlio &lt;part> con @localtype pari ad &quot;NoteRelazione&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $geog in geogname
+            satisfies 1 >= count($geog/part[@localtype = 'NoteRelazione'])"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M712: In &lt;controlaccess>, gli eventuali figli &lt;geogname> devono contenere un&#x0a;
+      figlio &lt;part> con @localtype pari a &quot;Toponimo&quot; con,&#x0a;
+      obbligatoriamente, anche l'attributo @identifier (con valore non nullo)&#x0a;
+      e contenuto testuale nullo oppure, in alternativa, contenuto testuale&#x0a;
+      non nullo e assenza di attributo @identifier
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $part in geogname/part[@localtype = 'Toponimo']
+            satisfies    (($part/@identifier != '') and not($part/text()))
+                      or (not($part/@identifier) and ($part/text() != ''))"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M713: In &lt;controlaccess>, gli eventuali figli &lt;subject>, quando privo&#x0a;
+      di @localtype, devono contenere solo dei figli &lt;part> con @localtype&#x0a;
+      pari a &quot;Soggetto&quot; oppure pari a &quot;NoteRelazione&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $part in subject[not(@localtype)]/part
+            satisfies $part/@localtype = ('Soggetto', 'NoteRelazione')"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M714: In &lt;controlaccess>, gli eventuali figli &lt;subject>, quando privo&#x0a;
+      di @localtype, devono obbligatoriamente contenere un, e solo un, figlio&#x0a;
+      &lt;part> con @localtype pari a &quot;Soggetto&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $subj in subject[not(@localtype)]
+            satisfies 1 = count($subj/part[@localtype = 'Soggetto'])"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M715: In &lt;controlaccess>, gli eventuali figli &lt;subject>, quando privo#x0a;
+      di @localtype, devono contenere, al più, un unico figlio &lt;part>#x0a;
+      con @localtype pari ad &quot;NoteRelazione&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $subj in subject[not(@localtype)]
+            satisfies 1 >= count($subj/part[@localtype = 'NoteRelazione'])"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M716: In &lt;controlaccess>, gli eventuali figli &lt;subject>, quando privo&#x0a;
+      di @localtype, devono contenere un figlio &lt;part> con @localtype pari&#x0a;
+      a &quot;Soggetto&quot; con, obbligatoriamente, anche l'attributo @identifier (con&#x0a;
+      valore non nullo) e contenuto testuale nullo oppure, in alternativa,&#x0a;
+      contenuto testuale non nullo e assenza di attributo @identifier
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $part in subject[not(@localtype)]/part[@localtype = 'Soggetto']
+            satisfies    (($part/@identifier != '') and not($part/text()))
+                      or (not($part/@identifier) and ($part/text() != ''))"/>
   </xs:complexType>
 
   <xs:complexType name="custodhist">
@@ -6696,13 +6861,17 @@ M307: In &lt;fromdate> deve essere non vuoto il contenuto dell'elemento
       &#x0a;&#x0a;]"
           test="text() != ''"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M308: In &lt;fromdate> deve essere presente, con valore non nullo, l'attributo&#x0a;
-      @standarddate, ma assenti @notbefore e @notafter, oppure,&#x0a;
-      in alternativa, siano presenti, con valore non nullo, @notbefore&#x0a;
-      e @notafter ma sia assente @standarddate
+M308: In &lt;fromdate>, quando @localtype è pari a &quot;DataSingola&quot;, può essere&#x0a;
+      presente, con valore non nullo, l'attributo @standarddate, ma in tal&#x0a;
+      caso devono essere assenti sia @notbefore che @notafter, oppure possono&#x0a;
+      essere presenti sia @notbefore che @notafter (non solo uno dei due), ma&#x0a;
+      in tal caso deve essere assente @standarddate, oppure possono essere&#x0a;
+      assenti tutti e tre gli attributi; le altre combinazioni non sono&#x0a;
+      accettate
       &#x0a;&#x0a;]"
           test="   ((@standarddate != '') and not(@notbefore) and not(@notafter))
-                or (not(@standarddate) and (@notbefore != '') and (@notafter != ''))"/>
+                or (not(@standarddate) and (@notbefore != '') and (@notafter != ''))
+                or (not(@standarddate) and not(@notbefore) and not(@notafter))"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M339: In &lt;fromdate> il valore di @standarddate deve essere in formato ISO 8601&#x0a;
       esteso; sono ammesse le varianti &quot;AAAA-MM-GG&quot;, &quot;AAAA-MM&quot; e &quot;AAAA&quot;; non è&#x0a;
@@ -6804,13 +6973,17 @@ M307: In &lt;todate> deve essere non vuoto il contenuto dell'elemento
       &#x0a;&#x0a;]"
           test="text() != ''"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M308: In &lt;todate> deve essere presente, con valore non nullo, l'attributo&#x0a;
-      @standarddate, ma assenti @notbefore e @notafter, oppure,&#x0a;
-      in alternativa, siano presenti, con valore non nullo, @notbefore&#x0a;
-      e @notafter ma sia assente @standarddate
+M308: In &lt;todate>, quando @localtype è pari a &quot;DataSingola&quot;, può essere&#x0a;
+      presente, con valore non nullo, l'attributo @standarddate, ma in tal&#x0a;
+      caso devono essere assenti sia @notbefore che @notafter, oppure possono&#x0a;
+      essere presenti sia @notbefore che @notafter (non solo uno dei due), ma&#x0a;
+      in tal caso deve essere assente @standarddate, oppure possono essere&#x0a;
+      assenti tutti e tre gli attributi; le altre combinazioni non sono&#x0a;
+      accettate
       &#x0a;&#x0a;]"
           test="   ((@standarddate != '') and not(@notbefore) and not(@notafter))
-                or (not(@standarddate) and (@notbefore != '') and (@notafter != ''))"/>
+                or (not(@standarddate) and (@notbefore != '') and (@notafter != ''))
+                or (not(@standarddate) and not(@notbefore) and not(@notafter))"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M339: In &lt;todate> il valore di @standarddate deve essere in formato ISO 8601&#x0a;
       esteso; sono ammesse le varianti &quot;AAAA-MM-GG&quot;, &quot;AAAA-MM&quot; e &quot;AAAA&quot;; non è&#x0a;
@@ -6905,13 +7078,28 @@ M172: In &lt;dateset>, quando contiene un &lt;datesingle> con @localtype pari a&
 M173: In &lt;dateset>, quando contiene un &lt;datesingle> con @localtype pari a&#x0a;
       &quot;DataTestuale&quot; e @altrender pari a &quot;Data non rilevabile - non rilevata&quot;,&#x0a;
       non deve contenere né &lt;daterange> né un &lt;datesingle> con @localtype pari&#x0a;
-      a &quot;DataSingola&quot;
+      a &quot;DataSingola&quot;, a meno che quest'ultimo sia privo degli attributi&#x0a;
+      @standarddate, @notbefore e @notafter
       &#x0a;&#x0a;]"
       xpathDefaultNamespace="##targetNamespace" 
       test="if (datesingle[    (@localtype = 'DataTestuale')
                            and (@altrender = 'Data non rilevabile - non rilevata')])
-            then     not(datesingle[@localtype = 'DataSingola'])
-                 and not(daterange)
+            then     not(daterange)
+                 and (every $date in (datesingle[@localtype = 'DataSingola'])
+                      satisfies $date[not(@standarddate) and not(@notbefore) and not(@notafter)])
+            else true()"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M696: In &lt;dateset>, quando contiene un &lt;datesingle> con @localtype pari a&#x0a;
+      &quot;DataSingola&quot; e privo degli attributi @standarddate, @notbefore,&#x0a;
+      e @notafter, deve essere anche presente un &lt;datesingle> con @localtype&#x0a;
+      pari a &quot;DataTestuale&quot; e @altrender pari a&#x0a;
+      &quot;Data non rilevabile - non rilevata&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="if (datesingle[    (@localtype = 'DataSingola') and not(@standarddate)
+                           and not(@notbefore) and not(@notafter)])
+            then datesingle[    (@localtype = 'DataTestuale')
+                            and (@altrender = 'Data non rilevabile - non rilevata')]
             else true()"/>
   </xs:complexType>
 
