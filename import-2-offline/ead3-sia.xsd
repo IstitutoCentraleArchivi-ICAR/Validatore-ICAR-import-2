@@ -828,12 +828,6 @@ M302: In &lt;archdesc> può essere presente, al più, un unico&#x0a;
       &#x0a;&#x0a;]"
       xpathDefaultNamespace="##targetNamespace" 
       test="1 >= count(bibliography/bibliography[@localtype = 'LinkFonteNormativa'])"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
-M314: In &lt;archdesc> può essere presente al più, un unico&#x0a;
-      bibliography/bibliography[@localtype = &quot;LinkRiferimentoBibliografico&quot;]
-      &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="1 >= count(bibliography/bibliography[@localtype = 'LinkRiferimentoBibliografico'])"/>
   </xs:complexType>
 
   <!-- M185: creato il tipo "archdesc.strc", derivato per estensione da
@@ -1543,12 +1537,6 @@ M302: In &lt;c> può essere presente, al più, un unico&#x0a;
       &#x0a;&#x0a;]"
       xpathDefaultNamespace="##targetNamespace" 
       test="1 >= count(bibliography/bibliography[@localtype = 'LinkFonteNormativa'])"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
-M314: In &lt;c> può essere presente al più, un unico&#x0a;
-      bibliography/bibliography[@localtype = &quot;LinkRiferimentoBibliografico&quot;]
-      &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="1 >= count(bibliography/bibliography[@localtype = 'LinkRiferimentoBibliografico'])"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M567: In &lt;c> deve essere presente un, e solo un, did/unitid con @identifier
       &#x0a;&#x0a;]"
