@@ -3220,20 +3220,6 @@ M579: In &lt;c>, quando rappresenta un'unità documentaria, se è presente un&#x
                      /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Audiovisivo'
                 else true()"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M591: In &lt;c>, quando rappresenta una &quot;Cartografia&quot;, deve essere presente un, e&#x0a;
-      un solo, did/physdescstructured/descriptivenote/p/geogname/part dove il&#x0a;
-      &lt;physdescstructured> ha l'attributo @physdescstructuredtype pari&#x0a;
-      a &quot;materialtype&quot; e dove &lt;geogname> ha l'attributo @localtype pari&#x0a;
-      a &quot;LuogoRappresentato&quot;
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="if ( did/physdescstructured[@physdescstructuredtype = 'materialtype']
-                    /physfacet[@localtype = 'TipologiaDocumentaria']
-                    /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Cartografia')
-                then 1 = count( did/physdescstructured[@physdescstructuredtype = 'materialtype']
-                               /descriptivenote/p/geogname[@localtype = 'LuogoRappresentato']/part)
-                else true()"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
 M631: In &lt;c>, quando rappresenta un'unità documentaria, il contenuto testuale&#x0a;
       dell'eventuale&#x0a;
       did/physdescstructured/physfacet[@localtype = &quot;Tipologia&quot;] deve&#x0a;
