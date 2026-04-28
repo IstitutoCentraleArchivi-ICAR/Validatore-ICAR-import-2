@@ -81,9 +81,6 @@
               Sala di Studio      (SI/NO) NB: se il flag ha valore SI, valorizzare l'elemento <term> con la stringa "Sala studio"; se il valore è NO il campo non si mappa.
               Tenant (soppresso 241022) identifica un controllo unitario di una responsabilità attribuita (non sempre corrispondente ad un Istituto) cfr: Soprintendenza, soggetti non standardizzati (Regione, …) => traduzione= responsabile tenutario di un ambiente di lavoro
          -->
-         <!--
-               not(identity[@localType[normalize-space(lower-case(.))='soggettoconservatore']])
-         -->
          <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
             xao:message="=&gt;&#xa;eac 0602 0599 0600 &#xa; visibilità e qualifica&#xa; cpfDescription[@audience='internal'] richiede in control/localControl/term uno dei valori&#xa;
 Luogo della cultura,
@@ -233,48 +230,6 @@ Copia parallela."
                    )
                   )
          "/>
-         <!--
-         
-                  (.[@eac-sia:status])
-                  and
-                  (
-                   every $v in @eac-sia:status satisfies 
-         
-            @eac-sia:status='Bozza'
-         or @eac-sia:status='In validazione di primo livello'
-         or @eac-sia:status='Validata (primo livello)'
-         or @eac-sia:status='In validazione di secondo livello'
-         or @eac-sia:status='Validata (secondo livello)'
-         or @eac-sia:status='Pubblicata'
-         or @eac-sia:status='Copia parallela'
-         -->
-      <!--
-      in alternativa localControl[@localType='status']/term per evitare ricorso a namespace locale -->
-      <!--
-      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="&#xa;0016 0732 0882 1025 Status della scheda obbligatorio
-control/localControl[@localType='status']/term è richiesto e univoco con valori:
-Bozza,
-In validazione di primo livello,
-Validata (primo livello),
-In validazione di secondo livello,
-Validata (secondo livello),
-Pubblicata,
-Copia parallela."
-         test="
-         (count(localControl[@localType='status']/term)=1)
-         and
-         (
-            normalize-space(lower-case(localControl[normalize-space(lower-case(@localType)='status']/term))='bozza'
-         or normalize-space(lower-case(localControl[normalize-space(lower-case(@localType)='status']/term))='in validazione di primo livello'
-         or normalize-space(lower-case(localControl[normalize-space(lower-case(@localType)='status']/term))='validata (primo livello)'
-         or normalize-space(lower-case(localControl[normalize-space(lower-case(@localType)='status']/term))='in validazione di secondo livello'
-         or normalize-space(lower-case(localControl[normalize-space(lower-case(@localType)='status']/term))='validata (secondo livello)'
-         or normalize-space(lower-case(localControl[normalize-space(lower-case(@localType)='status']/term))='pubblicata'
-         or normalize-space(lower-case(localControl[normalize-space(lower-case(@localType)='status']/term))='copia parallela'
-         )
-         "/>
-         -->
       <!-- 0004 0720 0870 1018
            Acronimo di sistema	obbligatorio non ripetibile	control/localControl[@localType='AcronimoSistema']/term/ -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
@@ -331,6 +286,111 @@ Descrizione riservata e risorsa riservata (autorizzazione)."
       <xs:attribute name="sourceReference" type="xs:IDREFS"/>
       <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
       <xs:anyAttribute namespace="##other" processContents="lax"/>
+      
+      <!-- identity to entità -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+       xao:message="=&gt;&#xa;eac &#xa; entità non riconosciuta&#xa;
+                   | @localType                   | entityType/@value | entityType/@eac-sia:tipoLocale&#xa;
+-------------------|------------------------------|-------------------|-------------------------------&#xa;
+       PROFILO     | ProfiloIstituzionale         | corporateBody     |&#xa;
+       CONTESTO    | ContestoStoricoIstituzionale | corporateBody     |&#xa;
+       EVENTO      |                              | corporateBody     | Evento&#xa;
+       ENTE        |                              | corporateBody     |&#xa;
+       FAMIGLIA    |                              | family            |&#xa;
+       PERSONA     |                              | person            |&#xa;
+indice ENTE        | VoceIndice                   | corporateBody     |&#xa;
+indice FAMIGLIA    | VoceIndice                   | family            |&#xa;
+indice ANTROPONIMO | VoceIndice                   | person            |"
+       test="
+        count(identity[    @localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale']][entityType[@value='corporateBody'                                      ][not(@*[name()='eac-sia:tipoLocale'])           ]]) +
+        count(identity[not(@localType)                                                             ][entityType[@value='corporateBody'                                      ][    @*[name()='eac-sia:tipoLocale'][.='Evento']]]) +
+        count(identity[not(@localType)                                                             ][entityType[@value='family' or @value='person' or @value='corporateBody'][not(@*[name()='eac-sia:tipoLocale'])           ]]) +
+        count(identity[    @localType[.='VoceIndice'                                              ]][entityType[@value='family' or @value='person' or @value='corporateBody'][not(@*[name()='eac-sia:tipoLocale'])           ]])
+        = 1
+       "/>
+
+      <!-- i test su PRODUTTORI e/o CONSERVATORI richiedono entità AGENTI e relazioni con targetRole 'Complesso archivistico' e relationType ammessi per AGENTE non sono ammesse per altre entità -->
+      <!-- esclude profili, contesti, eventi -->
+      
+      <!-- 0427
+         eac/cpfDescription/relations/relation[targetRole="Complesso archivistico"]/relationType/
+            Soggetto conservatore, Soggetto vigilante, Soggetto produttore, Possessore, Proprietario, Detentore dei diritti -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac 0427&#xa; cpfDescription/relations/relation[targetRole='Complesso archivistico']/relationType&#xa; AGENTE: Qualifica della relazione con 'Complesso archivistico' richiede uno dei valori:&#xa;
+Agente collegato,
+Soggetto conservatore,
+Soggetto vigilante,
+Soggetto produttore,
+Possessore,
+Proprietario,
+Detentore dei diritti,
+Produttore (OAIS),
+Versante (OAIS)."
+         test="
+              (count(identity/@localType) &gt; 0)
+              or
+              (count(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']]) &gt; 0)
+              or
+              (
+               every $v in relations/relation[targetRole[.='Complesso archivistico']]
+               satisfies
+               (
+                (count($v/relationType) &gt; 0)
+                and
+                (
+                 every $w in ($v/relationType/text())
+                 satisfies
+                 (
+                     $w='Agente collegato'
+                  or $w='Soggetto conservatore'
+                  or $w='Soggetto vigilante'
+                  or $w='Soggetto produttore'
+                  or $w='Possessore'
+                  or $w='Proprietario'
+                  or $w='Detentore dei diritti'
+                  or $w='Produttore (OAIS)'
+                  or $w='Versante (OAIS)'
+                 )
+                )
+               )
+              )
+              "/>
+              
+      <!-- /esclude profili, contesti, eventi -->
+      
+       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+          xao:message="=&gt;&#xa;eac 0427&#xa; cpfDescription/relations/relation[targetRole='Complesso archivistico']/relationType&#xa; PROFILO/CONTESTO/EVENTO: Qualifica della relazione con 'Complesso archivistico' non ammette i valori:&#xa;
+Soggetto conservatore,
+Soggetto vigilante,
+Soggetto produttore,
+Possessore,
+Proprietario,
+Detentore dei diritti,
+Produttore (OAIS),
+Versante (OAIS)."
+          test="
+              not
+              (
+               (count(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale']) &gt; 0)
+               or
+               (count(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']]) &gt; 0)
+              )
+               or
+               (
+                every $v in relations/relation[targetRole[.='Complesso archivistico']]/relationType/text()
+                satisfies
+                ( 
+                     $v!='Soggetto conservatore'
+                 and $v!='Soggetto vigilante'
+                 and $v!='Soggetto produttore'
+                 and $v!='Possessore'
+                 and $v!='Proprietario'
+                 and $v!='Detentore dei diritti'
+                 and $v!='Produttore (OAIS)'
+                 and $v!='Versante (OAIS)'
+                )
+               )
+               "/>
 
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac &#xa; cpfDescription/@audience in CONSERVATORE è richiesto."
@@ -368,12 +428,12 @@ Osservazioni."
              satisfies ($v='Osservazioni')
             ) 
          "/>
-         
+      
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac &#xa; valore non atteso o assente per CONSERVATORE in cpfDescription/description/generalContext/@localType"
          test="
             not (
-             descriptions/relations/relation[targetRole[.='Complesso archivistico']][relationType[.='Soggetto conservatore']]
+             relations/relation[targetRole[.='Complesso archivistico']][relationType[.='Soggetto conservatore']]
             )
             or
             (
@@ -473,16 +533,10 @@ Modalità di acquisizione: Versamento."
       | profilo istituzionale                          | [forbidden]           | [empty] | corporateBody | ProfiloIstituzionale        
       | evento                                         | [forbidden]           | Evento? | corporateBody | evento?                     
       -->
-      <!-- RELAZIONI
-      produttore e conservatore(ente/famiglia/persona)
-         not(identity/@localType)
-          and
-         not(identity/entityType/@eac-sia:tipoLocale)
-          and
-         relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico']][relationType[normalize-space(lower-case(.))='soggetto conservatore']]
-          and
-         relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico']][relationType[normalize-space(lower-case(.))='soggetto conservatore']]
-         
+      <!-- RELAZIONI -->
+      
+      <!-- AGENTI -->
+      <!--
          relations/relation/targetEntity/@targetType  relations/relation/targetRole
           corporateBody/family/person                  Soggetto produttore collegato
           corporateBody                                Profilo istituzionale collegato
@@ -499,12 +553,14 @@ Modalità di acquisizione: Versamento."
           resource                                     Tematismo
       -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac 0533 0553 0573 0644 0666 0689 0426 0450 0473 0496 0500 0504 0507 0527 0692 SOGGETTO PRODUTTORE E CONSERVATORE relations/relation&#xa;
+         xao:message="=&gt;&#xa;eac 0533 0553 0573 0644 0666 0689 0426 0450 0473 0496 0500 0504 0507 0527 0692 AGENTI relations/relation&#xa;
 targetEntity/@targetType    | targetRole&#xa;
-----------------------------|--------------------------------------------------------------&#xa;
-corporateBody/family/person | Soggetto produttore collegato&#xa;
+----------------------------|-----------------------------------------&#xa;
+agent                       | Contesto storico istituzionale collegato&#xa;
 corporateBody               | Profilo istituzionale collegato&#xa;
+corporateBody/family/person | Soggetto produttore collegato&#xa;
 corporateBody/family/person | Soggetto conservatore collegato&#xa;
+corporateBody/family/person | Agente collegato&#xa;
 resource                    | Risorsa digitale collegata&#xa;
 resource                    | Soggetto&#xa;
 resource                    | Complesso archivistico&#xa;
@@ -513,19 +569,14 @@ resource                    | Unità documentaria&#xa;
 resource                    | Strumento di ricerca&#xa;
 resource                    | Progetto&#xa;
 function                    | Evento&#xa;
-agent                       | Contesto storico istituzionale collegato&#xa;
 resource                    | Tematismo&#xa;
          "
          test="
          not
          (
-          not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
+          not(identity/@localType)
            and
           not(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
-           and
-          relations/relation[targetRole[.='Complesso archivistico']][relationType[.='Soggetto produttore']]
-           and
-          relations/relation[targetRole[.='Complesso archivistico']][relationType[.='Soggetto conservatore']]
          )
          or
          (
@@ -535,6 +586,7 @@ resource                    | Tematismo&#xa;
                $v='Soggetto produttore collegato'
             or $v='Profilo istituzionale collegato'
             or $v='Soggetto conservatore collegato'
+            or $v='Agente collegato'
             or $v='Risorsa digitale collegata'
             or $v='Soggetto'
             or $v='Complesso archivistico'
@@ -550,6 +602,7 @@ resource                    | Tematismo&#xa;
           and (every $v in relations/relation[targetRole[.='Soggetto produttore collegato'           ]]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
           and (every $v in relations/relation[targetRole[.='Profilo istituzionale collegato'         ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
           and (every $v in relations/relation[targetRole[.='Soggetto conservatore collegato'         ]]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
+          and (every $v in relations/relation[targetRole[.='Agente collegato'                        ]]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
           and (every $v in relations/relation[targetRole[.='Risorsa digitale collegata'              ]]/targetEntity/@targetType satisfies ($v = 'resource'))
           and (every $v in relations/relation[targetRole[.='Soggetto'                                ]]/targetEntity/@targetType satisfies ($v = 'resource'))
           and (every $v in relations/relation[targetRole[.='Complesso archivistico'                  ]]/targetEntity/@targetType satisfies ($v = 'resource'))
@@ -562,270 +615,7 @@ resource                    | Tematismo&#xa;
           and (every $v in relations/relation[targetRole[.='Tematismo'                               ]]/targetEntity/@targetType satisfies ($v = 'resource'))
          ) 
          "/>
-         <!-- 
-           not(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
-           not(identity/entityType[@eac-sia:tipoLocale='Evento'])
-         -->
-      <!--
-      produttore(ente/famiglia/persona)
-         not(identity/@localType)
-          and
-         not(identity/entityType/@eac-sia:tipoLocale)
-          and
-         relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico']][relationType[normalize-space(lower-case(.))='soggetto produttore']]
-          and
-         not 
-         (
-          relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico']][relationType[normalize-space(lower-case(.))='soggetto conservatore']]
-         )
-         
-         relations/relation/targetEntity/@targetType  relations/relation/targetRole
-          corporateBody/family/person                  Soggetto produttore collegato
-          corporateBody                                Profilo istituzionale collegato
-          resource                                     Risorsa digitale collegata
-          resource                                     Soggetto
-          resource                                     Complesso archivistico
-          resource                                     Unità archivistica
-          resource                                     Unità documentaria
-          resource                                     Strumento di ricerca
-          resource                                     Progetto
-          function                                     Evento
-          agent                                        Contesto storico istituzionale collegato
-          resource                                     Tematismo
-      -->
-      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac 0533 0553 0573 0689 0426 0450 0473 0496 0500 0504 0507 0527 0692 SOGGETTO PRODUTTORE relations/relation&#xa;
-targetEntity/@targetType    | targetRole&#xa;
-----------------------------|------------------------------------------------------------&#xa;
-corporateBody/family/person | Soggetto produttore collegato&#xa;
-corporateBody               | Profilo istituzionale collegato&#xa;
-resource                    | Risorsa digitale collegata&#xa;
-resource                    | Soggetto&#xa;
-resource                    | Complesso archivistico&#xa;
-resource                    | Unità archivistica&#xa;
-resource                    | Unità documentaria&#xa;
-resource                    | Strumento di ricerca&#xa;
-resource                    | Progetto&#xa;
-function                    | Evento&#xa;
-agent                       | Contesto storico istituzionale collegato&#xa;
-resource                    | Tematismo&#xa;
-         "
-         test="
-         not
-         (
-          not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
-           and
-          not(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
-           and
-          relations/relation[targetRole[.='Complesso archivistico']][relationType[.='Soggetto produttore']]
-           and
-          not 
-          (
-           relations/relation[targetRole[.='Complesso archivistico']][relationType[.='Soggetto conservatore']]
-          )
-         )
-         or
-         (
-          (
-           every $v in relations/relation/targetRole satisfies
-           (
-               $v='Soggetto produttore collegato'
-            or $v='Profilo istituzionale collegato'
-            or $v='Risorsa digitale collegata'
-            or $v='Soggetto'
-            or $v='Complesso archivistico'
-            or $v='Unità archivistica'
-            or $v='Unità documentaria'
-            or $v='Strumento di ricerca'
-            or $v='Progetto'
-            or $v='Evento'
-            or $v='Contesto storico istituzionale collegato'
-            or $v='Tematismo'
-           )
-          )
-          and (every $v in relations/relation[targetRole[.='Soggetto produttore collegato'           ]]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
-          and (every $v in relations/relation[targetRole[.='Profilo istituzionale collegato'         ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
-          and (every $v in relations/relation[targetRole[.='Risorsa digitale collegata'              ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Soggetto'                                ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Complesso archivistico'                  ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Unità archivistica'                      ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Unità documentaria'                      ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Strumento di ricerca'                    ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Progetto'                                ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Evento'                                  ]]/targetEntity/@targetType satisfies ($v = 'function'))
-          and (every $v in relations/relation[targetRole[.='Contesto storico istituzionale collegato']]/targetEntity/@targetType satisfies ($v = 'agent'))
-          and (every $v in relations/relation[targetRole[.='Tematismo'                               ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-         ) 
-         "/>
-      <!--
-      conservatore(ente/famiglia/persona)
-         not(identity/@localType)
-          and
-         not(identity/entityType/@eac-sia:tipoLocale)
-          and
-         relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico']][relationType[normalize-space(lower-case(.))='soggetto conservatore']]
-          and
-         not 
-         (
-          relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico']][relationType[normalize-space(lower-case(.))='soggetto produttore']]
-         )
-         
-         relations/relation/targetEntity/@targetType  relations/relation/targetRole
-          corporateBody/family/person                  Soggetto conservatore collegato
-          resource                                     Risorsa digitale collegata
-          resource                                     Soggetto
-          resource                                     Complesso archivistico
-          resource                                     Unità archivistica
-          resource                                     Unità documentaria
-          resource                                     Strumento di ricerca
-          resource                                     Progetto
-          function                                     Evento
-          agent                                        Contesto storico istituzionale collegato
-          resource                                     Tematismo
-      -->
-      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac 0644 0666 0689 0426 0450 0473 0496 0500 0504 0507 0527 0692 SOGGETTO CONSERVATORE relations/relation&#xa;
-targetEntity/@targetType    | targetRole&#xa;
-----------------------------|--------------------------------------------------------------&#xa;
-corporateBody/family/person | Soggetto conservatore collegato&#xa;
-resource                    | Risorsa digitale collegata&#xa;
-resource                    | Soggetto&#xa;
-resource                    | Complesso archivistico&#xa;
-resource                    | Unità archivistica&#xa;
-resource                    | Unità documentaria&#xa;
-resource                    | Strumento di ricerca&#xa;
-resource                    | Progetto&#xa;
-function                    | Evento&#xa;
-agent                       | Contesto storico istituzionale collegato&#xa;
-resource                    | Tematismo&#xa;
-         "
-         test="
-         not
-         (
-          not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
-           and
-          not(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
-           and
-          relations/relation[targetRole[.='Complesso archivistico']][relationType[.='Soggetto conservatore']]
-           and
-          not 
-          (
-           relations/relation[targetRole[.='Complesso archivistico']][relationType[.='Soggetto produttore']]
-          )
-         )
-         or
-         (
-          (
-           every $v in relations/relation/targetRole satisfies
-           (
-               $v='Soggetto conservatore collegato'
-            or $v='Risorsa digitale collegata'
-            or $v='Soggetto'
-            or $v='Complesso archivistico'
-            or $v='Unità archivistica'
-            or $v='Unità documentaria'
-            or $v='Strumento di ricerca'
-            or $v='Progetto'
-            or $v='Evento'
-            or $v='Contesto storico istituzionale collegato'
-            or $v='Tematismo'
-           )
-          )
-          and (every $v in relations/relation[targetRole[.='Soggetto conservatore collegato'         ]]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
-          and (every $v in relations/relation[targetRole[.='Risorsa digitale collegata'              ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Soggetto'                                ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Complesso archivistico'                  ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Unità archivistica'                      ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Unità documentaria'                      ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Strumento di ricerca'                    ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Progetto'                                ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Evento'                                  ]]/targetEntity/@targetType satisfies ($v = 'function'))
-          and (every $v in relations/relation[targetRole[.='Contesto storico istituzionale collegato']]/targetEntity/@targetType satisfies ($v = 'agent'))
-          and (every $v in relations/relation[targetRole[.='Tematismo'                               ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-         ) 
-         "/>
-      <!--
-      ente/famiglia/persona
-         not(identity/@localType)
-          and
-         not(identity/entityType/@eac-sia:tipoLocale)
-         
-         relations/relation/targetEntity/@targetType  relations/relation/targetRole
-          resource                                     Risorsa digitale collegata
-          resource                                     Soggetto
-          resource                                     Complesso archivistico
-          resource                                     Unità archivistica
-          resource                                     Unità documentaria
-          resource                                     Strumento di ricerca
-          resource                                     Progetto
-          function                                     Evento
-          agent                                        Contesto storico istituzionale collegato
-          resource                                     Tematismo
-      -->
-      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac 0689 0426 0450 0473 0496 0500 0504 0507 0527 0692 AGENTE né PRODUTTORE né CONSERVATORE relations/relation&#xa;
-targetEntity/@targetType | targetRole&#xa;
--------------------------|-----------------------------&#xa;
-resource                 | Risorsa digitale collegata&#xa;
-resource                 | Soggetto&#xa;
-resource                 | Complesso archivistico&#xa;
-resource                 | Unità archivistica&#xa;
-resource                 | Unità documentaria&#xa;
-resource                 | Strumento di ricerca&#xa;
-resource                 | Progetto&#xa;
-function                 | Evento&#xa;
-agent                    | Contesto storico istituzionale collegato&#xa;
-resource                 | Tematismo&#xa;
-         "
-         test="
-         not
-         (
-          not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
-           and
-          not(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
-           and
-          not
-          (
-           relations/relation[targetRole[.='Complesso archivistico']]
-            [
-             relationType
-             [
-              .='Soggetto produttore'
-               or
-              .='Soggetto conservatore'
-             ]
-            ]
-          )
-         )
-         or
-         (
-          (
-           every $v in relations/relation/targetRole satisfies
-           (
-               $v='Risorsa digitale collegata'
-            or $v='Soggetto'
-            or $v='Complesso archivistico'
-            or $v='Unità archivistica'
-            or $v='Unità documentaria'
-            or $v='Strumento di ricerca'
-            or $v='Progetto'
-            or $v='Evento'
-            or $v='Contesto storico istituzionale collegato'
-            or $v='Tematismo'
-           )
-          )
-          and (every $v in relations/relation[targetRole[.='Risorsa digitale collegata'              ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Soggetto'                                ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Complesso archivistico'                  ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Unità archivistica'                      ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Unità documentaria'                      ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Strumento di ricerca'                    ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Progetto'                                ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-          and (every $v in relations/relation[targetRole[.='Evento'                                  ]]/targetEntity/@targetType satisfies ($v = 'function'))
-          and (every $v in relations/relation[targetRole[.='Contesto storico istituzionale collegato']]/targetEntity/@targetType satisfies ($v = 'agent'))
-          and (every $v in relations/relation[targetRole[.='Tematismo'                               ]]/targetEntity/@targetType satisfies ($v = 'resource'))
-         ) 
-         "/>
+      <!-- /AGENTI -->
          
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac relations/relation&#xa;
@@ -835,7 +625,7 @@ agent                    | sameAs&#xa;
          "
          test="
           not (
-           not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
+           not(identity/@localType)
             and
            not(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
           )
@@ -880,9 +670,9 @@ corporateBody            | Contesto storico istituzionale collegato&#xa;
             or $v='Contesto storico istituzionale collegato'
            )
           )
-          and (every $v in relations/relation[targetRole[.='Agente collegato'                                                      ]]/targetEntity/@targetType satisfies ($v = 'agent'))
-          and (every $v in relations/relation[targetRole[.='Arofilo istituzionale collegato'                                       ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
-          and (every $v in relations/relation[targetRole[.='Contesto storico istituzionale collegato'                              ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
+          and (every $v in relations/relation[targetRole[.='Agente collegato'                        ]]/targetEntity/@targetType satisfies ($v = 'agent'))
+          and (every $v in relations/relation[targetRole[.='Profilo istituzionale collegato'         ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
+          and (every $v in relations/relation[targetRole[.='Contesto storico istituzionale collegato']]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
          ) 
          "/>
          
@@ -939,9 +729,9 @@ corporateBody            | Contesto storico istituzionale collegato&#xa;
             or $v='Contesto storico istituzionale collegato'
            )
           )
-          and (every $v in relations/relation[targetRole[.='Soggetto produttore collegato'                                ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
-          and (every $v in relations/relation[targetRole[.='Profilo istituzionale collegato'                              ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
-          and (every $v in relations/relation[targetRole[.='Contesto storico istituzionale collegato'                     ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
+          and (every $v in relations/relation[targetRole[.='Soggetto produttore collegato'           ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
+          and (every $v in relations/relation[targetRole[.='Profilo istituzionale collegato'         ]]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
+          and (every $v in relations/relation[targetRole[.='Contesto storico istituzionale collegato']]/targetEntity/@targetType satisfies ($v = 'corporateBody'))
          ) 
          "/>
          
@@ -987,7 +777,8 @@ corporateBody/family/person | Agente collegato&#xa;
 resource                    | Complesso archivistico&#xa;
 resource                    | Unità archivistica&#xa;
 resource                    | Unità documentaria&#xa;
-resource                    | Tematismo
+resource                    | Tematismo&#xa;
+resource                    | Progetto
          "
          test="
          not
@@ -1010,6 +801,7 @@ resource                    | Tematismo
             or $v='Unità archivistica'
             or $v='Unità documentaria'
             or $v='Tematismo'
+            or $v='Progetto'
            )
           )
           and (every $v in relations/relation[targetRole[.='Agente collegato'      ]]/targetEntity/@targetType satisfies ($v = 'corporateBody' or $v = 'family' or $v = 'person'))
@@ -1017,6 +809,7 @@ resource                    | Tematismo
           and (every $v in relations/relation[targetRole[.='Unità archivistica'    ]]/targetEntity/@targetType satisfies ($v = 'resource'))
           and (every $v in relations/relation[targetRole[.='Unità documentaria'    ]]/targetEntity/@targetType satisfies ($v = 'resource'))
           and (every $v in relations/relation[targetRole[.='Tematismo'             ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Progetto'              ]]/targetEntity/@targetType satisfies ($v = 'resource'))
          ) 
          "/>
          <!--
@@ -1064,7 +857,7 @@ LuogoEnte."
             not (
              identity/entityType[@value='corporateBody']
               and
-             not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
+             not(identity/@localType)
               and
              not(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
               and
@@ -1083,7 +876,7 @@ Sedi."
             not (
              identity/entityType[@value='corporateBody']
               and
-             not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
+             not(identity/@localType)
               and
              not(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
               and
@@ -1096,7 +889,171 @@ Sedi."
              or $v='Sedi'
             ))
          "/>
-         
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac indice ENTE valori ammessi per cpfDescription/description/places/place/@localType :
+SedeEnte."
+         test="
+            not (
+             identity/@localType[.='VoceIndice'] and identity/entityType[@value='corporateBody']
+              and
+             not(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
+            )
+            or
+            (every $v in description/places/place/@localType satisfies ($v='SedeEnte'))
+         "/>
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac 0124&#xa; AGENTE ENTE cpfDescription/description/existDates[@localType='DateEsistenzaEnte']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData&#xa; 'Qualifica della data' è richiesto con valori:&#xa;
+Data di istituzione,
+Data di cessazione - soppressione,
+Date di esistenza."
+      test="
+            not (
+             not(identity[@localType]) and identity/entityType[@value='corporateBody']
+            )
+            or
+            (
+             every $w in (description/existDates[@localType='DateEsistenzaEnte'])
+             satisfies
+             (
+              (count($w/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData']) &gt; 0)
+              and
+              (
+               every $v in ($w/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData'])
+               satisfies 
+               (
+                  $v='Data di istituzione'
+               or $v='Data di cessazione - soppressione'
+               or $v='Date di esistenza'
+               )
+              )
+             )
+            )
+           "/>
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac 0124&#xa; INDICE ENTE cpfDescription/description/existDates[@localType='DateEsistenzaEnte']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData&#xa; 'Qualifica della data' è richiesto con valori:&#xa;
+Data di istituzione-costituzione,
+Data di soppressione-cessazione."
+      test="
+            not (
+             identity[@localType='VoceIndice'] and identity/entityType[@value='corporateBody']
+            )
+            or
+            (
+             every $w in (description/existDates[@localType='DateEsistenzaEnte'])
+             satisfies
+             (
+              (count($w/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData']) &gt; 0)
+              and
+              (
+               every $v in ($w/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData'])
+               satisfies 
+               (
+                   $v='Data di istituzione-costituzione'
+                or $v='Data di soppressione-cessazione'
+               )
+              )
+             )
+            )
+           "/><!--
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac 0124&#xa; INDICE ENTE cpfDescription/description/existDates[@localType='DateEsistenzaEnte']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData&#xa; 'Qualifica della data' è richiesto con valori:&#xa;
+Data di istituzione-costituzione,
+Data di soppressione-cessazione."
+      test="not(@localType[.='DateEsistenzaEnte'])
+            or
+            (
+             (count((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData']) &gt; 0)
+             and
+             (
+              every $v in ((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData'])
+              satisfies 
+              (
+                  $v='Data di istituzione-costituzione'
+               or $v='Data di soppressione-cessazione'
+              )
+             )
+            )
+           "/>
+-->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac 0215&#xa; AGENTE FAMIGLIA cpfDescription/description/existDates[@localType='DateEsistenzaFamiglia']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData&#xa; 'Qualifica della data' è richiesto con valori:&#xa;
+Data di esistenza,
+Data di estinzione,
+Data di origine."
+      test="
+            not (
+             not(identity[@localType]) and identity/entityType[@value='family']
+            )
+            or
+            (
+             every $w in (description/existDates[@localType='DateEsistenzaFamiglia'])
+             satisfies
+             (
+              (count($w/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData']) &gt; 0)
+              and
+              (
+               every $v in ($w/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData'])
+               satisfies 
+               (
+                  $v='Data di esistenza'
+               or $v='Data di estinzione'
+               or $v='Data di origine'
+               )
+              )
+             )
+            )
+           "/>
+           
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac &#xa; INDICE FAMIGLIA cpfDescription/description/existDates[@localType='DateEsistenzaFamiglia']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData&#xa; 'Qualifica della data' è richiesto con valori:&#xa;
+Estinzione,
+Origine."
+      test="
+            not (
+             identity[@localType='VoceIndice'] and identity/entityType[@value='family']
+            )
+            or
+            (
+             every $w in (description/existDates[@localType='DateEsistenzaFamiglia'])
+             satisfies
+             (
+              (count($w/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData']) &gt; 0)
+              and
+              (
+               every $v in ($w/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData'])
+               satisfies 
+               (
+                   $v='Estinzione'
+                or $v='Origine'
+               )
+              )
+             )
+            )
+            
+           "/><!--
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac &#xa; INDICE FAMIGLIA cpfDescription/description/existDates[@localType='DateEsistenzaFamiglia']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData&#xa; 'Qualifica della data' è richiesto con valori:&#xa;
+Estinzione,
+Origine."
+      test="
+            not(@localType='DateEsistenzaFamiglia)
+            or
+            (
+             (count((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData']) &gt; 0)
+             and
+             (
+              every $v in ((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData'])
+              satisfies 
+              (
+                  $v='Estinzione'
+               or $v='Origine'
+              )
+             )
+            )
+           "/>
+-->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac AGENTE FAMIGLIA valori ammessi per cpfDescription/description/places/place/@localType :
 LuogoFamiglia."
@@ -1414,7 +1371,7 @@ Fine qualifica."
          "/>
 
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac 0239 &#xa;cpfDescription/description/localDescriptions/localDescription[@localType='TitoloFamiglia']/term&#xa; 'Titolo' lista chiusa con valori:&#xa;
+         xao:message="=&gt;&#xa;eac 0239 &#xa;cpfDescription/description/localDescriptions/localDescription[@localType='TitoloPersona']/term&#xa; 'Titolo' lista chiusa con valori:&#xa;
 Abate,
 Arcivescovo,
 Arciprete,
@@ -1467,10 +1424,10 @@ Vicario,
 Visconte,
 Viscontessa."
          test="
-            if (identity/entityType/@value[.='person' or .='family'])
+            if (not(identity/@localType) and identity/entityType/@value[.='person'])
             then
             (
-             every $v in (description/localDescriptions/localDescription[@localType[.='TitoloPersona' or .='TitoloFamiglia']]/term)
+             every $v in (description/localDescriptions/localDescription[@localType[.='TitoloPersona']]/term)
              satisfies
              (
                  $v='Abate'
@@ -1528,7 +1485,6 @@ Viscontessa."
             )
             else true()
          "/>
-<!--
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0239 &#xa;cpfDescription/description/localDescriptions/localDescription[@localType='TitoloFamiglia']/term&#xa; 'Titolo' lista chiusa con valori:&#xa;
 Barone,
@@ -1546,10 +1502,10 @@ Re,
 Signore,
 Visconte."
          test="
-            not(identity/entityType/@value[.='family'])
-            or 
+            if (not(identity/@localType) and identity/entityType/@value[.='family'])
+            then
             (
-             every $v in (description/localDescriptions/localDescription[@localType='TitoloFamiglia']/term)
+             every $v in (description/localDescriptions/localDescription[@localType[.='TitoloFamiglia']]/term)
              satisfies
              (
                  $v='Barone'
@@ -1566,72 +1522,10 @@ Visconte."
               or $v='Re'
               or $v='Signore'
               or $v='Visconte'
-             )
+             )       
             )
+            else true()
          "/>
-
-      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac 0360 &#xa;cpfDescription/description/localDescriptions/localDescription[@localType='TitoloPersona']/term&#xa; 'Titolo' lista chiusa con valori:&#xa;
-Barone,
-Cavaliere,
-Conte,
-Duca,
-Granduca,
-Imperatore,
-Marchese,
-Nobile,
-Nobile di città,
-Patrizio,
-Principe,
-Re,
-Signore,
-Visconte."
-         test="
-            not(identity/entityType/@value[.='person'])
-            or 
-            (
-             every $v in (description/localDescriptions/localDescription[@localType[.='TitoloPersona']]/term)
-             satisfies
-             (
-                 $v='Barone'
-              or $v='Cavaliere'
-              or $v='Conte'
-              or $v='Duca'
-              or $v='Granduca'
-              or $v='Imperatore'
-              or $v='Marchese'
-              or $v='Nobile'
-              or $v='Nobile di città'
-              or $v='Patrizio'
-              or $v='Principe'
-              or $v='Re'
-              or $v='Signore'
-              or $v='Visconte'
-             )
-            )
-         "/>
--->
-      <!--0612 CONSERVARTORE SEDE Tipologia Lista chiusa: Principale, Consultazione, Privato. -->
-      <!--
-      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac 0612&#xa; cpfDescription/description/places/place/placeRole/&#xa; 'CONSERVARTORE SEDE Tipologia' lista chiusa con valori:&#xa;
-Principale,
-Consultazione,
-Privato."
-         test="
-            not(relations/relation[targetRole[normalize-space(lower-case(.))='complesso archivistico']][relationType[normalize-space(lower-case(.))='soggetto conservatore']])
-            or
-            (
-             every $v in description/places/place/placeRole
-             satisfies
-             (
-                 normalize-space(lower-case($v))='principale'
-              or normalize-space(lower-case($v))='consultazione'
-              or normalize-space(lower-case($v))='privato'
-             )
-            )
-         "/>
-       -->
        <!-- eac 0803 0825
        cpfDescription
         [identity[@localType="ContestoStoricoIstituzionale"]/entityType[@value="corporateBody"]]
@@ -1927,13 +1821,6 @@ Collegato."
       <xs:attribute name="valueURI" type="xs:anyURI"/>
       <xs:anyAttribute namespace="##other" processContents="lax"/>
       
-      <!-- 0004 0720 0870 1018 <xs:complexType name="localTypeDeclaration"> name="shortCode"
-           Acronimo di sistema	obbligatorio non ripetibile	eac/control/localTypeDeclaration/shortCode/ -->
-      <!--  spostato in control/localControl[@localType='AcronimoSistema']/term per evitare obbligatorietà conseguente in localTypeDeclaration/reference
-      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac 0004 0720 0870 1018&#xa; eac/control/localTypeDeclaration/shortCode/&#xa; 'Acronimo di sistema' è richiesto e univoco"
-         test="count(shortCode)=1 and string-length(normalize-space(shortCode))>0"/>
-      -->
    </xs:complexType>
    <xs:complexType name="otherRecordId" mixed="true">
       <xs:attribute name="audience">
@@ -2039,32 +1926,17 @@ Collegato."
          </xs:simpleType>
       </xs:attribute>
       <xs:anyAttribute namespace="##other" processContents="lax"/>
-      <!--
-      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac 0721 0871&#xa; identity/@localType lista chiusa con valori&#xa;
-soggettoProduttore,
-soggettoConservatore,
-ProfiloIstituzionale,
-ContestoStoricoIstituzionale."
-         test="not(@localType)
-                or 
-               (@localType
-                [   normalize-space(lower-case(.))='soggettoproduttore'
-                 or normalize-space(lower-case(.))='soggettoconservatore'
-                 or normalize-space(lower-case(.))='ProfiloIstituzionale'
-                 or normalize-space(lower-case(.))='Contestostoricoistituzionale'
-                ]
-               )"/>
-      -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0721 0871&#xa; identity/@localType ammette i valori&#xa;
 ProfiloIstituzionale,
-ContestoStoricoIstituzionale."
+ContestoStoricoIstituzionale,
+VoceIndice."
          test="not(@localType)
                 or 
                (@localType
                 [   .='ProfiloIstituzionale'
                  or .='ContestoStoricoIstituzionale'
+                 or .='VoceIndice'
                  or .='Evento'
                 ]
                )"/>
@@ -2075,9 +1947,7 @@ IntestazionePrincipaleEnte,
 DenominazionePrincipaleEnte,
 AcronimoEnte."
          test="not (
-                entityType/@value='corporateBody'
-                 and
-                not(@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
+                not(@localType) and entityType/@value='corporateBody'
                  and
                 not(entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
                )
@@ -2090,18 +1960,12 @@ AcronimoEnte."
                  or $v='AcronimoEnte'
                 )
                )"/>
-               <!--
-               @eac-sia:tipoLocale='Evento'
-               @*[name()='eac-sia:tipoLocale'][.='Evento']
-               -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0062 0063 0064 0085 0086 0087 0089 &#xa; agente ente ammette in identity/nameEntry/@localType i valori&#xa;
 DenominazioneEnte,
 AltraDenominazioneEnte."
-         test="not (
-                entityType/@value='corporateBody'
-                 and
-                not(@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
+         test="not(
+                not(@localType) and entityType/@value='corporateBody'
                  and
                 not(entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
                )
@@ -2113,6 +1977,22 @@ AltraDenominazioneEnte."
                  or $v='AltraDenominazioneEnte'
                 )
                )"/>
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac &#xa; indice ente ammette in identity/nameEntry/@localType il valore&#xa;
+Ente."
+         test="not(
+                @localType[.='VoceIndice'] and entityType/@value='corporateBody'
+                 and
+                not(entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
+               )
+                or 
+               (
+                every $v in nameEntry/@localType
+                satisfies
+                (   $v='Ente'
+                )
+               )"/>
                
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0085 0086 0087 0089 &#xa; agente ente ammette in identity/nameEntry[@localType='AltraDenominazioneEnte']/part/@localType i valori&#xa;
@@ -2121,9 +2001,7 @@ AltraDenominazione,
 AltroAcronimo,
 Qualifica."
          test="not (
-                entityType/@value='corporateBody'
-                 and
-                not(@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
+                not(@localType) and entityType/@value='corporateBody'
                  and
                 not(entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
                )
@@ -2137,12 +2015,36 @@ Qualifica."
                  or $v='Qualifica'
                 )
                )"/>
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac &#xa; indice ente ammette in identity/nameEntry[@localType='Ente']/part/@localType i valori&#xa;
+IntestazioneEnte,
+DenominazioneEnte,
+AcronimoEnte,
+AltraDenominazioneEnte,
+AltroAcronimoEnte."
+         test="not (
+                @localType='VoceIndice' and entityType/@value='corporateBody'
+                 and
+                not(entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
+               )
+                or 
+               (
+                every $v in nameEntry[@localType='Ente']/part/@localType
+                satisfies
+                (   $v='IntestazioneEnte'
+                 or $v='DenominazioneEnte'
+                 or $v='AcronimoEnte'
+                 or $v='AltraDenominazioneEnte'
+                 or $v='AltroAcronimoEnte'
+                )
+               )"/>
                
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0154 0155 &#xa; agente famiglia ammette in identity/nameEntry[@localType='DenominazioneFamiglia']/part/@localType i valori&#xa;
 IntestazionePrincipaleFamiglia,
 DenominazionePrincipaleFamiglia."
-         test="not(entityType/@value='family')
+         test="not(not(@localType) and entityType/@value='family')
                 or 
                (
                 every $v in nameEntry[@localType='DenominazioneFamiglia']/part/@localType
@@ -2153,16 +2055,44 @@ DenominazionePrincipaleFamiglia."
                )"/>
 
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac 0154 0155 0176 0177 0180 &#xa; agente famiglia ammette in identity/nameEntry/@localType i valori&#xa;
+         xao:message="=&gt;&#xa;eac &#xa; indice famiglia ammette in identity/nameEntry[@localType='Famiglia']/part/@localType i valori&#xa;
+IntestazioneFamiglia,
 DenominazioneFamiglia,
 AltraDenominazioneFamiglia."
          test="not(entityType/@value='family')
+                or 
+               (
+                every $v in nameEntry[@localType='Famiglia']/part/@localType
+                satisfies
+                (   $v='IntestazioneFamiglia'
+                 or $v='DenominazioneFamiglia'
+                 or $v='AltraDenominazioneFamiglia'
+                )
+               )"/>
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac 0154 0155 0176 0177 0180 &#xa; agente famiglia ammette in identity/nameEntry/@localType i valori&#xa;
+DenominazioneFamiglia,
+AltraDenominazioneFamiglia."
+         test="not(not(@localType) and entityType/@value='family')
                 or 
                (
                 every $v in nameEntry/@localType
                 satisfies
                 (   $v='DenominazioneFamiglia'
                  or $v='AltraDenominazioneFamiglia'
+                )
+               )"/>
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac &#xa; indice famiglia ammette in identity/nameEntry/@localType il valore&#xa;
+Famiglia."
+         test="not(@localType[.='VoceIndice'] and entityType/@value='family')
+                or 
+               (
+                every $v in nameEntry/@localType
+                satisfies
+                (   $v='Famiglia'
                 )
                )"/>
 
@@ -2191,7 +2121,7 @@ Patronimico,
 Pseudonimo,
 SoprannomePersona,
 Origine-provenienzaPersona."
-         test="not(entityType/@value='person')
+         test="not(not(@localType) and entityType/@value='person')
                 or 
                (
                 every $v in nameEntry[@localType='DenominazionePersona']/part/@localType
@@ -2207,10 +2137,34 @@ Origine-provenienzaPersona."
                )"/>
 
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac &#xa; indice persona ammette in identity/nameEntry[@localType='Antroponimo']/part/@localType i valori&#xa;
+IntestazionePersona,
+NomePersona,
+CognomePersona,
+Patronimico,
+Pseudonimo,
+SoprannomePersona,
+Origine-provenienzaPersona."
+         test="not(@localType[.='VoceIndice'] and entityType/@value='person')
+                or 
+               (
+                every $v in nameEntry[@localType='Antroponimo']/part/@localType
+                satisfies
+                (   $v='IntestazionePersona'
+                 or $v='NomePersona'
+                 or $v='CognomePersona'
+                 or $v='Patronimico'
+                 or $v='Pseudonimo'
+                 or $v='Soprannome'
+                 or $v='Origine-provenienzaPersona'
+                )
+               )"/>
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0265 0266 0267 0288 0289 0290 0312 0316 0318 &#xa; agente persona ammette in identity/nameEntry/@localType i valori&#xa;
 DenominazionePersona,
 AltraDenominazionePersona."
-         test="not(entityType/@value='person')
+         test="not(not(@localType) and entityType/@value='person')
                 or 
                (
                 every $v in nameEntry/@localType
@@ -2219,6 +2173,19 @@ AltraDenominazionePersona."
                  or $v='AltraDenominazionePersona'
                 )
                )"/>
+               
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac &#xa; indice persona ammette in identity/nameEntry/@localType il valori&#xa;
+Antroponimo."
+         test="not(@localType[.='VoceIndice'] and entityType/@value='person')
+                or 
+               (
+                every $v in nameEntry/@localType
+                satisfies
+                (   $v='Antroponimo'
+                )
+               )"/>
+
 
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0288 0289 0290 0312 0316 0318 &#xa; agente persona ammette in identity/nameEntry[@localType='AltraDenominazionePersona']/part/@localType i valori&#xa;
@@ -2293,9 +2260,6 @@ AcronimoProfilo."
                )"/>
 
       <!-- 0598 qualifica conservatore (quando il conservatore è una famiglia o una persona non va compilato?) -->
-      <!--
-            not(identity[@localType[normalize-space(lower-case(.))='soggettoconservatore']])
-      -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0598&#xa; identity/otherEntityTypes/otherEntityType[@localType='Qualifica']/term/&#xa; 'CONSERVATORE Qualifica' lista chiusa con valori&#xa;
 Archivio,
@@ -2427,12 +2391,10 @@ Organo o ufficio statale del periodo postunitario."
            eac 0063 ENTE eac/cpfDescription/identity/entityType[@value='corporateBody']
            cpfDescription/identity/nameEntry/part[@localType='DenominazionePrincipaleEnte']/ è richiesto -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac 0062 0063 &#xa; nameEntry[@localType='DenominazioneEnte']/part[@localType='IntestazionePrincipaleEnte'], nameEntry[@localType='DenominazioneEnte']/part[@localType='DenominazionePrincipaleEnte']&#xa; 'Denominazione principale' e 'Intestazione principale' sono richiesti e univoci"
+         xao:message="=&gt;&#xa;eac 0062 0063 &#xa; nameEntry[@localType='DenominazioneEnte']/part[@localType='IntestazionePrincipaleEnte'], nameEntry[@localType='DenominazioneEnte']/part[@localType='DenominazionePrincipaleEnte']&#xa; 'Denominazione principale' e 'Intestazione principale' sono richiesti e univoci, 'Acronimo' è atteso univoco."
          test="
           not (
-           entityType/@value='corporateBody'
-            and
-           not(@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
+           not(@localType) and entityType/@value='corporateBody'
             and
            not(entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
           )
@@ -2443,6 +2405,24 @@ Organo o ufficio statale del periodo postunitario."
            count(nameEntry[@localType='DenominazioneEnte']/part[@localType='DenominazionePrincipaleEnte'][string-length(normalize-space(.))>0]) = 1
            and
            count(nameEntry[@localType='DenominazioneEnte']/part[@localType='AcronimoEnte']) &lt;= 1
+          )
+         "/>
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac &#xa; nameEntry[@localType='Ente']/part[@localType='IntestazioneEnte'], nameEntry[@localType='Ente']/part[@localType='DenominazioneEnte']&#xa; 'Denominazione' e 'Intestazione' sono richiesti e univoci, 'Acronimo' è atteso univoco."
+         test="
+          not (
+           @localType[.='VoceIndice'] and entityType/@value='corporateBody'
+            and
+           not(entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
+          )
+          or
+          (
+           count(nameEntry[@localType='Ente']/part[@localType='IntestazioneEnte'][string-length(normalize-space(.))>0]) = 1
+           and
+           count(nameEntry[@localType='Ente']/part[@localType='DenominazioneEnte'][string-length(normalize-space(.))>0]) = 1
+           and
+           count(nameEntry[@localType='Ente']/part[@localType='AcronimoEnte']) &lt;= 1
           )
          "/>
 
@@ -2494,18 +2474,36 @@ Denominazione parallela - Intestazione parallela."
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0154&#xa; cpfDescription/identity/nameEntry/part[@localType='IntestazionePrincipaleFamiglia']&#xa; 'Intestazione principale' è richiesto e univoco"
          test="
-          not(entityType/@value='family')
+          not(not(@localType) and entityType/@value='family')
            or
-          count(nameEntry/part[@localType='IntestazionePrincipaleFamiglia'][string-length(normalize-space(lower-case(.))) &gt; 0]) = 1
+          count(nameEntry/part[@localType='IntestazionePrincipaleFamiglia'][string-length(normalize-space(.)) &gt; 0]) = 1
          "/>
 
       <!-- eac 0154 cpfDescription/identity/nameEntry/part[@localType="DenominazionePrincipaleFamiglia"]/ -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0154&#xa; cpfDescription/identity/nameEntry/part[@localType='DenominazionePrincipaleFamiglia']&#xa; 'Denominazione principale' è richiesto e univoco"
          test="
-          not(entityType/@value='family')
+          not(not(@localType) and entityType/@value='family')
            or
-          count(nameEntry/part[@localType='DenominazionePrincipaleFamiglia'][string-length(normalize-space(lower-case(.))) &gt; 0]) = 1
+          count(nameEntry/part[@localType='DenominazionePrincipaleFamiglia'][string-length(normalize-space(.)) &gt; 0]) = 1
+         "/>
+
+      <!-- eac cpfDescription/identity/nameEntry/part[@localType="IntestazioneFamiglia"]/ -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac &#xa; cpfDescription/identity/nameEntry/part[@localType='IntestazioneFamiglia']&#xa; 'Intestazione' è richiesto e univoco"
+         test="
+          not(@localType[.='VoceIndice'] and entityType/@value='family')
+           or
+          count(nameEntry/part[@localType='IntestazioneFamiglia'][string-length(normalize-space(.)) &gt; 0]) = 1
+         "/>
+
+      <!-- eac cpfDescription/identity/nameEntry/part[@localType="DenominazioneFamiglia"]/ -->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac &#xa; cpfDescription/identity/nameEntry/part[@localType='DenominazioneFamiglia']&#xa; 'Denominazione' è richiesto e univoco"
+         test="
+          not(@localType[.='VoceIndice'] and entityType/@value='family')
+           or
+          count(nameEntry/part[@localType='DenominazioneFamiglia'][string-length(normalize-space(.)) &gt; 0]) = 1
          "/>
 
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
@@ -2596,7 +2594,7 @@ Non specificato."
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0267 &#xa;cpfDescription/identity/nameEntry/part[@localType='CognomePersona']&#xa; 'Cognome' è richiesto e univoco"
          test="
-            not(entityType/@value='person')
+            not(not(@localType) and entityType/@value='person')
             or 
             (
              count(nameEntry[@localType='DenominazionePersona']/part[@localType='CognomePersona'][string-length(normalize-space(.)) &gt; 0]) = 1
@@ -2607,10 +2605,30 @@ Non specificato."
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0267 &#xa;cpfDescription/identity/nameEntry/part[@localType='NomePersona']&#xa; 'Nome' è atteso univoco"
          test="
-            not(entityType/@value='person')
+            not(not(@localType) and entityType/@value='person')
             or 
             (
              count(nameEntry[@localType='DenominazionePersona']/part[@localType='NomePersona']) &lt;= 1
+            )
+         "/>
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac &#xa;cpfDescription/identity/nameEntry/part[@localType='CognomePersona']&#xa; 'Cognome' è richiesto e univoco"
+         test="
+            not(@localType[.='VoceIndice'] and entityType/@value='person')
+            or 
+            (
+             count(nameEntry[@localType='Antroponimo']/part[@localType='CognomePersona'][string-length(normalize-space(.)) &gt; 0]) = 1
+            )
+         "/>
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac &#xa;cpfDescription/identity/nameEntry/part[@localType='IntestazionePersona']&#xa; 'Intestazione' è richiesto e univoco"
+         test="
+            not(@localType[.='VoceIndice'] and entityType/@value='person')
+            or 
+            (
+             count(nameEntry[@localType='Antroponimo']/part[@localType='IntestazionePersona'][string-length(normalize-space(.)) &gt; 0]) = 1
             )
          "/>
 
@@ -2618,7 +2636,7 @@ Non specificato."
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0265&#xa; cpfDescription/identity/nameEntry/part[@localType='IntestazionePersona']&#xa; 'Intestazione principale' è richiesto e univoco"
          test="
-            not(entityType/@value='person')
+            not(not(@localType) and entityType/@value='person')
             or 
             (
              count(nameEntry[@localType='DenominazionePersona']/part[@localType='IntestazionePersona'][string-length(normalize-space(.)) &gt; 0]) = 1
@@ -3731,48 +3749,6 @@ Data non rilevabile - non rilevata."
       <xs:anyAttribute namespace="##other" processContents="lax"/>
       
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac 0124&#xa; cpfDescription/description/existDates[@localType='DateEsistenzaEnte']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData&#xa; 'Qualifica della data' è richiesto con valori:&#xa;
-Data di istituzione,
-Data di cessazione - soppressione,
-Date di esistenza."
-      test="not(@localType[.='DateEsistenzaEnte'])
-            or
-            (
-             (count((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData']) &gt; 0)
-             and
-             (
-              every $v in ((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData'])
-              satisfies 
-              (
-                  $v='Data di istituzione'
-               or $v='Data di cessazione - soppressione'
-               or $v='Date di esistenza'
-              )
-             )
-            )
-           "/>
-      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac 0215&#xa; cpfDescription/description/existDates[@localType='DateEsistenzaFamiglia']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData&#xa; 'Qualifica della data' è richiesto con valori:&#xa;
-Data di esistenza,
-Data di estinzione,
-Data di origine."
-      test="not(@localType='DateEsistenzaFamiglia')
-            or
-            (
-             (count((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData']) &gt; 0)
-             and
-             (
-              every $v in ((.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData'])
-              satisfies 
-              (
-                  $v='Data di esistenza'
-               or $v='Data di estinzione'
-               or $v='Data di origine'
-              )
-             )
-            )
-           "/>
-      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0335&#xa; cpfDescription/description/existDates[@localType='DateEsistenzaPersona']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData&#xa; 'Qualifica della data' è richiesto con valori:&#xa;
 Data di nascita,
 Data di morte,
@@ -3882,44 +3858,15 @@ Date di esistenza."
       <xs:attribute name="conventionDeclarationReference" type="xs:IDREFS"/>
       <xs:anyAttribute namespace="##other" processContents="lax"/>
       
-       <!-- 0426 0427
-          eac/cpfDescription/relations/relation[targetRole="complesso archivistico"]/relationType/
-             Lista chiusa: Soggetto produttore, Soggetto conservatore, Possessore, Proprietario, Detentore di diritti
-             obbligatorio con eac/cpfDescription/relations/relation[targetRole="complesso archivistico"]/targetEntity[@targetType="resource"]/@id --><!--
        <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-          xao:message="=&gt;&#xa;eac 0426 0427 cpfDescription/relations/relation[targetRole='complesso archivistico'][targetEntity[@targetType='resource' and @id]]/relationType lista chiusa con valori:
-Soggetto produttore,
-Soggetto conservatore,
-Possessore,
-Proprietario,
-Detentore di diritti"
-          test="not(.[targetRole[normalize-space(lower-case(.))='complesso archivistico']]/targetEntity[@targetType='resource']/@id)
-                 or
-                not
-                (.[targetRole[normalize-space(lower-case(.))='complesso archivistico']][targetEntity[@targetType='resource' and @id]]
-                 [not(relationType)
-                  or
-                  relationType
-                  [    normalize-space(lower-case(.))!='soggetto produttore'
-                   and normalize-space(lower-case(.))!='soggetto conservatore'
-                   and normalize-space(lower-case(.))!='possessore'
-                   and normalize-space(lower-case(.))!='proprietario'
-                   and normalize-space(lower-case(.))!='detentore di diritti'
-                  ]
-                 ]
-                )
-               "/>
-       -->
-
-       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-          xao:message="=&gt;&#xa;eac&#xa; cpfDescription/relations/relation[targetRole[.='AgenteCollegato']]/targetEntity/part/@localType ammette valore&#xa;
+          xao:message="=&gt;&#xa;eac&#xa; cpfDescription/relations/relation[targetRole[.='Agente collegato']]/targetEntity/part/@localType ammette valore&#xa;
 RuoloAgente"
           test="
            not(targetRole[.='Agente collegato'])
             or
            (
             every $v in targetEntity/part/@localType satisfies
-            normalize-space(lower-case($v)) = 'RuoloAgente'
+            normalize-space($v) = 'RuoloAgente'
            )
           "/>
 
@@ -3944,9 +3891,12 @@ RuoloAgente"
             targetEntity[string-length(normalize-space(@targetType))&gt;0]
            )
           "/>
+          
+       <!-- esclusi profili, contesti, eventi -->
        <!-- 0427
           eac/cpfDescription/relations/relation[targetRole="Complesso archivistico"]/relationType/
              Soggetto conservatore, Soggetto vigilante, Soggetto produttore, Possessore, Proprietario, Detentore dei diritti -->
+<!--
        <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
           xao:message="=&gt;&#xa;eac 0427&#xa; cpfDescription/relations/relation[targetRole='Complesso archivistico']/relationType&#xa; 'Qualifica della relazione' è richiesto con valori:&#xa;
 Soggetto conservatore,
@@ -3957,7 +3907,15 @@ Proprietario,
 Detentore dei diritti,
 Produttore (OAIS),
 Versante (OAIS)."
-          test="not(.[targetRole[.='Complesso archivistico']])
+          test="
+               (
+                not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
+                 and
+                not(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
+               )
+               or
+               (
+                not(.[targetRole[.='Complesso archivistico']])
                  or
                 (
                  (count(relationType) &gt; 0)
@@ -3977,7 +3935,51 @@ Versante (OAIS)."
                   )
                  )
                 )
+               )
                "/>
+
+                      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+          xao:message="=&gt;&#xa;eac 0427&#xa; cpfDescription/relations/relation[targetRole='Complesso archivistico']/relationType&#xa; 'Qualifica della relazione' è richiesto con valori:&#xa;
+Soggetto conservatore,
+Soggetto vigilante,
+Soggetto produttore,
+Possessore,
+Proprietario,
+Detentore dei diritti,
+Produttore (OAIS),
+Versante (OAIS)."
+          test="
+               (
+                not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
+                 and
+                not(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
+               )
+               or
+               (
+                not(.[targetRole[.='Complesso archivistico']])
+                 or
+                (
+                 (count(relationType) &gt; 0)
+                  and
+                 ( 
+                  every $v in (relationType/text())
+                  satisfies 
+                  (
+                      $v='Soggetto conservatore'
+                   or $v='Soggetto vigilante'
+                   or $v='Soggetto produttore'
+                   or $v='Possessore'
+                   or $v='Proprietario'
+                   or $v='Detentore dei diritti'
+                   or $v='Produttore (OAIS)'
+                   or $v='Versante (OAIS)'
+                  )
+                 )
+                )
+               )
+               "/>
+-->
+
        <!-- 0446 cpfDescription/relations/relation[targetRole="Complesso archivistico"][relationType[.='soggetto produttore' or .='soggetto conservatore']]/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData Data inizio produzione, Data fine produzione, Data di ingresso presso il conservatore  -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0446&#xa; cpfDescription/relations/relation[targetRole='Complesso archivistico'][relationType[.='Soggetto produttore' or .='Soggetto conservatore']]/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData&#xa; 'Qualifica della data' lista chiusa con valori:&#xa;
@@ -4006,6 +4008,7 @@ Data di ingresso presso il conservatore."
        -->
        <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
           xao:message="=&gt;&#xa;eac 0451 0474&#xa; cpfDescription/relations/relation/targetRole[.='Unità archivistica' or .='Unità documentaria']/relationType&#xa; 'Ruolo/qualifica' lista chiusa con valori:&#xa;
+Agente collegato,          
 Agrimensore,
 Autore,
 Committente,
@@ -4042,7 +4045,8 @@ Supervisore,
 Testimone,
 Versante (OAIS)."
            test="not(.[targetRole[.='Unità archivistica' or .='Unità documentaria']][relationType[
-                     .!='Agrimensore'
+                     .!='Agente collegato'
+                 and .!='Agrimensore'
                  and .!='Autore'
                  and .!='Committente'
                  and .!='Copista'
@@ -4199,6 +4203,7 @@ Associativa."
                       [
                           .='Soggetto produttore collegato'
                        or .='Soggetto conservatore collegato'
+                       or .='Agente collegato'
                       ]
                      ]/
                      relationType
@@ -4232,6 +4237,7 @@ Nativo Digitale,
                  and .!='È documentazione'
                  and .!='È rappresentazione di'
                 ])"/>
+       <!-- /esclusi profili, contesti, eventi -->
 
    </xs:complexType>
    <xs:complexType name="setComponent">
