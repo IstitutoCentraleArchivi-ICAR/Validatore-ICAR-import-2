@@ -86,13 +86,13 @@
 Luogo della cultura,
 Sala studio."
             test="
-                  not(relations/relation[targetRole[.='Complesso archivistico']][relationType[.='Soggetto conservatore']])
+                  not(cpfDescription/relations/relation[targetRole[.='Complesso archivistico']][relationType[.='Soggetto conservatore']])
                   or
                   not
                   (cpfDescription[@audience='internal']
                    and 
                    (count(control/localControl/term[.='Luogo della cultura'])&gt;0 or
-                    count(control/localControl/term[.='sala studio'        ])&gt;0
+                    count(control/localControl/term[.='Sala studio'        ])&gt;0
                    )
                   )
                  "/>
@@ -289,15 +289,15 @@ Descrizione riservata e risorsa riservata (autorizzazione)."
       
       <!-- identity to entità -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-       xao:message="=&gt;&#xa;eac &#xa; entità non riconosciuta&#xa;
-                   | @localType                   | entityType/@value | entityType/@eac-sia:tipoLocale&#xa;
+       xao:message="=&gt;&#xa;eac &#xa; entità non riconosciuta in identity&#xa;
+       entità      | @localType                   | entityType/@value | entityType/@eac-sia:tipoLocale&#xa;
 -------------------|------------------------------|-------------------|-------------------------------&#xa;
-       PROFILO     | ProfiloIstituzionale         | corporateBody     |&#xa;
-       CONTESTO    | ContestoStoricoIstituzionale | corporateBody     |&#xa;
-       EVENTO      |                              | corporateBody     | Evento&#xa;
        ENTE        |                              | corporateBody     |&#xa;
        FAMIGLIA    |                              | family            |&#xa;
        PERSONA     |                              | person            |&#xa;
+       PROFILO     | ProfiloIstituzionale         | corporateBody     |&#xa;
+       CONTESTO    | ContestoStoricoIstituzionale | corporateBody     |&#xa;
+       EVENTO      |                              | corporateBody     | Evento&#xa;
 indice ENTE        | VoceIndice                   | corporateBody     |&#xa;
 indice FAMIGLIA    | VoceIndice                   | family            |&#xa;
 indice ANTROPONIMO | VoceIndice                   | person            |"
@@ -310,7 +310,7 @@ indice ANTROPONIMO | VoceIndice                   | person            |"
        "/>
 
       <!-- i test su PRODUTTORI e/o CONSERVATORI richiedono entità AGENTI e relazioni con targetRole 'Complesso archivistico' e relationType ammessi per AGENTE non sono ammesse per altre entità -->
-      <!-- esclude profili, contesti, eventi -->
+      <!-- esclude profili, contesti, eventi e voci d'indice -->
       
       <!-- 0427
          eac/cpfDescription/relations/relation[targetRole="Complesso archivistico"]/relationType/
@@ -356,7 +356,7 @@ Versante (OAIS)."
               )
               "/>
               
-      <!-- /esclude profili, contesti, eventi -->
+      <!-- /esclude profili, contesti, eventi e voci d'indice -->
       
        <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
           xao:message="=&gt;&#xa;eac 0427&#xa; cpfDescription/relations/relation[targetRole='Complesso archivistico']/relationType&#xa; PROFILO/CONTESTO/EVENTO: Qualifica della relazione con 'Complesso archivistico' non ammette i valori:&#xa;
@@ -616,6 +616,39 @@ resource                    | Tematismo&#xa;
          ) 
          "/>
       <!-- /AGENTI -->
+
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac voce d'indice relations/relation&#xa;
+targetEntity/@targetType    | targetRole&#xa;
+----------------------------|-----------------------------------------&#xa;
+resource                    | Complesso archivistico&#xa;
+resource                    | Unità archivistica&#xa;
+resource                    | Unità documentaria&#xa;
+person                      | Antroponimo collegato&#xa;"
+         test="
+         not
+         (
+          identity/@localType[.='VoceIndice']
+           and
+          not(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
+         )
+         or
+         (
+          (
+           every $v in relations/relation/targetRole satisfies
+           (
+               $v='Complesso archivistico'
+            or $v='Unità archivistica'
+            or $v='Unità documentaria'
+            or ($v='Antroponimo collegato' and identity/entityType/@value='person')
+           )
+          )
+          and (every $v in relations/relation[targetRole[.='Complesso archivistico'                  ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Unità archivistica'                      ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Unità documentaria'                      ]]/targetEntity/@targetType satisfies ($v = 'resource'))
+          and (every $v in relations/relation[targetRole[.='Antroponimo collegato'                   ]]/targetEntity/@targetType satisfies ($v = 'person'))
+         ) 
+         "/>
          
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac relations/relation&#xa;
@@ -2426,6 +2459,7 @@ Organo o ufficio statale del periodo postunitario."
           )
          "/>
 
+<!-- @status='alternative' non richiesto per voci di indice?
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac cpfDescription/identity/nameEntry[@localType='AltraDenominazioneEnte] richiede [@status='alternative']"
          test="
@@ -2442,7 +2476,24 @@ Organo o ufficio statale del periodo postunitario."
            satisfies ($v[@status = 'alternative'])
           )
          "/>
-      
+-->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac cpfDescription/identity/nameEntry[@localType='AltraDenominazioneEnte] richiede [@status='alternative']"
+         test="
+          not (
+           entityType/@value='corporateBody'
+            and
+           not(@localType)
+            and
+           not(entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
+          )
+           or
+          (
+           every $v in nameEntry[@localType='AltraDenominazioneEnte']
+           satisfies ($v[@status = 'alternative'])
+          )
+         "/>
+
       <!-- eac 0089 cpfDescription/identity/nameEntry[@localType="AltraDenominazioneEnte" @status="alternative"]/part[@localType="qualifica"]
        Altra denominazione, Altro, Denominazione parallela - Intestazione parallela -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
@@ -2506,6 +2557,7 @@ Denominazione parallela - Intestazione parallela."
           count(nameEntry/part[@localType='DenominazioneFamiglia'][string-length(normalize-space(.)) &gt; 0]) = 1
          "/>
 
+<!-- @status='alternative' non richiesto per voci di indice?
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac cpfDescription/identity/nameEntry[@localType='AltraDenominazioneFamiglia] richiede [@status='alternative']"
          test="
@@ -2516,7 +2568,21 @@ Denominazione parallela - Intestazione parallela."
            satisfies ($v[@status = 'alternative'])
           )
          "/>
-         
+-->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac cpfDescription/identity/nameEntry[@localType='AltraDenominazioneFamiglia] richiede [@status='alternative']"
+         test="
+          not(
+           entityType/@value='family'
+            and
+           not(@localType)
+          )
+           or
+          (
+           every $v in nameEntry[@localType='AltraDenominazioneFamiglia']
+           satisfies ($v[@status = 'alternative'])
+          )
+         "/>
       <!-- eac 0180 cpfDescription/identity/nameEntry[@localType="AltraDenominazioneFamiglia" @status="alternative"]/part[@localType="qualifica"]
        Altra denominazione, Altro, Denominazione parallela - Intestazione parallela -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
@@ -2537,11 +2603,26 @@ Denominazione parallela - Intestazione parallela."
            )
           )
          "/>
-         
+<!-- @status='alternative' non richiesto per voci di indice?
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac cpfDescription/identity/nameEntry[@localType='AltraDenominazionePersona] richiede [@status='alternative']"
          test="
           not(entityType/@value='person')
+           or
+          (
+           every $v in nameEntry[@localType='AltraDenominazionePersona']
+           satisfies ($v[@status = 'alternative'])
+          )
+         "/>
+-->
+      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+         xao:message="=&gt;&#xa;eac cpfDescription/identity/nameEntry[@localType='AltraDenominazionePersona] richiede [@status='alternative']"
+         test="
+          not(
+           entityType/@value='person'
+            and
+           not(@localType)
+          )
            or
           (
            every $v in nameEntry[@localType='AltraDenominazionePersona']
