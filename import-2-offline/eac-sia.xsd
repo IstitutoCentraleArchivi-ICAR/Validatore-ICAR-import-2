@@ -5708,15 +5708,29 @@ Sede di attività."
                        $v='WGS84'
                    )
                "/>
-            <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-               xao:message="=&gt;&#xa;eac 0626 0627&#xa; geographicCoordinates/@eac-sia:tipoCoordinata è richiesto con valori:&#xa;
-Latitudine,
-Longitudine."
+<!--
                test="
                   (.[@eac-sia:tipoCoordinata])
                   and
                   (
                    every $v in @eac-sia:tipoCoordinata
+                   satisfies 
+                   (
+                       $v='Latitudine'
+                    or $v='Longitudine'
+                   )
+                  )
+               "
+-->
+            <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+               xao:message="=&gt;&#xa;eac 0626 0627&#xa; geographicCoordinates/@eac-sia:tipoCoordinata è richiesto con valori:&#xa;
+Latitudine,
+Longitudine."
+               test="
+                  (.[@*[name()='eac-sia:tipoCoordinata']])
+                  and
+                  (
+                   every $v in @*[name()='eac-sia:tipoCoordinata']
                    satisfies 
                    (
                        $v='Latitudine'
