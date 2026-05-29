@@ -943,7 +943,7 @@ Data di cessazione - soppressione,
 Date di esistenza."
       test="
             not (
-             not(identity[@localType]) and identity/entityType[@value='corporateBody']
+             (not(identity[@localType]) or identity[@localType='VoceIndice']) and identity/entityType[@value='corporateBody']
             )
             or
             (
@@ -963,7 +963,7 @@ Date di esistenza."
               )
              )
             )
-           "/>
+           "/><!--
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0124&#xa; INDICE ENTE cpfDescription/description/existDates[@localType='DateEsistenzaEnte']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData&#xa; 'Qualifica della data' è richiesto con valori:&#xa;
 Data di istituzione-costituzione,
@@ -989,7 +989,7 @@ Data di soppressione-cessazione."
               )
              )
             )
-           "/><!--
+           "/> --><!--
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0124&#xa; INDICE ENTE cpfDescription/description/existDates[@localType='DateEsistenzaEnte']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData&#xa; 'Qualifica della data' è richiesto con valori:&#xa;
 Data di istituzione-costituzione,
@@ -1012,12 +1012,12 @@ Data di soppressione-cessazione."
 -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0215&#xa; AGENTE FAMIGLIA cpfDescription/description/existDates[@localType='DateEsistenzaFamiglia']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData&#xa; 'Qualifica della data' è richiesto con valori:&#xa;
-Data di esistenza,
+Date di esistenza,
 Data di estinzione,
 Data di origine."
       test="
             not (
-             not(identity[@localType]) and identity/entityType[@value='family']
+             (not(identity[@localType]) or identity[@localType='VoceIndice']) and identity/entityType[@value='family']
             )
             or
             (
@@ -1030,15 +1030,14 @@ Data di origine."
                every $v in ($w/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@*[name()='eac-sia:qualificaData'])
                satisfies 
                (
-                  $v='Data di esistenza'
+                  $v='Date di esistenza'
                or $v='Data di estinzione'
                or $v='Data di origine'
                )
               )
              )
             )
-           "/>
-           
+           "/><!--
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac &#xa; INDICE FAMIGLIA cpfDescription/description/existDates[@localType='DateEsistenzaFamiglia']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData&#xa; 'Qualifica della data' è richiesto con valori:&#xa;
 Estinzione,
@@ -1065,7 +1064,7 @@ Origine."
              )
             )
             
-           "/><!--
+           "/> --><!--
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac &#xa; INDICE FAMIGLIA cpfDescription/description/existDates[@localType='DateEsistenzaFamiglia']/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData&#xa; 'Qualifica della data' è richiesto con valori:&#xa;
 Estinzione,
