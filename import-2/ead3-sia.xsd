@@ -5983,10 +5983,10 @@ M647: In &lt;physloc>, quando l'attributo @label è pari a &quot;Collocazione&qu
     <xs:attributeGroup ref="a.coverage"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M626: In &lt;physdescstructured> può essere presente, al più, un unico&#x0a;
-      descriptivenote/p
+      &lt;>descriptivenote>
       &#x0a;&#x0a;]"
       xpathDefaultNamespace="##targetNamespace" 
-      test="1 >= count(descriptivenote/p)"/>
+      test="1 >= count(descriptivenote)"/>
   </xs:complexType>
 
   <xs:complexType name="quantity" mixed="true">
