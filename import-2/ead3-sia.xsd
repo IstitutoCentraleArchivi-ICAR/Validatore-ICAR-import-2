@@ -1265,7 +1265,7 @@ M724: In &lt;archdesc> i valori di did/unittitle/@localtype devono essere&#x0a;
           xpathDefaultNamespace="##targetNamespace" 
           test="every $type in did/unittitle/@localtype
                 satisfies $type = ('Denominazione', 'IntegrazioneDenominazione',
-                                   'AnnotazioniAltraDenominazione')"/>
+                                   'AltraDenominazione')"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -2154,14 +2154,6 @@ M721: In &lt;c>, quando rappresenta un'unità archivistica, il contenuto&#x0a;
                           or $type/text() = ('byte', 'kilobyte', 'megabyte', 'gigabyte',
                                              'terabyte', 'petabyte', 'exabyte', 'zettabyte',
                                              'yottabyte', 'ronnabyte', 'quettabyte')"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M634: In &lt;c>, quando rappresenta un'unità archivistica, se sono presenti dei&#x0a;
-      did/container, allora nei &lt;container> deve essere presente&#x0a;
-      l'attributo @localtype
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="every $cont in did/container
-                satisfies $cont/@localtype"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M635: In &lt;c>, quando rappresenta un'unità archivistica, il valore degli&#x0a;
       eventuali did/container/@localtype deve soddisfare una precisa&#x0a;
@@ -3400,14 +3392,6 @@ M721: In &lt;c>, quando rappresenta un'unità documentaria, il contenuto&#x0a;
                           or $type/text() = ('byte', 'kilobyte', 'megabyte', 'gigabyte',
                                              'terabyte', 'petabyte', 'exabyte', 'zettabyte',
                                              'yottabyte', 'ronnabyte', 'quettabyte')"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M634: In &lt;c>, quando rappresenta un'unità documentaria, se sono presenti dei&#x0a;
-      did/container, allora nei &lt;container> deve essere presente&#x0a;
-      l'attributo @localtype
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="every $cont in did/container
-                satisfies $cont/@localtype"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M636: In &lt;c>, quando rappresenta un'unità documentaria, il valore degli&#x0a;
       eventuali did/container/@localtype deve soddisfare una precisa&#x0a;
@@ -5758,7 +5742,8 @@ M281: In &lt;controlnote>, quando il @localtype vale &quot;FinalitaProgetto&quot
   <!-- did -->
   <xs:complexType name="did">
     <xs:sequence>
-      <xs:element name="head" type="head" minOccurs="0"/>
+      <!-- M726: rimosso "head" in quanto non utilizzato
+                 dentro questo elemento -->
       <xs:group maxOccurs="unbounded" ref="m.did"/>
     </xs:sequence>
     <!-- M435: rimosso il gruppo "am.common", non utilizzato -->
@@ -6046,39 +6031,36 @@ M626: In &lt;physdescstructured> può essere presente, al più, un unico&#x0a;
   <!-- archdesc notes -->
 
   <xs:complexType name="accessrestrict">
-    <xs:sequence>
-      <xs:element name="head" type="head" minOccurs="0"/>
-      <xs:choice maxOccurs="unbounded">
-        <xs:group ref="m.blocks"/>
-        <xs:element name="accessrestrict" type="accessrestrict"/>
-      </xs:choice>
-    </xs:sequence>
+    <!-- M726: rimosso "head" in quanto non utilizzato
+               dentro questo elemento -->
+    <xs:choice maxOccurs="unbounded">
+      <xs:group ref="m.blocks"/>
+      <xs:element name="accessrestrict" type="accessrestrict"/>
+    </xs:choice>
     <!-- M405: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
     <xs:attribute name="localtype" type="xs:token"/>
   </xs:complexType>
 
   <xs:complexType name="accruals">
-    <xs:sequence>
-      <xs:element name="head" type="head" minOccurs="0"/>
-      <xs:choice maxOccurs="unbounded">
-        <xs:group ref="m.blocks"/>
-        <xs:element name="accruals" type="accruals"/>
-      </xs:choice>
-    </xs:sequence>
+    <!-- M726: rimosso "head" in quanto non utilizzato
+               dentro questo elemento -->
+    <xs:choice maxOccurs="unbounded">
+      <xs:group ref="m.blocks"/>
+      <xs:element name="accruals" type="accruals"/>
+    </xs:choice>
     <!-- M406: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="localtype" type="xs:token"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
   </xs:complexType>
 
   <xs:complexType name="acqinfo">
-    <xs:sequence>
-      <xs:element name="head" type="head" minOccurs="0"/>
-      <xs:choice maxOccurs="unbounded">
-        <xs:group ref="m.blocks"/>
-        <xs:element name="acqinfo" type="acqinfo"/>
-      </xs:choice>
-    </xs:sequence>
+    <!-- M726: rimosso "head" in quanto non utilizzato
+               dentro questo elemento -->
+    <xs:choice maxOccurs="unbounded">
+      <xs:group ref="m.blocks"/>
+      <xs:element name="acqinfo" type="acqinfo"/>
+    </xs:choice>
     <!-- M407: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="localtype" type="xs:token"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
@@ -6098,26 +6080,24 @@ M626: In &lt;physdescstructured> può essere presente, al più, un unico&#x0a;
   </xs:complexType>
 
   <xs:complexType name="appraisal">
-    <xs:sequence>
-      <xs:element name="head" type="head" minOccurs="0"/>
-      <xs:choice maxOccurs="unbounded">
-        <xs:group ref="m.blocks"/>
-        <xs:element name="appraisal" type="appraisal"/>
-      </xs:choice>
-    </xs:sequence>
+    <!-- M726: rimosso "head" in quanto non utilizzato
+               dentro questo elemento -->
+    <xs:choice maxOccurs="unbounded">
+      <xs:group ref="m.blocks"/>
+      <xs:element name="appraisal" type="appraisal"/>
+    </xs:choice>
     <!-- M412: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="localtype" type="xs:token"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
   </xs:complexType>
 
   <xs:complexType name="arrangement">
-    <xs:sequence>
-      <xs:element name="head" type="head" minOccurs="0"/>
-      <xs:choice maxOccurs="unbounded">
-        <xs:group ref="m.blocks"/>
-        <xs:element name="arrangement" type="arrangement"/>
-      </xs:choice>
-    </xs:sequence>
+    <!-- M726: rimosso "head" in quanto non utilizzato
+               dentro questo elemento -->
+    <xs:choice maxOccurs="unbounded">
+      <xs:group ref="m.blocks"/>
+      <xs:element name="arrangement" type="arrangement"/>
+    </xs:choice>
     <!-- M415: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="localtype" type="xs:token"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
@@ -6135,22 +6115,21 @@ M306: Qualora in un &lt;arrangement>, con @localtype pari a &quot;Numerazione&qu
   </xs:complexType>
 
   <xs:complexType name="bibliography">
-    <xs:sequence>
-      <xs:element name="head" type="head" minOccurs="0"/>
-      <xs:choice maxOccurs="unbounded">
-        <xs:group ref="m.blocks"/>
-        <!-- M186 e M685: specializzazione "bibliography" per gestione tracciati -->
-        <xs:element name="bibliography">
-          <xs:alternative type="bibliography.fnta" test="@localtype = 'FonteArchivistica'"/>
-          <xs:alternative type="bibliography.fntn" test="@localtype = 'FonteNormativa'"/>
-          <xs:alternative type="bibliography.rifb" test="@localtype = 'RiferimentoBibliografico'"/>
-          <xs:alternative type="bibliography.rifw" test="@localtype = 'RiferimentoWeb'"/>
-          <xs:alternative type="bibliography"/>
-        </xs:element>
-        <xs:element name="archref" type="archref"/>
-        <xs:element name="bibref" type="bibref"/>
-      </xs:choice>
-    </xs:sequence>
+    <!-- M726: rimosso "head" in quanto non utilizzato
+               dentro questo elemento -->
+    <xs:choice maxOccurs="unbounded">
+      <xs:group ref="m.blocks"/>
+      <!-- M186 e M685: specializzazione "bibliography" per gestione tracciati -->
+      <xs:element name="bibliography">
+        <xs:alternative type="bibliography.fnta" test="@localtype = 'FonteArchivistica'"/>
+        <xs:alternative type="bibliography.fntn" test="@localtype = 'FonteNormativa'"/>
+        <xs:alternative type="bibliography.rifb" test="@localtype = 'RiferimentoBibliografico'"/>
+        <xs:alternative type="bibliography.rifw" test="@localtype = 'RiferimentoWeb'"/>
+        <xs:alternative type="bibliography"/>
+      </xs:element>
+      <xs:element name="archref" type="archref"/>
+      <xs:element name="bibref" type="bibref"/>
+    </xs:choice>
     <!-- M417: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="localtype" type="xs:token"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
@@ -6179,14 +6158,13 @@ M587: In &lt;bibliography>, quando @localtype vale &quot;LinkRiferimentoBibliogr
   <!-- M358: rimosso il tipo "bioghist" in quanto non utilizzato -->
 
   <xs:complexType name="controlaccess">
-    <xs:sequence>
-      <xs:element name="head" type="head" minOccurs="0"/>
-      <xs:choice maxOccurs="unbounded">
-        <xs:group ref="m.blocks"/>
-        <xs:group ref="m.access"/>
-        <xs:element name="controlaccess" type="controlaccess"/>
-      </xs:choice>
-    </xs:sequence>
+    <!-- 726: rimosso "head" in quanto non utilizzato
+               dentro questo elemento -->
+    <xs:choice maxOccurs="unbounded">
+      <xs:group ref="m.blocks"/>
+      <xs:group ref="m.access"/>
+      <xs:element name="controlaccess" type="controlaccess"/>
+    </xs:choice>
     <!-- M424: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="localtype" type="xs:token"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
@@ -6364,26 +6342,24 @@ M716: In &lt;controlaccess>, gli eventuali figli &lt;subject>, quando privo&#x0a
   </xs:complexType>
 
   <xs:complexType name="custodhist">
-    <xs:sequence>
-      <xs:element name="head" type="head" minOccurs="0"/>
-      <xs:choice maxOccurs="unbounded">
-        <xs:group ref="m.blocks"/>
-        <xs:element name="custodhist" type="custodhist"/>
-      </xs:choice>
-    </xs:sequence>
+    <!-- M726: rimosso "head" in quanto non utilizzato
+               dentro questo elemento -->
+    <xs:choice maxOccurs="unbounded">
+      <xs:group ref="m.blocks"/>
+      <xs:element name="custodhist" type="custodhist"/>
+    </xs:choice>
     <!-- M427: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="localtype" type="xs:token"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
   </xs:complexType>
 
   <xs:complexType name="fileplan">
-    <xs:sequence>
-      <xs:element name="head" type="head" minOccurs="0"/>
-      <xs:choice maxOccurs="unbounded">
-        <xs:group ref="m.blocks"/>
-        <xs:element name="fileplan" type="fileplan"/>
-      </xs:choice>
-    </xs:sequence>
+    <!-- M726: rimosso "head" in quanto non utilizzato
+               dentro questo elemento -->
+    <xs:choice maxOccurs="unbounded">
+      <xs:group ref="m.blocks"/>
+      <xs:element name="fileplan" type="fileplan"/>
+    </xs:choice>
     <!-- M445: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="localtype" type="xs:token"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
@@ -6399,26 +6375,24 @@ M716: In &lt;controlaccess>, gli eventuali figli &lt;subject>, quando privo&#x0a
 
   <!-- M379: rimosso il tipo "legalstatus" in quanto non utilizzato (ACS annullato) -->
   <xs:complexType name="legalstatus">
-    <xs:sequence>
-      <xs:element name="head" type="head" minOccurs="0"/>
-      <xs:choice maxOccurs="unbounded">
-        <xs:group ref="m.blocks"/>
-        <xs:element name="legalstatus" type="legalstatus"/>
-      </xs:choice>
-    </xs:sequence>
+    <!-- M726: rimosso "head" in quanto non utilizzato
+               dentro questo elemento -->
+    <xs:choice maxOccurs="unbounded">
+      <xs:group ref="m.blocks"/>
+      <xs:element name="legalstatus" type="legalstatus"/>
+    </xs:choice>
     <xs:attributeGroup ref="am.common"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
     <xs:attribute name="localtype" type="xs:token"/>
   </xs:complexType>
 
   <xs:complexType name="odd">
-    <xs:sequence>
-      <xs:element name="head" type="head" minOccurs="0"/>
-      <xs:choice maxOccurs="unbounded">
-        <xs:group ref="m.blocks"/>
-        <xs:element name="odd" type="odd"/>
-      </xs:choice>
-    </xs:sequence>
+    <!-- M726: rimosso "head" in quanto non utilizzato
+               dentro questo elemento -->
+    <xs:choice maxOccurs="unbounded">
+      <xs:group ref="m.blocks"/>
+      <xs:element name="odd" type="odd"/>
+    </xs:choice>
     <!-- M466: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="localtype" type="xs:token"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
@@ -6464,13 +6438,12 @@ M593: In &lt;odd>, quando @localtype è pari a &quot;Osservazioni&quot;, non dev
   <!-- M388: rimosso il tipo "otherfindaid" in quanto non utilizzato -->
 
   <xs:complexType name="phystech">
-    <xs:sequence>
-      <xs:element name="head" type="head" minOccurs="0"/>
-      <xs:choice maxOccurs="unbounded">
-        <xs:group ref="m.blocks"/>
-        <xs:element name="phystech" type="phystech"/>
-      </xs:choice>
-    </xs:sequence>
+    <!-- M726: rimosso "head" in quanto non utilizzato
+               dentro questo elemento -->
+    <xs:choice maxOccurs="unbounded">
+      <xs:group ref="m.blocks"/>
+      <xs:element name="phystech" type="phystech"/>
+    </xs:choice>
     <!-- M476: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="encodinganalog" type="xs:token"/>
     <xs:attribute name="localtype" type="xs:token"/>
@@ -6479,50 +6452,47 @@ M593: In &lt;odd>, quando @localtype è pari a &quot;Osservazioni&quot;, non dev
   <!-- M390: rimosso il tipo "prefercite" in quanto non utilizzato -->
 
   <xs:complexType name="processinfo">
-    <xs:sequence>
-      <xs:element name="head" type="head" minOccurs="0"/>
-      <xs:choice maxOccurs="unbounded">
-        <xs:group ref="m.blocks"/>
-        <!-- M219: uso della specializzazione "processinfo.comp" nel caso
-                   dei tracciati -->
-        <xs:element name="processinfo">
-          <xs:alternative type="processinfo.comp" test="@localtype = 'ComplessoArchivistico'"/>
-          <xs:alternative type="processinfo.comp" test="@localtype = 'UnitaArchivistica'"/>
-          <xs:alternative type="processinfo.comp" test="@localtype = 'UnitaDocumentaria'"/>
-          <xs:alternative type="processinfo.comp" test="@localtype = 'Progetto'"/>
-          <xs:alternative type="processinfo.comp" test="@localtype = 'Tematismo'"/>
-          <xs:alternative type="processinfo"/>
-        </xs:element>
-      </xs:choice>
-    </xs:sequence>
+    <!-- M726: rimosso "head" in quanto non utilizzato
+               dentro questo elemento -->
+    <xs:choice maxOccurs="unbounded">
+      <xs:group ref="m.blocks"/>
+      <!-- M219: uso della specializzazione "processinfo.comp" nel caso
+                 dei tracciati -->
+      <xs:element name="processinfo">
+        <xs:alternative type="processinfo.comp" test="@localtype = 'ComplessoArchivistico'"/>
+        <xs:alternative type="processinfo.comp" test="@localtype = 'UnitaArchivistica'"/>
+        <xs:alternative type="processinfo.comp" test="@localtype = 'UnitaDocumentaria'"/>
+        <xs:alternative type="processinfo.comp" test="@localtype = 'Progetto'"/>
+        <xs:alternative type="processinfo.comp" test="@localtype = 'Tematismo'"/>
+        <xs:alternative type="processinfo"/>
+      </xs:element>
+    </xs:choice>
     <!-- M477: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="localtype" type="xs:token"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
   </xs:complexType>
 
   <xs:complexType name="relatedmaterial">
-    <xs:sequence>
-      <xs:element name="head" type="head" minOccurs="0"/>
-      <xs:choice maxOccurs="unbounded">
-        <xs:group ref="m.blocks"/>
-        <xs:element name="relatedmaterial" type="relatedmaterial"/>
-        <xs:element name="archref" type="archref"/>
-        <xs:element name="bibref" type="bibref"/>
-      </xs:choice>
-    </xs:sequence>
+    <!-- M726: rimosso "head" in quanto non utilizzato
+               dentro questo elemento -->
+    <xs:choice maxOccurs="unbounded">
+      <xs:group ref="m.blocks"/>
+      <xs:element name="relatedmaterial" type="relatedmaterial"/>
+      <xs:element name="archref" type="archref"/>
+      <xs:element name="bibref" type="bibref"/>
+    </xs:choice>
     <!-- M485: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="localtype" type="xs:token"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
   </xs:complexType>
 
   <xs:complexType name="scopecontent">
-    <xs:sequence>
-      <xs:element name="head" type="head" minOccurs="0"/>
-      <xs:choice maxOccurs="unbounded">
-        <xs:group ref="m.blocks"/>
-        <xs:element name="scopecontent" type="scopecontent"/>
-      </xs:choice>
-    </xs:sequence>
+    <!-- M726: rimosso "head" in quanto non utilizzato
+               dentro questo elemento -->
+    <xs:choice maxOccurs="unbounded">
+      <xs:group ref="m.blocks"/>
+      <xs:element name="scopecontent" type="scopecontent"/>
+    </xs:choice>
     <!-- M490: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attribute name="localtype" type="xs:token"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
@@ -6531,13 +6501,12 @@ M593: In &lt;odd>, quando @localtype è pari a &quot;Osservazioni&quot;, non dev
   <!-- M396: rimosso il tipo "separatedmaterial" in quanto non utilizzato -->
 
   <xs:complexType name="userestrict">
-    <xs:sequence>
-      <xs:element name="head" type="head" minOccurs="0"/>
-      <xs:choice maxOccurs="unbounded">
-        <xs:group ref="m.blocks"/>
-        <xs:element name="userestrict" type="userestrict"/>
-      </xs:choice>
-    </xs:sequence>
+    <!-- M726: rimosso "head" in quanto non utilizzato
+               dentro questo elemento -->
+    <xs:choice maxOccurs="unbounded">
+      <xs:group ref="m.blocks"/>
+      <xs:element name="userestrict" type="userestrict"/>
+    </xs:choice>
     <!-- M505: rimosso il gruppo "am.common", non utilizzato -->
     <xs:attributeGroup ref="am.common"/>
     <xs:attribute name="encodinganalog" type="xs:token"/>
@@ -6719,7 +6688,8 @@ M590: In &lt;p>, quando @altrender vale &quot;MotivoAttribuzione&quot;, il conte
   <!-- chronlist -->
   <xs:complexType name="chronlist">
     <xs:sequence>
-      <xs:element name="head" type="head" minOccurs="0"/>
+      <!-- M726: rimosso "head" in quanto non utilizzato
+                 dentro questo elemento -->
       <!-- M381: rimosso "listhead" in quanto non utilizzato -->
       <xs:element name="chronitem" type="chronitem" maxOccurs="unbounded"/>
     </xs:sequence>
@@ -7422,10 +7392,9 @@ M683: in &lt;ref>, quando l'attributo @arcrole è pari a &quot;Osservazioni&quot
   <!-- DSC -->
   <xs:complexType name="dsc">
     <xs:sequence>
-      <xs:sequence>
-        <xs:element name="head" type="head" minOccurs="0"/>
-        <xs:group minOccurs="0" maxOccurs="unbounded" ref="m.blocks"/>
-      </xs:sequence>
+      <!-- M726: rimosso "head" in quanto non utilizzato
+                 dentro questo elemento -->
+      <xs:group minOccurs="0" maxOccurs="unbounded" ref="m.blocks"/>
       <!-- M402: rimosso "thead" in quanto non utilizzato -->
       <xs:group minOccurs="0" ref="m.cOrC01"/>
     </xs:sequence>
@@ -7571,14 +7540,7 @@ M627: È obbligatoria in &lt;relation>, quando @relationtype vale&#x0a;
     </xs:choice>
   </xs:group>
 
-  <xs:complexType name="m.c.base">
-    <xs:sequence>
-      <xs:element name="head" type="head" minOccurs="0"/>
-      <xs:element name="did" type="did"/>
-      <xs:group minOccurs="0" maxOccurs="unbounded" ref="m.desc.base"/>
-    </xs:sequence>
-    <xs:attributeGroup ref="am.desc.c"/>
-  </xs:complexType>
+  <!-- M727: rimosso il tipo "m.c.base" in quanto non piu' utilizzato -->
 
   <xs:group name="m.access">
     <xs:choice>
