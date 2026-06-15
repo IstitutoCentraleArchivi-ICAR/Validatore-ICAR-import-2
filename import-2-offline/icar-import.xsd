@@ -40,7 +40,9 @@
 			<xs:sequence>
 				<xs:element name="header" type="header"/>
 				<xs:element name="listRecords" type="listRecords"/>
-			</xs:sequence>
+      </xs:sequence>
+      <xs:attribute name="idIcar" type="xs:ID"
+        fixed="la_radice_del_file_XML_deve_sempre_essere_icar-import"/>
 		</xs:complexType>
 	</xs:element>
 

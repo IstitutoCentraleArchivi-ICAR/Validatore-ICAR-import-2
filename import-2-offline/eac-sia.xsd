@@ -71,6 +71,8 @@
          <xs:attribute name="id" type="xs:ID"/>
          <xs:attribute name="languageOfElement" type="xs:NMTOKEN"/>
          <xs:attribute name="scriptOfElement" type="xs:NMTOKEN"/>
+         <xs:attribute name="idRefIcar" type="xs:IDREF"
+           fixed="la_radice_del_file_XML_deve_sempre_essere_icar-import"/>
          <xs:anyAttribute namespace="##other" processContents="lax"/>
                   
          <!-- 0602 0599 0600 0601 'AGENTI/soggetto conservatore' 'Luogo della cultura (SI/NO)' 'Sala di Studio (SI/NO)'

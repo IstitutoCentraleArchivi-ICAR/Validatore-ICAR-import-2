@@ -4354,6 +4354,8 @@ M563: In &lt;date>, quando @localtype è pari a &quot;QualificaData&quot;,&#x0a;
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="idRefIcar" type="xs:IDREF"
+        fixed="la_radice_del_file_XML_deve_sempre_essere_icar-import"/>
       <xs:assert xa:message="[&#x0a;&#x0a;
 M277: Quando &lt;ead> contiene almeno un&#x0a;
       control/filedesc/notestmt/controlnote[@localtype = &quot;TipologiaProgetto&quot;]/p&#x0a;
