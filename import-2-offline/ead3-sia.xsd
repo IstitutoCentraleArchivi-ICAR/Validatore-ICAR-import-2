@@ -2803,7 +2803,7 @@ M124: In &lt;c>, quando rappresenta un'unità documentaria, se è presente un&#x
       did/physdescstructured/physfacet, dove il @physdescstructuredtype del&#x0a;
       &lt;physdescstructured> vale &quot;materialtype&quot; e dove il @localtype del&#x0a;
       &lt;physfacet> vale &quot;Tecnica&quot;, allora, quando l'unita' documentaria&#x0a;
-      rappresenta una &quot;Cartografia&quot;, il contenuto di &lt;physfacet> deve&#x0a;
+      rappresenta una &quot;Fotografia&quot;, il contenuto di &lt;physfacet> deve&#x0a;
       soddisfare una precisa lista chiusa di valori ammissibili
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
