@@ -286,13 +286,17 @@ M225: È obbligatorio in &lt;bibref>, quando contenuto in &lt;bibliography> e re
           xpathDefaultNamespace="##targetNamespace" 
           test="not(@lang) or matches(@lang, '^[a-z]{3}$')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M653: È obbligatorio in &lt;bibref>, quando contenuto in &lt;bibliography> e relativo a un tracciato, che non sia nullo il contenuto testuale degli eventuali ref[@altrender = &quot;Identificativo&quot;]
+M653: È obbligatorio in &lt;bibref>, quando contenuto in &lt;bibliography> e relativo&#x0a;
+      a un tracciato, che non sia nullo il contenuto testuale degli eventuali&#x0a;
+      ref[@altrender = &quot;Identificativo&quot;]
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="every $ref in ref[@altrender = 'Identificativo']
                 satisfies $ref/text() != ''"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M655: È obbligatorio in &lt;bibref>, quando contenuto in &lt;bibliography> e relativo a un tracciato, che non sia nullo il contenuto testuale degli eventuali ref[@altrender = &quot;IdentificativoDiSistema&quot;]
+M655: È obbligatorio in &lt;bibref>, quando contenuto in &lt;bibliography> e relativo&#x0a;
+      a un tracciato, che non sia nullo il contenuto testuale degli eventuali&#x0a;
+      ref[@altrender = &quot;IdentificativoDiSistema&quot;]
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="every $ref in ref[@altrender = 'IdentificativoDiSistema']
@@ -878,103 +882,37 @@ M320: In &lt;archdesc>, quando è in versione minimale a supporto di uno strumen
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  
-  <!-- M185: creato il tipo "archdesc.comp", derivato per estensione da
-             "archdesc.base" e utilizzato per i complessi archivistici -->
-  <xs:complexType name="archdesc.comp">
+
+  <!-- M185: creato il tipo "archdesc.caub" (base per i complessi e unita') -->
+  <xs:complexType name="archdesc.caub">
     <xs:complexContent>
       <xs:extension base="archdesc.base">
         <xs:assert xa:message="[&#x0a;&#x0a;
-M008: È obbligatoria, in &lt;archdesc>, la presenza di @level
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="@level"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M006: È obbligatorio che in &lt;archdesc> sia presente uno, e un solo,&#x0a;
-      &lt;processinfo> con @localtype pari a &quot;StatusScheda&quot;
+M006: È obbligatorio che in &lt;archdec> - quando rappresenta un complesso&#x0a;
+      archivistico, un'unità archivistica o un'unità documentaria - sia&#x0a;
+      presente uno, e un solo, &lt;processinfo> con @localtype pari&#x0a;
+      a &quot;StatusScheda&quot;
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 = count(processinfo[@localtype = 'StatusScheda'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M007: È obbligatorio che, in &lt;archdesc>, il &lt;processinfo> con @localtype pari a&#x0a;
-      &quot;StatusScheda&quot; abbia almeno un figlio &lt;p>
+M007: È obbligatorio che in &lt;archdesc> - quando rappresenta un complesso&#x0a;
+      archivistico, un'unità archivistica o un'unità documentaria - il&#x0a;
+      &lt;processinfo> con @localtype pari a &quot;StatusScheda&quot; abbia almeno&#x0a;
+      un figlio &lt;p>
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="processinfo[@localtype = 'StatusScheda']/p"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M009: È obbligatoria, in &lt;archdesc>, la presenza di uno e un solo&#x0a;
-      did/unittitle[@localtype = &quot;Denominazione&quot;]
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="1 = count(did/unittitle[@localtype = 'Denominazione'])"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M022: In &lt;archdesc> è ammesso, al più, un unico figlio &lt;custodhist>
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="1 >= count(custodhist)"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M023: In &lt;archdesc>, l'eventuale figlio &lt;custodhist> deve avere almeno un&#x0a;
-      figlio &lt;p>
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="if (custodhist) then custodhist/p else true()"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M024: In &lt;archdesc> è ammesso, al più, un unico figlio &lt;appraisal> con&#x0a;
-      @localtype pari a &quot;ProcedureScarto&quot;
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="1 >= count(appraisal[@localtype = 'ProcedureScarto'])"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M025: In &lt;archdesc> l'eventuale figlio &lt;appraisal>, con @localtype pari a&#x0a;
-      &quot;ProcedureScarto&quot;, deve avere almeno un figlio &lt;p>
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="if (appraisal[@localtype = 'ProcedureScarto'])
-                then appraisal[@localtype = 'ProcedureScarto']/p
-                else true()"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M026: In &lt;archdesc> è ammesso, al più, un unico figlio &lt;accruals>
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="1 >= count(accruals)"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M027: In &lt;archdesc> l'eventuale figlio &lt;accruals> deve avere almeno un figlio&#x0a;
-      &lt;p>
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="if (accruals) then accruals/p else true()"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M028: In &lt;archdesc> è ammesso, al più, un unico figlio &lt;acqinfo>
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="1 >= count(acqinfo)"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M029: In &lt;archdesc> l'eventuale figlio &lt;acqinfo> deve avere almeno un figlio&#x0a;
-      &lt;p>
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="if (acqinfo) then acqinfo/p else true()"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M030: In &lt;archdesc> è ammesso, al più, un unico figlio &lt;odd> con @localtype&#x0a;
-      pari ad &quot;AltreInfo&quot;
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="1 >= count(odd[@localtype = 'AltreInfo'])"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M160: In &lt;archdesc> gli eventuali figli &lt;odd> devono avere privi&#x0a;
-      di @localtype o avere un @localtype che vale &quot;Osservazioni&quot;
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="every $odd in odd
-                satisfies $odd[not(@localtype) or (@localtype = 'Osservazioni')]"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M033: In &lt;archdesc> non è ammesso un figlio &lt;accessrestrict> diretto con&#x0a;
-      @localtype pari a &quot;NoteCondizioniAccesso&quot;
+M033: In &lt;archdesc> - quando rappresenta un complesso archivistico, un'unità&#x0a;
+      archivistica o un'unità documentaria - non è ammesso un figlio&#x0a;
+      &lt;accessrestrict> diretto con @localtype pari a &quot;NoteCondizioniAccesso&quot;
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="not(accessrestrict[@localtype = 'NoteCondizioniAccesso'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M034: &lt;archdesc> non è ammesso più di un&#x0a;
+M034: &lt;archdesc> - quando rappresenta un complesso archivistico, un'unità&#x0a;
+      archivistica o un'unità documentaria - non è ammesso più di un&#x0a;
        accessrestrict[@localtype = &quot;CondizioniAccesso&quot;]&#x0a;
       /accessrestrict[@localtype = &quot;NoteCondizioniAccesso&quot;]
       &#x0a;&#x0a;]"
@@ -982,61 +920,65 @@ M034: &lt;archdesc> non è ammesso più di un&#x0a;
           test="1 >= count( accessrestrict[@localtype = 'CondizioniAccesso']
                            /accessrestrict[@localtype = 'NoteCondizioniAccesso'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M035: In &lt;archdesc> non è ammesso un figlio &lt;userestrict> diretto con&#x0a;
-      @localtype pari a &quot;NoteCondizioniUtilizzo&quot;
+M035: In &lt;archdesc> - quando rappresenta un complesso archivistico, un'unità&#x0a;
+      archivistica o un'unità documentaria - non è ammesso un figlio&#x0a;
+      &lt;userestrict> diretto con @localtype pari a &quot;NoteCondizioniUtilizzo&quot;
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="not(userestrict[@localtype = 'NoteCondizioniUtilizzo'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M036: &lt;archdesc> non ammette più di discendente (e comunque non figlio diretto)&#x0a;
-      &lt;userestrict> con @localtype pari a &quot;NoteCondizioniUtilizzo&quot;
+M036: &lt;archdesc> - quando rappresenta un complesso archivistico, un'unità&#x0a;
+      archivistica o un'unità documentaria - non ammette più di discendente&#x0a;
+      (e comunque non figlio diretto) &lt;userestrict> con @localtype pari&#x0a;
+      a &quot;NoteCondizioniUtilizzo&quot;
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(userestrict//userestrict[@localtype = 'NoteCondizioniUtilizzo'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M040: In &lt;archdesc> deve essere presente, al più, un unico&#x0a;
-      did/physdescstructured/dimensions[@unit = &quot;MetriLineari&quot;]
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="1 >= count(did/physdescstructured/dimensions[@unit = 'MetriLineari'])"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M041: In &lt;archdesc> deve essere presente, al più, un unico&#x0a;
-      did/physdesc[@localtype = &quot;ConsistenzaTotale&quot;]
+M041: In &lt;archdesc> - quando rappresenta un complesso archivistico, un'unità&#x0a;
+      archivistica o un'unità documentaria - deve essere presente, al più,&#x0a;
+      un unico did/physdesc[@localtype = &quot;ConsistenzaTotale&quot;]
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(did/physdesc[@localtype = 'ConsistenzaTotale'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M042: In &lt;archdesc> non deve essere presente più di un&#x0a;
+M042: In &lt;archdesc> - quando rappresenta un complesso archivistico, un'unità&#x0a;
+      archivistica o un'unità documentaria - non deve essere presente più di un&#x0a;
       did/physdescstructured/descriptivenote
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(did/physdescstructured/descriptivenote)"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M043: In &lt;archdesc> non deve essere presente più di un&#x0a;
+M043: In &lt;archdesc> - quando rappresenta un complesso archivistico, un'unità&#x0a;
+      archivistica o un'unità documentaria - non deve essere presente più di un&#x0a;
       did/didnote[@localtype = &quot;StatoDiConservazione&quot;])
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(did/didnote[@localtype = 'StatoDiConservazione'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M044: In &lt;archdesc> non deve essere presente più di un&#x0a;
+M044: In &lt;archdesc> - quando rappresenta un complesso archivistico, un'unità&#x0a;
+      archivistica o un'unità documentaria - non deve essere presente più di un&#x0a;
       did/didnote[@localtype = &quot;CondizioniDelMateriale&quot;])
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(did/didnote[@localtype = 'CondizioniDelMateriale'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M045: In &lt;archdesc> non deve essere presente più di un&#x0a;
+M045: In &lt;archdesc> - quando rappresenta un complesso archivistico, un'unità&#x0a;
+      archivistica o un'unità documentaria - non deve essere presente più di un&#x0a;
       did/didnote[@localtype = &quot;RestauroOAltriInterventi&quot;])
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(did/didnote[@localtype = 'RestauroOAltriInterventi'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M067: In &lt;archdesc> non deve essere presente più di un &lt;accessrestrict>&#x0a;
-      con @localtype pari a &quot;CondizioniAccesso&quot;
+M067: In &lt;archdesc> - quando rappresenta un complesso archivistico, un'unità&#x0a;
+      archivistica o un'unità documentaria - non deve essere presente più di un&#x0a;
+      &lt;accessrestrict> con @localtype pari a &quot;CondizioniAccesso&quot;
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(accessrestrict[@localtype = 'CondizioniAccesso'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M076: In &lt;archdesc>, se sono presenti degli&#x0a;
+M076: In &lt;archdesc> - quando rappresenta un complesso archivistico, un'unità&#x0a;
+      archivistica o un'unità documentaria -, se sono presenti degli&#x0a;
       accessrestrict[@localtype = &quot;CondizioniAccesso&quot;]/p, allora i contenuti dei&#x0a;
       &lt;p> devono soddisfare una precisa lista chiusa di valori ammissibili
       &#x0a;&#x0a;]"
@@ -1045,7 +987,8 @@ M076: In &lt;archdesc>, se sono presenti degli&#x0a;
                 satisfies $p/text() = ('Liberamente accessibile', 'Parzialmente accessibile',
                                        'Non accessibile', 'Accessibile previa autorizzazione')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M077: In &lt;archdesc>, se sono presenti degli&#x0a;
+M077: In &lt;archdesc> - quando rappresenta un complesso archivistico, un'unità&#x0a;
+      archivistica o un'unità documentaria -, se sono presenti degli&#x0a;
       userestrict[@localtype = &quot;Riproduzione&quot;]/p, allora i contenuti dei &lt;p>&#x0a;
       devono soddisfare una precisa lista chiusa di valori ammissibili
       &#x0a;&#x0a;]"
@@ -1055,7 +998,8 @@ M077: In &lt;archdesc>, se sono presenti degli&#x0a;
                                        'Riproduzione a pagamento', 'Riproduzione a fini di studio e ricerca',
                                        'Riproduzione sottoposta ad autorizzazione')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M078: In &lt;archdesc>, se sono presenti dei&#x0a;
+M078: In &lt;archdesc> - quando rappresenta un complesso archivistico, un'unità&#x0a;
+      archivistica o un'unità documentaria -, se sono presenti dei&#x0a;
       did/didnote[@localtype = &quot;StatoDiConservazione&quot;], allora i contenuti&#x0a;
       dei &lt;didnote> devono soddisfare una precisa lista chiusa di valori&#x0a;
       ammissibili
@@ -1064,40 +1008,23 @@ M078: In &lt;archdesc>, se sono presenti dei&#x0a;
           test="every $note in did/didnote[@localtype = 'StatoDiConservazione']
                 satisfies $note/text() = ('Pessimo', 'Mediocre', 'Discreto', 'Buono', 'Ottimo')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M161: In &lt;archdesc> non deve essere presente più di un &lt;arrangement> con&#x0a;
-      @localtype pari a &quot;CriteriOrdinamento&quot;
+M161: In &lt;archdesc> - quando rappresenta un complesso archivistico, un'unità&#x0a;
+      archivistica o un'unità documentaria - non deve essere presente più di un&#x0a;
+      &lt;arrangement> con @localtype pari a &quot;CriteriOrdinamento&quot;
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(arrangement[@localtype = 'CriteriOrdinamento'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M178: In &lt;archdesc>, è ammesso, al più, un unico figlio &lt;scopecontent> con&#x0a;
-      @localtype pari a &quot;AmbitiEContenuto&quot;
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="1 >= count(scopecontent[@localtype = 'AmbitiEContenuto'])"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M179: In &lt;archdesc>, l'eventuale figlio &lt;scopecontent>, con @localtype pari a&#x0a;
-      &quot;AmbitiEContenuto&quot;, deve avere almeno un figlio &lt;p>
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="every $s in scopecontent[@localtype = 'AmbitiEContenuto']
-                satisfies $s/p"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M180: In &lt;archdesc>, gli eventuali figli &lt;scopecontent> devono avere @localtype&#x0a;
-      pari a &quot;AmbitiEContenuto&quot;
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="every $s in scopecontent
-                satisfies $s/@localtype = 'AmbitiEContenuto'"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M296: È obbligatoria in &lt;archdesc>, quando relativo a un complesso&#x0a;
-      archivistico, la presenza di un (e un solo)&#x0a;
+M296: È obbligatoria in &lt;archdesc> - quando rappresenta un complesso&#x0a;
+      archivistico, un'unità archivistica o un'unità documentaria -&#x0a;
+      la presenza di un (e un solo)&#x0a;
       accessrestrict/accessrestrict[@localtype = &quot;VisibilitaFE&quot;]/p
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 = count(accessrestrict/accessrestrict[@localtype = 'VisibilitaFE']/p)"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M297: In &lt;archdesc>, quando relativo a un complesso archivistico, il valore di&#x0a;
+M297: In &lt;archdesc> - quando rappresenta un complesso archivistico, un'unità&#x0a;
+      archivistica o un'unità documentaria - il valore di&#x0a;
       accessrestrict/accessrestrict[@localtype = &quot;VisibilitaFE&quot;]/p&#x0a;
       deve soddisfare il contenuto di una precisa lista chiusa di valori&#x0a;
       ammessi
@@ -1109,6 +1036,214 @@ M297: In &lt;archdesc>, quando relativo a un complesso archivistico, il valore d
                                        'Descrizione Protetta e Risorsa Protetta (login)',
                                        'Descrizione Libera e Risorsa Riservata (autorizzazione)',
                                        'Descrizione Riservata e Risorsa Riservata (autorizzazione)')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M567: In &lt;archdesc> - quando rappresenta un complesso archivistico, un'unità&#x0a;
+      archivistica o un'unità documentaria - deve essere presente un, e solo&#x0a;
+      un, did/unitid con @identifier
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 = count(did/unitid[@identifier])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M568: In &lt;archdesc> - quando rappresenta un complesso archivistico, un'unità&#x0a;
+      archivistica o un'unità documentaria - nel did/unitid con @identifier&#x0a;
+      deve essere presente anche un @label con valore non nullo
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $unit in (did/unitid[@identifier])
+                satisfies $unit[@label != '']"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M569: In &lt;archdesc> - quando rappresenta un complesso archivistico, un'unità&#x0a;
+      archivistica o un'unità documentaria - nel did/unitid con @identifier&#x0a;
+      il contenuto testuale deve essere non nullo
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $unit in (did/unitid[@identifier])
+                satisfies $unit/text() != ''"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M570: In &lt;archdesc> - quando rappresenta un complesso archivistico, un'unità&#x0a;
+      archivistica o un'unità documentaria - nel did/unitid con @identifier&#x0a;
+      l'attributo deve avere valore non nullo
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $id in (did/unitid/@identifier)
+                satisfies $id != ''"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M571: In &lt;archdesc> - quando rappresenta un complesso archivistico, un'unità&#x0a;
+      archivistica o un'unità documentaria - deve essere presente, al più,&#x0a;
+      un unico did/didnote[@localtype = &quot;PeriodizzazioneOTipologia&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/didnote[@localtype = 'PeriodizzazioneOTipologia'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M572: In &lt;archdesc> - quando rappresenta un complesso archivistico, un'unità&#x0a;
+      archivistica o un'unità documentaria - è obbligatorio che il contenuto di&#x0a;
+      processinfo[@localtype = &quot;StatusScheda&quot;]/p soddisfi una ben precisa&#x0a;
+      lista chiusa di valori possibili ammessi
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $p in processinfo[@localtype = 'StatusScheda']/p
+                satisfies $p/text() = ('Bozza', 'In validazione', 'Validata',
+                                       'Pubblicata', 'Copia parallela')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M576: In &lt;archdesc> - quando rappresenta un complesso archivistico, un'unità&#x0a;
+      archivistica o un'unità documentaria - non può essere presente nessun&#x0a;
+      relations/relation/dateset/datesingle con il @relationtype&#x0a;
+      del &lt;relation> pari a &quot;cpfrelation&quot; e con il @localtype del &lt;datesingle>&#x0a;
+      pari a &quot;DataTopica&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="not( relations/relation[@relationtype = 'cpfrelation']
+                    /dateset/datesingle[@localtype = 'DataTopica'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M580: In &lt;archdesc> - quando rappresenta un complesso archivistico, un'unità&#x0a;
+      archivistica o un'unità documentaria - è obblicatorio che eventuali figli&#x0a;
+      &lt;userestric> abbiano l'attributo @localtype pari o a &quot;Pubblicazione&quot;&#x0a;
+      o pari a &quot;Riproduzione&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $user in userestrict
+                satisfies $user/@localtype = ('Pubblicazione', 'Riproduzione')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M581: In &lt;archdesc> - quando rappresenta un complesso archivistico, un'unità&#x0a;
+      archivistica o un'unità documentaria - è obbligatorio che in eventuali&#x0a;
+      userestric/userestrict il valore dell'attributo @localtype del secondo&#x0a;
+      &lt;userestrict> (il nipote di &lt;archdesc>) sia&#x0a;
+      pari a &quot;NoteCondizioniUtilizzo&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $user in userestrict/userestrict
+                satisfies $user/@localtype = 'NoteCondizioniUtilizzo'"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M721: In &lt;archdesc> - quando rappresenta un complesso archivistico, un'unità&#x0a;
+      archivistica o un'unita' documentaria - il contenuto testuale degli&#x0a;
+      eventuali did/physdescstructured/unittype, quando l'attributo&#x0a;
+      @physdescstructuredtype del &lt;physdescstructured> vale &quot;spaceoccupied&quot;,&#x0a;
+      deve essere vuoto oppure deve soddisfare una precisa lista chiusa&#x0a;
+      di valori ammissibili 
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $type in did/physdescstructured[@physdescstructuredtype = 'spaceoccupied']/unittype
+                satisfies    not($type/text())
+                          or $type/text() = ('byte', 'kilobyte', 'megabyte', 'gigabyte',
+                                             'terabyte', 'petabyte', 'exabyte', 'zettabyte',
+                                             'yottabyte', 'ronnabyte', 'quettabyte')"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  
+  <!-- M185: creato il tipo "archdesc.comp", derivato per estensione da
+             "archdesc.caub" e utilizzato per i complessi archivistici -->
+  <xs:complexType name="archdesc.comp">
+    <xs:complexContent>
+      <xs:extension base="archdesc.caub">
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M008: È obbligatoria, in &lt;archdesc>, la presenza di @level
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="@level"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M009: È obbligatoria in &lt;archdesc>, quando rappresenta un complesso&#x0a;
+      archivistico, la presenza di uno e un solo&#x0a;
+      did/unittitle[@localtype = &quot;Denominazione&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 = count(did/unittitle[@localtype = 'Denominazione'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M022: In &lt;archdesc>, quando rappresenta un complesso archivistico, è ammesso,&#x0a;
+      al più, un unico figlio &lt;custodhist>
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(custodhist)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M023: In &lt;archdesc>, quando rappresenta un complesso archivistico, l'eventuale&#x0a;
+      figlio &lt;custodhist> deve avere almeno un figlio &lt;p>
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (custodhist) then custodhist/p else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M024: In &lt;archdesc>, quando rappresenta un complesso archivistico, è ammesso,&#x0a;
+      al più, un unico figlio &lt;appraisal> con @localtype&#x0a;
+      pari a &quot;ProcedureScarto&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(appraisal[@localtype = 'ProcedureScarto'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M025: In &lt;archdesc>, quando rappresenta un complesso archivistico, l'eventuale&#x0a;
+      figlio &lt;appraisal>, con @localtype pari a &quot;ProcedureScarto&quot;, deve avere&#x0a;
+      almeno un figlio &lt;p>
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (appraisal[@localtype = 'ProcedureScarto'])
+                then appraisal[@localtype = 'ProcedureScarto']/p
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M026: In &lt;archdesc>, quando rappresenta un complesso archivistico, è ammesso,&#x0a;
+      al più, un unico figlio &lt;accruals>
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(accruals)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M027: In &lt;archdesc>, quando rappresenta un complesso archivistico, l'eventuale&#x0a;
+      figlio &lt;accruals> deve avere almeno un figlio &lt;p>
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (accruals) then accruals/p else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M028: In &lt;archdesc>, quando rappresenta un complesso archivistico, è ammesso,&#x0a;
+      al più, un unico figlio &lt;acqinfo>
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(acqinfo)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M029: In &lt;archdesc>, quando rappresenta un complesso archivistico, l'eventuale&#x0a;
+      figlio &lt;acqinfo> deve avere almeno un figlio &lt;p>
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (acqinfo) then acqinfo/p else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M030: In &lt;archdesc>, quando rappresenta un complesso archivistico, è ammesso,&#x0a;
+      al più, un unico figlio &lt;odd> con @localtype pari ad &quot;AltreInfo&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(odd[@localtype = 'AltreInfo'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M040: In &lt;archdesc>, quando rappresenta un complesso archivistico, deve essere&#x0a;
+      presente, al più, un unico&#x0a;
+      did/physdescstructured/dimensions[@unit = &quot;MetriLineari&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/physdescstructured/dimensions[@unit = 'MetriLineari'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M160: In &lt;archdesc>, quando rappresenta un complesso archivistico, gli&#x0a;
+      eventuali figli &lt;odd> devono avere privi di @localtype o avere&#x0a;
+      un @localtype che vale &quot;Osservazioni&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $odd in odd
+                satisfies $odd[not(@localtype) or (@localtype = 'Osservazioni')]"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M178: In &lt;archdesc>, quando rappresenta un complesso archivistico, è ammesso,&#x0a;
+      al più, un unico figlio &lt;scopecontent> con @localtype&#x0a;
+      pari a &quot;AmbitiEContenuto&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(scopecontent[@localtype = 'AmbitiEContenuto'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M179: In &lt;archdesc>, quando rappresenta un complesso archivistico, l'eventuale&#x0a;
+      figlio &lt;scopecontent>, con @localtype pari a &quot;AmbitiEContenuto&quot;,&#x0a;
+      deve avere almeno un figlio &lt;p>
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $s in scopecontent[@localtype = 'AmbitiEContenuto']
+                satisfies $s/p"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M180: In &lt;archdesc>, quando rappresenta un complesso archivistico, gli&#x0a;
+      eventuali figli &lt;scopecontent> devono avere @localtype&#x0a;
+      pari a &quot;AmbitiEContenuto&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $s in scopecontent
+                satisfies $s/@localtype = 'AmbitiEContenuto'"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M304: In &lt;archdesc>, quando rappresenta un complesso archivistico, gli&#x0a;
       eventuali valori di&#x0a;
@@ -1123,65 +1258,12 @@ M304: In &lt;archdesc>, quando rappresenta un complesso archivistico, gli&#x0a;
                                    'Possessore', 'Detentore di diritti', 'Soggetto produttore',
                                    'Agente collegato', 'Produttore (OAIS)', 'Versante (OAIS)')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M536: In &lt;archdesc> non è ammesso più di un&#x0a;
+M536: In &lt;archdesc>, quando rappresenta un complesso archivistico,&#x0a;
+      non è ammesso più di un&#x0a;
       did/unittitle[@localtype = &quot;IntegrazioneDenominazione&quot;]
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(did/unittitle[@localtype = 'IntegrazioneDenominazione'])"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M567: In &lt;arcdesc>, quando rappresenta un complesso archivistico, deve essere&#x0a;
-      presente un, e solo un, did/unitid con @identifier
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="1 = count(did/unitid[@identifier])"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M568: In &lt;arcdesc>, quando rappresenta un complesso archivistico, nel&#x0a;
-      did/unitid con @identifier deve essere presente anche un @label con&#x0a;
-      valore non nullo
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="every $unit in (did/unitid[@identifier])
-                satisfies $unit[@label != '']"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M569: In &lt;archdesc>, quando rappresenta un complesso archivistico, nel&#x0a;
-      did/unitid con @identifier il contenuto testuale deve essere non nullo
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="every $unit in (did/unitid[@identifier])
-                satisfies $unit/text() != ''"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M570: In &lt;arcdesc>, quando rappresenta un complesso archivistico, nel&#x0a;
-      did/unitid con @identifier, l'attributo deve avere valore non nullo
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="every $id in (did/unitid/@identifier)
-                satisfies $id != ''"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M571: In &lt;archdesc>, quando rappresenta un complesso archivistico, deve essere&#x0a;
-      presente, al più, un unico&#x0a;
-      did/didnote[@localtype = &quot;PeriodizzazioneOTipologia&quot;]
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="1 >= count(did/didnote[@localtype = 'PeriodizzazioneOTipologia'])"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M572: In &lt;archdesc>, quando rappresenta un complesso archivistico,&#x0a;
-      è obbligatorio che il contenuto di&#x0a;
-      processinfo[@localtype = &quot;StatusScheda&quot;]/p soddisfi una ben precisa&#x0a;
-      lista chiusa di valori possibili ammessi
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="every $p in processinfo[@localtype = 'StatusScheda']/p
-                satisfies $p/text() = ('Bozza', 'In validazione', 'Validata',
-                                       'Pubblicata', 'Copia parallela')"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M576: In &lt;archdesc>, quando rappresenta un complesso archivistico, non può&#x0a;
-      essere presente nessun relations/relation/dateset/datesingle con&#x0a;
-      il @relationtype del &lt;relation> pari a &quot;cpfrelation&quot; e con&#x0a;
-      il @localtype del &lt;datesingle> pari a &quot;DataTopica&quot;
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="not( relations/relation[@relationtype = 'cpfrelation']
-                    /dateset/datesingle[@localtype = 'DataTopica'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M577: In &lt;archdesc>, quando rappresenta un complesso archivistico, non può&#x0a;
       essere presente nessun
@@ -1189,23 +1271,6 @@ M577: In &lt;archdesc>, quando rappresenta un complesso archivistico, non può&#
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="not(did/unitdatestructured/dateset/datesingle[@localtype = 'DataTopica'])"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M580: In &lt;archdesc>, quando rappresenta un complesso archivistico,&#x0a;
-      è obbligatorio che eventuali figli &lt;userestric> abbiano l'attributo&#x0a;
-      @localtype pari o a &quot;Pubblicazione&quot; o pari a &quot;Riproduzione&quot;
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="every $user in userestrict
-                satisfies $user/@localtype = ('Pubblicazione', 'Riproduzione')"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M581: In &lt;archdesc>, quando rappresenta un complesso archivistico,&#x0a;
-      è obbligatorio che in eventuali userestric/userestrict il valore&#x0a;
-      dell'attributo @localtype del secondo &lt;userestrict> (il nipote&#x0a;
-      di &lt;archdesc>) sia pari a &quot;NoteCondizioniUtilizzo&quot;
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="every $user in userestrict/userestrict
-                satisfies $user/@localtype = 'NoteCondizioniUtilizzo'"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M628: In &lt;archdesc>, quando rappresenta un complesso archivistico,&#x0a;
       i &lt;relationentry> degli eventuali relations/relation/relationentry,&#x0a;
@@ -1232,19 +1297,6 @@ M632: In &lt;archdesc>, quando rappresenta un complesso archivistico,&#x0a;
                                              'Taccuino', 'Vacchetta', 'Volume', 'Pergamena', 'Pezzo',
                                              'Disegno', 'Rubrica', 'Pergamena')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M721: In &lt;archdesc>, quando rappresenta un complesso archivistico,&#x0a;
-      il contenuto testuale degli eventuali did/physdescstructured/unittype,&#x0a;
-      quando l'attributo @physdescstructuredtype del &lt;physdescstructured> vale&#x0a;
-      &quot;spaceoccupied&quot;, deve essere vuoto oppure deve soddisfare una precisa&#x0a;
-      lista chiusa di valori ammissibili 
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="every $type in did/physdescstructured[@physdescstructuredtype = 'spaceoccupied']/unittype
-                satisfies    not($type/text())
-                          or $type/text() = ('byte', 'kilobyte', 'megabyte', 'gigabyte',
-                                             'terabyte', 'petabyte', 'exabyte', 'zettabyte',
-                                             'yottabyte', 'ronnabyte', 'quettabyte')"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
 M723: In &lt;archdesc>, quando rappresenta un complesso archivistico,&#x0a;
       il contenuto testuale degli eventuali&#x0a;
       did/unitdatestructured/dateset/datesingle, quando l'attributo @localtype&#x0a;
@@ -1259,13 +1311,1536 @@ M723: In &lt;archdesc>, quando rappresenta un complesso archivistico,&#x0a;
                                           'Con documentazione in copia fino al', 'Con lacuna',
                                           'Data della documentazione compresa', 'Principale')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M724: In &lt;archdesc> i valori di did/unittitle/@localtype devono essere&#x0a;
-      compatibili con una precisa lista chiusa di valori ammissibili
+M724: In &lt;archdesc>, quando rappresenta un complesso archivistico, i valori&#x0a;
+      di did/unittitle/@localtype devono essere compatibili con una precisa&#x0a;
+      lista chiusa di valori ammissibili
       &#x0a;&#x0a;]"
           xpathDefaultNamespace="##targetNamespace" 
           test="every $type in did/unittitle/@localtype
                 satisfies $type = ('Denominazione', 'IntegrazioneDenominazione',
                                    'AltraDenominazione')"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- M185: creato il tipo "archdesc.arch", derivato per estensione da
+             "archdesc.caub" e utilizzato per le unita' archivistiche -->
+  <xs:complexType name="archdesc.arch">
+    <xs:complexContent>
+      <xs:extension base="archdesc.caub">
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M020: In &lt;archdesc>, quando rappresenta un'unità archivistica, è ammesso, al&#x0a;
+      più, un unico figlio &lt;scopecontent> con @localtype&#x0a;
+      pari a &quot;DescrizioneContenuto&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(scopecontent[@localtype = 'DescrizioneContenuto'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M021: In &lt;archdesc>, quando rappresenta un'unità archivistica, l'eventuale&#x0a;
+      figlio &lt;scopecontent>, con @localtype pari a &quot;DescrizioneContenuto&quot;,&#x0a;
+      deve avere almeno un figlio &lt;p>
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $s in scopecontent[@localtype = 'DescrizioneContenuto']
+                satisfies $s/p"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M050: In &lt;archdesc>, quando rappresenta un'unità archivistica, deve essere&#x0a;
+      presente, al più, un unico&#x0a;
+      did/unitid[@localtype = &quot;NumeroSequenza&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/unitid[@localtype = 'NumeroSequenza'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M051: In &lt;archdesc>, quando rappresenta un'unità archivistica, deve essere&#x0a;
+      presente, al più, un unico&#x0a;
+      did/unitid[@localtype = &quot;NumOrdinamentoProvvisorio&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/unitid[@localtype = 'NumOrdinamentoProvvisorio'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M052: In &lt;archdesc>, quando rappresenta un'unità archivistica, deve essere&#x0a;
+      presente, al più, un unico&#x0a;
+      did/unitid[@localtype = &quot;NumOrdinamentoDefinitivo&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/unitid[@localtype = 'NumOrdinamentoDefinitivo'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M053: In &lt;archdesc>, quando rappresenta un'unità archivistica, deve essere&#x0a;
+      presente, al più, un unico did/unitid[@localtype = &quot;Segnatura&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/unitid[@localtype = 'Segnatura'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M054: In &lt;archdesc>, quando rappresenta un'unità archivistica, se sono presenti&#x0a;
+      dei did/unitid[@localtype = &quot;SegnaturaPrecedente&quot;], allora in &lt;unitid>&#x0a;
+      deve essere presente anche @localtype
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $unitid in did/unitid[@label = 'SegnaturaPrecedente']
+                satisfies $unitid/@localtype"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M055: In &lt;archdesc>, quando rappresenta un'unità archivistica, deve essere&#x0a;
+      presente, al più, un unico &lt;fileplan>
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(fileplan)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M056: In &lt;archdesc>, quando rappresenta un'unità archivistica, l'eventuale&#x0a;
+      figlio &lt;fileplan> deve avere almeno un figlio &lt;p>
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (fileplan) then fileplan/p else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M057: In &lt;archdesc>, quando rappresenta un'unità archivistica, deve essere&#x0a;
+      presente, al più, un unico&#x0a;
+      fileplan/p/subject[@localtype = &quot;IndiceClassificazione&quot;]/@identifier
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(fileplan/p/subject[@localtype = 'IndiceClassificazione']/@identifier)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M058: In &lt;archdesc>, quando rappresenta un'unità archivistica, deve essere&#x0a;
+      presente, al più, un unico did/unitid[@localtype = &quot;TitoloOriginale&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/unitid[@localtype = 'TitoloOriginale'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M059: In &lt;archdesc>, quando rappresenta un'unità archivistica, deve essere&#x0a;
+      presente, al più, un unico did/unitid[@localtype = &quot;IntegrazioneTitolo&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/unitid[@localtype = 'IntegrazioneTitolo'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M060: In &lt;archdesc>, quando rappresenta un'unità archivistica, deve essere&#x0a;
+      presente, al più, un unico did/unitid[@localtype = &quot;TitoloAttribuito&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/unitid[@localtype = 'TitoloAttribuito'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M061: In &lt;archdesc>, quando rappresenta un'unità archivistica, deve essere&#x0a;
+      presente almeno uno tra did/unittitle[@localtype = &quot;TitoloOriginale&quot;] e&#x0a;
+      tra did/unittitle[@localtype = &quot;TitoloAttribuito&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="   did/unittitle[@localtype = 'TitoloOriginale']
+                or did/unittitle[@localtype = 'TitoloAttribuito']"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M062: In &lt;archdesc>, quando rappresenta un'unità archivistica, deve essere&#x0a;
+      presente, al più, un unico&#x0a;
+      did/physdescstructured/physfacet[@localtype = &quot;Supporto&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/physdescstructured/physfacet[@localtype = 'Supporto'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M063: In &lt;archdesc>, quando rappresenta un'unità archivistica, deve essere&#x0a;
+      presente, al più, un unico&#x0a;
+      did/physdescstructured/dimensions[@localtype = &quot;Altezza&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/physdescstructured/dimensions[@localtype = 'Altezza'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M064: In &lt;archdesc>, quando rappresenta un'unità archivistica, deve essere&#x0a;
+      presente, al più, un unico&#x0a;
+      did/physdescstructured/dimensions[@localtype = &quot;Larghezza&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/physdescstructured/dimensions[@localtype = 'Larghezza'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M065: In &lt;archdesc>, quando rappresenta un'unità archivistica, deve essere&#x0a;
+      presente, al più, un unico&#x0a;
+      did/physdescstructured/dimensions[@localtype = &quot;Spessore&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/physdescstructured/dimensions[@localtype = 'Spessore'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M066: In &lt;archdesc>, quando rappresenta un'unità archivistica, deve essere&#x0a;
+      presente, al più, un unico&#x0a;
+      did/physdescstructured/physfacet[@localtype = &quot;Legatura&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/physdescstructured/physfacet[@localtype = 'Legatura'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M069: In &lt;archdesc>, quando rappresenta un'unità archivistica, deve&#x0a;
+      obbligatoriamente essere presente un unico (non ripetibile)&#x0a;
+      relations/relation[@relationtype = &quot;resourcerelation&quot;]/relationentry&#x0a;
+      dove il @localtype del &lt;relationentry> vale &quot;LivelloSuperiore&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 = count( relations/relation[@relationtype = 'resourcerelation']
+                          /relationentry[@localtype = 'LivelloSuperiore'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M079: In &lt;archdesc>, quando rappresenta un'unità archivistica, se sono presenti&#x0a;
+      dei relations/relation[@relationtype = &quot;cpfrelation&quot;], allora il valore&#x0a;
+      degli @arcrole dei &lt;relation> devono soddisfare una precisa lista chiusa&#x0a;
+      di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $relation in relations/relation[@relationtype = 'cpfrelation']
+                satisfies $relation/@arcrole = ('Destinatario', 'Mittente', 'Notaio', 'Testimone',
+                                                'Autore', 'Disegnatore', 'Editore', 'Incisore',
+                                                'Giudice', 'Agrimensore', 'Rilevatore', 'Miniaturista',
+                                                'Copista', 'Esecutore', 'Progettista', 'Supervisore',
+                                                'Litografo', 'Fotografo inventore', 'Fotografo principale',
+                                                'Ideatore', 'Regista', 'Committente', 'Corrispondente',
+                                                'Curatore', 'Responsabile', 'Partecipante', 'Finanziatore',
+                                                'Possessore', 'Proprietario', 'Detentore dei diritti',
+                                                'Agente collegato')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M181: In &lt;archdesc>, quando rappresenta un'unità archivistica, gli eventuali&#x0a;
+      figli &lt;scopecontent> devono avere @localtype pari a&#x0a;
+      &quot;DescrizioneContenuto&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $s in scopecontent
+                satisfies $s/@localtype = 'DescrizioneContenuto'"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M309: In &lt;archdesc>, quando rappresenta un'unità archivistica, l'eventuale&#x0a;
+      figlio &lt;fileplan> non deve avere più di un figlio &lt;p> con contenuto&#x0a;
+      testuale non nullo
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (fileplan) then 1 >= count(fileplan/p[text()[normalize-space()]]) else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M310: In &lt;archdesc>, quando rappresenta un'unità archivistica, l'eventuale&#x0a;
+      figlio &lt;fileplan> non deve avere più di un figlio &lt;p> che contiene, a sua&#x0a;
+      volta, un figlio &lt;subject>
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (fileplan) then 1 >= count(fileplan/p[subject]) else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M311: In &lt;archdesc>, quando rappresenta un'unità archivistica, l'eventuale&#x0a;
+      figlio &lt;fileplan> non deve contenere nessun figlio &lt;p> con contenuto&#x0a;
+      testuale non nullo e, contemporaneamente, un figlio &lt;subject>
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (fileplan) then not(fileplan/p[subject and text()[normalize-space()]]) else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M352: In &lt;archdesc>, quando rappresenta un'unità archivistica, deve essere&#x0a;
+      presente, al più, un unico&#x0a;
+      did/physdescstructured/physfacet[@localtype = &quot;Tipologia&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/physdescstructured/physfacet[@localtype = 'Tipologia'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M577: In &lt;archdesc>, quando rappresenta un'unità archivistica, non può essere&#x0a;
+      presente nessun
+      did/unitdatestructured/dateset/datesingle[@localtype = &quot;DataTopica&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="not(did/unitdatestructured/dateset/datesingle[@localtype = 'DataTopica'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M629: In &lt;archdesc>, quando rappresenta un'unità archivistica, se sono presenti&#x0a;
+      dei relations/relation[@relationtype = &quot;cpfrelation&quot;], allora&#x0a;
+      in &lt;relation> deve essere presente l'attributo @arcrole
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $relation in relations/relation[@relationtype = 'cpfrelation']
+                satisfies $relation/@arcrole"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M630: In &lt;archdesc>, quando rappresenta un'unità archivistica, il contenuto&#x0a;
+      testuale dell'eventuale&#x0a;
+      did/physdescstructured/physfacet[@localtype = &quot;Tipologia&quot;] deve&#x0a;
+      soddisfare una precisa lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $phys in did/physdescstructured/physfacet[@localtype = 'Tipologia']
+                satisfies $phys/text() = ('Album', 'Busta', 'Buste', 'Cartella', 'Cartelle',
+                                          'Faldone', 'Faldoni', 'Fascicolo', 'Fascicoli',
+                                          'Filza', 'Filze', 'Foglio', 'Fogli', 'Manifesto',
+                                          'Manifesti', 'Mappa', 'Mappe', 'Mazzo', 'Mazzi',
+                                          'Opuscolo', 'Opuscoli', 'Pacco', 'Pacchi', 'Plico',
+                                          'Plichi', 'Quaderno', 'Quaderni', 'Raccoglitore',
+                                          'Raccoglitori', 'Registro', 'Registri', 'Rivista',
+                                          'Riviste', 'Rotolo', 'Rotoli', 'Scatola', 'Scatole',
+                                          'Scheda', 'Schede', 'Taccuino', 'Taccuini', 'Vacchetta',
+                                          'Vacchette', 'Volume', 'Volumi')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M635: In &lt;archdesc>, quando rappresenta un'unità archivistica, il valore degli&#x0a;
+      eventuali did/container/@localtype deve soddisfare una precisa&#x0a;
+      lista chiusa di valori ammissibili 
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $type in did/container/@localtype
+                satisfies $type = ('Busta', 'Camicia', 'Cartella', 'Faldone', 'Fascio', 'Filza',
+                                   'Mazzo', 'Pacco', 'Plico', 'Raccoglitore', 'Scatola',
+                                   'PacchettoInformativo')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M637: In &lt;archdesc>, quando rappresenta un'unità archivistica, gli eventuali&#x0a;
+      did/container non possono contenere più di un ref/num
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $cont in did/container
+                satisfies 1 >= count($cont/ref/num)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M638: In &lt;archdesc>, quando rappresenta un'unità archivistica, gli eventuali&#x0a;
+      did/container non possono contenere più di un ref/title/part
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $cont in did/container
+                satisfies 1 >= count($cont/ref/title/part)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M722: In &lt;archdesc>, quando rappresenta un'unità archivistica, il contenuto&#x0a;
+      testuale degli eventuali did/physdescstructured/unittype, quando&#x0a;
+      l'attributo @physdescstructuredtype del &lt;physdescstructured> vale&#x0a;
+      &quot;materialtype&quot; deve essere vuoto oppure deve soddisfare una precisa&#x0a;
+      lista chiusa di valori ammissibili 
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $type in did/physdescstructured[@physdescstructuredtype = 'materialtype']/unittype
+                satisfies    not($type/text())
+                          or $type/text() = ('Album', 'Busta', 'Cartella', 'Faldone', 'Fascicolo',
+                                             'Filza', 'Foglio', 'Manifesto', 'Mappa', 'Mazzo',
+                                             'Opuscolo', 'Pacco', 'Plico', 'Quaderno', 'Raccoglitore',
+                                             'Registro', 'Rivista', 'Rotolo', 'Scatola', 'Scheda',
+                                             'Taccuino', 'Vacchetta', 'Volume', 'Pergamena', 'Pezzo',
+                                             'Disegno', 'Rubrica', 'Pergamena', 'Documento')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M725: In &lt;archdesc>, quando rappresenta un'unità archivistica, i valori di&#x0a;
+      did/unittitle/@localtype devono essere compatibili con una precisa lista&#x0a;
+      chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $type in did/unittitle/@localtype
+                satisfies $type = ('TitoloOriginale', 'TitoloAttribuito')"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- M185: creato il tipo "archdesc.docu", derivato per estensione da
+             "archdesc.caub" e utilizzato per le unita' documentarie -->
+  <xs:complexType name="archdesc.docu">
+    <xs:complexContent>
+      <xs:extension base="archdesc.caub">
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M020: In &lt;archdesc>, quando rappresenta un'unità documentaria, è ammesso, al&#x0a;
+      più, un unico figlio &lt;scopecontent> con @localtype&#x0a;
+      pari a &quot;DescrizioneContenuto&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(scopecontent[@localtype = 'DescrizioneContenuto'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M021: In &lt;archdesc>, quando rappresenta un'unità documentaria, l'eventuale&#x0a;
+      figlio &lt;scopecontent>, con @localtype pari a &quot;DescrizioneContenuto&quot;&#x0a;
+      deve avere almeno un figlio &lt;p>
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $s in scopecontent[@localtype = 'DescrizioneContenuto']
+                satisfies $s/p"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M050: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico&#x0a;
+      did/unitid[@localtype = &quot;NumeroSequenza&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/unitid[@localtype = 'NumeroSequenza'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M051: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico&#x0a;
+      did/unitid[@localtype = &quot;NumOrdinamentoProvvisorio&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/unitid[@localtype = 'NumOrdinamentoProvvisorio'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M052: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico&#x0a;
+      did/unitid[@localtype = &quot;NumOrdinamentoDefinitivo&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/unitid[@localtype = 'NumOrdinamentoDefinitivo'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M053: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico did/unitid[@localtype = &quot;Segnatura&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/unitid[@localtype = 'Segnatura'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M054: In &lt;archdesc>, quando rappresenta un'unità documentaria, se sono presenti&#x0a;
+      dei did/unitid[@localtype = &quot;SegnaturaPrecedente&quot;], allora in &lt;unitid>&#x0a;
+      deve essere presente anche @localtype
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $unitid in did/unitid[@label = 'SegnaturaPrecedente']
+                satisfies $unitid/@localtype"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M058: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico did/unitid[@localtype = &quot;TitoloOriginale&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/unitid[@localtype = 'TitoloOriginale'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M059: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico did/unitid[@localtype = &quot;IntegrazioneTitolo&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/unitid[@localtype = 'IntegrazioneTitolo'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M060: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico did/unitid[@localtype = &quot;TitoloAttribuito&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/unitid[@localtype = 'TitoloAttribuito'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M061: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente almeno uno tra did/unittitle[@localtype = &quot;TitoloOriginale&quot;] e&#x0a;
+      tra did/unittitle[@localtype = &quot;TitoloAttribuito&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="   did/unittitle[@localtype = 'TitoloOriginale']
+                or did/unittitle[@localtype = 'TitoloAttribuito']"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M062: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico&#x0a;
+      did/physdescstructured/physfacet[@localtype = &quot;Supporto&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/physdescstructured/physfacet[@localtype = 'Supporto'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M063: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico&#x0a;
+      did/physdescstructured/dimensions[@localtype = &quot;Altezza&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/physdescstructured/dimensions[@localtype = 'Altezza'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M064: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico&#x0a;
+      did/physdescstructured/dimensions[@localtype = &quot;Larghezza&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/physdescstructured/dimensions[@localtype = 'Larghezza'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M065: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico&#x0a;
+      did/physdescstructured/dimensions[@localtype = &quot;Spessore&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/physdescstructured/dimensions[@localtype = 'Spessore'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M066: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico&#x0a;
+      did/physdescstructured/physfacet[@localtype = &quot;Legatura&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/physdescstructured/physfacet[@localtype = 'Legatura'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M069: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve&#x0a;
+      obbligatoriamente essere presente un unico (non ripetibile)&#x0a;
+      relations/relation[@relationtype = &quot;resourcerelation&quot;]/relationentry&#x0a;
+      dove il @localtype del &lt;relationentry> vale &quot;LivelloSuperiore&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 = count( relations/relation[@relationtype = 'resourcerelation']
+                          /relationentry[@localtype = 'LivelloSuperiore'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M070: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico (non ripetibile)&#x0a;
+      did/physdescstructured/physfacet/genreform dove il&#x0a;
+      @physdescstructuredtype di &lt;physdescstructured> vale &quot;materialtype&quot; e&#x0a;
+      dove il @localtype del &lt;physfacet> vale &quot;TipologiaDocumentaria&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                           /physfacet[@localtype = 'TipologiaDocumentaria']/genreform)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M071: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico (non ripetibile)&#x0a;
+      did/physdescstructured/physfacet/genreform/part dove il&#x0a;
+      @physdescstructuredtype di &lt;physdescstructured> vale &quot;materialtype&quot;,&#x0a;
+      dove il @localtype del &lt;physfacet> vale &quot;TipologiaDocumentaria&quot; e&#x0a;
+      dove il @localtype del &lt;part> vale &quot;TracciatoSpecifico&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                           /physfacet[@localtype = 'TipologiaDocumentaria']
+                           /genreform/part[@localtype = 'TracciatoSpecifico'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M072: In &lt;archdesc>, quando rappresenta un'unità documentaria, se sono presenti&#x0a;
+      dei did/physdescstructured/physfacet/genreform/part dove i&#x0a;
+      @physdescstructuredtype di &lt;physdescstructured> valgono &quot;materialtype&quot;,&#x0a;
+      dove i @localtype dei &lt;physfacet> valgono &quot;TipologiaDocumentaria&quot; e&#x0a;
+      dove i @localtype dei &lt;part> valgono &quot;TracciatoSpecifico&quot;, allora i&#x0a;
+      contenuti dei &lt;part> devono soffisfare una lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $part in  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                               /physfacet[@localtype = 'TipologiaDocumentaria']
+                               /genreform/part[@localtype = 'TracciatoSpecifico']
+                satisfies $part/text() = ('Audiovisivo', 'Cartografia', 'Carteggio', 'Fotografia',
+                                          'Grafica', 'Manoscritto', 'Pergamena')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M073: In &lt;archdesc>, quando rappresenta un'unità documentaria, se sono presenti&#x0a;
+      dei did/physdescstructured/physfacet/genreform/part dove i @localtype dei&#x0a;
+      &lt;physfacet> valgono &quot;Sigillo&quot;, dove i @localtype del &lt;genreform> valgono&#x0a;
+      &quot;DescrizioneSigillo&quot;, e dove i @localtype dei &lt;part> valgono&#x0a;
+      &quot;Natura&quot;, allora i contenuti dei &lt;part> devono soffisfare una precisa&#x0a;
+      lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $part in  did/physdescstructured/physfacet[@localtype = 'Sigillo']
+                               /genreform[@localtype = 'DescrizioneSigillo']
+                               /part[@localtype = 'Natura']
+                satisfies $part/text() = ('Sigillo a una faccia', 'Sigillo a due facce', 'Bolla',
+                                          'Sigillo con controsigillo', 'Timbro a umido', 'Timbro a secco',
+                                          'Sigillo deperdito')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M074: In &lt;archdesc>, quando rappresenta un'unità documentaria, se sono presenti&#x0a;
+      dei did/physdescstructured/physfacet/genreform/part dove i @localtype di&#x0a;
+      &lt;physfacet> valgono &quot;Sigillo&quot;, dove i @localtype del &lt;genreform> valgono&#x0a;
+      &quot;DescrizioneSigillo&quot;, e dove i @localtype dei &lt;part> valgono&#x0a;
+      &quot;Materiale&quot;, allora i contenuti dei &lt;part> devono soffisfare una precisa&#x0a;
+      lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $part in  did/physdescstructured/physfacet[@localtype = 'Sigillo']
+                               /genreform[@localtype = 'DescrizioneSigillo']
+                               /part[@localtype = 'Materiale']
+                satisfies $part/text() = ('Argilla', 'Cera', 'Ceralacca', 'Oro', 'Piombo', 'Argento',
+                                          'Carta', 'Cera sotto carta', 'Inchiostro')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M075: In &lt;archdesc>, quando rappresenta un'unità documentaria, se sono presenti&#x0a;
+      dei did/physdescstructured/physfacet/genreform/part dove i @localtype dei&#x0a;
+      &lt;physfacet> valgono &quot;Sigillo&quot;, dove i @localtype del &lt;genreform> valgono&#x0a;
+      &quot;DescrizioneSigillo&quot;, e dove i @localtype dei &lt;part> valgono&#x0a;
+      &quot;ModoApposizione&quot;, allora i contenuti dei &lt;part> devono soddisfare una&#x0a;
+      precisa lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $part in  did/physdescstructured/physfacet[@localtype = 'Sigillo']
+                               /genreform[@localtype = 'DescrizioneSigillo']
+                               /part[@localtype = 'ModoApposizione']
+                satisfies $part/text() = ('Aderente', 'Aderente incassato', 'Aderente su coda semplice',
+                                          'Aderente su coda parigina', 'Aderente en placard', 'Pendente')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M079: In &lt;archdesc>, quando rappresenta un'unità documentaria, se sono presenti&#x0a;
+      dei relations/relation[@relationtype = &quot;cpfrelation&quot;], allora il valore&#x0a;
+      degli @arcrole dei &lt;relation> devono soddisfare una precisa lista chiusa&#x0a;
+      di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $relation in relations/relation[@relationtype = 'cpfrelation']
+                satisfies $relation/@arcrole = ('Destinatario', 'Mittente', 'Notaio', 'Testimone',
+                                                'Autore', 'Disegnatore', 'Editore', 'Incisore',
+                                                'Giudice', 'Agrimensore', 'Rilevatore', 'Miniaturista',
+                                                'Copista', 'Esecutore', 'Progettista', 'Supervisore',
+                                                'Litografo', 'Fotografo inventore', 'Fotografo principale',
+                                                'Ideatore', 'Regista', 'Committente', 'Corrispondente',
+                                                'Curatore', 'Responsabile', 'Partecipante', 'Finanziatore',
+                                                'Possessore', 'Proprietario', 'Detentore dei diritti',
+                                                'Agente collegato')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M084: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico (non ripetibile)&#x0a;
+      did/didnote[@localtype = &quot;NoteDorsali&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/didnote[@localtype = 'NoteDorsali'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M085: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente&#x0a;
+      un did/didnote[@localtype = &quot;NoteDorsali&quot;], allora l'unità documentaria&#x0a;
+      deve rappresentare una &quot;Pergamena&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (did/didnote[@localtype = 'NoteDorsali'])
+                then  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                     /physfacet[@localtype = 'TipologiaDocumentaria']
+                     /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Pergamena'
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M086: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/materialspec[@label = &quot;Colore&quot;], allora l'unità documentaria deve&#x0a;
+      rappresentare o una &quot;Cartografia&quot;, o un &quot;Audiovisivo&quot;, o una&#x0a;
+      &quot;Grafica&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (did/materialspec[@label = 'Colore'])
+                then    did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                       /physfacet[@localtype = 'TipologiaDocumentaria']
+                       /genreform/part[@localtype = 'TracciatoSpecifico']/text()
+                     = ('Cartografia', 'Audiovisivo', 'Grafica')
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M087: In &lt;archdesc>, quando rappresenta una &quot;Cartografia&quot;, se è presente un&#x0a;
+      did/materialspec[@label = &quot;Colore&quot;], allora il contenuto del&#x0a;
+      &lt;materialspec> deve soddisfare una ben precisa lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if ( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                    /physfacet[@localtype = 'TipologiaDocumentaria']
+                    /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Cartografia')
+                then every $mat in did/materialspec[@label = 'Colore']
+                     satisfies $mat/text() = ('Bianco e nero', 'Misto', 'Monocromatico', 'Multicolore')
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M088: In &lt;archdesc>, quando rappresenta una &quot;Grafica&quot;, se è presente un&#x0a;
+      did/materialspec[@label = &quot;Colore&quot;], allora il contenuto del&#x0a;
+      &lt;materialspec> deve soddisfare una ben precisa lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if ( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                    /physfacet[@localtype = 'TipologiaDocumentaria']
+                    /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Grafica')
+                then every $mat in did/materialspec[@label = 'Colore']
+                     satisfies $mat/text() = ('Altro', 'Bianco e nero', 'Colorato a mano', 'Misto',
+                                              'Monocromatico', 'Multicolore')
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M089: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico (non ripetibile)&#x0a;
+      did/materialspec[@label = &quot;Formato&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/materialspec[@label = 'Formato'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M090: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente&#x0a;
+      un did/materialspec[@label = &quot;Formato&quot;], allora l'unità documentaria deve&#x0a;
+      rappresentare un &quot;Audiovisivo&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (did/materialspec[@label = 'Formato'])
+                then  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                     /physfacet[@localtype = 'TipologiaDocumentaria']
+                     /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Audiovisivo'
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M091: In &lt;archdesc>, se è presente un did/materialspec[@label = &quot;Formato&quot;],&#x0a;
+      allora il contenuto del &lt;materialspec> deve soddisfare una ben precisa&#x0a;
+      lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $mat in did/materialspec[@label = 'Formato']
+                satisfies $mat/text() = ('AVI', 'MPEG-4', 'MOV', 'MP3', 'WAW')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M092: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente&#x0a;
+      un did/materialspec[@label = &quot;Materia&quot;], allora l'unità documentaria deve&#x0a;
+      rappresentare una &quot;Grafica&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (did/materialspec[@label = 'Materia'])
+                then  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                     /physfacet[@localtype = 'TipologiaDocumentaria']
+                     /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Grafica'
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M093: In &lt;archdesc>, se è presente un did/materialspec[@label = &quot;Materia&quot;],&#x0a;
+      allora il contenuto del &lt;materialspec> deve soddisfare una ben precisa&#x0a;
+      lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $mat in did/materialspec[@label = 'Materia']
+                satisfies $mat/text() = ('Altro', 'Carta', 'Carta giapponese', 'Carta velina',
+                                         'Carta oliata', 'Carta paglierina', 'Carta patinata',
+                                         'Carta pergamena', 'Carta quadrettata', 'Carta timbrata',
+                                         'Carta tinta', 'Carta velina', 'Carta vellutata',
+                                         'Carta vergata', 'Cartoncino', 'Cartoncino bianco',
+                                         'Cartoncino colorato', 'Cartoncino da spolvero',
+                                         'Pergamena', 'Cartone', 'Cera', 'Cuoio', 'Gesso', 'Legno',
+                                         'Metallo', 'Seta', 'Tela', 'Tessuto Vetro', 'Carta telata',
+                                         'Carta da lucido', 'Carta millimetrata', 'Radex',
+                                         'Item/supporto elettronico', 'Supporti misti')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M094: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico (non ripetibile) did/materialspec con&#x0a;
+      @localtype pari o ad &quot;Angolare&quot; o a &quot;Lineare&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/materialspec[@localtype = ('Angolare', 'Lineare')])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M095: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente&#x0a;
+      un did/materialspec con @localtype o pari ad &quot;Angolare&quot; o a &quot;Lineare&quot;,&#x0a;
+      allora l'unità documentaria deve rappresentare o una &quot;Cartografia&quot; o una&#x0a;
+      &quot;Grafica&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (did/materialspec[@localtype = ('Angolare', 'Lineare')])
+                then  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                     /physfacet[@localtype = 'TipologiaDocumentaria']
+                     /genreform/part[@localtype = 'TracciatoSpecifico']/text() = ('Cartografia', 'Grafica')
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M096: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico (non ripetibile)&#x0a;
+      did/materialspec[@label = &quot;Orientamento&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/materialspec[@localtype = 'Orientamento'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M097: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente&#x0a;
+      un did/materialspec[@label = &quot;Orientamento&quot;], allora l'unità documentaria&#x0a;
+      deve rappresentare una &quot;Cartografia&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (did/materialspec[@label = 'Orientamento'])
+                then  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                     /physfacet[@localtype = 'TipologiaDocumentaria']
+                     /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Cartografia'
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M098: In &lt;archdesc>, se è presente un&#x0a;
+      did/materialspec[@label = &quot;Orientamento&quot;], allora il contenuto del&#x0a;
+      &lt;materialspec> deve soddisfare una ben precisa lista chiusa&#x0a;
+      di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $mat in did/materialspec[@localtype = 'Orientamento']
+                satisfies $mat/text() = ('Nord', 'Sud', 'Est', 'Ovest', 'Nord-Est',
+                                         'Nord-Ovest', 'Sud-Est', 'Sud-Ovest')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M099: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/descriptivenote/p/geogname, dove il @localtype di&#x0a;
+      &lt;geogname> è pari a &quot;LuogoRappresentato&quot;], allora l'unità documentaria&#x0a;
+      deve rappresentare o una &quot;Cartografia&quot;, o una &quot;Fotografia&quot;, o una&#x0a;
+      &quot;Grafica&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $geo in  did/physdescstructured/descriptivenote/p
+                              /geogname[@localtype = 'LuogoRappresentato']
+                satisfies    did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                            /physfacet[@localtype = 'TipologiaDocumentaria']
+                            /genreform/part[@localtype = 'TracciatoSpecifico']/text()
+                          = ('Cartografia', 'Fotografia', 'Grafica')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M100: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico (non ripetibile)&#x0a;
+      did/physdescstructured/descriptivenote/p/quote[@localtype = &quot;Explicit&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/physdescstructured/descriptivenote/p/quote[@localtype = 'Explicit'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M101: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/descriptivenote/p/quote[@localtype = &quot;Explicit&quot;],&#x0a;
+      allora l'unità documentaria deve rappresentare un &quot;Manoscritto&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $quote in did/physdescstructured/descriptivenote/p/quote[@localtype = 'Explicit']
+                satisfies  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                          /physfacet[@localtype = 'TipologiaDocumentaria']
+                          /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Manoscritto'"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M102: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente al più, un unico (non ripetibile)&#x0a;
+      did/physdescstructured/descriptivenote/p/quote[@localtype = &quot;Implicit&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/physdescstructured/descriptivenote/p/quote[@localtype = 'Implicit'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M103: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/descriptivenote/p/quote[@localtype = &quot;Implicit&quot;],&#x0a;
+      allora l'unità documentaria deve rappresentare un &quot;Manoscritto&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $quote in did/physdescstructured/descriptivenote/p/quote[@localtype = 'Implicit']
+                satisfies  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                          /physfacet[@localtype = 'TipologiaDocumentaria']
+                          /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Manoscritto'"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M104: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/descriptivenote/p/subject, dove il @localtype di&#x0a;
+      &lt;subject> è pari a &quot;Occasione&quot;], allora l'unità documentaria&#x0a;
+      deve rappresentare una &quot;Fotografia&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $quote in did/physdescstructured/descriptivenote/p/subject[@localtype = 'Occasione']
+                satisfies  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                          /physfacet[@localtype = 'TipologiaDocumentaria']
+                          /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Fotografia'"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M105: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico (non ripetibile)
+      did/physdescstructured/dimensions[@localtype = &quot;Altezza&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count( did/physdescstructured/dimensions[@localtype = 'Altezza'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M108: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/dimensions[@localtype = &quot;Altezza&quot;], allora&#x0a;
+      &lt;dimensions> deve avere contenuto non nullo
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $dim in did/physdescstructured/dimensions[@localtype = 'Altezza']
+                satisfies $dim/text() != ''"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M109: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico (non ripetibile)
+      did/physdescstructured/dimensions[@localtype = &quot;Larghezza&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/physdescstructured/dimensions[@localtype = 'Larghezza'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M112: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/dimensions[@localtype = &quot;Larghezza&quot;], allora&#x0a;
+      &lt;dimensions> deve avere contenuto&quot; non nullo
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $dim in did/physdescstructured/dimensions[@localtype = 'Larghezza']
+                satisfies $dim/text() != ''"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M113: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico (non ripetibile)&#x0a;
+      did/physdescstructured/physfacet, dove il @physdescstructuredtype del&#x0a;
+      &lt;physdescstructured> vale &quot;materialtype&quot; e dove il @localtype&#x0a;
+      del &lt;physfacet> vale &quot;AStampa&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                           /physfacet[@localtype = 'AStampa'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M114: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/physfacet, dove il @physdescstructuredtype del&#x0a;
+      &lt;physdescstructured> vale &quot;materialtype&quot; e dove il @localtype del&#x0a;
+      &lt;physfacet> vale &quot;AStampa&quot;, allora l'unità documentaria deve&#x0a;
+      rappresentare una &quot;Cartografia&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if ( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                    /physfacet[@localtype = 'AStampa'])
+                then  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                     /physfacet[@localtype = 'TipologiaDocumentaria']
+                     /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Cartografia'
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M115: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/physfacet, dove il @physdescstructuredtype del&#x0a;
+      &lt;physdescstructured> vale &quot;materialtype&quot; e dove il @localtype del&#x0a;
+      &lt;physfacet> vale &quot;AStampa&quot;, allora il contenuto di &lt;physfacet> deve&#x0a;
+      soddisfare una precisa lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $phys in  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                               /physfacet[@localtype = 'AStampa']
+                satisfies $phys/text() = ('Sì', 'Si', 'No')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M116: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/physfacet, dove il @physdescstructuredtype del&#x0a;
+      &lt;physdescstructured> vale &quot;materialtype&quot; e dove il @localtype del&#x0a;
+      &lt;physfacet> vale &quot;MediazioniGrafiche&quot;, allora l'unità documentaria deve&#x0a;
+      rappresentare una &quot;Cartografia&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if ( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                    /physfacet[@localtype = 'MediazioniGrafiche'])
+                then  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                     /physfacet[@localtype = 'TipologiaDocumentaria']
+                     /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Cartografia'
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M117: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/physfacet, dove il @physdescstructuredtype del&#x0a;
+      &lt;physdescstructured> vale &quot;materialtype&quot; e dove il @localtype del&#x0a;
+      &lt;physfacet> vale &quot;MediazioniGrafiche&quot;, allora il contenuto di &lt;physfacet>&#x0a;
+      deve soddisfare una precisa lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $phys in  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                               /physfacet[@localtype = 'MediazioniGrafiche']
+                satisfies $phys/text() = ('Matita', 'Inchiostri policromi', 'Inchiostro nero',
+                                          'Acquerello', 'Tempera', 'Sanguigna', 'Tecnica mista',
+                                          'Penna')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M118: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico (non ripetibile)&#x0a;
+      did/physdescstructured/physfacet, dove il @physdescstructuredtype del&#x0a;
+      &lt;physdescstructured> vale &quot;materialtype&quot; e dove il @localtype del&#x0a;
+      &lt;physfacet> vale &quot;RappresentazioneTematica&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                           /physfacet[@localtype = 'RappresentazioneTematica'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M119: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/physfacet, dove il @physdescstructuredtype del&#x0a;
+      &lt;physdescstructured> vale &quot;materialtype&quot; e dove il @localtype del&#x0a;
+      &lt;physfacet> vale &quot;RappresentazioneTematica&quot;, allora l'unità documentaria&#x0a;
+      deve rappresentare una &quot;Cartografia&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if ( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                    /physfacet[@localtype = 'RappresentazioneTematica'])
+                then  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                     /physfacet[@localtype = 'TipologiaDocumentaria']
+                     /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Cartografia'
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M120: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/physfacet, dove il @physdescstructuredtype del&#x0a;
+      &lt;physdescstructured> vale &quot;materialtype&quot; e dove il @localtype del&#x0a;
+      &lt;physfacet> vale &quot;RappresentazioneTematica&quot;, allora il contenuto di&#x0a;
+      &lt;physfacet> deve soddisfare una precisa lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $phys in  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                               /physfacet[@localtype = 'RappresentazioneTematica']
+                satisfies $phys/text() = ('Carta celeste', 'Carta geografica', 'Carta geologica',
+                                          'Carta idrografica', 'Carta corografica', 'Carta militare',
+                                          'Carta mineralogica', 'Carta nautica', 'Carta topografica',
+                                          'Mappa catastale', 'Carta IGM')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M121: In &lt;archdesc>, quando rappresenta un'unità documentaria di tipo&#x0a;
+      &quot;Cartografia&quot; o &quot;Fotografia&quot;, deve essere presente, al più, un unico (non&#x0a;
+      ripetibile) did/physdescstructured/physfacet, dove il&#x0a;
+      @physdescstructuredtype del &lt;physdescstructured> vale &quot;materialtype&quot; e&#x0a;
+      dove il @localtype del &lt;physfacet> vale &quot;Tecnica&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if ( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                    /physfacet[@localtype = 'TipologiaDocumentaria']
+                    /genreform/part[@localtype = 'TracciatoSpecifico']/text() = ('Cartografia', 'Fotografia'))
+                then (1 >= count( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                                 /physfacet[@localtype = 'Tecnica']))
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M122: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/physfacet, dove il @physdescstructuredtype del&#x0a;
+      &lt;physdescstructured> vale &quot;materialtype&quot; e dove il @localtype del&#x0a;
+      &lt;physfacet> vale &quot;Tecnica&quot;, allora l'unità documentaria deve&#x0a;
+      rappresentare o una &quot;Cartografia&quot;, o un &quot;Audiovisivo&quot;,&#x0a;
+      o una &quot;Fotografia&quot;, o una &quot;Grafica&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if ( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                    /physfacet[@localtype = 'Tecnica'])
+                then    did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                       /physfacet[@localtype = 'TipologiaDocumentaria']
+                       /genreform/part[@localtype = 'TracciatoSpecifico']/text()
+                     = ('Cartografia', 'Audiovisivo', 'Fotografia', 'Grafica')
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M123: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/physfacet, dove il @physdescstructuredtype del&#x0a;
+      &lt;physdescstructured> vale &quot;materialtype&quot; e dove il @localtype del&#x0a;
+      &lt;physfacet> vale &quot;Tecnica&quot;, allora, quando l'unita' documentaria&#x0a;
+      rappresenta una &quot;Cartografia&quot;, il contenuto di &lt;physfacet> deve&#x0a;
+      soddisfare una precisa lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if ( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                    /physfacet[@localtype = 'TipologiaDocumentaria']
+                    /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Cartografia')
+                then every $phys in  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                                    /physfacet[@localtype = 'Tecnica']
+                     satisfies $phys/text() = ('Acquaforte', 'Cianografia', 'Disegno', 'Eliografia',
+                                               'Fotoincisione', 'Fotolitografia', 'Ignoto', 'Incisione',
+                                               'Litografia', 'Manoscritto', 'Serigrafia', 'Xilografia')
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M124: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/physfacet, dove il @physdescstructuredtype del&#x0a;
+      &lt;physdescstructured> vale &quot;materialtype&quot; e dove il @localtype del&#x0a;
+      &lt;physfacet> vale &quot;Tecnica&quot;, allora, quando l'unita' documentaria&#x0a;
+      rappresenta una &quot;Fotografia&quot;, il contenuto di &lt;physfacet> deve&#x0a;
+      soddisfare una precisa lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if ( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                    /physfacet[@localtype = 'TipologiaDocumentaria']
+                    /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Fotografia')
+                then every $phys in  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                                    /physfacet[@localtype = 'Tecnica']
+                     satisfies   $phys/text()
+                               = ('Albumina', 'Aristotipo', 'Autocromia/vetro',
+                                  'Bromolio', 'Calotipo', 'Carbone', 'Carta celloidina',
+                                  'Carta salata', 'Cianotipo', 'Collodio', 'Collodio matt',
+                                  'Collotipia', 'Dagherrotipo', 'Disegno', 'Documento',
+                                  'Fotocromolitografia', 'Fotografia digitale', 'Fotoincisione',
+                                  &quot;Gelatina ai sali d'argento&quot;,
+                                  &quot;Gelatina ai sali d'argento/carta&quot;,
+                                  &quot;Gelatina ai sali d'argento/pellicola&quot;,
+                                  &quot;Gelatina ai sali d'argento/pellicola (acetati)&quot;,
+                                  &quot;Gelatina ai sali d'argento/pellicola (nitrato)&quot;,
+                                  &quot;Gelatina ai sali d'argento/pellicola (poliestere)&quot;,
+                                  &quot;Gelatina ai sali d'argento/vetro&quot;, 'Kallytipo',
+                                  'Platinotipo', 'Processi a sviluppo cromogeno',
+                                  'Stampa ai pigmenti', 'Stampa digitale', 'Stampa fotomeccanica',
+                                  &quot;Stampa a getto d'inchiostro&quot;, 'Stampa tipografica',
+                                  'Stampa tipografica a mezzitoni', 'Woodburytipia')
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M125: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/physfacet, dove il @physdescstructuredtype del&#x0a;
+      &lt;physdescstructured> vale &quot;materialtype&quot; e dove il @localtype del&#x0a;
+      &lt;physfacet> vale &quot;Tecnica&quot;, allora, quando l'unita' documentaria&#x0a;
+      rappresenta una &quot;Grafica&quot;, il contenuto di &lt;physfacet> deve soddisfare&#x0a;
+      una precisa lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if ( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                    /physfacet[@localtype = 'TipologiaDocumentaria']
+                    /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Grafica')
+                then every $phys in  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                                    /physfacet[@localtype = 'Tecnica']
+                     satisfies $phys/text() = ('Acquaforte', 'Acquerello', 'Acquatina', 'Algrafia', 'Altro',
+                                               'Blu print', 'Bulino', 'Calcografia', 'Camaïeu', 'Carborundum',
+                                               'Chiaroscuro', 'Cliché-verre', 'Collage', 'Collografia',
+                                               'Coloritura', 'Computergrafica', 'Cromolitografia',
+                                               'Cromozincografia', 'Doratura', 'Eliografia', 'Eliotipia',
+                                               'Fotoincisione', 'Fotolitografia', 'Gipsografia', 'Lavis',
+                                               'Linoleografia', 'Litografia', 'Offset', 'Oleografia',
+                                               'Pochoir', 'Puntasecca', 'Serigrafia', 'Stampa tipografica',
+                                               'Vernice molle', 'Vitrografia', 'Xilografia')
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M126: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico (non ripetibile)&#x0a;
+      did/physdescstructured/physfacet/genreform/part, dove il&#x0a;
+      @physdescstructuredtype del &lt;physdescstructured> vale &quot;materialtype&quot;,&#x0a;
+      e dove il @localtype di &lt;physfacet> vale &quot;TipologiaSpecifica&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                           /physfacet[@localtype = 'TipologiaSpecifica']/genreform/part)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M127: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/physfacet/genreform/part, dove il&#x0a;
+      @physdescstructuredtype del &lt;physdescstructured> vale &quot;materialtype&quot;,&#x0a;
+      dove il @localtype di &lt;physfacet> vale &quot;TipologiaSpecifica&quot;, allora&#x0a;
+      l'unità documentaria deve rappresentare o una &quot;Cartografia&quot;,&#x0a;
+      o un &quot;Audiovisivo&quot;, o una &quot;Fotografia&quot;, o una &quot;Grafica&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if ( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                    /physfacet[@localtype = 'TipologiaSpecifica']/genreform/part)
+                then    did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                       /physfacet[@localtype = 'TipologiaDocumentaria']
+                       /genreform/part[@localtype = 'TracciatoSpecifico']/text()
+                     = ('Cartografia', 'Audiovisivo', 'Fotografia', 'Grafica')
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M128: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/physfacet/genreform/part, dove il&#x0a;
+      @physdescstructuredtype del &lt;physdescstructured> vale &quot;materialtype&quot;,&#x0a;
+      dove il @localtype di &lt;physfacet> vale &quot;TipologiaSpecifica&quot; allora,&#x0a;
+      quando l'unità documentaria rappresenta una &quot;Cartografia&quot;, il contenuto&#x0a;
+      del &lt;part> deve soddisfare una precisa lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if ( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                    /physfacet[@localtype = 'TipologiaDocumentaria']
+                    /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Cartografia')
+                then every $part in  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                                    /physfacet[@localtype = 'TipologiaSpecifica']/genreform/part
+                     satisfies $part/text() = ('Atlante', 'Mappa', 'Modello', 'Pianta', 'Profilo',
+                                               'Sezione', 'Veduta', 'Planimetria', 'Planivolumetria',
+                                               'Planisfero', &quot;Vista a volo d'uccello&quot;,
+                                               'Veduta prospettica', 'Veduta assonometrica',
+                                               'Studio/schizzo', 'Prospetto', 'Rilievo')
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M129: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/physfacet/genreform/part, dove il&#x0a;
+      @physdescstructuredtype del &lt;physdescstructured> vale &quot;materialtype&quot; e&#x0a;
+      dove il @localtype del &lt;physfacet> vale &quot;TipologiaSpecifica&quot;, allora,&#x0a;
+      quando l'unità documentaria rappresenta un &quot;Audiovisivo&quot;, il contenuto&#x0a;
+      del &lt;part> deve soddisfare una precisa lista chiusa di valori&#x0a;
+      emmissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if ( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                    /physfacet[@localtype = 'TipologiaDocumentaria']
+                    /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Audiovisivo')
+                then every $part in  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                                    /physfacet[@localtype = 'TipologiaSpecifica']/genreform/part
+                     satisfies $part/text() = ('Documentario', 'Film', 'Intervista',
+                                               'Presentazione', 'Videointervista',
+                                               'Altro', 'Audio', 'Video')
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M130: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/physfacet/genreform/part, dove il&#x0a;
+      @physdescstructuredtype del &lt;physdescstructured> vale &quot;materialtype&quot; e&#x0a;
+      dove il @localtype del &lt;physfacet> vale &quot;TipologiaSpecifica&quot;, allora,&#x0a;
+      quando l'unità documentaria rappresenta una &quot;Fotografia&quot;, il contenuto&#x0a;
+      del &lt;part> deve soddisfare una precisa lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if ( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                    /physfacet[@localtype = 'TipologiaDocumentaria']
+                    /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Fotografia')
+                then every $part in  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                                    /physfacet[@localtype = 'TipologiaSpecifica']/genreform/part
+                     satisfies $part/text() = ('Negativo', 'Positivo', 'Diapositiva', 'Unicum',
+                                               'Fotografia virtuale', 'Materiale vario')
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M131: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/physfacet/genreform/part, dove il&#x0a;
+      @physdescstructuredtype del &lt;physdescstructured> vale &quot;materialtype&quot; e&#x0a;
+      dove il @localtype del &lt;physfacet> vale &quot;TipologiaSpecifica&quot;, allora,&#x0a;
+      quando l'unità documentaria rappresenta una &quot;Grafica&quot;, il contenuto&#x0a;
+      del &lt;part> deve soddisfare una precisa lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if ( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                    /physfacet[@localtype = 'TipologiaDocumentaria']
+                    /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Grafica')
+                then every $part in  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                                    /physfacet[@localtype = 'TipologiaSpecifica']/genreform/part
+                     satisfies $part/text() = ('Biglietto da visita', 'Disegno', 'Disegno tecnico',
+                                               'Illustrazione', 'Stampa', 'Disegno artistico')
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M132: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico (non ripetibile)&#x0a;
+      did/physdescstructured/physfacet/genreform/part, dove il&#x0a;
+      @physdescstructuredtype del &lt;physdescstructured> vale &quot;materialtype&quot; e&#x0a;
+      dove il @localtype di &lt;physfacet> vale &quot;StadioDocumento&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                           /physfacet[@localtype = 'StadioDocumento']/genreform/part)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M133: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/physfacet/genreform/part, dove il&#x0a;
+      @physdescstructuredtype del &lt;physdescstructured> vale &quot;materialtype&quot; e&#x0a;
+      dove il @localtype di &lt;physfacet> vale &quot;StadioDocumento&quot;, allora l'unità&#x0a;
+      documentaria deve rappresentare o un &quot;Manoscritto&quot;, o una &quot;Pergamena&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if ( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                    /physfacet[@localtype = 'StadioDocumento']/genreform/part)
+                then    did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                       /physfacet[@localtype = 'TipologiaDocumentaria']
+                       /genreform/part[@localtype = 'TracciatoSpecifico']/text()
+                     = ('Manoscritto', 'Pergamena')
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M134: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/physfacet/genreform, dove il&#x0a;
+      @physdescstructuredtype del &lt;physdescstructured> vale &quot;materialtype&quot; e&#x0a;
+      dove il @localtype del &lt;physfacet> vale &quot;StadioDocumento&quot;, allora il&#x0a;
+      contenuto del &lt;part> deve soddisfare una precisa lista chiusa di valori&#x0a;
+      ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $part in  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                               /physfacet[@localtype = 'StadioDocumento']/genreform/part
+                satisfies $part/text() = ('Minuta', 'Originale', 'Copia autentica',
+                                          'Copia semplice', 'Copia tarda', 'Copia coeva')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M135: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico (non ripetibile)&#x0a;
+      did/physdescstructured/physfacet/genreform/part, dove il&#x0a;
+      @physdescstructuredtype del &lt;physdescstructured> vale &quot;materialtype&quot; e&#x0a;
+      dove il @localtype di &lt;physfacet> vale &quot;StatoRedazione&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                           /physfacet[@localtype = 'StatoRedazione']/genreform/part)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M136: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/physfacet/genreform/part, dove il&#x0a;
+      @physdescstructuredtype del &lt;physdescstructured> vale &quot;materialtype&quot; e&#x0a;
+      dove il @localtype di &lt;physfacet> vale &quot;StatoRedazione&quot;, allora l'unità&#x0a;
+      documentaria deve rappresentare una &quot;Cartografia&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if ( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                    /physfacet[@localtype = 'StatoRedazione']/genreform/part)
+                then  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                     /physfacet[@localtype = 'TipologiaDocumentaria']
+                     /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Cartografia'
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M137: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/physfacet/genreform, dove il&#x0a;
+      @physdescstructuredtype del &lt;physdescstructured> vale &quot;materialtype&quot; e&#x0a;
+      dove il @localtype del &lt;physfacet> vale &quot;StatoRedazione&quot;, allora il&#x0a;
+      contenuto del &lt;part> deve soddisfare una precisa lista chiusa di valori&#x0a;
+      ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $part in  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                               /physfacet[@localtype = 'StatoRedazione']/genreform/part
+                satisfies $part/text() = ('Abbozzo', 'Minuta', 'Originale', 'Copia autentica',
+                                          'Copia semplice', 'Copia tarda', 'Copia coeva')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M138: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/unitdatestructured/datesingle[@localtype = &quot;DataRipresa&quot;], allora&#x0a;
+      l'unità documentaria deve rappresentare una &quot;Fotografia&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (did/unitdatestructured/datesingle[@localtype = 'DataRipresa'])
+                then  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                     /physfacet[@localtype = 'TipologiaDocumentaria']
+                     /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Fotografia'
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M139: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico (non ripetibile)&#x0a;
+      did/unitid[@localtype = &quot;NumeroTavola&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/unitid[@localtype = 'NumeroTavola'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M140: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/unitid[@localtype = &quot;NumeroTavola&quot;], allora l'unità documentaria&#x0a;
+      deve rappresentare una &quot;Cartografia&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (did/unitid[@localtype = 'NumeroTavola'])
+                then  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                     /physfacet[@localtype = 'TipologiaDocumentaria']
+                     /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Cartografia'
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M141: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico (non ripetibile)&#x0a;
+      scopecontent[@localtype = &quot;SoggettoIdentificato&quot;], o figlio di&#x0a;
+      &lt;archdesc>, o discendente di un ulteriore &lt;scopecontent>, figlio&#x0a;
+      di &lt;archdesc>
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= (  count(scopecontent[@localtype = 'SoggettoIdentificato'])
+                      + count(scopecontent//scopecontent[@localtype = 'SoggettoIdentificato']))"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M142: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      scopecontent[@localtype = &quot;SoggettoIdentificato&quot;], o figlio di&#x0a;
+      &lt;archdesc>, o discendente di un ulteriore &lt;scopecontent>, figlio di&#x0a;
+      &lt;archdesc>, allora l'unità documentaria deve rappresentare&#x0a;
+      una &quot;Fotografia&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (   scopecontent[@localtype = 'SoggettoIdentificato']
+                    or scopecontent//scopecontent[@localtype = 'SoggettoIdentificato'])
+                then  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                     /physfacet[@localtype = 'TipologiaDocumentaria']
+                     /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Fotografia'
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M144: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/physfacet, dove il @physdescstructuredtype del&#x0a;
+      &lt;physdescstructured> vale &quot;materialtype&quot; e dove il @localtype del&#x0a;
+      &lt;physfacet> vale &quot;Esecuzione&quot;, allora l'unità documentaria deve&#x0a;
+      rappresentare una &quot;Grafica&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if ( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                    /physfacet[@localtype = 'Esecuzione'])
+                then  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                     /physfacet[@localtype = 'TipologiaDocumentaria']
+                     /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Grafica'
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M145: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/physfacet, dove il @physdescstructuredtype del&#x0a;
+      &lt;physdescstructured> vale &quot;materialtype&quot; e dove il @localtype del&#x0a;
+      &lt;physfacet> vale &quot;Esecuzione&quot;, allora il contenuto del &lt;physfacet> deve&#x0a;
+      soddisfare una precisa lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $phys in  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                               /physfacet[@localtype = 'Esecuzione']
+                satisfies $phys/text() = ('Mano libera', 'Tecnigrafo',
+                                          'Elaborazione elettronica o digitale')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M146: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico (non ripetibile)&#x0a;
+      scopecontent[@localtype = &quot;NotaArchivisticoCodicologica&quot;], o figlio di&#x0a;
+      &lt;archdesc>, o discendente di un ulteriore &lt;scopecontent>, figlio&#x0a;
+      di &lt;archdesc>
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= (  count(scopecontent[@localtype = 'NotaArchivisticoCodicologica'])
+                      + count(scopecontent//scopecontent[@localtype = 'NotaArchivisticoCodicologica']))"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M147: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      scopecontent[@localtype = &quot;NotaArchivisticoCodicologica&quot;], o figlio di&#x0a;
+      &lt;archdesc>, o discendente di un ulteriore &lt;scopecontent>, figlio di&#x0a;
+      &lt;archdesc>, allora l'unità documentaria deve rappresentare&#x0a;
+      un &quot;Manoscritto&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (   scopecontent[@localtype = 'NotaArchivisticoCodicologica']
+                    or scopecontent//scopecontent[@localtype = 'NotaArchivisticoCodicologica'])
+                then  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                     /physfacet[@localtype = 'TipologiaDocumentaria']
+                     /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Manoscritto'
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M148: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico (non ripetibile)&#x0a;
+      scopecontent[@localtype = &quot;NotaArchivisticoDiplomatica&quot;], o figlio di&#x0a;
+      &lt;archdesc>, o discendente di un ulteriore &lt;scopecontent>, figlio&#x0a;
+      di &lt;archdesc>
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= (  count(scopecontent[@localtype = 'NotaArchivisticoDiplomatica'])
+                      + count(scopecontent//scopecontent[@localtype = 'NotaArchivisticoDiplomatica']))"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M149: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      scopecontent[@localtype = &quot;NotaArchivisticoDiplomatica&quot;], o figlio di&#x0a;
+      &lt;archdesc>, o discendente di un ulteriore &lt;scopecontent>, figlio di&#x0a;
+      &lt;archdesc>, allora l'unità documentaria deve rappresentare&#x0a;
+      una &quot;Pergamena&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if (   scopecontent[@localtype = 'NotaArchivisticoDiplomatica']
+                    or scopecontent//scopecontent[@localtype = 'NotaArchivisticoDiplomatica'])
+                then  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                     /physfacet[@localtype = 'TipologiaDocumentaria']
+                     /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Pergamena'
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M150: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico (non ripetibile)&#x0a;
+      did/physdescstructured/physfacet/geogname/geographiccoordinates, dove il&#x0a;
+      @physdescstructuredtype del &lt;physdescstructured> vale &quot;materialtype&quot;,&#x0a;
+      dove il @coordinatesystem del &lt;geographiccoordinates> vale &quot;WSG84&quot;, e&#x0a;
+      dove l'@altrender del medesimo &lt;geographiccoordinates> vale &quot;Latitudine&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                           /physfacet/geogname/geographiccoordinates[    @coordinatesystem = 'WGS84'
+                                                                     and @altrender = 'Latitudine'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M151: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/physfacet/geogname/geographiccoordinates, dove il&#x0a;
+      @physdescstructuredtype del &lt;physdescstructured> vale &quot;materialtype&quot;,&#x0a;
+      dove il @coordinatesystem del &lt;geographiccoordinates> vale &quot;WSG84&quot;, e&#x0a;
+      dove l'@altrender del medesimo &lt;geographiccoordinates> vale &quot;Latitudine&quot;,&#x0a;
+      allora l'unità documentaria deve rappresentare una &quot;Cartografia&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if ( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                    /physfacet/geogname/geographiccoordinates[    @coordinatesystem = 'WGS84'
+                                                              and @altrender = 'Latitudine'])
+                then  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                     /physfacet[@localtype = 'TipologiaDocumentaria']
+                     /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Cartografia'
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M152: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico (non ripetibile)&#x0a;
+      did/physdescstructured/physfacet/geogname/geographiccoordinates, dove il&#x0a;
+      @physdescstructuredtype del &lt;physdescstructured> vale &quot;materialtype&quot;,&#x0a;
+      dove il @coordinatesystem del &lt;geographiccoordinates> vale &quot;WSG84&quot;, e&#x0a;
+      dove l'@altrender del medesimo &lt;geographiccoordinates> vale &quot;Longitudine&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                           /physfacet/geogname/geographiccoordinates[    @coordinatesystem = 'WGS84'
+                                                                     and @altrender = 'Longitudine'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M153: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/physfacet/geogname/geographiccoordinates, dove il&#x0a;
+      @physdescstructuredtype del &lt;physdescstructured> vale &quot;materialtype&quot;,&#x0a;
+      dove il @coordinatesystem del &lt;geographiccoordinates> vale &quot;WSG84&quot;, e&#x0a;
+      dove l'@altrender del medesimo &lt;geographiccoordinates> vale&#x0a;
+      &quot;Longitudine&quot;, allora l'unità documentaria deve rappresentare una&#x0a;
+      &quot;Cartografia&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if ( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                    /physfacet/geogname/geographiccoordinates[    @coordinatesystem = 'WGS84'
+                                                              and @altrender = 'Longitudine'])
+                then  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                     /physfacet[@localtype = 'TipologiaDocumentaria']
+                     /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Cartografia'
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M154: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico (non ripetibile)&#x0a;
+      did/physdescstructured/physfacet/geogname/geographiccoordinates, dove il&#x0a;
+      @physdescstructuredtype del &lt;physdescstructured> vale &quot;materialtype&quot;,&#x0a;
+      dove il @coordinatesystem del &lt;geographiccoordinates> vale &quot;WSG84&quot;, e&#x0a;
+      dove l'@altrender del medesimo &lt;geographiccoordinates> vale &quot;Reticolo&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                           /physfacet/geogname/geographiccoordinates[    @coordinatesystem = 'WGS84'
+                                                                     and @altrender = 'Reticolo'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M155: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/physfacet/geogname/geographiccoordinates, dove il&#x0a;
+      @physdescstructuredtype del &lt;physdescstructured> vale &quot;materialtype&quot;,&#x0a;
+      dove il @coordinatesystem del &lt;geographiccoordinates> vale &quot;WSG84&quot;, e&#x0a;
+      dove l'@altrender del medesimo &lt;geographiccoordinates> vale &quot;Reticolo&quot;,&#x0a;
+      allora l'unità documentaria deve rappresentare una &quot;Cartografia&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if ( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                    /physfacet/geogname/geographiccoordinates[    @coordinatesystem = 'WGS84'
+                                                              and @altrender = 'Reticolo'])
+                then  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                     /physfacet[@localtype = 'TipologiaDocumentaria']
+                     /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Cartografia'
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M156: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico (non ripetibile)&#x0a;
+      did/physdescstructured/physfacet/geogname/geographiccoordinates, dove il&#x0a;
+      @physdescstructuredtype del &lt;physdescstructured> vale &quot;materialtype&quot;,&#x0a;
+      dove il @coordinatesystem del &lt;geographiccoordinates> vale &quot;WSG84&quot;, e&#x0a;
+      dove l'@altrender del medesimo &lt;geographiccoordinates> vale &quot;Proiezione&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                           /physfacet/geogname/geographiccoordinates[    @coordinatesystem = 'WGS84'
+                                                                     and @altrender = 'Proiezione'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M157: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/physfacet/geogname/geographiccoordinates, dove il&#x0a;
+      @physdescstructuredtype del &lt;physdescstructured> vale &quot;materialtype&quot;,&#x0a;
+      dove il @coordinatesystem del &lt;geographiccoordinates> vale &quot;WSG84&quot;, e&#x0a;
+      dove l'@altrender del medesimo &lt;geographiccoordinates> vale &quot;Proiezione&quot;,&#x0a;
+      allora l'unità documentaria deve rappresentare una &quot;Cartografia&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if ( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                    /physfacet/geogname/geographiccoordinates[    @coordinatesystem = 'WGS84'
+                                                              and @altrender = 'Proiezione'])
+                then  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                     /physfacet[@localtype = 'TipologiaDocumentaria']
+                     /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Cartografia'
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M158: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/physfacet/geogname/geographiccoordinates, dove il&#x0a;
+      @physdescstructuredtype del &lt;physdescstructured> vale &quot;materialtype&quot;,&#x0a;
+      dove il @coordinatesystem del &lt;geographiccoordinates> vale &quot;WSG84&quot;, e&#x0a;
+      dove l'@altrender del medesimo &lt;geographiccoordinates> vale &quot;Proiezione&quot;,&#x0a;
+      allora il contenuto del &lt;geographiccoordinates> deve soddisfare una&#x0a;
+      precisa lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $geog in ( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                                /physfacet/geogname/geographiccoordinates[    @coordinatesystem = 'WGS84'
+                                                                          and @altrender = 'Proiezione'])
+                satisfies $geog/text() = ('Proiezione azimutale', 'Proiezione cilindrica',
+                                          'Proiezione conica', 'Proiezione prospettica',
+                                          'Proiezione traversa di Mercatore UTM')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M182: In &lt;archdesc>, quando rappresenta un'unità documentaria, gli eventuali&#x0a;
+      figli &lt;scopecontent> devono avere @localtype pari a&#x0a;
+      &quot;SoggettoIdentificato&quot; a &quot;NotaArchivisticoCodicologica&quot; a&#x0a;
+      &quot;NotaArchivisticoDiplomatica&quot; a &quot;DescrizioneContenuto&quot; a &quot;Regesto&quot; o a&#x0a;
+      &quot;TrascrizioneEdizione&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $s in scopecontent
+                satisfies $s/@localtype = ('SoggettoIdentificato', 'NotaArchivisticoCodicologica',
+                                           'NotaArchivisticoDiplomatica', 'DescrizioneContenuto',
+                                           'Regesto', 'TrascrizioneEdizione')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M183: In &lt;archdesc>, quando rappresenta un'unità documentaria, è ammesso, al&#x0a;
+      più, un unico figlio &lt;scopecontent> con @localtype pari a &quot;Regesto&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(scopecontent[@localtype = 'Regesto'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M184: In &lt;archdesc>, quando rappresenta un'unità documentaria, è ammesso, al&#x0a;
+      più, un unico figlio &lt;scopecontent> con @localtype&#x0a;
+      pari a &quot;TrascrizioneEdizione&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(scopecontent[@localtype = 'TrascrizioneEdizione'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M312: In &lt;archdesc>, quando rappresenta un'unità documentaria, è ammesso, al&#x0a;
+      più, un&#x0a;
+      fileplan/p/subject[@localtype = &quot;CodiceClassificazione&quot;]/@identifier
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(fileplan/p/subject[@localtype = 'CodiceClassificazione']/@identifier)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M313: In &lt;archdesc>, quando rappresenta un'unità documentaria, è ammesso, al&#x0a;
+      più, un fileplan/p/subject[@localtype = &quot;CodiceClassificazione&quot;]/part&#x0a;
+      dove il @localtype del &lt;part> è pari a &quot;Qualifica&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count( fileplan/p/subject[@localtype = 'CodiceClassificazione']
+                           /part[@localtype = 'Qualifica'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M352: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico&#x0a;
+      did/physdescstructured/physfacet[@localtype = &quot;Tipologia&quot;]
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count(did/physdescstructured/physfacet[@localtype = 'Tipologia'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M353: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico&#x0a;
+      did/physdescstructured/physfacet/genreform/part dove&#x0a;
+      il @physdescstructuredtype del &lt;physdescstructured> è pari&#x0a;
+      a &quot;materialtype&quot;, dove il @localtype del &lt;physfacet> è pari a &quot;Sigillo&quot;,&#x0a;
+      e dove @localtype del &lt;genreform> vale &quot;PresenzaSigillo&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count( did/physdescstructured[@physdescstructuredtype='materialtype']
+                           /physfacet[@localtype='Sigillo']
+                           /genreform[@localtype='PresenzaSigillo']/part)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M578: In &lt;archdesc>, quando rappresenta un'unità documentaria, deve essere&#x0a;
+      presente, al più, un unico (non ripetibile)&#x0a;
+      did/physdescstructured/physfacet con il @physdescstructuredtype del&#x0a;
+      &lt;physdescstructured> vale &quot;materialtype&quot; e con il @localtype&#x0a;
+      del &lt;physfacet> vale &quot;Durata&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="1 >= count( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                           /physfacet[@localtype = 'Durata'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M579: In &lt;archdesc>, quando rappresenta un'unità documentaria, se è presente un&#x0a;
+      did/physdescstructured/physfacet, con il @physdescstructuredtype&#x0a;
+      del &lt;physdescstructured> vale &quot;materialtype&quot; e con il @localtype&#x0a;
+      del &lt;physfacet> vale &quot;Durata&quot;, allora l'unità documentaria deve&#x0a;
+      rappresentare un &quot;Audiovisivo&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="if ( did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                    /physfacet[@localtype = 'Durata'])
+                then  did/physdescstructured[@physdescstructuredtype = 'materialtype']
+                     /physfacet[@localtype = 'TipologiaDocumentaria']
+                     /genreform/part[@localtype = 'TracciatoSpecifico']/text() = 'Audiovisivo'
+                else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M631: In &lt;archdesc>, quando rappresenta un'unità documentaria, il contenuto&#x0a;
+      testuale dell'eventuale&#x0a;
+      did/physdescstructured/physfacet[@localtype = &quot;Tipologia&quot;] deve&#x0a;
+      soddisfare una precisa lista chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $phys in did/physdescstructured/physfacet[@localtype = 'Tipologia']
+                satisfies $phys/text() = ('Album', 'Manifesto', 'Mappa', 'Opuscolo', 'Plico',
+                                          'Quaderno', 'Registro', 'Rubrica', 'Vacchetta',
+                                          'Volume')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M633: In &lt;archdesc>, quando rappresenta un'unità documentaria, il contenuto&#x0a;
+      testuale degli eventuali did/physdescstructured/unittype, quando&#x0a;
+      l'attributo @phisdescstructuredtype del &lt;physdescstructured> vale&#x0a;
+      &quot;materialtype&quot;, deve essere vuoto oppure deve soddisfare una precisa&#x0a;
+      lista chiusa di valori ammissibili 
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $type in did/physdescstructured[@physdescstructuredtype = 'materialtype']/unittype
+                satisfies    not($type/text())
+                          or $type/text() = ('Carta', 'Carte', 'Fogli', 'Foglio', 'Pagine', 'Pagina')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M636: In &lt;archdesc>, quando rappresenta un'unità documentaria, il valore degli&#x0a;
+      eventuali did/container/@localtype deve soddisfare una precisa&#x0a;
+      lista chiusa di valori ammissibili 
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $type in did/container/@localtype
+                satisfies $type = ('Camicia', 'Cartella', 'Plico', 'Scatola')"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M637: In &lt;archdesc>, quando rappresenta un'unità documentaria, gli eventuali&#x0a;
+      did/container non possono contenere più di un ref/num
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $cont in did/container
+                satisfies 1 >= count($cont/ref/num)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M638: In &lt;archdesc>, quando rappresenta un'unità documentaria, gli eventuali&#x0a;
+      did/container non possono contenere più di un ref/title/part
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $cont in did/container
+                satisfies 1 >= count($cont/ref/title/part)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M725: In &lt;archdesc>, quando rappresenta un'unità documentaria, i valori di&#x0a;
+      did/unittitle/@localtype devono essere compatibili con una precisa lista&#x0a;
+      chiusa di valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $type in did/unittitle/@localtype
+                satisfies $type = ('TitoloOriginale', 'TitoloAttribuito')"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -1537,17 +3112,17 @@ M078: In &lt;c>, se sono presenti dei&#x0a;
       test="every $note in did/didnote[@localtype = 'StatoDiConservazione']
             satisfies $note/text() = ('Pessimo', 'Mediocre', 'Discreto', 'Buono', 'Ottimo')"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
-M161: In &lt;c> non deve essere presente più di un &lt;arrangement> con @localtype&#x0a;
-      pari a &quot;CriteriOrdinamento&quot;
-      &#x0a;&#x0a;]"
-      xpathDefaultNamespace="##targetNamespace" 
-      test="1 >= count(arrangement[@localtype = 'CriteriOrdinamento'])"/>
-    <xs:assert xa:message="[&#x0a;&#x0a;
 M159: In &lt;c> è ammesso, al più, un unico figlio &lt;odd> con @localtype pari&#x0a;
       ad &quot;Osservazioni&quot;
       &#x0a;&#x0a;]"
       xpathDefaultNamespace="##targetNamespace" 
       test="1 >= count(odd[@localtype = 'Osservazioni'])"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M161: In &lt;c> non deve essere presente più di un &lt;arrangement> con @localtype&#x0a;
+      pari a &quot;CriteriOrdinamento&quot;
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="1 >= count(arrangement[@localtype = 'CriteriOrdinamento'])"/>
     <xs:assert xa:message="[&#x0a;&#x0a;
 M296: È obbligatoria in &lt;c> la presenza di un (e un solo)&#x0a;
       accessrestrict/accessrestrict[@localtype = &quot;VisibilitaFE&quot;]/p
@@ -1638,6 +3213,19 @@ M581: In &lt;c> è obbligatorio che in eventuali userestric/userestrict il valor
       xpathDefaultNamespace="##targetNamespace" 
       test="every $user in userestrict/userestrict
             satisfies $user/@localtype = 'NoteCondizioniUtilizzo'"/>
+    <xs:assert xa:message="[&#x0a;&#x0a;
+M721: In &lt;c> il contenuto testuale degli eventuali&#x0a;
+      did/physdescstructured/unittype, quando l'attributo&#x0a;
+      @physdescstructuredtype del &lt;physdescstructured> vale &quot;spaceoccupied&quot;,&#x0a;
+      deve essere vuoto oppure deve soddisfare una precisa lista chiusa&#x0a;
+      di valori ammissibili 
+      &#x0a;&#x0a;]"
+      xpathDefaultNamespace="##targetNamespace" 
+      test="every $type in did/physdescstructured[@physdescstructuredtype = 'spaceoccupied']/unittype
+            satisfies    not($type/text())
+                      or $type/text() = ('byte', 'kilobyte', 'megabyte', 'gigabyte',
+                                         'terabyte', 'petabyte', 'exabyte', 'zettabyte',
+                                         'yottabyte', 'ronnabyte', 'quettabyte')"/>
   </xs:complexType>
 
   <!-- M001: creato il tipo "c.comp" -->
@@ -1713,14 +3301,6 @@ M030: In &lt;c>, quando rappresenta un complesso archivistico, è ammesso, al pi
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count(odd[@localtype = 'AltreInfo'])"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M160: In &lt;c>, quando rappresenta un complesso archivistico, gli eventuali figli&#x0a;
-      &lt;odd> devono avere privi di @localtype o avere un @localtype che vale&#x0a;
-      &quot;Osservazioni&quot;
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="every $odd in odd
-                satisfies $odd[not(@localtype) or (@localtype = 'Osservazioni')]"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
 M040: In &lt;c>, quando rappresenta un complesso archivistico, deve essere&#x0a;
       presente, al più, un unico&#x0a;
       did/physdescstructured/dimensions[@unit = &quot;MetriLineari&quot;]
@@ -1736,6 +3316,14 @@ M046: In &lt;c>, quando rappresenta un complesso archivistico, deve&#x0a;
           xpathDefaultNamespace="##targetNamespace" 
           test="1 >= count( relations/relation[@relationtype = 'resourcerelation']
                            /relationentry[@localtype = 'ComplArchSovraordinato'])"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M160: In &lt;c>, quando rappresenta un complesso archivistico, gli eventuali figli&#x0a;
+      &lt;odd> devono avere privi di @localtype o avere un @localtype che vale&#x0a;
+      &quot;Osservazioni&quot;
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $odd in odd
+                satisfies $odd[not(@localtype) or (@localtype = 'Osservazioni')]"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M178: In &lt;c>, quando rappresenta un complesso archivistico, è ammesso, al più,&#x0a;
       un unico figlio &lt;scopecontent> con @localtype pari a&#x0a;
@@ -1809,19 +3397,6 @@ M632: In &lt;c>, quando rappresenta un complesso archivistico, il contenuto&#x0a
                                                  'Registro', 'Rivista', 'Rotolo', 'Scatola', 'Scheda',
                                                  'Taccuino', 'Vacchetta', 'Volume', 'Pergamena', 'Pezzo',
                                                  'Disegno', 'Rubrica', 'Pergamena')"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M721: In &lt;c>, quando rappresenta un complesso archivistico, il contenuto&#x0a;
-      testuale degli eventuali did/physdescstructured/unittype, quando&#x0a;
-      l'attributo @physdescstructuredtype del &lt;physdescstructured> vale&#x0a;
-      &quot;spaceoccupied&quot;, deve essere vuoto oppure deve soddisfare una precisa&#x0a;
-      lista chiusa di valori ammissibili 
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="every $type in did/physdescstructured[@physdescstructuredtype = 'spaceoccupied']/unittype
-                satisfies    not($type/text())
-                          or $type/text() = ('byte', 'kilobyte', 'megabyte', 'gigabyte',
-                                             'terabyte', 'petabyte', 'exabyte', 'zettabyte',
-                                             'yottabyte', 'ronnabyte', 'quettabyte')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M717: In &lt;c>, quando rappresenta un complesso archivistico, deve essere&#x0a;
       presente al più un (non ripetibile) relations/relation/descriptivenote/p&#x0a;
@@ -2126,35 +3701,6 @@ M630: In &lt;c>, quando rappresenta un'unità archivistica, il contenuto testual
                                           'Scheda', 'Schede', 'Taccuino', 'Taccuini', 'Vacchetta',
                                           'Vacchette', 'Volume', 'Volumi')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M722: In &lt;c>, quando rappresenta un'unità archivistica, il contenuto&#x0a;
-      testuale degli eventuali did/physdescstructured/unittype, quando&#x0a;
-      l'attributo @physdescstructuredtype del &lt;physdescstructured> vale&#x0a;
-      &quot;materialtype&quot; deve essere vuoto oppure deve soddisfare una precisa&#x0a;
-      lista chiusa di valori ammissibili 
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="every $type in did/physdescstructured[@physdescstructuredtype = 'materialtype']/unittype
-                satisfies    not($type/text())
-                          or $type/text() = ('Album', 'Busta', 'Cartella', 'Faldone', 'Fascicolo',
-                                             'Filza', 'Foglio', 'Manifesto', 'Mappa', 'Mazzo',
-                                             'Opuscolo', 'Pacco', 'Plico', 'Quaderno', 'Raccoglitore',
-                                             'Registro', 'Rivista', 'Rotolo', 'Scatola', 'Scheda',
-                                             'Taccuino', 'Vacchetta', 'Volume', 'Pergamena', 'Pezzo',
-                                             'Disegno', 'Rubrica', 'Pergamena', 'Documento')"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
-M721: In &lt;c>, quando rappresenta un'unità archivistica, il contenuto&#x0a;
-      testuale degli eventuali did/physdescstructured/unittype, quando&#x0a;
-      l'attributo @physdescstructuredtype del &lt;physdescstructured> vale&#x0a;
-      &quot;spaceoccupied&quot;, deve essere vuoto oppure deve soddisfare una precisa&#x0a;
-      lista chiusa di valori ammissibili 
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="every $type in did/physdescstructured[@physdescstructuredtype = 'spaceoccupied']/unittype
-                satisfies    not($type/text())
-                          or $type/text() = ('byte', 'kilobyte', 'megabyte', 'gigabyte',
-                                             'terabyte', 'petabyte', 'exabyte', 'zettabyte',
-                                             'yottabyte', 'ronnabyte', 'quettabyte')"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
 M635: In &lt;c>, quando rappresenta un'unità archivistica, il valore degli&#x0a;
       eventuali did/container/@localtype deve soddisfare una precisa&#x0a;
       lista chiusa di valori ammissibili 
@@ -2178,6 +3724,22 @@ M638: In &lt;c>, quando rappresenta un'unità archivistica, gli eventuali&#x0a;
           xpathDefaultNamespace="##targetNamespace" 
           test="every $cont in did/container
                 satisfies 1 >= count($cont/ref/title/part)"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M722: In &lt;c>, quando rappresenta un'unità archivistica, il contenuto&#x0a;
+      testuale degli eventuali did/physdescstructured/unittype, quando&#x0a;
+      l'attributo @physdescstructuredtype del &lt;physdescstructured> vale&#x0a;
+      &quot;materialtype&quot; deve essere vuoto oppure deve soddisfare una precisa&#x0a;
+      lista chiusa di valori ammissibili 
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="every $type in did/physdescstructured[@physdescstructuredtype = 'materialtype']/unittype
+                satisfies    not($type/text())
+                          or $type/text() = ('Album', 'Busta', 'Cartella', 'Faldone', 'Fascicolo',
+                                             'Filza', 'Foglio', 'Manifesto', 'Mappa', 'Mazzo',
+                                             'Opuscolo', 'Pacco', 'Plico', 'Quaderno', 'Raccoglitore',
+                                             'Registro', 'Rivista', 'Rotolo', 'Scatola', 'Scheda',
+                                             'Taccuino', 'Vacchetta', 'Volume', 'Pergamena', 'Pezzo',
+                                             'Disegno', 'Rubrica', 'Pergamena', 'Documento')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M725: In &lt;c>, quando rappresenta un'unità archivistica, i valori di&#x0a;
       did/unittitle/@localtype devono essere compatibili con una precisa lista&#x0a;
@@ -3380,19 +4942,6 @@ M633: In &lt;c>, quando rappresenta un'unità documentaria, il contenuto testual
                 satisfies    not($type/text())
                           or $type/text() = ('Carta', 'Carte', 'Fogli', 'Foglio', 'Pagine', 'Pagina')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
-M721: In &lt;c>, quando rappresenta un'unità documentaria, il contenuto&#x0a;
-      testuale degli eventuali did/physdescstructured/unittype, quando&#x0a;
-      l'attributo @physdescstructuredtype del &lt;physdescstructured> vale&#x0a;
-      &quot;spaceoccupied&quot;, deve essere vuoto oppure deve soddisfare una precisa&#x0a;
-      lista chiusa di valori ammissibili 
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="every $type in did/physdescstructured[@physdescstructuredtype = 'spaceoccupied']/unittype
-                satisfies    not($type/text())
-                          or $type/text() = ('byte', 'kilobyte', 'megabyte', 'gigabyte',
-                                             'terabyte', 'petabyte', 'exabyte', 'zettabyte',
-                                             'yottabyte', 'ronnabyte', 'quettabyte')"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
 M636: In &lt;c>, quando rappresenta un'unità documentaria, il valore degli&#x0a;
       eventuali did/container/@localtype deve soddisfare una precisa&#x0a;
       lista chiusa di valori ammissibili 
@@ -3785,15 +5334,6 @@ M545: In &lt;datesingle>, quando @localtype è pari a &quot;DataTestuale&quot;,&
     <xs:complexContent>
       <xs:extension base="datesingle">
         <xs:assert xa:message="[&#x0a;&#x0a;
-M168: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, se è&#x0a;
-      presente @altrender il suo valore deve soddisfare una precisa lista di&#x0a;
-      valori ammissibili
-      &#x0a;&#x0a;]"
-          xpathDefaultNamespace="##targetNamespace" 
-          test="   not(@altrender)
-                or (@altrender != ('DataApprossimativa', 'DataAttribuita', 'DataIncerta',
-                                   'DataAnteQuem', 'DataPostQuem', 'DataIncertaAttribuita'))"/>
-        <xs:assert xa:message="[&#x0a;&#x0a;
 M080: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, il valore di&#x0a;
       @notbefore, se presente, deve corrispondere a un numero, positivo, di&#x0a;
       quattro cifre corrispondente a un anno; i valori precedenti all'anno 1000&#x0a;
@@ -3853,6 +5393,15 @@ M083: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, s
                          and (  number(substring(@notafter, 1, 4))
                               = 99 + number(substring(@notbefore, 1, 4))))
                 else true()"/>
+        <xs:assert xa:message="[&#x0a;&#x0a;
+M168: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, se è&#x0a;
+      presente @altrender il suo valore deve soddisfare una precisa lista di&#x0a;
+      valori ammissibili
+      &#x0a;&#x0a;]"
+          xpathDefaultNamespace="##targetNamespace" 
+          test="   not(@altrender)
+                or (@altrender != ('DataApprossimativa', 'DataAttribuita', 'DataIncerta',
+                                   'DataAnteQuem', 'DataPostQuem', 'DataIncertaAttribuita'))"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M174: In &lt;datesingle>, quando @localtype è pari a &quot;DataSingola&quot;, il valore&#x0a;
       dell'anno in @notbefore, se presente, non può valere &quot;0000&quot; (valore&#x0a;
@@ -4340,6 +5889,8 @@ M563: In &lt;date>, quando @localtype è pari a &quot;QualificaData&quot;,&#x0a;
                                                      and (@otherlevel = 'Progetto')"/>
           <xs:alternative type="archdesc.strc" test="    (@level = 'otherlevel')
                                                      and (@otherlevel = 'StrumentoDiRicerca')"/>
+          <xs:alternative type="archdesc.docu" test="@level = 'item'"/>
+          <xs:alternative type="archdesc.arch" test="@level = 'file'"/>
           <xs:alternative type="archdesc.comp"/>
         </xs:element>
       </xs:sequence>
