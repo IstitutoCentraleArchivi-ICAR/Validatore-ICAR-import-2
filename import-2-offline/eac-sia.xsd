@@ -74,6 +74,12 @@
          <xs:attribute name="idRefIcar" type="xs:IDREF"
            fixed="la_radice_del_file_XML_deve_sempre_essere_icar-import"/>
          <xs:anyAttribute namespace="##other" processContents="lax"/>
+         
+         <!-- xalan 
+         <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
+            xao:message="=&gt;&#xa;eac &#xa; missing import header"
+            test="count(..[local-name(.)='recordBody'])&gt;0"/>
+            -->
                   
          <!-- 0602 0599 0600 0601 'AGENTI/soggetto conservatore' 'Luogo della cultura (SI/NO)' 'Sala di Studio (SI/NO)'
            eac/cpfDescription/@audience
@@ -242,10 +248,10 @@ Copia parallela."
          xao:message="=&gt;&#xa;eac 0715 0865 1013&#xa; control/localControl[@localType='Visibilita_FE']/term&#xa; 'Visibilità FE' lista chiusa con valori:&#xa;
 Completa,
 Non visibile,
-Descrizione libera e risorsa protetta (login),
-Descrizione protetta e risorsa protetta (login),
-Descrizione libera e risorsa riservata (autorizzazione),
-Descrizione riservata e risorsa riservata (autorizzazione)."
+Descrizione Libera e Risorsa Protetta (login),
+Descrizione Protetta e Risorsa Protetta (login),
+Descrizione Libera e Risorsa Riservata (autorizzazione),
+Descrizione Riservata e Risorsa Riservata (autorizzazione)."
       test="(count(localControl[@localType[.='Visibilita_FE']]/term) = 1)
              and
             (
@@ -254,10 +260,10 @@ Descrizione riservata e risorsa riservata (autorizzazione)."
              (
                  $v='Completa'
               or $v='Non visibile'
-              or $v='Descrizione libera e risorsa protetta (login)'
-              or $v='Descrizione protetta e risorsa protetta (login)'
-              or $v='Descrizione libera e risorsa riservata (autorizzazione)'
-              or $v='Descrizione riservata e risorsa riservata (autorizzazione)'
+              or $v='Descrizione Libera e Risorsa Protetta (login)'
+              or $v='Descrizione Protetta e Risorsa Protetta (login)'
+              or $v='Descrizione Libera e Risorsa Riservata (autorizzazione)'
+              or $v='Descrizione Riservata e Risorsa Riservata (autorizzazione)'
              )
             )
            "/>
@@ -2705,7 +2711,7 @@ Non specificato."
          "/>
 
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-         xao:message="=&gt;&#xa;eac &#xa;cpfDescription/identity/nameEntry/part[@localType='IntestazionePersona']&#xa; 'Intestazione' è richiesto e univoco"
+         xao:message="=&gt;&#xa;eac &#xa; cpfDescription/identity/nameEntry/part[@localType='IntestazionePersona']&#xa; 'Intestazione' è richiesto e univoco"
          test="
             not(@localType[.='VoceIndice'] and entityType/@value='person')
             or 
