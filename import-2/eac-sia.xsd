@@ -2322,49 +2322,50 @@ Altra sede."
                  va inserito il valore del campo controllato ??? -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0022&#xa; identity[entityType/@value='corporateBody']/otherEntityTypes/otherEntityType[@localType='Ente']/term&#xa; 'TIPOLOGIA ENTE' ammette valori:&#xa;
-Accademia/ente di cultura,
+accademia/ente di cultura,
 Archivio di Stato,
 Archivio di Stato/Sezione,
-Arte/ordine/collegio/associazione di categoria,
-Associazione civile e di movimento,
-Associazione combattentistica e d'arma,
-Banca/istituto di credito/ente assicurativo/ente previdenziale,
-Comitato di liberazione nazionale/corpo militare della Resistenza,
-Comune/città metropolitana/unione di comuni,
-Corporazione religiosa soppressa,
-Ente conservatore,
-Ente di gestione di acque, ambiente, energia, territorio, trasporti,
-Ente economico e di promozione economica/impresa/studio professionale,
-Ente di culto acattolico/associazione acattolica,
-Ente di culto cattolico/associazione cattolica,
-Ente/istituzione fascista,
-Ente ricreativo/sportivo/turistico,
-Ente territoriale minore,
-Notaio,
-Opera pia/istituzione ed ente di assistenza e beneficenza/ospedale,
-Ordine cavalleresco,
-Organizzazione internazionale,
-Organo di informazione e stampa,
-Feudo,
-Ente sanitario/ente di servizi alla persona,
-Partito e movimento politico/associazione politica,
-Provincia/provincia autonoma (organo e ufficio),
-Rappresentanza diplomatica/ufficio di paesi stranieri con sede in Italia,
-Regione/regione a statuto speciale (organo e ufficio),
-Scuola/ente di istruzione,
-Sindacato/organizzazione sindacale,
-Università/ente di ricerca,
-Organo o ufficio statale del periodo preunitario,
-Organo centrale di stato di Antico regime,
-Organo periferico o locale di stato di Antico regime,
-Organo o ufficio di stato di Antico regime,
-Organo centrale di stato del periodo napoleonico,
-Organo periferico di stato del periodo napoleonico,
-Organo centrale di stato della Restaurazione,
-Organo periferico di stato della Restaurazione,
-Organo e ufficio statale centrale di periodo postunitario,
-Organo e ufficio statale periferico del periodo postunitario,
-Organo o ufficio statale del periodo postunitario."
+arte/ordine/collegio/associazione di categoria,
+associazione civile e di movimento,
+associazione combattentistica e d'arma,
+banca/istituto di credito/ente assicurativo/ente previdenziale,
+comitato di liberazione nazionale/corpo militare della Resistenza,
+comune/città metropolitana/unione di comuni,
+corporazione religiosa soppressa,
+ente conservatore,
+ente di gestione di acque, ambiente, energia, territorio, trasporti,
+ente economico e di promozione economica/impresa/studio professionale,
+ente di culto acattolico/associazione acattolica,
+ente di culto cattolico/associazione cattolica,
+ente/istituzione fascista,
+ente ricreativo/sportivo/turistico,
+ente territoriale minore,
+notaio,
+opera pia/istituzione ed ente di assistenza e beneficenza/ospedale,
+ordine cavalleresco,
+organizzazione internazionale,
+organo di informazione e stampa,
+feudo,
+ente sanitario/ente di servizi alla persona,
+partito e movimento politico/associazione politica,
+provincia/provincia autonoma (organo e ufficio),
+rappresentanza diplomatica/ufficio di paesi stranieri con sede in Italia,
+regione/regione a statuto speciale (organo e ufficio),
+scuola/ente di istruzione,
+sindacato/organizzazione sindacale,
+università/ente di ricerca,
+Statale preunitario,
+Statale postunitario,
+Non statale,
+organo centrale di stato di Antico regime,
+organo periferico o locale di stato di Antico regime,
+organo o ufficio di stato di Antico regime,
+organo centrale di stato del periodo napoleonico,
+organo periferico di stato del periodo napoleonico,
+organo centrale di stato della Restaurazione,
+organo periferico di stato della Restaurazione,
+organo e ufficio statale centrale di periodo postunitario,
+organo e ufficio statale periferico del periodo postunitario."
          test="
           not (
            entityType/@value='corporateBody'
@@ -2379,49 +2380,50 @@ Organo o ufficio statale del periodo postunitario."
             satisfies
             (
                 $v=''
-             or $v='Accademia/ente di cultura'
+             or $v='accademia/ente di cultura'
              or $v='Archivio di Stato'
              or $v='Archivio di Stato/Sezione'
-             or $v='Arte/ordine/collegio/associazione di categoria'
-             or $v='Associazione civile e di movimento'
-             or $v='Associazione combattentistica e d''arma'
-             or $v='Banca/istituto di credito/ente assicurativo/ente previdenziale'
-             or $v='Comitato di liberazione nazionale/corpo militare della Resistenza'
-             or $v='Comune/città metropolitana/unione di comuni'
-             or $v='Corporazione religiosa soppressa'
-             or $v='Ente conservatore'
-             or $v='Ente di gestione di acque, ambiente, energia, territorio, trasporti'
-             or $v='Ente economico e di promozione economica/impresa/studio professionale'
-             or $v='Ente di culto acattolico/associazione acattolica'
-             or $v='Ente di culto cattolico/associazione cattolica'
-             or $v='Ente/istituzione fascista'
-             or $v='Ente ricreativo/sportivo/turistico'
-             or $v='Ente territoriale minore'
-             or $v='Notaio'
-             or $v='Opera pia/istituzione ed ente di assistenza e beneficenza/ospedale'
-             or $v='Ordine cavalleresco'
-             or $v='Organizzazione internazionale'
-             or $v='Organo di informazione e stampa'
-             or $v='Feudo'
-             or $v='Ente sanitario/ente di servizi alla persona'
-             or $v='Partito e movimento politico/associazione politica'
-             or $v='Provincia/provincia autonoma (organo e ufficio)'
-             or $v='Rappresentanza diplomatica/ufficio di paesi stranieri con sede in Italia'
-             or $v='Regione/regione a statuto speciale (organo e ufficio)'
-             or $v='Scuola/ente di istruzione'
-             or $v='Sindacato/organizzazione sindacale'
-             or $v='Università/ente di ricerca'
-             or $v='Organo o ufficio statale del periodo preunitario'
-             or $v='Organo centrale di stato di Antico regime'
-             or $v='Organo periferico o locale di stato di Antico regime'
-             or $v='Organo o ufficio di stato di Antico regime'
-             or $v='Organo centrale di stato del periodo napoleonico'
-             or $v='Organo periferico di stato del periodo napoleonico'
-             or $v='Organo centrale di stato della Restaurazione'
-             or $v='Organo periferico di stato della Restaurazione'
-             or $v='Organo e ufficio statale centrale di periodo postunitario'
-             or $v='Organo e ufficio statale periferico del periodo postunitario'
-             or $v='Organo o ufficio statale del periodo postunitario'
+             or $v='arte/ordine/collegio/associazione di categoria'
+             or $v='associazione civile e di movimento'
+             or $v='associazione combattentistica e d''arma'
+             or $v='banca/istituto di credito/ente assicurativo/ente previdenziale'
+             or $v='comitato di liberazione nazionale/corpo militare della Resistenza'
+             or $v='comune/città metropolitana/unione di comuni'
+             or $v='corporazione religiosa soppressa'
+             or $v='ente conservatore'
+             or $v='ente di gestione di acque, ambiente, energia, territorio, trasporti'
+             or $v='ente economico e di promozione economica/impresa/studio professionale'
+             or $v='ente di culto acattolico/associazione acattolica'
+             or $v='ente di culto cattolico/associazione cattolica'
+             or $v='ente/istituzione fascista'
+             or $v='ente ricreativo/sportivo/turistico'
+             or $v='ente territoriale minore'
+             or $v='notaio'
+             or $v='opera pia/istituzione ed ente di assistenza e beneficenza/ospedale'
+             or $v='ordine cavalleresco'
+             or $v='organizzazione internazionale'
+             or $v='organo di informazione e stampa'
+             or $v='feudo'
+             or $v='ente sanitario/ente di servizi alla persona'
+             or $v='partito e movimento politico/associazione politica'
+             or $v='provincia/provincia autonoma (organo e ufficio)'
+             or $v='rappresentanza diplomatica/ufficio di paesi stranieri con sede in Italia'
+             or $v='regione/regione a statuto speciale (organo e ufficio)'
+             or $v='scuola/ente di istruzione'
+             or $v='sindacato/organizzazione sindacale'
+             or $v='università/ente di ricerca'
+             or $v='Statale preunitario'
+             or $v='Statale postunitario'
+             or $v='Non statale'
+             or $v='organo centrale di stato di Antico regime'
+             or $v='organo periferico o locale di stato di Antico regime'
+             or $v='organo o ufficio di stato di Antico regime'
+             or $v='organo centrale di stato del periodo napoleonico'
+             or $v='organo periferico di stato del periodo napoleonico'
+             or $v='organo centrale di stato della Restaurazione'
+             or $v='organo periferico di stato della Restaurazione'
+             or $v='organo e ufficio statale centrale di periodo postunitario'
+             or $v='organo e ufficio statale periferico del periodo postunitario'
             )
           )
          "/>
