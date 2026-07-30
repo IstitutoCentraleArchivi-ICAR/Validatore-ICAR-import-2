@@ -1124,9 +1124,9 @@ M721: In &lt;archdesc> - quando rappresenta un complesso archivistico, un'unità
           xpathDefaultNamespace="##targetNamespace" 
           test="every $type in did/physdescstructured[@physdescstructuredtype = 'spaceoccupied']/unittype
                 satisfies    not($type/text())
-                          or $type/text() = ('byte', 'kilobyte', 'megabyte', 'gigabyte',
-                                             'terabyte', 'petabyte', 'exabyte', 'zettabyte',
-                                             'yottabyte', 'ronnabyte', 'quettabyte')"/>
+                          or $type/text() = ('Byte', 'Kilobyte', 'Megabyte', 'Gigabyte',
+                                             'Terabyte', 'Petabyte', 'Exabyte', 'Zettabyte',
+                                             'Yottabyte', 'Ronnabyte', 'Quettabyte')"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -3223,9 +3223,9 @@ M721: In &lt;c> il contenuto testuale degli eventuali&#x0a;
       xpathDefaultNamespace="##targetNamespace" 
       test="every $type in did/physdescstructured[@physdescstructuredtype = 'spaceoccupied']/unittype
             satisfies    not($type/text())
-                      or $type/text() = ('byte', 'kilobyte', 'megabyte', 'gigabyte',
-                                         'terabyte', 'petabyte', 'exabyte', 'zettabyte',
-                                         'yottabyte', 'ronnabyte', 'quettabyte')"/>
+                      or $type/text() = ('Byte', 'Kilobyte', 'Megabyte', 'Gigabyte',
+                                         'Terabyte', 'Petabyte', 'Exabyte', 'Zettabyte',
+                                         'Yottabyte', 'Ronnabyte', 'Quettabyte')"/>
   </xs:complexType>
 
   <!-- M001: creato il tipo "c.comp" -->
