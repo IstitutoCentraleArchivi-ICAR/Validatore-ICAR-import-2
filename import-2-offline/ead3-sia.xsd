@@ -1256,7 +1256,7 @@ M304: In &lt;archdesc>, quando rappresenta un complesso archivistico, gli&#x0a;
                                 /relationentry/@localtype)
                 satisfies $type = ('Soggetto conservatore', 'Soggetto vigilante', 'Proprietario',
                                    'Possessore', 'Detentore di diritti', 'Soggetto produttore',
-                                   'Agente collegato', 'Produttore (OAIS)', 'Versante (OAIS)')"/>
+                                   'Agente collegato', 'Versante (OAIS)')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M536: In &lt;archdesc>, quando rappresenta un complesso archivistico,&#x0a;
       non è ammesso più di un&#x0a;
@@ -3358,7 +3358,7 @@ M304: In &lt;c>, quando rappresenta un complesso archivistico, gli eventuali&#x0
                                 /relationentry/@localtype)
                 satisfies $type = ('Soggetto conservatore', 'Soggetto vigilante', 'Proprietario',
                                    'Possessore', 'Detentore di diritti', 'Soggetto produttore',
-                                   'Agente collegato', 'Produttore (OAIS)', 'Versante (OAIS)')"/>
+                                   'Agente collegato', 'Versante (OAIS)')"/>
         <xs:assert xa:message="[&#x0a;&#x0a;
 M536: In &lt;c>, quando rappresenta un compesso archivistico, non è ammesso&#x0a;
       più di un did/unittitle[@localtype = &quot;IntegrazioneDenominazione&quot;]
