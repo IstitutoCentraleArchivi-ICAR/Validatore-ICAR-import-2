@@ -332,7 +332,6 @@ Soggetto produttore,
 Possessore,
 Proprietario,
 Detentore dei diritti,
-Produttore (OAIS),
 Versante (OAIS)."
          test="
               (count(identity/@localType) &gt; 0)
@@ -356,7 +355,6 @@ Versante (OAIS)."
                   or $w='Possessore'
                   or $w='Proprietario'
                   or $w='Detentore dei diritti'
-                  or $w='Produttore (OAIS)'
                   or $w='Versante (OAIS)'
                  )
                 )
@@ -374,7 +372,6 @@ Soggetto produttore,
 Possessore,
 Proprietario,
 Detentore dei diritti,
-Produttore (OAIS),
 Versante (OAIS)."
           test="
               not
@@ -394,7 +391,6 @@ Versante (OAIS)."
                  and $v!='Possessore'
                  and $v!='Proprietario'
                  and $v!='Detentore dei diritti'
-                 and $v!='Produttore (OAIS)'
                  and $v!='Versante (OAIS)'
                 )
                )
@@ -3982,94 +3978,6 @@ RuoloAgente"
            )
           "/>
           
-       <!-- esclusi profili, contesti, eventi -->
-       <!-- 0427
-          eac/cpfDescription/relations/relation[targetRole="Complesso archivistico"]/relationType/
-             Soggetto conservatore, Soggetto vigilante, Soggetto produttore, Possessore, Proprietario, Detentore dei diritti -->
-<!--
-       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-          xao:message="=&gt;&#xa;eac 0427&#xa; cpfDescription/relations/relation[targetRole='Complesso archivistico']/relationType&#xa; 'Qualifica della relazione' è richiesto con valori:&#xa;
-Soggetto conservatore,
-Soggetto vigilante,
-Soggetto produttore,
-Possessore,
-Proprietario,
-Detentore dei diritti,
-Produttore (OAIS),
-Versante (OAIS)."
-          test="
-               (
-                not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
-                 and
-                not(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
-               )
-               or
-               (
-                not(.[targetRole[.='Complesso archivistico']])
-                 or
-                (
-                 (count(relationType) &gt; 0)
-                  and
-                 ( 
-                  every $v in (relationType/text())
-                  satisfies 
-                  (
-                      $v='Soggetto conservatore'
-                   or $v='Soggetto vigilante'
-                   or $v='Soggetto produttore'
-                   or $v='Possessore'
-                   or $v='Proprietario'
-                   or $v='Detentore dei diritti'
-                   or $v='Produttore (OAIS)'
-                   or $v='Versante (OAIS)'
-                  )
-                 )
-                )
-               )
-               "/>
-
-                      <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
-          xao:message="=&gt;&#xa;eac 0427&#xa; cpfDescription/relations/relation[targetRole='Complesso archivistico']/relationType&#xa; 'Qualifica della relazione' è richiesto con valori:&#xa;
-Soggetto conservatore,
-Soggetto vigilante,
-Soggetto produttore,
-Possessore,
-Proprietario,
-Detentore dei diritti,
-Produttore (OAIS),
-Versante (OAIS)."
-          test="
-               (
-                not(identity/@localType[.='ProfiloIstituzionale' or .='ContestoStoricoIstituzionale'])
-                 and
-                not(identity/entityType[@*[name()='eac-sia:tipoLocale'][.='Evento']])
-               )
-               or
-               (
-                not(.[targetRole[.='Complesso archivistico']])
-                 or
-                (
-                 (count(relationType) &gt; 0)
-                  and
-                 ( 
-                  every $v in (relationType/text())
-                  satisfies 
-                  (
-                      $v='Soggetto conservatore'
-                   or $v='Soggetto vigilante'
-                   or $v='Soggetto produttore'
-                   or $v='Possessore'
-                   or $v='Proprietario'
-                   or $v='Detentore dei diritti'
-                   or $v='Produttore (OAIS)'
-                   or $v='Versante (OAIS)'
-                  )
-                 )
-                )
-               )
-               "/>
--->
-
        <!-- 0446 cpfDescription/relations/relation[targetRole="Complesso archivistico"][relationType[.='soggetto produttore' or .='soggetto conservatore']]/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData Data inizio produzione, Data fine produzione, Data di ingresso presso il conservatore  -->
       <xs:assert xpathDefaultNamespace="https://archivists.org/ns/eac/v2"
          xao:message="=&gt;&#xa;eac 0446&#xa; cpfDescription/relations/relation[targetRole='Complesso archivistico'][relationType[.='Soggetto produttore' or .='Soggetto conservatore']]/(.|dateSet)/(date|(dateRange/(fromDate|toDate)))/@eac-sia:qualificaData&#xa; 'Qualifica della data' lista chiusa con valori:&#xa;
@@ -4122,7 +4030,6 @@ Mittente,
 Notaio,
 Partecipante,
 Possessore,
-Produttore (OAIS)
 Progettista,
 Proprietario,
 Regista,
@@ -4159,7 +4066,6 @@ Versante (OAIS)."
                  and .!='Notaio'
                  and .!='Partecipante'
                  and .!='Possessore'
-                 and .!='Produttore (OAIS)'
                  and .!='Progettista'
                  and .!='Proprietario'
                  and .!='Regista'
